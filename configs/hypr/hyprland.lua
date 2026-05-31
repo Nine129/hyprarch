@@ -41,6 +41,7 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("hyprpaper")
   hl.exec_cmd("swaync")                                    -- Notification daemon + control center
   hl.exec_cmd("nm-applet")
+  hl.exec_cmd("blueman-applet")                          -- Bluetooth tray icon
   hl.exec_cmd("/usr/lib/polkit-gnome-authentication-agent-1")
   hl.exec_cmd("wl-paste --watch cliphist store")  -- Clipboard history daemon
 end)

@@ -72,6 +72,7 @@ Install the window manager, compositor, bar, launcher, yazi (terminal file manag
 
 ```bash
 sudo pacman -S --needed \
+  hyprland \
   uwsm \
   waybar \
   rofi-wayland \
@@ -87,8 +88,6 @@ sudo pacman -S --needed \
   qt5-wayland \
   qt6-wayland
 ```
-
-> **⚠️ Hyprland version note:** Arch's `[extra]` repo currently has Hyprland 0.46.x, but this rice uses the **Lua config API** introduced in **0.55+**. You must install `hyprland-git` from the **AUR** instead (see [Section 5](#5-aur-packages)). The stock `pacman -S hyprland` will NOT parse `.lua` configs.
 
 **What each provides:**
 
@@ -157,48 +156,70 @@ sudo pacman -S --needed \
   btop \
   fastfetch \
   neovim \
+  lesspipe \
   networkmanager \
   nm-connection-editor \
   network-manager-applet \
   bluez \
   bluez-utils \
-  blueman
+  blueman \
+  playerctl \
+  fd \
+  ripgrep \
+  bat \
+  tealdeer \
+  brightnessctl \
+  p7zip \
+  unrar \
+  xdg-utils
 ```
 
-### 4.5 Wallpaper & Display
+### 4.5 Media & Document Viewers
+
+```bash
+sudo pacman -S --needed \
+  mpv \
+  imv \
+  zathura \
+  zathura-pdf-mupdf
+```
+
+### 4.6 Audio Effects
+
+```bash
+sudo pacman -S --needed \
+  easyeffects
+```
+
+### 4.7 Wallpaper & Display
 
 ```bash
 sudo pacman -S --needed \
   hyprpaper
 ```
 
-### 4.6 Browser
+### 4.8 Browser
 
 Vivaldi is in the AUR — installed via `yay` in [Section 5](#5-aur-packages).
 
-### 4.7 Theming (Icons & Cursor)
+### 4.9 Theming (Icons & Cursor)
 
 ```bash
 sudo pacman -S --needed \
-  papirus-icon-theme \
-  bibata-cursor-theme
+  papirus-icon-theme
 ```
 
 > - **Papirus-Dark** is the icon theme referenced by the GTK-3/4 configs
 > - **Bibata-Modern-Ice** is the cursor theme set via `XCURSOR_THEME` in `.zshenv`
 > - Apply with `nwg-look` or manually via `~/.config/gtk-3.0/settings.ini`
 
-### 4.8 AUR Helper (already installed above)
+### 4.10 AUR Helper (already installed above)
 
 ---
 
 ## 5. AUR Packages
 
 ```bash
-# Hyprland (git) — 0.55+ with Lua config support
-# Arch's [extra] repo only has 0.46.x — Lua was introduced in 0.55
-yay -S hyprland-git
-
 # Vivaldi browser (AUR)
 yay -S vivaldi vivaldi-ffmpeg-codecs
 
@@ -207,13 +228,12 @@ yay -S swayosd-git
 
 # grimblast — grim/slurp wrapper (screenshots)
 yay -S grimblast-git
+
+# Timeshift — system snapshot / rollback
+yay -S timeshift
 ```
 
 > If `grimblast-git` build fails, check community alternatives or use `grim + slurp` directly.
->
-> **Tip:** `hyprland-git` builds from the latest git commit. If a build fails,
-> check the [Hyprland GitHub](https://github.com/hyprwm/Hyprland) for known
-> issues, or install a specific tag version via the AUR's `PKGBUILD`.
 
 ---
 
@@ -225,8 +245,10 @@ yay -S grimblast-git
 sudo pacman -S --needed \
   noto-fonts \
   noto-fonts-emoji \
+  noto-fonts-cjk \
   ttf-jetbrains-mono-nerd \
-  ttf-nerd-fonts-symbols-mono
+  ttf-nerd-fonts-symbols-mono \
+  ttf-liberation
 
 # Share Tech Mono — used by Waybar, Kitty, Rofi, Hyprlock
 # This is OPTIONAL but strongly recommended for the correct look
@@ -282,7 +304,7 @@ Replace `exec_cmd` daemon spawning with proper systemd user services for crash r
 ```bash
 # Create service files
 mkdir -p ~/.config/systemd/user
-cp ~/arch-hyprland-rice/configs/systemd/user/*.service ~/.config/systemd/user/
+cp ~/hyprarch/configs/systemd/user/*.service ~/.config/systemd/user/
 
 # Enable and start all four
 systemctl --user enable --now hyprpaper hypridle swaync cliphist
@@ -294,6 +316,81 @@ journalctl --user -u hypridle -f
 
 > ⚠️ If you use these services, **remove** the corresponding `hl.exec_cmd()` lines from `hyprland.lua` (hyprpaper, hypridle, swaync, wl-paste). The included `configs/hypr/hyprland.lua` already has them commented out with a note.
 
+### 7.3 Bluetooth Service
+
+Enable the Bluetooth stack system-wide:
+
+```bash
+sudo systemctl enable --now bluetooth
+```
+
+Then add `blueman-applet` to your Hyprland autostart (already included in `configs/hypr/hyprland.lua`):
+
+```lua
+hl.exec_cmd("blueman-applet")  -- Bluetooth tray icon
+```
+
+### 7.4 Tealdeer (tldr) Cache
+
+Populate the offline cheat-sheet cache:
+
+```bash
+tldr --update
+```
+
+### 7.5 Default Applications (MIME)
+
+Copy the provided `mimeapps.list` to register Vivaldi (browser), Zathura (PDF), imv (images), mpv (media), nvim (text/code), and Yazi (files/archives) as system defaults:
+
+```bash
+mkdir -p ~/.config/xdg
+ln -sf ~/hyprarch/configs/xdg/mimeapps.list ~/.config/xdg/mimeapps.list
+```
+
+Reload the MIME database:
+
+```bash
+xdg-mime default vivaldi-stable.desktop x-scheme-handler/https
+```
+
+### 7.6 Timeshift Backups
+
+Timeshift creates system snapshots for rollback after bad updates or config mistakes. It uses cronie for automatic scheduling.
+
+```bash
+# Enable the scheduler
+sudo systemctl enable --now cronie
+
+# Install Timeshift (AUR)
+yay -S timeshift
+```
+
+**Configuration (GUI):**
+
+1. Launch: `pkexec timeshift-gtk`
+2. Choose snapshot type:
+   - **BTRFS** — if your root partition uses BTRFS
+   - **RSYNC** — if ext4 (Arch default for most fresh installs)
+3. Select the snapshot device (usually the root partition)
+4. Set the schedule:
+   - Daily:   5 snapshots, keep last **3**
+   - Weekly:  3 snapshots, keep last **2**
+   - Monthly: 2 snapshots, keep last 1
+5. Click **Create** to take the first manual snapshot
+
+**CLI quick reference:**
+
+```bash
+# Manual snapshot before risky operations
+sudo timeshift --create --comments "before-update"
+
+# List existing snapshots
+sudo timeshift --list
+
+# Restore from snapshot
+sudo timeshift --restore
+```
+
 ---
 
 ## 8. Apply Configs
@@ -302,7 +399,7 @@ journalctl --user -u hypridle -f
 
 ```bash
 # If you have the rice folder, copy everything:
-cp -r arch-hyprland-rice/configs/* ~/.config/
+cp -r hyprarch/configs/* ~/.config/
 ```
 
 Or if the configs are in a git repo:
@@ -405,13 +502,13 @@ Starship is configured via `~/.config/starship.toml`. A custom CGGX-themed confi
 is included in the dotfiles — full CGGX palette, language modules, git status:
 
 ```bash
-cp ~/arch-hyprland-rice/configs/starship.toml ~/.config/starship.toml
+cp ~/hyprarch/configs/starship.toml ~/.config/starship.toml
 ```
 
 If you prefer to start from scratch and customize:
 
 ```bash
-cp ~/arch-hyprland-rice/configs/starship.toml ~/.config/starship.toml
+cp ~/hyprarch/configs/starship.toml ~/.config/starship.toml
 # Then edit ~/.config/starship.toml to your liking
 ```
 
@@ -424,15 +521,20 @@ cyan python indicator, command duration, and an Arch OS logo.
 The `.zshrc` is minimal by design. To add syntax highlighting and autosuggestions:
 
 ```bash
-# Using zsh-completions, zsh-syntax-highlighting, zsh-autosuggestions
-yay -S zsh-completions zsh-syntax-highlighting zsh-autosuggestions
+mkdir -p ~/.zsh/plugins
+git clone https://github.com/zsh-users/zsh-autosuggestions   ~/.zsh/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting   ~/.zsh/plugins/zsh-syntax-highlighting
 ```
 
-Then uncomment or add to `~/.zshrc`:
+Then add to `~/.zshrc` (already included in the provided `.zshrc`):
 
 ```zsh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+if [[ -d "$HOME/.zsh/plugins/zsh-autosuggestions" ]]; then
+  source "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+if [[ -d "$HOME/.zsh/plugins/zsh-syntax-highlighting" ]]; then
+  source "$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
 ```
 
 ---
@@ -574,20 +676,22 @@ Copy-paste this to install **everything at once**:
 ```bash
 # Official repos
 sudo pacman -S --needed \
-  uwsm waybar rofi-wayland swaync kitty yazi \
+  hyprland uwsm waybar rofi-wayland swaync kitty yazi \
   hyprlock hypridle polkit-gnome \
   polkit-kde-agent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk qt5-wayland qt6-wayland \
   pipewire wireplumber pipewire-pulse pipewire-audio pavucontrol \
   grim slurp swappy hyprpicker wl-clipboard cliphist \
-  zsh starship btop fastfetch neovim hyprpaper \
+  zsh starship btop fastfetch neovim lesspipe hyprpaper \
   networkmanager nm-connection-editor network-manager-applet \
-  bluez bluez-utils blueman \
-  papirus-icon-theme bibata-cursor-theme \
-  noto-fonts noto-fonts-emoji ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-mono \
+  bluez bluez-utils blueman playerctl \
+  mpv imv zathura zathura-pdf-mupdf \
+  fd ripgrep bat tealdeer easyeffects brightnessctl p7zip unrar xdg-utils cronie \
+  papirus-icon-theme \
+  noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-mono ttf-liberation \
   gtk3
 
 # AUR
-yay -S hyprland-git vivaldi vivaldi-ffmpeg-codecs swayosd-git grimblast-git ttf-share-tech-mono
+yay -S vivaldi vivaldi-ffmpeg-codecs swayosd-git grimblast-git ttf-share-tech-mono bibata-cursor-theme timeshift
 ```
 
 Then:

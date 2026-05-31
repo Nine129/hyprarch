@@ -1439,6 +1439,7 @@
   <span class="c-key">hl.exec_cmd</span>(<span class="c-str">"hyprpaper"</span>)
   <span class="c-key">hl.exec_cmd</span>(<span class="c-str">"swaync"</span>)                                    <span class="c-comment">-- Notification daemon + control center</span>
   <span class="c-key">hl.exec_cmd</span>(<span class="c-str">"nm-applet"</span>)
+  <span class="c-key">hl.exec_cmd</span>(<span class="c-str">"blueman-applet"</span>)                          <span class="c-comment">-- Bluetooth tray icon</span>
   <span class="c-key">hl.exec_cmd</span>(<span class="c-str">"/usr/lib/polkit-gnome-authentication-agent-1"</span>)
   <span class="c-key">hl.exec_cmd</span>(<span class="c-str">"wl-paste --watch cliphist store"</span>)  <span class="c-comment">-- Clipboard history daemon</span>
 <span class="c-key">end</span>)</pre>
@@ -2328,6 +2329,7 @@ wallpaper = eDP-1,$HOME/.local/share/wallpapers/cggx.webp</pre>
         <div class="tab-bar">
           <button class="tab-btn active" onclick="switchTab(this,'sh-rc')">.zshrc</button>
           <button class="tab-btn" onclick="switchTab(this,'sh-env')">.zshenv</button>
+          <button class="tab-btn" onclick="switchTab(this,'sh-profile')">.zprofile</button>
         </div>
         <div id="sh-rc" class="tab-panel active">
           <pre><span class="c-comment"># ── CGGX Zsh ──────────────────────────────────────────</span>
@@ -2380,25 +2382,16 @@ zstyle ':completion:*' cache-path <span class="c-str">"$HOME/.cache/zsh"</span>
 <span class="c-key">bindkey </span>'^U' kill-whole-line
 <span class="c-key">bindkey </span>'^L' clear-screen
 
-<span class="c-comment"># ── CGGX Prompt ───────────────────────────────────────</span>
-<span class="c-comment"># Colors: red (#ff2d55), cyan (#00e5ff), silver (#e8e8f0), muted (#6a6a80)</span>
-<span class="c-comment"># Format:</span>
-<span class="c-comment">#   ╭─ nine@arch ~/some/path (main)</span>
-<span class="c-comment">#   ╰─ $ </span>
+<span class="c-comment"># ── Zsh plugins (manual, no Oh-My-Zsh) ──────────────</span>
+if [[ -d <span class="c-str">"$HOME/.zsh/plugins/zsh-autosuggestions"</span> ]]; then
+  <span class="c-key">source</span> <span class="c-str">"$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"</span>
+fi
+if [[ -d <span class="c-str">"$HOME/.zsh/plugins/zsh-syntax-highlighting"</span> ]]; then
+  <span class="c-key">source</span> <span class="c-str">"$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"</span>
+fi
 
-PROMPT='%B%F{#ff2d55}╭─%f %F{#e8e8f0}%n%f%F{#6a6a80}@%f%F{#00e5ff}%m%f %F{#6a6a80}%3~%f%F{#6a6a80}$(git_prompt_info)%f
-%B%F{#ff2d55}╰─%f%F{#e8e8f0} %# %f%b'
-RPROMPT=''
-
-<span class="c-comment"># ── Git prompt info ───────────────────────────────────</span>
-autoload -Uz vcs_info
-zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git:*' stagedstr '%F{#c8ff00}●%f'
-zstyle ':vcs_info:git:*' unstagedstr '%F{#ff2d55}●%f'
-zstyle ':vcs_info:git:*' formats ' (%F{#00e5ff}%b%f%F{#6a6a80}%c%u%f)'
-zstyle ':vcs_info:git:*' actionformats ' (%F{#ff6b00}%b%f|%F{#ff2d55}%a%f%F{#6a6a80}%c%u%f)'
-precmd() { vcs_info }
-git_prompt_info() { echo -n <span class="c-str">"${vcs_info_msg_0_}"</span> }
+<span class="c-comment"># ── Starship prompt ───────────────────────────────────</span>
+<span class="c-key">eval</span> <span class="c-str">"$(starship init zsh)"</span>
 
 <span class="c-comment"># ── Dir colors ────────────────────────────────────────</span>
 <span class="c-key">export LS_COLORS</span>=<span class="c-str">"di=00;38;5;81:fi=00;38;5;254:ln=00;38;5;39:ex=00;38;5;47:*.md=00;38;5;220:*.txt=00;38;5;254:*.gz=00;38;5;244:*.zip=00;38;5;244:*.tar=00;38;5;244:*.zst=00;38;5;244:*.png=00;38;5;213:*.jpg=00;38;5;213:*.mp4=00;38;5;213:*.mp3=00;38;5;140:*.lua=00;38;5;81:*.rs=00;38;5;47:*.toml=00;38;5;220:*.json=00;38;5;220:*.yaml=00;38;5;220:*.html=00;38;5;81:*.css=00;38;5;81:*.js=00;38;5;47:*.ts=00;38;5;81:*.py=00;38;5;47:*.go=00;38;5;81:*.c=00;38;5;81:*.h=00;38;5;81:*.cfg=00;38;5;244:*.conf=00;38;5;244:*.rasi=00;38;5;81"</span>
@@ -2503,7 +2496,7 @@ fi
 <span class="c-comment"># ── Pager ─────────────────────────────────────────────</span>
 <span class="c-key">export PAGER</span>=<span class="c-str">"less"</span>
 <span class="c-key">export LESS</span>=<span class="c-str">"-RFi"</span>
-<span class="c-key">export LESSOPEN</span>=<span class="c-str">"|~/.local/bin/lessfilter %s"</span>
+<span class="c-key">export LESSOPEN</span>=<span class="c-str">"|lesspipe %s"</span>
 
 <span class="c-comment"># ── Terminal ──────────────────────────────────────────</span>
 <span class="c-key">export TERM</span>=<span class="c-str">"xterm-256color"</span>
@@ -2529,6 +2522,16 @@ fi
 <span class="c-key">export _JAVA_AWT_WM_NONREPARENTING</span>=<span class="c-str">"1"</span>
 <span class="c-key">export MOZ_ENABLE_WAYLAND</span>=<span class="c-str">"1"</span>
 <span class="c-comment"># Intel GPU only — no NVIDIA workarounds</span>
+</pre>
+        </div>
+        <div id="sh-profile" class="tab-panel">
+          <pre><span class="c-comment"># ── CGGX Zsh — Profile ─────────────────────────────────</span>
+<span class="c-comment"># Place at ~/.zprofile</span>
+<span class="c-comment"># Auto-launch Hyprland on tty1 (no SDDM/display manager)</span>
+
+if [[ -z <span class="c-str">"$WAYLAND_DISPLAY"</span> ]] && [[ <span class="c-str">"$(tty)"</span> = <span class="c-str">"/dev/tty1"</span> ]]; then
+  <span class="c-key">exec</span> uwsm start hyprland
+fi
 </pre>
         </div>
       </div>
@@ -3973,6 +3976,122 @@ WantedBy=graphical-session.target
         </div>
       </div>
 
+      <!-- ── xdg/mimeapps.list ── -->
+      <div class="config-card">
+        <div class="config-card-header">
+          <div class="config-card-title">xdg/mimeapps.list</div>
+          <div class="config-tag tag-gtk">ini</div>
+        </div>
+        <div class="config-card-path">~/.config/xdg/mimeapps.list</div>
+        <div class="config-card-desc">Default application associations — Vivaldi (browser), Zathura (PDF), imv (images), mpv (video/audio), nvim (text/code), Yazi (archives + file manager)</div>
+        <div class="config-card-tabs">
+          <div class="tab-bar">
+            <button class="tab-btn active" onclick="switchTab(this,'mime-card')">mimeapps.list</button>
+          </div>
+          <div id="mime-card" class="tab-panel active">
+            <pre><span class="c-sec">[Default Applications]</span>
+<span class="c-comment"># ── Browser ────────────────────────────────────────────</span>
+x-scheme-handler/http=<span class="c-str">vivaldi-stable.desktop</span>
+x-scheme-handler/https=<span class="c-str">vivaldi-stable.desktop</span>
+x-scheme-handler/ftp=<span class="c-str">vivaldi-stable.desktop</span>
+text/html=<span class="c-str">vivaldi-stable.desktop</span>
+application/xhtml+xml=<span class="c-str">vivaldi-stable.desktop</span>
+application/x-extension-htm=<span class="c-str">vivaldi-stable.desktop</span>
+application/x-extension-html=<span class="c-str">vivaldi-stable.desktop</span>
+application/x-extension-xhtml=<span class="c-str">vivaldi-stable.desktop</span>
+
+<span class="c-comment"># ── PDF ────────────────────────────────────────────────</span>
+application/pdf=<span class="c-str">org.pwmt.zathura.desktop</span>
+
+<span class="c-comment"># ── Images ─────────────────────────────────────────────</span>
+image/png=<span class="c-str">imv.desktop</span>
+image/jpeg=<span class="c-str">imv.desktop</span>
+image/jpg=<span class="c-str">imv.desktop</span>
+image/gif=<span class="c-str">imv.desktop</span>
+image/webp=<span class="c-str">imv.desktop</span>
+image/bmp=<span class="c-str">imv.desktop</span>
+image/tiff=<span class="c-str">imv.desktop</span>
+image/svg+xml=<span class="c-str">imv.desktop</span>
+image/x-portable-pixmap=<span class="c-str">imv.desktop</span>
+image/avif=<span class="c-str">imv.desktop</span>
+image/heic=<span class="c-str">imv.desktop</span>
+image/heif=<span class="c-str">imv.desktop</span>
+
+<span class="c-comment"># ── Video ──────────────────────────────────────────────</span>
+video/mp4=<span class="c-str">mpv.desktop</span>
+video/x-matroska=<span class="c-str">mpv.desktop</span>
+video/webm=<span class="c-str">mpv.desktop</span>
+video/avi=<span class="c-str">mpv.desktop</span>
+video/quicktime=<span class="c-str">mpv.desktop</span>
+video/x-msvideo=<span class="c-str">mpv.desktop</span>
+video/mpeg=<span class="c-str">mpv.desktop</span>
+video/ogg=<span class="c-str">mpv.desktop</span>
+video/3gpp=<span class="c-str">mpv.desktop</span>
+video/x-flv=<span class="c-str">mpv.desktop</span>
+video/x-m4v=<span class="c-str">mpv.desktop</span>
+video/x-ms-wmv=<span class="c-str">mpv.desktop</span>
+
+<span class="c-comment"># ── Audio ──────────────────────────────────────────────</span>
+audio/mpeg=<span class="c-str">mpv.desktop</span>
+audio/mp3=<span class="c-str">mpv.desktop</span>
+audio/ogg=<span class="c-str">mpv.desktop</span>
+audio/flac=<span class="c-str">mpv.desktop</span>
+audio/wav=<span class="c-str">mpv.desktop</span>
+audio/x-wav=<span class="c-str">mpv.desktop</span>
+audio/aac=<span class="c-str">mpv.desktop</span>
+audio/m4a=<span class="c-str">mpv.desktop</span>
+audio/x-m4a=<span class="c-str">mpv.desktop</span>
+audio/opus=<span class="c-str">mpv.desktop</span>
+audio/webm=<span class="c-str">mpv.desktop</span>
+audio/x-flac=<span class="c-str">mpv.desktop</span>
+
+<span class="c-comment"># ── Text / Code ────────────────────────────────────────</span>
+text/plain=<span class="c-str">nvim.desktop</span>
+text/x-log=<span class="c-str">nvim.desktop</span>
+text/css=<span class="c-str">nvim.desktop</span>
+text/javascript=<span class="c-str">nvim.desktop</span>
+text/x-python=<span class="c-str">nvim.desktop</span>
+text/x-rust=<span class="c-str">nvim.desktop</span>
+text/x-lua=<span class="c-str">nvim.desktop</span>
+text/x-shellscript=<span class="c-str">nvim.desktop</span>
+text/x-script.python=<span class="c-str">nvim.desktop</span>
+text/xml=<span class="c-str">nvim.desktop</span>
+text/markdown=<span class="c-str">nvim.desktop</span>
+text/x-markdown=<span class="c-str">nvim.desktop</span>
+text/x-toml=<span class="c-str">nvim.desktop</span>
+text/x-yaml=<span class="c-str">nvim.desktop</span>
+application/json=<span class="c-str">nvim.desktop</span>
+application/x-shellscript=<span class="c-str">nvim.desktop</span>
+application/x-zerosize=<span class="c-str">nvim.desktop</span>
+application/javascript=<span class="c-str">nvim.desktop</span>
+application/typescript=<span class="c-str">nvim.desktop</span>
+application/x-perl=<span class="c-str">nvim.desktop</span>
+application/x-ruby=<span class="c-str">nvim.desktop</span>
+application/sql=<span class="c-str">nvim.desktop</span>
+
+<span class="c-comment"># ── Archives ───────────────────────────────────────────</span>
+application/zip=<span class="c-str">yazi.desktop</span>
+application/x-tar=<span class="c-str">yazi.desktop</span>
+application/x-compressed-tar=<span class="c-str">yazi.desktop</span>
+application/x-bzip-compressed-tar=<span class="c-str">yazi.desktop</span>
+application/x-xz-compressed-tar=<span class="c-str">yazi.desktop</span>
+application/x-zstd-compressed-tar=<span class="c-str">yazi.desktop</span>
+application/x-7z-compressed=<span class="c-str">yazi.desktop</span>
+application/x-rar=<span class="c-str">yazi.desktop</span>
+application/x-rar-compressed=<span class="c-str">yazi.desktop</span>
+application/gzip=<span class="c-str">yazi.desktop</span>
+application/x-gzip=<span class="c-str">yazi.desktop</span>
+
+<span class="c-comment"># ── File manager ───────────────────────────────────────</span>
+inode/directory=<span class="c-str">yazi.desktop</span>
+
+<span class="c-comment"># ── Terminal ───────────────────────────────────────────</span>
+x-scheme-handler/terminal=<span class="c-str">kitty.desktop</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
 
   </div>
   </div><!-- /config-grid -->
@@ -4169,15 +4288,15 @@ WantedBy=graphical-session.target
         <span style="background:#ff2d55;color:#0a0a0c;font-family:var(--font-display);font-size:14px;font-weight:700;padding:4px 10px;">STEP 1</span>
         <span style="color:var(--silver);font-family:var(--font-display);font-size:18px;font-weight:600;">Install Everything</span>
       </div>
-      <div style="font-family:var(--font-mono);font-size:10px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
+      <div style="font-family:var(--font-mono);font-size:13px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
         Run these in order. The rice requires Hyprland 0.55+ for Lua config support — AUR has it.
       </div>
-      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:9px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;"># Pacman (official repos)
+      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:12px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;"># Pacman (official repos)
 sudo pacman -Syu
-sudo pacman -S --needed waybar kitty neovim rofi-wayland swaync yazi   fastfetch btop starship cliphist wl-clipboard swappy grim slurp hyprpicker   noto-fonts noto-fonts-emoji ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-mono   papirus-icon-theme bibata-cursor-theme polkit-gnome   xdg-desktop-portal-hyprland xdg-desktop-portal-gtk   uwsm pipewire wireplumber pipewire-pulse pavucontrol gtk3   networkmanager nm-connection-editor network-manager-applet   zsh hyprlock hypridle hyprpaper qt5-wayland qt6-wayland
+sudo pacman -S --needed waybar kitty neovim rofi-wayland swaync yazi   fastfetch btop starship cliphist wl-clipboard swappy grim slurp hyprpicker lesspipe   noto-fonts noto-fonts-emoji ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-mono   papirus-icon-theme polkit-gnome   xdg-desktop-portal-hyprland xdg-desktop-portal-gtk   uwsm pipewire wireplumber pipewire-pulse pavucontrol gtk3   networkmanager nm-connection-editor network-manager-applet   zsh hyprland hyprlock hypridle hyprpaper qt5-wayland qt6-wayland   playerctl bluez bluez-utils blueman mpv imv zathura zathura-pdf-mupdf   fd ripgrep bat tealdeer easyeffects brightnessctl p7zip unrar xdg-utils   noto-fonts-cjk ttf-liberation
 
 # Yay / AUR (Hyprland 0.55+ Lua API required)
-yay -S hyprland-git swayosd-git grimblast-git ttf-share-tech-mono   vivaldi vivaldi-ffmpeg-codecs</pre>
+yay -S swayosd-git grimblast-git ttf-share-tech-mono bibata-cursor-theme   vivaldi vivaldi-ffmpeg-codecs timeshift</pre>
     </div>
 
     <!-- STEP 2 -->
@@ -4186,19 +4305,25 @@ yay -S hyprland-git swayosd-git grimblast-git ttf-share-tech-mono   vivaldi viva
         <span style="background:#00e5ff;color:#0a0a0c;font-family:var(--font-display);font-size:14px;font-weight:700;padding:4px 10px;">STEP 2</span>
         <span style="color:var(--silver);font-family:var(--font-display);font-size:18px;font-weight:600;">Enable Systemd Services</span>
       </div>
-      <div style="font-family:var(--font-mono);font-size:10px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
+      <div style="font-family:var(--font-mono);font-size:13px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
         Replace old exec-once with proper user services for crash resilience &amp; journalctl logs.
       </div>
-      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:9px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;"># Copy service files
+      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:12px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;"># Copy service files
 mkdir -p ~/.config/systemd/user
-cp ~/arch-hyprland-rice/configs/systemd/user/*.service ~/.config/systemd/user/
+cp ~/hyprarch/configs/systemd/user/*.service ~/.config/systemd/user/
 
 # Enable all four daemons
 systemctl --user enable --now hyprpaper hypridle swaync cliphist
 
 # Check logs if something isn't working
-journalctl --user -u hyprpaper -f</pre>
-      <div style="font-family:var(--font-mono);font-size:9px;line-height:1.6;color:var(--orange);margin-top:8px;padding:8px;background:rgba(255,107,0,0.08);border:1px solid rgba(255,107,0,0.2);">
+journalctl --user -u hyprpaper -f
+
+# Bluetooth stack (system-wide)
+sudo systemctl enable --now bluetooth
+
+# Timeshift scheduler (cronie)
+sudo systemctl enable --now cronie</pre>
+      <div style="font-family:var(--font-mono);font-size:12px;line-height:1.6;color:var(--orange);margin-top:8px;padding:8px;background:rgba(255,107,0,0.08);border:1px solid rgba(255,107,0,0.2);">
         ⚠️ Remove the corresponding hl.exec_cmd() lines from hyprland.lua if using these services. The included config already has them commented.
       </div>
     </div>
@@ -4208,12 +4333,12 @@ journalctl --user -u hyprpaper -f</pre>
         <span style="background:#c8ff00;color:#0a0a0c;font-family:var(--font-display);font-size:14px;font-weight:700;padding:4px 10px;">STEP 3</span>
         <span style="color:var(--silver);font-family:var(--font-display);font-size:18px;font-weight:600;">Apply Configs</span>
       </div>
-      <div style="font-family:var(--font-mono);font-size:10px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
+      <div style="font-family:var(--font-mono);font-size:13px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
         Clone the dotfiles and symlink everything into place.
       </div>
-      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:9px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;">cd ~
-git clone https://github.com/your-org/arch-hyprland-rice
-cd arch-hyprland-rice
+      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:12px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;">cd ~
+git clone https://github.com/Nine129/hyprarch
+cd hyprarch
 
 # Symlink configs (overwrites existing)
 for dir in configs/*/; do
@@ -4225,7 +4350,10 @@ done
 ln -sf configs/shell/.zshrc ~/.zshrc
 ln -sf configs/shell/.zshenv ~/.zshenv
 ln -sf configs/starship.toml ~/.config/starship.toml
-ln -sf configs/fontconfig/fonts.conf ~/.config/fontconfig/fonts.conf</pre>
+ln -sf configs/fontconfig/fonts.conf ~/.config/fontconfig/fonts.conf
+
+# Make scripts executable
+chmod +x ~/.config/hypr/scripts/*.sh</pre>
     </div>
 
     <!-- STEP 4 -->
@@ -4234,18 +4362,19 @@ ln -sf configs/fontconfig/fonts.conf ~/.config/fontconfig/fonts.conf</pre>
         <span style="background:#ff6b00;color:#0a0a0c;font-family:var(--font-display);font-size:14px;font-weight:700;padding:4px 10px;">STEP 4</span>
         <span style="color:var(--silver);font-family:var(--font-display);font-size:18px;font-weight:600;">Set Up Zsh</span>
       </div>
-      <div style="font-family:var(--font-mono);font-size:10px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
+      <div style="font-family:var(--font-mono);font-size:13px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
         Change shell, install plugins, and configure Starship with the CGGX prompt.
       </div>
-      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:9px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;"># Zsh as default shell (logout & re-login after)
+      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:12px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;"># Zsh as default shell (logout & re-login after)
 chsh -s /usr/bin/zsh
 
 # Starship prompt (CGGX config included in dotfiles)
-cp ~/arch-hyprland-rice/configs/starship.toml ~/.config/starship.toml
+cp ~/hyprarch/configs/starship.toml ~/.config/starship.toml
 
 # Zsh plugins (optional but recommended)
-git clone https://github.com/zsh-users/zsh-autosuggestions   $ZSH_CUSTOM/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting   $ZSH_CUSTOM/plugins/zsh-syntax-highlighting</pre>
+mkdir -p ~/.zsh/plugins
+git clone https://github.com/zsh-users/zsh-autosuggestions   ~/.zsh/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting   ~/.zsh/plugins/zsh-syntax-highlighting</pre>
     </div>
 
     <!-- STEP 5 -->
@@ -4254,10 +4383,13 @@ git clone https://github.com/zsh-users/zsh-syntax-highlighting   $ZSH_CUSTOM/plu
         <span style="background:#b48cff;color:#0a0a0c;font-family:var(--font-display);font-size:14px;font-weight:700;padding:4px 10px;">STEP 5</span>
         <span style="color:var(--silver);font-family:var(--font-display);font-size:18px;font-weight:600;">Reboot &amp; Launch</span>
       </div>
-      <div style="font-family:var(--font-mono);font-size:10px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
+      <div style="font-family:var(--font-mono);font-size:13px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
         Log out of your current session and select Hyprland from the display manager, or start via uwsm.
       </div>
-      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:9px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;"># Reboot after steps 1-4
+      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:12px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;"># Update tealdeer (tldr) cache
+tldr --update
+
+# Reboot after steps 1-4
 sudo reboot
 
 # On next login: select "Hyprland (uwsm)" from SDDM / greetd
@@ -4272,10 +4404,10 @@ exec uwsm start hyprland</pre>
         <span style="background:#6a6a80;color:#e8e8f0;font-family:var(--font-display);font-size:14px;font-weight:700;padding:4px 10px;">STEP 6</span>
         <span style="color:var(--silver);font-family:var(--font-display);font-size:18px;font-weight:600;">Verify</span>
       </div>
-      <div style="font-family:var(--font-mono);font-size:10px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
+      <div style="font-family:var(--font-mono);font-size:13px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
         Quick checklist to confirm everything is running.
       </div>
-      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:9px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;"># 1. Hyprland version (must be 0.55+)
+      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:12px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;"># 1. Hyprland version (must be 0.55+)
 hyprctl version | head -1
 
 # 2. Waybar running
@@ -4290,13 +4422,53 @@ echo "test" | wl-copy && cliphist list | head -1
 # 5. Screenshot with grimblast
 grimblast copy output
 
-# 6. Keybind: SUPER+Q opens kitty
-# 7. Keybind: SUPER+E opens yazi
-# 8. Keybind: Print copies screenshot to clipboard</pre>
+# 6. Bluetooth running
+bluetoothctl show | grep -q "Powered" && echo "bluetooth OK"
+
+# 7. Keybind: SUPER+Q opens kitty
+# 8. Keybind: SUPER+E opens yazi
+# 9. Keybind: Print copies screenshot to clipboard</pre>
     </div>
 
   </div>
-<footer class="site-footer">
+
+    <!-- STEP 7 -->
+    <div style="background:var(--surface);border:1px solid var(--border);padding:24px;">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+        <span style="background:#b48cff;color:#0a0a0c;font-family:var(--font-display);font-size:14px;font-weight:700;padding:4px 10px;">STEP 7</span>
+        <span style="color:var(--silver);font-family:var(--font-display);font-size:18px;font-weight:600;">Configure Timeshift Backups</span>
+      </div>
+      <div style="font-family:var(--font-mono);font-size:13px;line-height:1.8;color:var(--muted);margin-bottom:12px;">
+        Automatic BTRFS/RSYNC snapshots with cronie scheduler. Protects against bad updates or config mistakes.
+      </div>
+      <pre style="background:#0a0a0c;border:1px solid var(--border);padding:16px;font-size:12px;line-height:1.9;color:var(--silver);font-family:'Share Tech Mono',monospace;"># 1. Open Timeshift GUI:
+pkexec timeshift-gtk
+
+# 2. Select snapshot type:
+#    - BTRFS  if root is BTRFS
+#    - RSYNC  if ext4 (default for most Arch installs)
+
+# 3. Choose snapshot location (usually root device)
+
+# 4. Set schedule (recommended):
+#    Daily:   5 snapshots, keep last 3
+#    Weekly:  3 snapshots, keep last 2
+#    Monthly: 2 snapshots, keep last 1
+
+# 5. Click "Create" for first manual snapshot, then
+#    cronie handles automatic snapshots.
+
+# Manual snapshot:
+sudo timeshift --create --comments "before-update"
+
+# List snapshots:
+sudo timeshift --list
+
+# Restore:
+sudo timeshift --restore</pre>
+    </div>
+
+  <footer class="site-footer">
   <div class="footer-logo">CGG<span>X</span></div>
   <div class="footer-note">KINETIC BRUTALIST · HYPRLAND · ARCH LINUX · NINE@ARCH</div>
 </footer>

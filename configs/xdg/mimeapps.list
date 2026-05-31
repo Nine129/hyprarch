@@ -1,0 +1,98 @@
+[Default Applications]
+# ── Browser ────────────────────────────────────────────
+x-scheme-handler/http=vivaldi-stable.desktop
+x-scheme-handler/https=vivaldi-stable.desktop
+x-scheme-handler/ftp=vivaldi-stable.desktop
+text/html=vivaldi-stable.desktop
+application/xhtml+xml=vivaldi-stable.desktop
+application/x-extension-htm=vivaldi-stable.desktop
+application/x-extension-html=vivaldi-stable.desktop
+application/x-extension-xhtml=vivaldi-stable.desktop
+
+# ── PDF ────────────────────────────────────────────────
+application/pdf=org.pwmt.zathura.desktop
+
+# ── Images ─────────────────────────────────────────────
+image/png=imv.desktop
+image/jpeg=imv.desktop
+image/jpg=imv.desktop
+image/gif=imv.desktop
+image/webp=imv.desktop
+image/bmp=imv.desktop
+image/tiff=imv.desktop
+image/svg+xml=imv.desktop
+image/x-portable-pixmap=imv.desktop
+image/avif=imv.desktop
+image/heic=imv.desktop
+image/heif=imv.desktop
+
+# ── Video ──────────────────────────────────────────────
+video/mp4=mpv.desktop
+video/x-matroska=mpv.desktop
+video/webm=mpv.desktop
+video/avi=mpv.desktop
+video/quicktime=mpv.desktop
+video/x-msvideo=mpv.desktop
+video/mpeg=mpv.desktop
+video/ogg=mpv.desktop
+video/3gpp=mpv.desktop
+video/x-flv=mpv.desktop
+video/x-m4v=mpv.desktop
+video/x-ms-wmv=mpv.desktop
+
+# ── Audio ──────────────────────────────────────────────
+audio/mpeg=mpv.desktop
+audio/mp3=mpv.desktop
+audio/ogg=mpv.desktop
+audio/flac=mpv.desktop
+audio/wav=mpv.desktop
+audio/x-wav=mpv.desktop
+audio/aac=mpv.desktop
+audio/m4a=mpv.desktop
+audio/x-m4a=mpv.desktop
+audio/opus=mpv.desktop
+audio/webm=mpv.desktop
+audio/x-flac=mpv.desktop
+
+# ── Text / Code ────────────────────────────────────────
+text/plain=nvim.desktop
+text/x-log=nvim.desktop
+text/css=nvim.desktop
+text/javascript=nvim.desktop
+text/x-python=nvim.desktop
+text/x-rust=nvim.desktop
+text/x-lua=nvim.desktop
+text/x-shellscript=nvim.desktop
+text/x-script.python=nvim.desktop
+text/xml=nvim.desktop
+text/markdown=nvim.desktop
+text/x-markdown=nvim.desktop
+text/x-toml=nvim.desktop
+text/x-yaml=nvim.desktop
+application/json=nvim.desktop
+application/x-shellscript=nvim.desktop
+application/x-zerosize=nvim.desktop
+application/javascript=nvim.desktop
+application/typescript=nvim.desktop
+application/x-perl=nvim.desktop
+application/x-ruby=nvim.desktop
+application/sql=nvim.desktop
+
+# ── Archives ───────────────────────────────────────────
+application/zip=yazi.desktop
+application/x-tar=yazi.desktop
+application/x-compressed-tar=yazi.desktop
+application/x-bzip-compressed-tar=yazi.desktop
+application/x-xz-compressed-tar=yazi.desktop
+application/x-zstd-compressed-tar=yazi.desktop
+application/x-7z-compressed=yazi.desktop
+application/x-rar=yazi.desktop
+application/x-rar-compressed=yazi.desktop
+application/gzip=yazi.desktop
+application/x-gzip=yazi.desktop
+
+# ── File manager ───────────────────────────────────────
+inode/directory=yazi.desktop
+
+# ── Terminal ───────────────────────────────────────────
+x-scheme-handler/terminal=kitty.desktop

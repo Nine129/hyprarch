@@ -11,7 +11,7 @@ export VISUAL="nvim"
 # ── Pager ─────────────────────────────────────────────
 export PAGER="less"
 export LESS="-RFi"
-export LESSOPEN="|~/.local/bin/lessfilter %s"
+export LESSOPEN="| lesspipe %s"
 
 # ── Terminal ──────────────────────────────────────────
 # Kitty sets TERM=xterm-kitty automatically — do NOT override

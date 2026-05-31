@@ -1,7 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # ── CGGX Screenshot → Swappy ──────────────────────────
-# Region screenshot → swappy editor → save to ~/Pictures/Screenshots
-# Bound to SUPER + Print in hyprland binds.lua
-
-notify-send "Screenshot" "Select a region to capture..."
-grim -g "$(slurp)" - | swappy -f -
+# Captures a region and opens it in Swappy for markup/annotations.
+# Bound to SUPER+Print in binds.lua
+grimblast copy area && wl-paste | swappy -f -

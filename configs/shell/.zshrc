@@ -48,25 +48,16 @@ bindkey '^W' backward-kill-word
 bindkey '^U' kill-whole-line
 bindkey '^L' clear-screen
 
-# ── CGGX Prompt ───────────────────────────────────────
-# Colors: red (#ff2d55), cyan (#00e5ff), silver (#e8e8f0), muted (#6a6a80)
-# Format:
-#   ╭─ nine@arch ~/some/path (main)
-#   ╰─ $ 
+# ── Zsh plugins (manual, no Oh-My-Zsh) ──────────────
+if [[ -d "$HOME/.zsh/plugins/zsh-autosuggestions" ]]; then
+  source "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+if [[ -d "$HOME/.zsh/plugins/zsh-syntax-highlighting" ]]; then
+  source "$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+fi
 
-PROMPT='%B%F{#ff2d55}╭─%f %F{#e8e8f0}%n%f%F{#6a6a80}@%f%F{#00e5ff}%m%f %F{#6a6a80}%3~%f%F{#6a6a80}$(git_prompt_info)%f
-%B%F{#ff2d55}╰─%f%F{#e8e8f0} %# %f%b'
-RPROMPT=''
-
-# ── Git prompt info ───────────────────────────────────
-autoload -Uz vcs_info
-zstyle ':vcs_info:git:*' check-for-changes true
-zstyle ':vcs_info:git:*' stagedstr '%F{#c8ff00}●%f'
-zstyle ':vcs_info:git:*' unstagedstr '%F{#ff2d55}●%f'
-zstyle ':vcs_info:git:*' formats ' (%F{#00e5ff}%b%f%F{#6a6a80}%c%u%f)'
-zstyle ':vcs_info:git:*' actionformats ' (%F{#ff6b00}%b%f|%F{#ff2d55}%a%f%F{#6a6a80}%c%u%f)'
-precmd() { vcs_info }
-git_prompt_info() { echo -n "${vcs_info_msg_0_}" }
+# ── Starship prompt ───────────────────────────────────
+eval "$(starship init zsh)"
 
 # ── Dir colors ────────────────────────────────────────
 export LS_COLORS="di=00;38;5;81:fi=00;38;5;254:ln=00;38;5;39:ex=00;38;5;47:*.md=00;38;5;220:*.txt=00;38;5;254:*.gz=00;38;5;244:*.zip=00;38;5;244:*.tar=00;38;5;244:*.zst=00;38;5;244:*.png=00;38;5;213:*.jpg=00;38;5;213:*.mp4=00;38;5;213:*.mp3=00;38;5;140:*.lua=00;38;5;81:*.rs=00;38;5;47:*.toml=00;38;5;220:*.json=00;38;5;220:*.yaml=00;38;5;220:*.html=00;38;5;81:*.css=00;38;5;81:*.js=00;38;5;47:*.ts=00;38;5;81:*.py=00;38;5;47:*.go=00;38;5;81:*.c=00;38;5;81:*.h=00;38;5;81:*.cfg=00;38;5;244:*.conf=00;38;5;244:*.rasi=00;38;5;81"
