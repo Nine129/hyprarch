@@ -1,0 +1,56 @@
+/* ── CGGX SwayNC ──────────────────────────────────── */
+/* Theme variables — overrides default SCSS variables  */
+:root {
+  --cc-bg: rgba(10, 10, 12, 0.85);
+
+  --noti-border-color: rgba(255, 45, 85, 0.2);
+  --noti-bg: 26, 26, 32;
+  --noti-bg-alpha: 0.88;
+  --noti-bg-darker: rgb(15, 15, 20);
+  --noti-bg-hover: rgb(36, 36, 44);
+  --noti-bg-focus: rgba(255, 45, 85, 0.15);
+  --noti-close-bg: rgb(42, 42, 52);
+  --noti-close-bg-hover: rgb(255, 45, 85);
+
+  --text-color: #e8e8f0;
+  --text-color-disabled: #6a6a80;
+
+  --bg-selected: rgb(255, 45, 85);
+
+  --border: 1px solid rgba(255, 45, 85, 0.2);
+  --border-radius: 0;
+}
+
+/* Notifications — floating popups */
+.notification {
+  border-radius: 0;
+  border: var(--border);
+  background: rgba(26, 26, 32, 0.88);
+
+  &.critical {
+    border: 1px solid rgba(255, 45, 85, 0.6);
+  }
+
+  .summary { color: #00e5ff; font-weight: 700; }
+  .time    { color: #6a6a80; font-size: 12px; }
+  .body    { color: #6a6a80; }
+}
+
+/* Control center panel */
+.control-center {
+  background: var(--cc-bg);
+  border-radius: 0;
+}
+
+/* Progress bar */
+progressbar trough {
+  background: #6a6a80;
+  border-radius: 0;
+  progress { background: #ff2d55; }
+}
+
+/* Close button */
+.close-button {
+  border-radius: 0;
+  &:hover { background: #ff2d55; }
+}  

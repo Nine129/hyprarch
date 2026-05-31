@@ -1,0 +1,32 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+  "logo": {
+    "type": "small",
+    "color": {
+      "1": "#ff2d55",
+      "2": "#ff2d55"
+    }
+  },
+  "display": {
+    "separator": " → ",
+    "color": "cyan"
+  },
+  "modules": [
+    "title",
+    "separator",
+    { "type": "os", "key": " ", "keyColor": "cyan" },
+    { "type": "kernel", "key": " ", "keyColor": "cyan" },
+    { "type": "uptime", "key": " ", "keyColor": "cyan" },
+    { "type": "packages", "key": " ", "keyColor": "cyan" },
+    { "type": "shell", "key": " ", "keyColor": "cyan" },
+    { "type": "wm", "key": " ", "keyColor": "cyan" },
+    { "type": "terminal", "key": " ", "keyColor": "cyan" },
+    { "type": "cpu", "key": "󰍛 ", "keyColor": "cyan" },
+    { "type": "gpu", "key": "󰢮 ", "keyColor": "cyan" },
+    { "type": "memory", "key": "󰍛 ", "keyColor": "cyan" },
+    { "type": "disk", "key": "󰋊 ", "keyColor": "cyan" },
+    { "type": "battery", "key": " ", "keyColor": "cyan" },
+    "separator",
+    { "type": "colors", "symbol": "circle" }
+  ]
+}

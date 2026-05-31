@@ -1,0 +1,47 @@
+/* ── CGGX SwayOSD ──────────────────────────────────── */
+/* On-screen display for volume, brightness and playback */
+/* Place at: ~/.config/swayosd/style.css                 */
+
+window#osd {
+  border-radius: 0;
+  border: none;
+  background: rgba(10, 10, 12, 0.88);
+
+  #container {
+    margin: 16px 20px;
+  }
+
+  image {
+    color: #00e5ff;
+  }
+
+  label {
+    color: #e8e8f0;
+  }
+
+  progressbar:disabled,
+  image:disabled {
+    opacity: 0.35;
+  }
+
+  progressbar {
+    min-height: 6px;
+    border-radius: 0;
+    background: transparent;
+    border: none;
+  }
+
+  trough {
+    min-height: inherit;
+    border-radius: 0;
+    border: none;
+    background: #6a6a80;
+  }
+
+  progress {
+    min-height: inherit;
+    border-radius: 0;
+    border: none;
+    background: #ff2d55;
+  }
+}

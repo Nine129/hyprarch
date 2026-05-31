@@ -1,0 +1,28 @@
+// ── CGGX Waybar — Bar Layout ───────────
+// Module defs in: ~/.config/waybar/modules/cggx.jsonc
+[
+  {
+    "layer":    "top",
+    "position": "top",
+    "height":   40,
+
+    "include": "~/.config/waybar/modules/cggx.jsonc",
+
+    "modules-left": [
+      "hyprland/workspaces#number"
+    ],
+
+    "modules-center": [],
+
+    "modules-right": [
+      "disk",
+      "memory",
+      "network",
+      "pulseaudio",
+      "clock",
+      "battery",
+      "tray",
+      "custom/power-button"
+    ],
+  }
+]

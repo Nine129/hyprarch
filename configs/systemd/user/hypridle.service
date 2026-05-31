@@ -1,0 +1,21 @@
+# ── CGGX Hypridle Service ───────────────────────────────
+# Place at: ~/.config/systemd/user/hypridle.service
+# Idle management — auto-lock, dpms, suspend
+# Start: systemctl --user enable --now hypridle
+# Logs:  journalctl --user -u hypridle -f
+
+[Unit]
+Description=Hyprland idle management daemon
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/hypridle
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target
+
+            

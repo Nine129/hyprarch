@@ -1,0 +1,22 @@
+/* ── CGGX GTK-4 Override ───────────────*/
+@define-color accent_color          #ff2d55;
+@define-color accent_bg_color       #ff2d55;
+@define-color accent_fg_color       #ffffff;
+@define-color destructive_color     #ff2d55;
+@define-color success_color         #c8ff00;
+@define-color warning_color         #ff6b00;
+@define-color error_color           #ff2d55;
+@define-color window_bg_color       #0a0a0c;
+@define-color window_fg_color       #e8e8f0;
+@define-color headerbar_bg_color    #111115;
+@define-color headerbar_fg_color    #e8e8f0;
+@define-color card_bg_color         #1a1a20;
+@define-color popover_bg_color      #111115;
+@define-color sidebar_bg_color      #0d0d10;
+
+window { border-radius: 10px; }
+headerbar {
+  border-bottom: 1px solid rgba(255,45,85,0.3);
+}
+/* Icon theme: Papirus-Dark */
+/* Cursor theme: Bibata-Modern-Ice */

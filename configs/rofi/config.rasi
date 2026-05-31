@@ -1,0 +1,220 @@
+/* ── CGGX Rofi Config + Theme ────────── */
+/* File: ~/.config/rofi/config.rasi       */
+
+/* ── Palette ──────────────────────────── */
+* {
+  bg:      #0a0a0c;
+  bg-alt:  #111115;
+  surface: #1a1a20;
+  border:  #2a2a35;
+  fg:      #e8e8f0;
+  fg-dim:  #6a6a80;
+  red:     #ff2d55;
+  cyan:    #00e5ff;
+  lime:    #c8ff00;
+  orange:  #ff6b00;
+  primary:   #ff2d55;
+  secondary: #00e5ff;
+}
+
+/* ── Configuration ────────────────────── */
+configuration {
+  modes:                 [ drun, run, window ];
+  terminal:              "kitty";
+  show-icons:            true;
+  icon-theme:            "Papirus-Dark";
+  drun-display-format:   "{name}";
+  sidebar-mode:          false;
+  click-to-exit:         true;
+  cycle:                 true;
+  matching:              "normal";
+  sort:                  false;
+  case-sensitive:        false;
+}
+
+/* ── Global widget defaults ───────────── */
+* {
+  background-color: transparent;
+  text-color:       @fg;
+  border-color:     @border;
+  border-radius:    0;
+  spacing:          0;
+  padding:          0;
+  margin:           0;
+}
+
+/* ── Window ───────────────────────────── */
+window {
+  background-color: rgba(10, 10, 12, 0.70);
+  text-color:       @fg;
+  border:           1px solid @border;
+  border-radius:    0;
+  width:            400px;
+  padding:          0;
+  location:         center;
+  anchor:           center;
+  fullscreen:       false;
+  transparency:     "real";
+  font:             "Share Tech Mono 10";
+  cursor:           "default";
+}
+
+/* ── Mainbox ──────────────────────────── */
+mainbox {
+  enabled:         true;
+  spacing:         0;
+  padding:         0;
+  background-color: transparent;
+}
+
+/* ── Inputbar ─────────────────────────── */
+inputbar {
+  spacing:         0;
+  border-bottom:   1px solid @secondary;
+}
+
+/* ── Prompt ───────────────────────────── */
+prompt {
+  enabled:      true;
+  text-color:   @primary;
+  font:         "Share Tech Mono 10";
+  padding:      10px 0 10px 12px;
+  vertical-align: 0.5;
+}
+
+/* ── Entry (search box) ───────────────── */
+entry {
+  enabled:             true;
+  background-color:    transparent;
+  text-color:          @fg;
+  placeholder-color:   @fg-dim;
+  placeholder:         "search...";
+  cursor-color:        @primary;
+  cursor-width:        2px;
+  hide-cursor-on-empty: false;
+  padding:             10px 12px;
+  font:                "Share Tech Mono 10";
+}
+
+/* ── Case indicator ───────────────────── */
+case-indicator {
+  enabled:    true;
+  text-color: @fg-dim;
+  padding:    0 10px;
+}
+
+/* ── Listview ─────────────────────────── */
+listview {
+  columns:        1;
+  lines:          8;
+  spacing:        0;
+  dynamic:        true;
+  cycle:          true;
+  scrollbar:      false;
+  fixed-height:   false;
+  reverse:        false;
+  padding:        6px 0;
+  layout:         vertical;
+  cursor:         "default";
+}
+
+/* ── Element (each row) ───────────────── */
+element {
+  orientation: horizontal;
+  children:    [ element-icon, element-text ];
+  spacing:     10px;
+  padding:     5px 12px;
+  cursor:      "default";
+  border-left: 3px solid transparent;
+}
+
+/* Element states ───────────────────────── */
+element normal.normal {
+  background-color: transparent;
+  text-color:       @fg;
+}
+element normal.urgent {
+  background-color: transparent;
+  text-color:       @orange;
+}
+element normal.active {
+  background-color: transparent;
+  text-color:       @secondary;
+  border-left:      3px solid @secondary;
+}
+element selected.normal {
+  background-color: rgba(255, 45, 85, 0.15);
+  text-color:       @fg;
+  border-left:      3px solid @primary;
+}
+element selected.urgent {
+  background-color: rgba(255, 45, 85, 0.15);
+  text-color:       @orange;
+  border-left:      3px solid @orange;
+}
+element selected.active {
+  background-color: rgba(0, 229, 255, 0.15);
+  text-color:       @secondary;
+  border-left:      3px solid @secondary;
+}
+element alternate.normal {
+  background-color: rgba(255, 255, 255, 0.03);
+  text-color:       @fg;
+}
+
+/* ── Element text ─────────────────────── */
+element-text {
+  text-color       @secondary;
+  vertical-align:  0.5;
+  horizontal-align: 0;
+  cursor:           "default";
+  highlight:        bold;
+}
+
+/* ── Element icon ─────────────────────── */
+element-icon {
+  size:            20px;
+  vertical-align: 0.5;
+  cursor:          "default";
+}
+
+/* ── Element index (shortcut num) ────── */
+element-index {
+  text-color:    @fg-dim;
+  vertical-align: 0.5;
+  padding:       0 4px 0 0;
+}
+
+/* ── Mode switcher ────────────────────── */
+mode-switcher {
+  enabled:         false;
+  spacing:         0;
+  background-color: @bg-alt;
+  border-top:      1px solid @border;
+  padding:         0;
+}
+
+button {
+  text-color:      @fg-dim;
+  background-color: transparent;
+  padding:         6px 14px;
+  cursor:          "pointer";
+  border-left:     1px solid @border;
+}
+button:first-child {
+  border-left:      none;
+}
+button selected {
+  text-color:      @primary;
+  background-color: rgba(255, 45, 85, 0.08);
+}
+
+/* ── Message box ──────────────────────── */
+message {
+  background-color: @bg-alt;
+  border-top:      1px solid @border;
+  padding:         8px 12px;
+}
+textbox {
+  text-color: @fg-dim;
+}

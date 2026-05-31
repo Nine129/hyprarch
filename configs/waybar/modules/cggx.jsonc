@@ -1,0 +1,80 @@
+// ── CGGX Waybar — Module Definitions ───
+// Included via config: "include": "~/.config/waybar/modules/cggx.jsonc"
+{
+  // Number-style workspaces: 1-9 persistent
+  "hyprland/workspaces#number": {
+    "all-outputs":          true,
+    "format":               "{icon}",
+    "on-click":             "activate",
+    "on-scroll-up":         "hyprctl dispatch workspace e+1",
+    "on-scroll-down":       "hyprctl dispatch workspace e-1",
+    "persistent-workspaces": {
+      "1": [], "2": [], "3": [], "4": [], "5": [],
+      "6": [], "7": [], "8": [], "9": []
+    },
+    "format-icons": {
+      "1": "1", "2": "2", "3": "3", "4": "4", "5": "5",
+      "6": "6", "7": "7", "8": "8", "9": "9",
+      "urgent": "",
+      "default": ""
+    }
+  },
+
+  "disk": {
+    "interval": 30,
+    "format":   "/ {percentage_free}% FREE"
+  },
+
+  "memory": {
+    "interval": 30,
+    "format":   "RAM {used}G / {total}G"
+  },
+
+  "network": {
+    "interval":            30,
+    "format-wifi":         "{essid}",
+    "format-ethernet":     "{ifname}",
+    "format-disconnected": "󰖪 Disconnected",
+    "on-click":            "kitty -e 'nmtui'",
+    "tooltip-format":      "{ipaddr} / {essid}"
+  },
+
+  "pulseaudio": {
+    "format":          " {volume}%",
+    "format-muted":    "󰖁 Muted",
+    "format-icons":    { "default": ["", "", ""] },
+    "scroll-step":     1,
+    "on-click":        "pavucontrol",
+    "on-click-right": "pactl set-sink-mute 0 toggle"
+  },
+
+  "clock": {
+    "interval":  60,
+    "format":    " {:%a %d  %H:%M}",
+    "format-alt": "{:%Y-%m-%d}"
+  },
+
+  "battery": {
+    "bat":     "BAT0",
+    "interval": 60,
+    "states": {
+      "warning":  30,
+      "critical": 15
+    },
+    "format":          "{icon} {capacity}%",
+    "format-charging":  " {capacity}%",
+    "format-plugged":  " {capacity}%",
+    "format-icons":    ["", "", "", "", ""]
+  },
+
+  "custom/power-button": {
+    "format":    "",
+    "on-click":  "bash ~/.config/hypr/scripts/power-menu.sh",
+    "tooltip":   false
+  },
+
+  "tray": {
+    "icon-size": 14,
+    "spacing":   10
+  }
+}

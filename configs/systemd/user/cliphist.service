@@ -1,0 +1,21 @@
+# ── CGGX Cliphist Service ───────────────────────────────
+# Place at: ~/.config/systemd/user/cliphist.service
+# Clipboard history — watches wl-paste, stores in cliphist DB
+# Start: systemctl --user enable --now cliphist
+# Logs:  journalctl --user -u cliphist -f
+
+[Unit]
+Description=Clipboard history daemon (wl-paste + cliphist)
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/wl-paste --watch cliphist store
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target
+
+            

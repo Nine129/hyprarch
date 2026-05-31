@@ -1,0 +1,21 @@
+# ── CGGX SwayNC Service ─────────────────────────────────
+# Place at: ~/.config/systemd/user/swaync.service
+# SwayNotificationCenter — notification daemon + panel
+# Start: systemctl --user enable --now swaync
+# Logs:  journalctl --user -u swaync -f
+
+[Unit]
+Description=Sway notification center
+PartOf=graphical-session.target
+After=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/swaync
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=graphical-session.target
+
+            

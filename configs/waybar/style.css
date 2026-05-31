@@ -1,0 +1,105 @@
+/* ── CGGX Waybar — Style ────────────── */
+@import "colors/cggx.css";
+
+* {
+  font-family: 'Share Tech Mono';
+  font-size:   10px;
+  font-weight: 600;
+  border:     none;
+  padding:    0;
+}
+
+window#waybar {
+  background: transparent;
+}
+
+window > box {
+  background: transparent;
+  padding:    0 12px;
+  margin:     5px 80px 0 12px;
+}
+
+/* ── Workspace numbers 1-9 ── */
+#workspaces button {
+  background:   rgba(26, 26, 32, 0.88);
+  border-radius: 0;
+  color:        @muted;
+  padding:      2px 10px;
+  margin:       6px 2px;
+  font-size:    10px;
+  transition:   all 0.12s ease;
+}
+
+#workspaces button.active {
+  background: @red;
+  color:      @bg;
+}
+
+#workspaces button.urgent {
+  color: @orange;
+  animation: blink-orange 1s steps(12) infinite alternate;
+}
+
+#workspaces button:hover {
+  background: rgba(42, 42, 53, 0.5);
+  color:      @silver;
+}
+
+/* ── Pill modules ── */
+#disk,
+#memory,
+#network,
+#pulseaudio,
+#clock,
+#battery,
+#custom-power-button {
+  background:   rgba(26, 26, 32, 0.88);
+  border-radius: 0;
+  padding:      0 12px;
+  margin:       6px 2px;
+  line-height:  22px;
+}
+
+#disk      { color: @lime; }
+#memory    { color: @orange; }
+#network   { color: @cyan; }
+#pulseaudio { color: @orange; }
+#clock     { color: @cyan; }
+#battery   { color: @lime; }
+
+#battery.charging { color: @cyan; }
+#battery.warning  { color: @orange; }
+#battery.critical {
+  color:      @bg;
+  background: @red;
+}
+
+/* ── Power button ── */
+#custom-power-button {
+  color: @red;
+}
+
+/* ── Tray ── */
+#tray {
+  background: transparent;
+  margin:     6px 2px;
+  padding:    0 6px;
+}
+
+/* ── Tooltips ── */
+tooltip {
+  background: @bg;
+  border:     1px solid @border;
+  color:      @silver;
+  font-size:  10px;
+}
+
+tooltip label {
+  padding: 8px;
+  color:   @silver;
+}
+
+/* ── Animations ── */
+@keyframes blink-orange {
+  to { color: @silver; }
+}

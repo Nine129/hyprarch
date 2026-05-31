@@ -1,0 +1,157 @@
+# ── CGGX Zsh ──────────────────────────────────────────
+# Place at ~/.zshrc
+
+# ── Options ───────────────────────────────────────────
+setopt AUTO_CD
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt EXTENDED_GLOB
+setopt NUMERIC_GLOB_SORT
+setopt MENU_COMPLETE
+setopt COMPLETE_IN_WORD
+setopt ALWAYS_TO_END
+setopt CORRECT
+setopt CORRECT_ALL
+setopt HIST_VERIFY
+setopt SHARE_HISTORY
+setopt APPEND_HISTORY
+setopt INC_APPEND_HISTORY
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_EXPIRE_DUPS_FIRST
+
+# ── History ────────────────────────────────────────────
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
+HISTDUP=erase
+
+# ── Completion ─────────────────────────────────────────
+autoload -Uz compinit && compinit
+autoload -Uz bashcompinit && bashcompinit
+
+zstyle ':completion:*' menu select
+zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' rehash true
+zstyle ':completion:*' use-cache true
+zstyle ':completion:*' cache-path "$HOME/.cache/zsh"
+
+# ── Keybindings ───────────────────────────────────────
+bindkey -v  # vi mode
+bindkey '^R' history-incremental-search-backward
+bindkey '^A' beginning-of-line
+bindkey '^E' end-of-line
+bindkey '^W' backward-kill-word
+bindkey '^U' kill-whole-line
+bindkey '^L' clear-screen
+
+# ── CGGX Prompt ───────────────────────────────────────
+# Colors: red (#ff2d55), cyan (#00e5ff), silver (#e8e8f0), muted (#6a6a80)
+# Format:
+#   ╭─ nine@arch ~/some/path (main)
+#   ╰─ $ 
+
+PROMPT='%B%F{#ff2d55}╭─%f %F{#e8e8f0}%n%f%F{#6a6a80}@%f%F{#00e5ff}%m%f %F{#6a6a80}%3~%f%F{#6a6a80}$(git_prompt_info)%f
+%B%F{#ff2d55}╰─%f%F{#e8e8f0} %# %f%b'
+RPROMPT=''
+
+# ── Git prompt info ───────────────────────────────────
+autoload -Uz vcs_info
+zstyle ':vcs_info:git:*' check-for-changes true
+zstyle ':vcs_info:git:*' stagedstr '%F{#c8ff00}●%f'
+zstyle ':vcs_info:git:*' unstagedstr '%F{#ff2d55}●%f'
+zstyle ':vcs_info:git:*' formats ' (%F{#00e5ff}%b%f%F{#6a6a80}%c%u%f)'
+zstyle ':vcs_info:git:*' actionformats ' (%F{#ff6b00}%b%f|%F{#ff2d55}%a%f%F{#6a6a80}%c%u%f)'
+precmd() { vcs_info }
+git_prompt_info() { echo -n "${vcs_info_msg_0_}" }
+
+# ── Dir colors ────────────────────────────────────────
+export LS_COLORS="di=00;38;5;81:fi=00;38;5;254:ln=00;38;5;39:ex=00;38;5;47:*.md=00;38;5;220:*.txt=00;38;5;254:*.gz=00;38;5;244:*.zip=00;38;5;244:*.tar=00;38;5;244:*.zst=00;38;5;244:*.png=00;38;5;213:*.jpg=00;38;5;213:*.mp4=00;38;5;213:*.mp3=00;38;5;140:*.lua=00;38;5;81:*.rs=00;38;5;47:*.toml=00;38;5;220:*.json=00;38;5;220:*.yaml=00;38;5;220:*.html=00;38;5;81:*.css=00;38;5;81:*.js=00;38;5;47:*.ts=00;38;5;81:*.py=00;38;5;47:*.go=00;38;5;81:*.c=00;38;5;81:*.h=00;38;5;81:*.cfg=00;38;5;244:*.conf=00;38;5;244:*.rasi=00;38;5;81"
+
+# ── Aliases ────────────────────────────────────────────
+# System
+alias ls='ls --color=auto'
+alias ll='ls -lah'
+alias la='ls -A'
+alias l='ls -CF'
+alias grep='grep --color=auto'
+alias df='df -h'
+alias du='du -hc'
+alias free='free -h'
+
+# Confirm before overwriting
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+
+# Directory navigation
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias ~='cd ~'
+
+# Hyprland
+alias hrc='hyprctl reload config'
+alias hw='hyprctl workspaces'
+alias hm='hyprctl monitors'
+alias hk='hyprctl keyword'
+alias hd='hyprctl dispatch'
+alias hb='hyprctl hyprpaper'
+
+# Waybar
+alias wbr='killall waybar && waybar &> /dev/null &'
+
+# Rofi
+alias rfl='rofi -show drun'
+alias rfw='rofi -show window'
+alias rfr='rofi -show run'
+
+# Kitty
+alias k='kitty'
+alias kssh='kitty +kitten ssh'
+
+# Neovim
+alias v='nvim'
+alias vi='nvim'
+alias vim='nvim'
+
+# Git
+alias g='git'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git push'
+alias gl='git log --oneline --graph'
+alias gs='git status'
+alias gd='git diff'
+alias gb='git branch'
+alias gco='git checkout'
+alias gcb='git checkout -b'
+alias gpl='git pull'
+alias gf='git fetch'
+
+# Systemd
+alias sc='systemctl'
+alias scu='systemctl --user'
+alias jc='journalctl'
+alias jcu='journalctl --user'
+
+# Yay (AUR helper)
+alias y='yay'
+alias ys='yay -S'
+alias yr='yay -Rns'
+alias yq='yay -Q'
+alias yu='yay -Syu'
+
+# Screenshot
+alias ss='grimblast copy area && wl-paste | swappy -f -'                   # Region → swappy markup
+alias ss-full='grimblast copy output && wl-paste | swappy -f -'            # Full → swappy markup
+alias ss-window='grimblast copy active && wl-paste | swappy -f -'          # Active window → swappy
+alias ss-save='grimblast save area'                                         # Region → file
+
+# ── Autostart (first shell only) ──────────────────────
+if [[ -z "$ZSH_SESSION" ]]; then
+  export ZSH_SESSION="started"
+fi
