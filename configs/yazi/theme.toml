@@ -11,100 +11,99 @@
 [filetype]
 rules = [
   # Directories — cyan like waybar clock
-  { name = "*", type = "directory", fg = "#00e5ff" },
+  { url = "*", type = "directory", fg = "#00e5ff" },
 
   # Images / video — purple like fetch artwork
-  { name = "*.png",  fg = "#b48cff" },
-  { name = "*.jpg",  fg = "#b48cff" },
-  { name = "*.jpeg", fg = "#b48cff" },
-  { name = "*.gif",  fg = "#b48cff" },
-  { name = "*.webp", fg = "#b48cff" },
-  { name = "*.svg",  fg = "#b48cff" },
-  { name = "*.mp4",  fg = "#b48cff" },
-  { name = "*.mov",  fg = "#b48cff" },
+  { url = "*.png",  fg = "#b48cff" },
+  { url = "*.jpg",  fg = "#b48cff" },
+  { url = "*.jpeg", fg = "#b48cff" },
+  { url = "*.gif",  fg = "#b48cff" },
+  { url = "*.webp", fg = "#b48cff" },
+  { url = "*.svg",  fg = "#b48cff" },
+  { url = "*.mp4",  fg = "#b48cff" },
+  { url = "*.mov",  fg = "#b48cff" },
 
   # Audio — red like accent
-  { name = "*.mp3",  fg = "#ff2d55" },
-  { name = "*.flac", fg = "#ff2d55" },
-  { name = "*.wav",  fg = "#ff2d55" },
-  { name = "*.aac",  fg = "#ff2d55" },
-  { name = "*.ogg",  fg = "#ff2d55" },
+  { url = "*.mp3",  fg = "#ff2d55" },
+  { url = "*.flac", fg = "#ff2d55" },
+  { url = "*.wav",  fg = "#ff2d55" },
+  { url = "*.aac",  fg = "#ff2d55" },
+  { url = "*.ogg",  fg = "#ff2d55" },
 
   # Archives — lime like waybar disk
-  { name = "*.zip",  fg = "#c8ff00" },
-  { name = "*.tar",  fg = "#c8ff00" },
-  { name = "*.gz",   fg = "#c8ff00" },
-  { name = "*.xz",   fg = "#c8ff00" },
-  { name = "*.bz2",  fg = "#c8ff00" },
-  { name = "*.7z",   fg = "#c8ff00" },
+  { url = "*.zip",  fg = "#c8ff00" },
+  { url = "*.tar",  fg = "#c8ff00" },
+  { url = "*.gz",   fg = "#c8ff00" },
+  { url = "*.xz",   fg = "#c8ff00" },
+  { url = "*.bz2",  fg = "#c8ff00" },
+  { url = "*.7z",   fg = "#c8ff00" },
 
   # Config / code — orange like waybar memory
-  { name = "*.lua",  fg = "#ff6b00" },
-  { name = "*.conf", fg = "#ff6b00" },
-  { name = "*.json", fg = "#ff6b00" },
-  { name = "*.toml", fg = "#ff6b00" },
-  { name = "*.yaml", fg = "#ff6b00" },
-  { name = "*.ini",  fg = "#ff6b00" },
-  { name = "*.css",  fg = "#ff6b00" },
-  { name = "*.html", fg = "#ff6b00" },
-  { name = "*.xml",  fg = "#ff6b00" },
+  { url = "*.lua",  fg = "#ff6b00" },
+  { url = "*.conf", fg = "#ff6b00" },
+  { url = "*.json", fg = "#ff6b00" },
+  { url = "*.toml", fg = "#ff6b00" },
+  { url = "*.yaml", fg = "#ff6b00" },
+  { url = "*.ini",  fg = "#ff6b00" },
+  { url = "*.css",  fg = "#ff6b00" },
+  { url = "*.html", fg = "#ff6b00" },
+  { url = "*.xml",  fg = "#ff6b00" },
 
   # Source code — cyan like waybar net-icon
-  { name = "*.rs",   fg = "#00e5ff" },
-  { name = "*.py",   fg = "#00e5ff" },
-  { name = "*.js",   fg = "#00e5ff" },
-  { name = "*.ts",   fg = "#00e5ff" },
-  { name = "*.go",   fg = "#00e5ff" },
-  { name = "*.c",    fg = "#00e5ff" },
-  { name = "*.h",    fg = "#00e5ff" },
-  { name = "*.cpp",  fg = "#00e5ff" },
-  { name = "*.zig",  fg = "#00e5ff" },
+  { url = "*.rs",   fg = "#00e5ff" },
+  { url = "*.py",   fg = "#00e5ff" },
+  { url = "*.js",   fg = "#00e5ff" },
+  { url = "*.ts",   fg = "#00e5ff" },
+  { url = "*.go",   fg = "#00e5ff" },
+  { url = "*.c",    fg = "#00e5ff" },
+  { url = "*.h",    fg = "#00e5ff" },
+  { url = "*.cpp",  fg = "#00e5ff" },
+  { url = "*.zig",  fg = "#00e5ff" },
 
   # Documents — silver
-  { name = "*.md",   fg = "#e8e8f0" },
-  { name = "*.txt",  fg = "#e8e8f0" },
-  { name = "*.pdf",  fg = "#e8e8f0" },
+  { url = "*.md",   fg = "#e8e8f0" },
+  { url = "*.txt",  fg = "#e8e8f0" },
+  { url = "*.pdf",  fg = "#e8e8f0" },
 
   # Executables — lime
-  { name = "*", type = "executable", fg = "#c8ff00" },
+  { url = "*", type = "executable", fg = "#c8ff00" },
 
   # Symlinks — red
-  { name = "*", type = "symlink", fg = "#ff2d55" },
+  { url = "*", type = "symlink", fg = "#ff2d55" },
 
   # Special: makefiles, docker, etc — orange
-  { name = "Makefile",  fg = "#ff6b00" },
-  { name = "Dockerfile", fg = "#ff6b00" },
+  { url = "Makefile",  fg = "#ff6b00" },
+  { url = "Dockerfile", fg = "#ff6b00" },
 ]
 
 # ── Manager (file listing) ─────────────────────────────
 [manager]
+syntect_theme = "catppuccin-mocha"
+
 [manager.preview]
 selected = { fg = "#e8e8f0", bg = "#1a1a20" }
-
-[manager]
-syntect_theme = "catppuccin-mocha"
 
 # ── Folder / file icons ────────────────────────────────
 [icon]
 rules = [
-  { name = "*", type = "directory", fg = "#00e5ff" },
-  { name = "*.png",  fg = "#b48cff" },
-  { name = "*.jpg",  fg = "#b48cff" },
-  { name = "*.webp", fg = "#b48cff" },
-  { name = "*.mp3",  fg = "#ff2d55" },
-  { name = "*.flac", fg = "#ff2d55" },
-  { name = "*.zip",  fg = "#c8ff00" },
-  { name = "*.tar",  fg = "#c8ff00" },
-  { name = "*.lua",  fg = "#ff6b00" },
-  { name = "*.json", fg = "#ff6b00" },
-  { name = "*.toml", fg = "#ff6b00" },
-  { name = "*.conf", fg = "#ff6b00" },
-  { name = "*.rs",   fg = "#00e5ff" },
-  { name = "*.py",   fg = "#00e5ff" },
-  { name = "*.js",   fg = "#00e5ff" },
-  { name = "*.md",   fg = "#e8e8f0" },
-  { name = "*", type = "executable", fg = "#c8ff00" },
-  { name = "*", type = "symlink", fg = "#ff2d55" },
+  { url = "*", type = "directory", fg = "#00e5ff" },
+  { url = "*.png",  fg = "#b48cff" },
+  { url = "*.jpg",  fg = "#b48cff" },
+  { url = "*.webp", fg = "#b48cff" },
+  { url = "*.mp3",  fg = "#ff2d55" },
+  { url = "*.flac", fg = "#ff2d55" },
+  { url = "*.zip",  fg = "#c8ff00" },
+  { url = "*.tar",  fg = "#c8ff00" },
+  { url = "*.lua",  fg = "#ff6b00" },
+  { url = "*.json", fg = "#ff6b00" },
+  { url = "*.toml", fg = "#ff6b00" },
+  { url = "*.conf", fg = "#ff6b00" },
+  { url = "*.rs",   fg = "#00e5ff" },
+  { url = "*.py",   fg = "#00e5ff" },
+  { url = "*.js",   fg = "#00e5ff" },
+  { url = "*.md",   fg = "#e8e8f0" },
+  { url = "*", type = "executable", fg = "#c8ff00" },
+  { url = "*", type = "symlink", fg = "#ff2d55" },
 ]
 
 # ── Status bar ─────────────────────────────────────────
@@ -160,7 +159,7 @@ border = "#ff2d55"
 [which]
 fg = "#e8e8f0"
 bg = "#1a1a20"
-mask = "#6a6a80"
+mask = { fg = "#6a6a80", bg = "#1a1a20" }
 candidates = 10
 # Candidate key colors
 [which.key]

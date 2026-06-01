@@ -44,13 +44,13 @@
     "format-muted":    "󰖁 Muted",
     "format-icons":    { "default": ["", "", ""] },
     "scroll-step":     1,
-    "on-click":        "pavucontrol",
+    "on-click":        "bash ~/.config/hypr/scripts/pavucontrol-toggle.sh",
     "on-click-right": "pactl set-sink-mute 0 toggle"
   },
 
   "clock": {
     "interval":  60,
-    "format":    " {:%a %d  %H:%M}",
+    "format":    "🕐 {:%a %d  %H:%M}",
     "format-alt": "{:%Y-%m-%d}"
   },
 

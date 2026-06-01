@@ -6,8 +6,10 @@ hl.config({
     gaps_in              = 4,
     gaps_out             = 12,
     border_size          = 2,
-    col.active_border    = "rgba(ff2d55ff) rgba(ff6b00ff) 30deg",
-    col.inactive_border  = "rgba(2a2a3580)",
+    col = {
+           active_border = { colors = {"rgba(ff2d55ee)", "rgba(ff6b00ee)"}, angle = 30 },
+	   inactive_border = "rgba(2a2a3580)",
+   },
     layout               = "dwindle",
     resize_on_border     = true,
   },
@@ -20,24 +22,24 @@ hl.config({
     fullscreen_opacity  = 1.0,
     dim_inactive        = true,
     dim_strength        = 0.5,
-
+    
     blur = {
       enabled            = true,
-      size               = 8,
+      size               = 6,
       passes             = 2,
-      vibrancy           = 0.18,
+      vibrancy           = 0.05,
       new_optimizations   = true,
       xray               = false,
-      noise              = 0.0117,
-      contrast           = 0.8916,
-      brightness         = 0.8172,
+      noise              = 0.005,
+      contrast           = 0.7,
+      brightness         = 0.8,
     },
 
     shadow = {
       enabled            = true,
-      range              = 12,
+      range              = 6,
       render_power       = 3,
-      color              = "rgba(ff2d5540)",
+      color              = "rgba(0a0a0caa)",
       scale              = 1.0,
     },
   },
@@ -52,7 +54,6 @@ hl.config({
   },
 
   misc = {
-    vfr                  = true,
     vrr                  = 1,
     disable_hyprland_logo = true,
   },

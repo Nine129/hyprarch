@@ -36,12 +36,17 @@ hl.config({
 
 -- Autostart ───────────────────────────
 hl.on("hyprland.start", function()
-  hl.exec_cmd("waybar")
+  -- Managed by systemd user service (auto-restart on crash):
+  -- hl.exec_cmd("waybar")
   hl.exec_cmd("swayosd-server")                            -- On-screen display (volume/brightness)
-  hl.exec_cmd("hyprpaper")
-  hl.exec_cmd("swaync")                                    -- Notification daemon + control center
+  -- Managed by systemd user services (step 2):
+  -- hl.exec_cmd("hyprpaper")
+  -- hl.exec_cmd("swaync")                                    -- Notification daemon + control center
   hl.exec_cmd("nm-applet")
   hl.exec_cmd("blueman-applet")                          -- Bluetooth tray icon
   hl.exec_cmd("/usr/lib/polkit-gnome-authentication-agent-1")
-  hl.exec_cmd("wl-paste --watch cliphist store")  -- Clipboard history daemon
+  -- Managed by systemd:
+  -- hl.exec_cmd("wl-paste --watch cliphist store")  -- Clipboard history daemon
+  -- Set wallpaper via IPC (hyprpaper v0.8.4 config preload doesn't work at startup)
+  hl.exec_cmd("hyprctl hyprpaper wallpaper eDP-1,/home/nine/.local/share/wallpapers/cggx.webp")
 end)

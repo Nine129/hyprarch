@@ -21,7 +21,6 @@ hl.window_rule({
 hl.window_rule({ match = { class = "firefox" },   workspace = 1 })
 hl.window_rule({ match = { class = "zen" },       workspace = 1 })
 hl.window_rule({ match = { class = "chromium" },  workspace = 1 })
-hl.window_rule({ match = { initial_class = "kitty" }, workspace = 2 })
 
 -- Smart gaps (no gaps when single) ─
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })

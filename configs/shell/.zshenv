@@ -2,7 +2,7 @@
 # Place at ~/.zshenv
 
 # ── Path ──────────────────────────────────────────────
-export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$HOME/go/bin:$HOME/.local/share/pi-node/node-v22.22.3-linux-x64/bin:$PATH"
 
 # ── Default editor ────────────────────────────────────
 export EDITOR="nvim"
@@ -17,8 +17,9 @@ export LESSOPEN="| lesspipe %s"
 # Kitty sets TERM=xterm-kitty automatically — do NOT override
 
 # ── Language ──────────────────────────────────────────
-export LANG="en_US.UTF-8"
-export LC_ALL="en_US.UTF-8"
+# en_US.UTF-8 not generated on this system; use C.UTF-8 instead
+export LANG="C.UTF-8"
+export LC_ALL="C.UTF-8"
 
 # ── XDG paths ─────────────────────────────────────────
 export XDG_CONFIG_HOME="$HOME/.config"

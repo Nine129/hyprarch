@@ -110,6 +110,7 @@ alias vi='nvim'
 alias vim='nvim'
 
 # Git
+alias git='nocorrect git'
 alias g='git'
 alias ga='git add'
 alias gc='git commit'

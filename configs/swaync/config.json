@@ -1,15 +1,10 @@
 {
-  // Position
   "positionX": "right",
   "positionY": "top",
   "layer": "overlay",
-
-  // Control center
   "control-center-exclusive-zone": false,
   "control-center-width": 400,
   "control-center-height": 600,
-
-  // Notifications
   "notification-window-width": 400,
   "timeout": 10,
   "timeout-low": 5,
@@ -18,15 +13,12 @@
   "notification-2fa-action": false,
   "image-visibility": "when-available",
   "hide-on-action": true,
-
-  // Widgets
   "widgets": [
     "title",
     "dnd",
     "mpris",
     "notifications"
   ],
-
   "widget-config": {
     "title": {
       "text": "Notifications",

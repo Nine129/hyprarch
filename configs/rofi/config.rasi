@@ -35,8 +35,8 @@ configuration {
 /* ── Global widget defaults ───────────── */
 * {
   background-color: transparent;
-  text-color:       @fg;
-  border-color:     @border;
+  text-color:       var(fg);
+  border-color:     var(border);
   border-radius:    0;
   spacing:          0;
   padding:          0;
@@ -46,8 +46,9 @@ configuration {
 /* ── Window ───────────────────────────── */
 window {
   background-color: rgba(10, 10, 12, 0.70);
-  text-color:       @fg;
-  border:           1px solid @border;
+  text-color:       var(fg);
+  border:           1px;
+  border-color:     var(border);
   border-radius:    0;
   width:            400px;
   padding:          0;
@@ -70,13 +71,14 @@ mainbox {
 /* ── Inputbar ─────────────────────────── */
 inputbar {
   spacing:         0;
-  border-bottom:   1px solid @secondary;
+  border-bottom:   1px;
+  border-color:     var(secondary);
 }
 
 /* ── Prompt ───────────────────────────── */
 prompt {
   enabled:      true;
-  text-color:   @primary;
+  text-color:   var(primary);
   font:         "Share Tech Mono 10";
   padding:      10px 0 10px 12px;
   vertical-align: 0.5;
@@ -86,10 +88,10 @@ prompt {
 entry {
   enabled:             true;
   background-color:    transparent;
-  text-color:          @fg;
-  placeholder-color:   @fg-dim;
+  text-color:          var(fg);
+  placeholder-color:   var(fg-dim);
   placeholder:         "search...";
-  cursor-color:        @primary;
+  cursor-color:        var(primary);
   cursor-width:        2px;
   hide-cursor-on-empty: false;
   padding:             10px 12px;
@@ -99,7 +101,7 @@ entry {
 /* ── Case indicator ───────────────────── */
 case-indicator {
   enabled:    true;
-  text-color: @fg-dim;
+  text-color: var(fg-dim);
   padding:    0 10px;
 }
 
@@ -125,46 +127,51 @@ element {
   spacing:     10px;
   padding:     5px 12px;
   cursor:      "default";
-  border-left: 3px solid transparent;
+  border-left: 3px;
+  border-color:   transparent;
 }
 
 /* Element states ───────────────────────── */
 element normal.normal {
   background-color: transparent;
-  text-color:       @fg;
+  text-color:       var(fg);
 }
 element normal.urgent {
   background-color: transparent;
-  text-color:       @orange;
+  text-color:       var(orange);
 }
 element normal.active {
   background-color: transparent;
-  text-color:       @secondary;
-  border-left:      3px solid @secondary;
+  text-color:       var(secondary);
+  border-left:      3px;
+  border-color:     var(secondary);
 }
 element selected.normal {
   background-color: rgba(255, 45, 85, 0.15);
-  text-color:       @fg;
-  border-left:      3px solid @primary;
+  text-color:       var(fg);
+  border-left:      3px;
+  border-color:     var(primary);
 }
 element selected.urgent {
   background-color: rgba(255, 45, 85, 0.15);
-  text-color:       @orange;
-  border-left:      3px solid @orange;
+  text-color:       var(orange);
+  border-left:      3px;
+  border-color:     var(orange);
 }
 element selected.active {
   background-color: rgba(0, 229, 255, 0.15);
-  text-color:       @secondary;
-  border-left:      3px solid @secondary;
+  text-color:       var(secondary);
+  border-left:      3px;
+  border-color:     var(secondary);
 }
 element alternate.normal {
   background-color: rgba(255, 255, 255, 0.03);
-  text-color:       @fg;
+  text-color:       var(fg);
 }
 
 /* ── Element text ─────────────────────── */
 element-text {
-  text-color       @secondary;
+  text-color:       var(secondary);
   vertical-align:  0.5;
   horizontal-align: 0;
   cursor:           "default";
@@ -180,7 +187,7 @@ element-icon {
 
 /* ── Element index (shortcut num) ────── */
 element-index {
-  text-color:    @fg-dim;
+  text-color:    var(fg-dim);
   vertical-align: 0.5;
   padding:       0 4px 0 0;
 }
@@ -189,32 +196,32 @@ element-index {
 mode-switcher {
   enabled:         false;
   spacing:         0;
-  background-color: @bg-alt;
-  border-top:      1px solid @border;
+  background-color: var(bg-alt);
+  border-top:      1px;
+  border-color:     var(border);
   padding:         0;
 }
 
 button {
-  text-color:      @fg-dim;
+  text-color:      var(fg-dim);
   background-color: transparent;
   padding:         6px 14px;
   cursor:          "pointer";
-  border-left:     1px solid @border;
-}
-button:first-child {
-  border-left:      none;
+  border-left:     1px;
+  border-color:     var(border);
 }
 button selected {
-  text-color:      @primary;
+  text-color:      var(primary);
   background-color: rgba(255, 45, 85, 0.08);
 }
 
 /* ── Message box ──────────────────────── */
 message {
-  background-color: @bg-alt;
-  border-top:      1px solid @border;
+  background-color: var(bg-alt);
+  border-top:      1px;
+  border-color:     var(border);
   padding:         8px 12px;
 }
 textbox {
-  text-color: @fg-dim;
+  text-color: var(fg-dim);
 }

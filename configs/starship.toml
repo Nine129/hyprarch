@@ -4,14 +4,7 @@
 # Reload: pkill -USR1 starship || exec $SHELL
 
 # ── Format ─────────────────────────────────────────────
-format = """
-$os
-$directory
-$git_branch
-$git_status
-$cmd_duration
-$line_break
-$character"""
+format = "$os $directory $git_branch$git_status$cmd_duration\n$character"
 
 # ── Palette ────────────────────────────────────────────
 palette = "cggx"
@@ -64,7 +57,7 @@ deleted = "✘"
 [cmd_duration]
 style = "muted"
 format = "⏱️ [$duration]($style) "
-min_time_to_show = 2000
+min_time_to_notify = 2000
 show_milliseconds = false
 
 # ── OS ─────────────────────────────────────────────────
