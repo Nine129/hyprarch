@@ -87,7 +87,7 @@ hl.bind("SUPER + SHIFT + C",   hl.dsp.exec_cmd("cliphist wipe && notify-send 'Cl
 
 -- Lock & exit ─────────────────────
 hl.bind("SUPER + L",           hl.dsp.exec_cmd("hyprlock"))
-hl.bind("SUPER + SHIFT + Q",   hl.dsp.exec_cmd("/home/nine/.local/bin/wlogout -b 3 -c 10 -r 10 -m 140"))
+hl.bind("SUPER + SHIFT + Q",   hl.dsp.exec_cmd("/home/nine/.local/bin/wlogout -b 5 -c 10 -r 0 -T 400 -B 400 -L 70 -R 70"))
 hl.bind("SUPER + SHIFT + Escape",  hl.dsp.exec_cmd("hyprctl dispatch exit"))
 
 -- Screenshot menu ─────────────────────
@@ -102,33 +102,4 @@ hl.bind("XF86AudioNext",         hl.dsp.exec_cmd("swayosd-client --playerctl nex
 hl.bind("XF86AudioPrev",         hl.dsp.exec_cmd("swayosd-client --playerctl previous"))
 hl.bind("XF86AudioPlay",         hl.dsp.exec_cmd("swayosd-client --playerctl play-pause"))
 hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("swayosd-client --brightness raise"),                  { repeating = true })
-hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness lower"),                 { repeating = true })     
--- Sourced via require("rules")
-
--- Float-only windows ──────────────
-hl.window_rule({ match = { class = "pavucontrol" },        float = true, center = true })
-hl.window_rule({ match = { class = "blueman-manager" },     float = true })
-hl.window_rule({ match = { class = "nm-connection-editor" }, float = true })
-hl.window_rule({ match = { class = "hyprpicker" },          float = true })
-hl.window_rule({ match = { class = "imv" },                  float = true })
-hl.window_rule({ match = { class = "mpv" },                  float = true })
-hl.window_rule({ match = { class = "xdg-desktop-portal" },   float = true })
-
--- Browser PiP
-hl.window_rule({
-  match  = { class = "firefox", title = "Picture-in-Picture" },
-  float  = true,
-  size   = { 400, 300 },
-})
-
--- Fixed workspace assignments ─────
-hl.window_rule({ match = { class = "firefox" },   workspace = 1 })
-hl.window_rule({ match = { class = "zen" },       workspace = 1 })
-hl.window_rule({ match = { class = "chromium" },  workspace = 1 })
--- hl.window_rule({ match = { initial_class = "kitty" }, workspace = 2 })
-
--- Smart gaps (no gaps when single) ─
-hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
-hl.workspace_rule({ workspace = "f[1]",   gaps_out = 0, gaps_in = 0 })
-hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
-hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding   = 0 })
+hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness lower"),                 { repeating = true })

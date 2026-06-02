@@ -152,3 +152,11 @@ alias gparted='sudo -E gparted'
 if [[ -z "$ZSH_SESSION" ]]; then
   export ZSH_SESSION="started"
 fi
+
+# pnpm
+export PNPM_HOME="/home/nine/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME/bin:"*) ;;
+  *) export PATH="$PNPM_HOME/bin:$PATH" ;;
+esac
+# pnpm end

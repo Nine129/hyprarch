@@ -56,3 +56,9 @@ hl.on("hyprland.start", function()
   -- Set wallpaper via IPC (hyprpaper v0.8.4 config preload doesn't work at startup)
   hl.exec_cmd("hyprctl hyprpaper wallpaper eDP-1,/home/nine/.local/share/wallpapers/cggx.webp")
 end)
+-- Window Rules ───────────────────────────
+-- Window Rules chuẩn chỉ theo Hyprland Wiki v0.55.2 Lua API
+hl.window_rule({ 
+  match    = { class = "vesktop" }, 
+  decorate = false,
+})

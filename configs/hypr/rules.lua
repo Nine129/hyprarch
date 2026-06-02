@@ -21,10 +21,20 @@ hl.window_rule({
 hl.window_rule({ match = { class = "vivaldi" },       workspace = 1 })
 hl.window_rule({ match = { class = "Vivaldi-stable" }, workspace = 1 })
 
--- Force Vivaldi fully opaque — override global decoration opacity
-hl.window_rule({ match = { class = "vivaldi" },       opaque = true })
-hl.window_rule({ match = { class = "Vivaldi-stable" }, opaque = true })
+-- Force Vivaldi fully opaque — hl.window_rule's `opaque` doesn't work in the Lua API,
+-- so we use an event listener to fire setprop when Vivaldi opens.
+hl.on("window.open", function(win)
+  if win.class:match("[Vv]ivaldi") then
+    hl.dispatch(hl.dsp.window.set_prop({ window = win, prop = "opaque", value = 1 }))
+  end
+end)
 hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 12, gaps_in = 4 })
 hl.workspace_rule({ workspace = "f[1]",   gaps_out = 12, gaps_in = 4 })
 -- Ensure borders show on single-window workspaces
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 3 })
+
+-- Enable blur on wlogout layer surface for acrylic glass effect
+hl.layer_rule({
+  match = { namespace = "logout_dialog" },
+  blur  = true,
+})

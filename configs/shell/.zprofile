@@ -3,5 +3,5 @@
 # Auto-launch Hyprland on tty1 (no SDDM/display manager)
 
 if [ -z "$WAYLAND_DISPLAY" ] && [ "$(tty)" = "/dev/tty1" ]; then
-  exec uwsm start hyprland
+  exec uwsm start hyprland-uwsm.desktop
 fi
