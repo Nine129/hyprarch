@@ -146,7 +146,8 @@ alias ss='grimblast copy area && wl-paste | swappy -f -'                   # Reg
 alias ss-full='grimblast copy output && wl-paste | swappy -f -'            # Full → swappy markup
 alias ss-window='grimblast copy active && wl-paste | swappy -f -'          # Active window → swappy
 alias ss-save='grimblast save area'                                         # Region → file
-
+# Gparted
+alias gparted='sudo -E gparted'
 # ── Autostart (first shell only) ──────────────────────
 if [[ -z "$ZSH_SESSION" ]]; then
   export ZSH_SESSION="started"

@@ -24,8 +24,8 @@ window > box {
   background:   #1a1a20;
   border-radius: 0;
   color:        @muted;
-  padding:      4px 14px;
-  margin:       6px 2px;
+  padding:      8px 14px;
+  margin:       4px 2px;
   font-size:    13px;
   transition:   all 0.12s ease;
 }
@@ -75,7 +75,9 @@ window > box {
 
 /* ── Power button ── */
 #custom-power-button {
-  color: @red;
+  color:     @red;
+  font-size: 18px;
+  padding:   0 12px;
 }
 
 /* ── Tray ── */

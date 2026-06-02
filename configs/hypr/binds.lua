@@ -87,7 +87,7 @@ hl.bind("SUPER + SHIFT + C",   hl.dsp.exec_cmd("cliphist wipe && notify-send 'Cl
 
 -- Lock & exit ─────────────────────
 hl.bind("SUPER + L",           hl.dsp.exec_cmd("hyprlock"))
-hl.bind("SUPER + SHIFT + Q",   hl.dsp.exec_cmd("~/.config/hypr/scripts/power-menu.sh"))
+hl.bind("SUPER + SHIFT + Q",   hl.dsp.exec_cmd("/home/nine/.local/bin/wlogout -b 3 -c 10 -r 10 -m 140"))
 hl.bind("SUPER + SHIFT + Escape",  hl.dsp.exec_cmd("hyprctl dispatch exit"))
 
 -- Screenshot menu ─────────────────────

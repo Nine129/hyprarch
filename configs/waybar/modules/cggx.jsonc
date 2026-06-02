@@ -70,7 +70,7 @@
 
   "custom/power-button": {
     "format":    "",
-    "on-click":  "python3 ~/.config/hypr/scripts/power-menu.py",
+    "on-click":  "/home/nine/.local/bin/wlogout -b 3 -c 10 -r 10 -m 140",
     "tooltip":   false
   },
 

@@ -47,6 +47,7 @@ fi
 
 # Auto-paste
 sleep 0.03
-wtype -M ctrl v -m ctrl                     # GUI (Ctrl+V)
-sleep 0.03
-wtype -M ctrl -M shift v -m shift -m ctrl   # Terminal (Ctrl+Shift+V)
+# Terminal paste first, then GUI paste (avoids quoted-insert issue)
+wtype -M ctrl -M shift v -m shift -m ctrl  # works in kitty/terminals
+sleep 0.05
+wtype -M ctrl v -m ctrl                    # works in GUI apps

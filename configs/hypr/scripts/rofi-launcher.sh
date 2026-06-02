@@ -117,8 +117,12 @@ rebuild_cache() {
       else
         color="$COL_DEFAULT"; icon="$ICO_DEFAULT"
       fi
+      # Check if app needs a terminal
+      terminal=false
+      grep -qis '^Terminal=true' "$file" && terminal=true
+
       # Prepend sort key (name) with @@@ delimiter, strip after sort
-      echo "$(escape "$name")@@@<span foreground='$color'>$icon  $(escape "$name")</span>|$bn"
+      echo "$(escape "$name")@@@<span foreground='$color'>$icon  $(escape "$name")</span>|$bn|$terminal"
     done | sort -t'@' -k1 | cut -d'@' -f4-
   ) > "$CACHE"
 }
@@ -156,5 +160,23 @@ selected_idx=$(cut -d'|' -f1 "$CACHE" | \
 [[ -z "$selected_idx" ]] && exit 0
 
 # ── Launch app ──────────────────────────
-desktop_bn=$(sed -n "$((selected_idx + 1))p" "$CACHE" | cut -d'|' -f2)
-gtk-launch "${desktop_bn%.desktop}" &
+IFS='|' read -r _ desktop_bn terminal < <(sed -n "$((selected_idx + 1))p" "$CACHE")
+desktop_bn="${desktop_bn%.desktop}"
+
+if [[ "$terminal" == "true" ]]; then
+  # Find the .desktop file and extract Exec for terminal launch
+  desktop_file=""
+  for dir in /usr/share/applications /usr/local/share/applications \
+    /var/lib/flatpak/exports/share/applications \
+    "$HOME/.local/share/applications" \
+    "$HOME/.local/share/flatpak/exports/share/applications"; do
+    [[ -f "$dir/${desktop_bn}.desktop" ]] && { desktop_file="$dir/${desktop_bn}.desktop"; break; }
+  done
+  if [[ -n "$desktop_file" ]]; then
+    exec_cmd=$(grep -m1 '^Exec=' "$desktop_file" | sed 's/^Exec=//') || true
+    exec_cmd=$(echo "$exec_cmd" | sed 's/%[fFuUbcdDnNmMiIv]//g' | sed 's/  */ /g' | sed 's/^ *//')
+    nohup kitty -e "$SHELL" -c "$exec_cmd" >/dev/null 2>&1 &
+  fi
+else
+  gtk-launch "$desktop_bn" &
+fi
