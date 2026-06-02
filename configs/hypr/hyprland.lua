@@ -28,9 +28,15 @@ hl.monitor({
 -- Input ──────────────────────────────
 hl.config({
   input = {
-    kb_layout   = "us",
-    follow_mouse = 1,
-    sensitivity  = 0,
+    kb_layout      = "us",
+    follow_mouse   = 1,
+    sensitivity    = 1.2,
+    accel_profile  = "flat",
+  },
+
+  cursor = {
+    no_hardware_cursors = true,
+    enable_hyprcursor   = false,
   },
 })
 

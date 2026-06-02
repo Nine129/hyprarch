@@ -3,7 +3,7 @@
 # Place at ~/.config/cliphist/config
 # See: cliphist help  OR  cliphist(1) man page
 
-max-items         1500        # Total entries to keep (default 750)
-max-store-size    10MiB       # Max size per clipboard item (default 5MB)
-preview-width     120         # Preview chars shown in picker (default 100)
-max-dedupe-search 200         # How many recent items to dedupe against (default 100)
+max-items         1500
+max-store-size    10MiB
+preview-width     120
+max-dedupe-search 200

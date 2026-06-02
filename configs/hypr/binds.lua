@@ -7,12 +7,13 @@ hl.bind("SUPER + Q",       hl.dsp.exec_cmd("kitty"))
 hl.bind("SUPER + W",       hl.dsp.window.close())
 
 -- Launcher ────────────────────────
-hl.bind("SUPER + SPACE", hl.dsp.exec_cmd("~/.config/hypr/scripts/rofi-launcher.sh"))
+hl.bind("SUPER + Super_L", hl.dsp.exec_cmd("~/.config/hypr/scripts/rofi-launcher.sh"), { release = true })
 hl.bind("SUPER + E",     hl.dsp.exec_cmd("kitty -e yazi"))
 
 -- Layout ──────────────────────────
 hl.bind("SUPER + F",       hl.dsp.window.fullscreen({ mode = "fullscreen" }))
-hl.bind("SUPER + V",       hl.dsp.window.float({ action = "toggle" }))
+hl.bind("SUPER + V",       hl.dsp.exec_cmd("~/.config/hypr/scripts/cliphist-rofi.sh"))
+hl.bind("SUPER + X",       hl.dsp.window.float({ action = "toggle" }))
 hl.bind("SUPER + P",       hl.dsp.window.pseudo({ action = "toggle" }))
 hl.bind("SUPER + J",       hl.dsp.layout("togglesplit"))
 

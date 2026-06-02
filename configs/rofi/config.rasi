@@ -1,5 +1,8 @@
-/* ── CGGX Rofi Config + Theme ────────── */
+/* ── CGGX Rofi — Cyberpunk Theme ───── */
 /* File: ~/.config/rofi/config.rasi       */
+/* Design: bold red frame, full red       */
+/* selection highlight, category-colored  */
+/* entries via custom launcher script.    */
 
 /* ── Palette ──────────────────────────── */
 * {
@@ -13,16 +16,16 @@
   cyan:    #00e5ff;
   lime:    #c8ff00;
   orange:  #ff6b00;
-  primary:   #ff2d55;
-  secondary: #00e5ff;
+  purple:  #bd00ff;
+  pink:    #ff007f;
+  gold:    #ffcc00;
 }
 
 /* ── Configuration ────────────────────── */
 configuration {
   modes:                 [ drun, run, window ];
   terminal:              "kitty";
-  show-icons:            true;
-  icon-theme:            "Papirus-Dark";
+  show-icons:            false;    /* icons are Nerd Font glyphs in markup */
   drun-display-format:   "{name}";
   sidebar-mode:          false;
   click-to-exit:         true;
@@ -45,18 +48,18 @@ configuration {
 
 /* ── Window ───────────────────────────── */
 window {
-  background-color: rgba(10, 10, 12, 0.70);
+  background-color: #0a0a0c;
   text-color:       var(fg);
-  border:           1px;
-  border-color:     var(border);
+  border:           2px;
+  border-color:     var(red);
   border-radius:    0;
-  width:            400px;
+  width:            520px;
   padding:          0;
   location:         center;
   anchor:           center;
   fullscreen:       false;
-  transparency:     "real";
-  font:             "Share Tech Mono 10";
+  transparency:     "background";
+  font:             "JetBrainsMonoNL Nerd Font Mono 13";
   cursor:           "default";
 }
 
@@ -71,17 +74,12 @@ mainbox {
 /* ── Inputbar ─────────────────────────── */
 inputbar {
   spacing:         0;
-  border-bottom:   1px;
-  border-color:     var(secondary);
+  border:          0;
 }
 
-/* ── Prompt ───────────────────────────── */
+/* ── Prompt (hidden) ──────────────────── */
 prompt {
-  enabled:      true;
-  text-color:   var(primary);
-  font:         "Share Tech Mono 10";
-  padding:      10px 0 10px 12px;
-  vertical-align: 0.5;
+  enabled:      false;
 }
 
 /* ── Entry (search box) ───────────────── */
@@ -91,31 +89,29 @@ entry {
   text-color:          var(fg);
   placeholder-color:   var(fg-dim);
   placeholder:         "search...";
-  cursor-color:        var(primary);
+  cursor-color:        var(red);
   cursor-width:        2px;
   hide-cursor-on-empty: false;
-  padding:             10px 12px;
-  font:                "Share Tech Mono 10";
+  padding:             12px 14px;
+  font:                "JetBrainsMonoNL Nerd Font Mono 13";
 }
 
 /* ── Case indicator ───────────────────── */
 case-indicator {
-  enabled:    true;
-  text-color: var(fg-dim);
-  padding:    0 10px;
+  enabled:    false;
 }
 
 /* ── Listview ─────────────────────────── */
 listview {
   columns:        1;
-  lines:          8;
+  lines:          12;
   spacing:        0;
-  dynamic:        true;
+  dynamic:        false;
   cycle:          true;
   scrollbar:      false;
   fixed-height:   false;
   reverse:        false;
-  padding:        6px 0;
+  padding:        0 0 6px;
   layout:         vertical;
   cursor:         "default";
 }
@@ -123,18 +119,19 @@ listview {
 /* ── Element (each row) ───────────────── */
 element {
   orientation: horizontal;
-  children:    [ element-icon, element-text ];
-  spacing:     10px;
-  padding:     5px 12px;
+  children:    [ element-text ];
+  spacing:     0;
+  padding:     6px 14px;
   cursor:      "default";
-  border-left: 3px;
-  border-color:   transparent;
 }
 
 /* Element states ───────────────────────── */
+/* With -markup-rows, Pango foreground takes */
+/* precedence. Category-colored text shows   */
+/* on the grey selection background.         */
 element normal.normal {
   background-color: transparent;
-  text-color:       var(fg);
+  text-color:       inherit;
 }
 element normal.urgent {
   background-color: transparent;
@@ -142,77 +139,35 @@ element normal.urgent {
 }
 element normal.active {
   background-color: transparent;
-  text-color:       var(secondary);
-  border-left:      3px;
-  border-color:     var(secondary);
+  text-color:       var(cyan);
 }
 element selected.normal {
-  background-color: rgba(255, 45, 85, 0.15);
-  text-color:       var(fg);
-  border-left:      3px;
-  border-color:     var(primary);
+  background-color: #2a2a35;
 }
 element selected.urgent {
-  background-color: rgba(255, 45, 85, 0.15);
-  text-color:       var(orange);
-  border-left:      3px;
-  border-color:     var(orange);
+  background-color: #2a2a35;
 }
 element selected.active {
-  background-color: rgba(0, 229, 255, 0.15);
-  text-color:       var(secondary);
-  border-left:      3px;
-  border-color:     var(secondary);
+  background-color: #2a2a35;
 }
 element alternate.normal {
   background-color: rgba(255, 255, 255, 0.03);
-  text-color:       var(fg);
+  text-color:       inherit;
 }
 
 /* ── Element text ─────────────────────── */
 element-text {
-  text-color:       var(secondary);
+  text-color:       inherit;
   vertical-align:  0.5;
   horizontal-align: 0;
   cursor:           "default";
   highlight:        bold;
+  font:             "JetBrainsMonoNL Nerd Font Mono 13";
 }
 
-/* ── Element icon ─────────────────────── */
-element-icon {
-  size:            20px;
-  vertical-align: 0.5;
-  cursor:          "default";
-}
-
-/* ── Element index (shortcut num) ────── */
-element-index {
-  text-color:    var(fg-dim);
-  vertical-align: 0.5;
-  padding:       0 4px 0 0;
-}
-
-/* ── Mode switcher ────────────────────── */
+/* ── Mode switcher (hidden) ───────────── */
 mode-switcher {
   enabled:         false;
-  spacing:         0;
-  background-color: var(bg-alt);
-  border-top:      1px;
-  border-color:     var(border);
-  padding:         0;
-}
-
-button {
-  text-color:      var(fg-dim);
-  background-color: transparent;
-  padding:         6px 14px;
-  cursor:          "pointer";
-  border-left:     1px;
-  border-color:     var(border);
-}
-button selected {
-  text-color:      var(primary);
-  background-color: rgba(255, 45, 85, 0.08);
 }
 
 /* ── Message box ──────────────────────── */

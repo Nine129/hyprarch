@@ -25,11 +25,11 @@ hl.animation({ leaf = "global", enabled = true, speed = 8, bezier = "myBezier" }
 
 -- Workspaces ──────────────────────────
 --  Direction: slide (left/right)
---  Curve:     bouncy spring → overshoot + settle
-hl.animation({ leaf = "workspaces",       enabled = true, speed = 8, bezier = "bouncy", style = "slide" })
-hl.animation({ leaf = "workspacesIn",     enabled = true, speed = 8, bezier = "bouncy", style = "slide" })
-hl.animation({ leaf = "workspacesOut",    enabled = true, speed = 8, bezier = "bouncy", style = "slide" })
-hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 8, bezier = "bouncy", style = "slide" })
+--  Curve:     myBezier — snappy ease-out, no overshoot
+hl.animation({ leaf = "workspaces",       enabled = true, speed = 8, bezier = "myBezier", style = "slide" })
+hl.animation({ leaf = "workspacesIn",     enabled = true, speed = 8, bezier = "myBezier", style = "slide" })
+hl.animation({ leaf = "workspacesOut",    enabled = true, speed = 8, bezier = "myBezier", style = "slide" })
+hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 8, bezier = "myBezier", style = "slide" })
 
 -- Windows ────────────────────────────
 --  Style:     popin 80% (scale from 0.8 → 1.0)

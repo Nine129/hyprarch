@@ -14,22 +14,25 @@ entries="📷  Full → File\n✂️  Region → File\n🖌️  Region → Swapp
 theme=(
   -theme-str 'window {
     background-color: rgba(10,10,12,0.70);
-    border: 1px solid #2a2a35;
-    border-radius: 0;
-    width: 280px;
-    font: "Share Tech Mono 10";
+    border:           1px;
+    border-color:     #2a2a35;
+    border-radius:    0;
+    width:            280px;
+    font:             "Share Tech Mono 10";
   }'
   -theme-str 'mainbox { spacing: 0; padding: 0; }'
   -theme-str 'listview { spacing: 0; padding: 0; scrollbar: false; }'
   -theme-str 'element {
-    padding: 5px 12px;
-    border-left: 3px solid transparent;
+    padding:       5px 12px;
+    border:        0px 0px 0px 3px;
+    border-color:  transparent;
   }'
   -theme-str 'element normal.normal { text-color: #e8e8f0; }'
   -theme-str 'element selected.normal {
     background-color: rgba(255,45,85,0.15);
     text-color: #e8e8f0;
-    border-left: 3px solid #ff2d55;
+    border:        0px 0px 0px 3px;
+    border-color:  #ff2d55;
   }'
   -theme-str 'element-text {
     font: "Share Tech Mono 10";
@@ -42,7 +45,7 @@ theme=(
   -theme-str 'prompt { enabled: false; }'
 )
 
-selected=$(echo -e "$entries" | rofi -dmenu -p "" "${theme[@]}" -lines 5 -no-custom -i)
+selected=$(echo -e "$entries" | rofi -dmenu -p "" "${theme[@]}" -lines 5 -no-custom -i -me-select-entry "" -me-accept-entry MousePrimary)
 
 case "$selected" in
   *"Full → File")

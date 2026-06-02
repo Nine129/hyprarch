@@ -35,7 +35,7 @@ Hyprpaper is a wallpaper daemon for Hyprland. Since v0.8.4 it uses **hyprlang** 
 splash = false
 ipc   = true
 
-wallpaper = eDP-1 {
+wallpaper[eDP-1] {
     path     = ~/.local/share/wallpapers/cggx.webp
     fit_mode = cover
 }

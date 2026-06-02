@@ -49,6 +49,10 @@ bindkey '^U' kill-whole-line
 bindkey '^L' clear-screen
 
 # ── Zsh plugins (manual, no Oh-My-Zsh) ──────────────
+# ── Zsh-autosuggestions ────────────────────────────────
+# Brighter suggestion text so it's actually readable
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9a9ab0"
+
 if [[ -d "$HOME/.zsh/plugins/zsh-autosuggestions" ]]; then
   source "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi

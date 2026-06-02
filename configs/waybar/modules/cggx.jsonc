@@ -5,7 +5,7 @@
   "hyprland/workspaces#number": {
     "all-outputs":          true,
     "format":               "{icon}",
-    "on-click":             "activate",
+    "on-click":             "workspace {name}",
     "on-scroll-up":         "hyprctl dispatch workspace e+1",
     "on-scroll-down":       "hyprctl dispatch workspace e-1",
     "persistent-workspaces": {
@@ -32,7 +32,7 @@
 
   "network": {
     "interval":            30,
-    "format-wifi":         "{essid}",
+    "format-wifi":         "󰤨 {essid}",
     "format-ethernet":     "{ifname}",
     "format-disconnected": "󰖪 Disconnected",
     "on-click":            "kitty -e 'nmtui'",
@@ -40,9 +40,9 @@
   },
 
   "pulseaudio": {
-    "format":          " {volume}%",
+    "format":          " {volume}%",
     "format-muted":    "󰖁 Muted",
-    "format-icons":    { "default": ["", "", ""] },
+    "format-icons":    { "default": ["", "", ""] },
     "scroll-step":     1,
     "on-click":        "bash ~/.config/hypr/scripts/pavucontrol-toggle.sh",
     "on-click-right": "pactl set-sink-mute 0 toggle"
@@ -50,7 +50,7 @@
 
   "clock": {
     "interval":  60,
-    "format":    "🕐 {:%a %d  %H:%M}",
+    "format":    " {:%a %d  %H:%M}",
     "format-alt": "{:%Y-%m-%d}"
   },
 
@@ -64,12 +64,13 @@
     "format":          "{icon} {capacity}%",
     "format-charging":  " {capacity}%",
     "format-plugged":  " {capacity}%",
-    "format-icons":    ["", "", "", "", ""]
+    "format-icons":    ["", "", "", "", ""],
+    "on-click":        "bash ~/.config/hypr/scripts/power-profile.sh"
   },
 
   "custom/power-button": {
     "format":    "",
-    "on-click":  "bash ~/.config/hypr/scripts/power-menu.sh",
+    "on-click":  "python3 ~/.config/hypr/scripts/power-menu.py",
     "tooltip":   false
   },
 

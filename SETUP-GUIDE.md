@@ -441,6 +441,7 @@ After copying, verify the layout:
 │   └── scripts/
 │       ├── cliphist-rofi.sh
 │       ├── power-menu.sh
+│       ├── power-profile.sh       ← ACPI platform profile switcher
 │       ├── screenshot-menu.sh
 │       └── screenshot-swappy.sh
 ├── waybar/
@@ -455,7 +456,8 @@ After copying, verify the layout:
 ├── kitty/
 │   └── kitty.conf
 ├── rofi/
-│   └── config.rasi
+│   ├── config.rasi
+│   └── power-profile.rasi        ← power profile switcher theme
 ├── fastfetch/
 │   └── config.jsonc
 ├── cliphist/
@@ -469,7 +471,26 @@ After copying, verify the layout:
     └── init.lua
 ```
 
-### 8.5 Set Up Zsh Dotfiles
+### 8.5 Sudoers Rule — Power Profile Switching
+
+The power profile switcher (`power-profile.sh`) writes to `/sys/firmware/acpi/platform_profile`
+which requires root. Create a passwordless sudo rule so the script can switch profiles
+without prompting:
+
+```bash
+sudo visudo -f /etc/sudoers.d/power-profile
+```
+
+Add this line (replace `nine` with your username):
+
+```
+nine ALL=(root) NOPASSWD: /usr/bin/tee /sys/firmware/acpi/platform_profile
+```
+
+> **Security:** This only allows `tee` to write to that one sysfs file — no arbitrary
+> root access. `power-profile.sh` is the only script that uses it.
+
+### 8.6 Set Up Zsh Dotfiles
 
 ```bash
 # The configs/shell/ folder contains .zshenv and .zshrc
@@ -625,6 +646,7 @@ uwsm start hyprland
 | Notification | Run `notify-send "test"` → SwayNC popup top-right |
 | Clipboard | `SUPER+C` → Rofi clipboard picker with history |
 | Power menu | `SUPER+SHIFT+Q` → Rofi power menu (lock/logout/reboot/shutdown) |
+| Power profile | Click battery in Waybar → Rofi profile picker (low-power/balanced/performance) |
 | Bluetooth | `blueman-manager` from terminal |
 | Network | nm-applet icon visible in Waybar tray |
 
@@ -656,6 +678,7 @@ See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for detailed fixes.
 | `SUPER + SHIFT + 1..9` | Move window to workspace |
 | `SUPER + L` | Lock screen (hyprlock) |
 | `SUPER + SHIFT + Q` | Power menu (rofi) |
+| `Click battery` in Waybar | Power profile switcher (rofi) |
 | `SUPER + SHIFT + ESC` | Exit Hyprland |
 | `Print` | Screenshot region → clipboard (grimblast) |
 | `SUPER + Print` | Screenshot region → swappy editor |
@@ -710,6 +733,10 @@ ln -sf ~/.config/shell/.zshrc ~/.zshrc
 # Wallpaper
 mkdir -p ~/.local/share/wallpapers
 cp wallpaper.webp ~/.local/share/wallpapers/cggx.webp
+
+# Power profile sudoers (replace 'nine' with your username)
+echo 'nine ALL=(root) NOPASSWD: /usr/bin/tee /sys/firmware/acpi/platform_profile' | \
+  sudo tee /etc/sudoers.d/power-profile
 
 # Services
 systemctl --user enable --now pipewire wireplumber

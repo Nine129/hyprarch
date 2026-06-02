@@ -1,31 +1,37 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
   "logo": {
-    "type": "small",
-    "color": {
-      "1": "#ff2d55",
-      "2": "#ff2d55"
+    "source": "/home/nine/.config/fastfetch/logo.txt",
+    "type": "file",
+    "padding": {
+      "right": 2
     }
   },
   "display": {
-    "separator": " → ",
-    "color": "cyan"
+    "separator": "  →  "
   },
   "modules": [
-    "title",
+    { "type": "title", "outputColor": "cyan" },
     "separator",
-    { "type": "os", "key": " ", "keyColor": "cyan" },
-    { "type": "kernel", "key": " ", "keyColor": "cyan" },
-    { "type": "uptime", "key": " ", "keyColor": "cyan" },
-    { "type": "packages", "key": " ", "keyColor": "cyan" },
-    { "type": "shell", "key": " ", "keyColor": "cyan" },
-    { "type": "wm", "key": " ", "keyColor": "cyan" },
-    { "type": "terminal", "key": " ", "keyColor": "cyan" },
-    { "type": "cpu", "key": "󰍛 ", "keyColor": "cyan" },
-    { "type": "gpu", "key": "󰢮 ", "keyColor": "cyan" },
-    { "type": "memory", "key": "󰍛 ", "keyColor": "cyan" },
-    { "type": "disk", "key": "󰋊 ", "keyColor": "cyan" },
-    { "type": "battery", "key": " ", "keyColor": "cyan" },
+
+    // ── System ──
+    { "type": "os",      "key": "OS",       "keyColor": "red" },
+    { "type": "kernel",  "key": "Kernel",   "keyColor": "red" },
+    { "type": "uptime",  "key": "Uptime",   "keyColor": "red" },
+
+    // ── Software ──
+    { "type": "packages","key": "Packages", "keyColor": "bright_green" },
+    { "type": "shell",   "key": "Shell",    "keyColor": "bright_green" },
+    { "type": "wm",      "key": "WM",       "keyColor": "bright_green" },
+    { "type": "terminal","key": "Terminal", "keyColor": "bright_green" },
+
+    // ── Hardware ──
+    { "type": "cpu",     "key": "CPU",     "keyColor": "magenta" },
+    { "type": "gpu",     "key": "GPU",     "keyColor": "magenta" },
+    { "type": "memory",  "key": "Memory",  "keyColor": "magenta" },
+    { "type": "disk",    "key": "Disk",    "keyColor": "magenta" },
+    { "type": "battery", "key": "Battery", "keyColor": "magenta" },
+
     "separator",
     { "type": "colors", "symbol": "circle" }
   ]

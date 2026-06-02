@@ -18,12 +18,13 @@ hl.window_rule({
 })
 
 -- Fixed workspace assignments ─────
-hl.window_rule({ match = { class = "firefox" },   workspace = 1 })
-hl.window_rule({ match = { class = "zen" },       workspace = 1 })
-hl.window_rule({ match = { class = "chromium" },  workspace = 1 })
+hl.window_rule({ match = { class = "vivaldi" },       workspace = 1 })
+hl.window_rule({ match = { class = "Vivaldi-stable" }, workspace = 1 })
 
--- Smart gaps (no gaps when single) ─
-hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 0, gaps_in = 0 })
-hl.workspace_rule({ workspace = "f[1]",   gaps_out = 0, gaps_in = 0 })
-hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0 })
-hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, rounding   = 0 })
+-- Force Vivaldi fully opaque — override global decoration opacity
+hl.window_rule({ match = { class = "vivaldi" },       opaque = true })
+hl.window_rule({ match = { class = "Vivaldi-stable" }, opaque = true })
+hl.workspace_rule({ workspace = "w[tv1]", gaps_out = 12, gaps_in = 4 })
+hl.workspace_rule({ workspace = "f[1]",   gaps_out = 12, gaps_in = 4 })
+-- Ensure borders show on single-window workspaces
+hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 3 })
