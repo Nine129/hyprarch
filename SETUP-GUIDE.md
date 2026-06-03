@@ -118,6 +118,7 @@ sudo pacman -S --needed \
   pipewire \
   wireplumber \
   pipewire-pulse \
+  pipewire-alsa \
   pipewire-audio \
   pavucontrol
 ```
@@ -171,7 +172,9 @@ sudo pacman -S --needed \
   brightnessctl \
   p7zip \
   unrar \
-  xdg-utils
+  xdg-utils \
+  yt-dlp \
+  python-mutagen
 ```
 
 ### 4.5 Media & Document Viewers
@@ -740,13 +743,14 @@ sudo pacman -S --needed \
   hyprland uwsm waybar rofi-wayland swaync kitty yazi \
   hyprlock hypridle polkit-gnome \
   polkit-kde-agent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk qt5-wayland qt6-wayland \
-  pipewire wireplumber pipewire-pulse pipewire-audio pavucontrol \
+  pipewire wireplumber pipewire-pulse pipewire-alsa pipewire-audio pavucontrol \
   grim slurp swappy hyprpicker wl-clipboard cliphist \
   zsh starship btop fastfetch neovim lesspipe hyprpaper \
   networkmanager nm-connection-editor network-manager-applet \
   bluez bluez-utils blueman playerctl \
   mpv imv zathura zathura-pdf-mupdf \
   fd ripgrep bat tealdeer easyeffects brightnessctl p7zip unrar xdg-utils cronie \
+  yt-dlp python-mutagen \
   papirus-icon-theme \
   xorg-xcursorgen imagemagick \
   noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-mono ttf-liberation \
