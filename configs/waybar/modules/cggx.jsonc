@@ -70,7 +70,7 @@
 
   "custom/power-button": {
     "format":    "",
-    "on-click":  "/home/nine/.local/bin/wlogout -b 5 -c 10 -r 0 -T 400 -B 400 -L 70 -R 70",
+    "on-click":  "/home/nine/hyprarch/configs/hypr/scripts/wlogout-toggle.sh",
     "tooltip":   false
   },
 
