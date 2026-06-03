@@ -504,6 +504,44 @@ ln -sf ~/.config/shell/.zshrc ~/.zshrc
 > regardless of `ZDOTDIR`. The `.zshrc` can also be symlinked, or you can set
 > `ZDOTDIR` in `.zshenv` if you prefer all zsh files under `~/.config/zsh/`.
 
+### 8.7 Recolor Cursor Theme (Optional)
+
+The default **Bibata-Modern-Ice** cursors use four different colors for the diagonal resize cursors (cyan, orange, lime, yellow). This step recolors the yellow ↘ SE-resize cursor to **purple** (`#b48cff`) to match the rice palette.
+
+> **Dependencies:** `xorg-xcursorgen` and `imagemagick` (for image processing).
+
+```bash
+sudo pacman -S --needed xorg-xcursorgen imagemagick
+```
+
+**Recolor the bottom-right (SE-resize) cursor:**
+
+```bash
+cd ~/hyprarch/cursor-retool
+
+# Generate the recolored PNG
+python3 retool.py --colors colors.json
+
+# Build the Xcursor binary
+cd output
+xcursorgen <<< "24 21 21 bottom_right_corner.png" > cursors/bottom_right_corner
+
+# Install (replace system cursor)
+sudo cp cursors/bottom_right_corner /usr/share/icons/Bibata-Modern-Ice/cursors/bottom_right_corner
+
+# Log out and back in for changes to take effect
+uwsm stop
+```
+
+> **Why this works:** The `retool.py` script loads the original Xcursor images via
+> `libXcursor`, recolors the fill pixels to the target color while preserving the
+> black outline and white corner tip, then outputs PNGs. `xcursorgen` rebuilds them
+> into Xcursor format.
+>
+> To recolor other cursors, edit `colors.json` and re-run the pipeline. The cursor
+> image cache only invalidates on a fresh session — `hyprctl setcursor` alone won't
+> show the new image.
+
 ---
 
 ## 9. Zsh Setup
@@ -710,6 +748,7 @@ sudo pacman -S --needed \
   mpv imv zathura zathura-pdf-mupdf \
   fd ripgrep bat tealdeer easyeffects brightnessctl p7zip unrar xdg-utils cronie \
   papirus-icon-theme \
+  xorg-xcursorgen imagemagick \
   noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-mono ttf-liberation \
   gtk3
 

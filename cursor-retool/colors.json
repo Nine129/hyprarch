@@ -1,0 +1,15 @@
+{
+    "top_left_corner":     {"hex": null},
+    "top_right_corner":    {"hex": null},
+    "bottom_left_corner":  {"hex": null},
+    "bottom_right_corner": {"hex": "#b48cff", "note": "↘ purple"},
+    "left_side":  {"hex": null},
+    "right_side": {"hex": null},
+    "top_side":   {"hex": null},
+    "bottom_side": {"hex": null},
+    "sb_h_double_arrow": {"hex": null},
+    "sb_v_double_arrow": {"hex": null},
+    "bd_double_arrow":   {"hex": null},
+    "fd_double_arrow":   {"hex": null},
+    "arrow": {"hex": null}
+}
