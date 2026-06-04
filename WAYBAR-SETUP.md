@@ -201,19 +201,32 @@ The [`waybar-import/`](./waybar-import/) folder contains real dotfiles from an A
 
 ## 2. CGGX Rice — Resolved Decisions
 
-These were settled during the grill-me session.
+These were settled during the grill-me / grill-with-docs sessions.
 
 ### 2.1 Bar Aesthetic
 
 | Property | Decision |
 |----------|----------|
-| **Look** | Floating pill island — transparent `window#waybar` background, opaque `rgba(26,26,32,0.88)` pill modules |
+| **Look** | Floating pill island — transparent `window#waybar` background, opaque `#1a1a20` pill modules |
 | **Position** | `top`, full-width |
+| **Height** | 50px |
 | **Border-radius** | **0 everywhere** — zero rounding, consistent with CGGX sharp aesthetic |
-| **Active workspace** | Red `#ff2d55` background pill (not underline) — matches original mockup |
-| **Hover** | Subtle brightening, no background color shift |
+| **Active workspace** | Red `#ff2d55` background pill + inner glow (`box-shadow: 0 0 12px rgba(255,45,85,0.4)`) |
+| **Hover** | TranslateY(-1px) lift on all interactive modules, 0.15s ease transition |
+| **Center section** | Empty (negative space — purposeful asymmetry) |
 
-### 2.2 Architecture
+### 2.2 Visual Richness Decisions
+
+| Dimension | Decision |
+|-----------|----------|
+| **Icons** | Icon-first layout — every module has a colored Nerd Font icon (16px) before text (13px). Standard set: (disk), (memory), (network), (audio), (clock), ⏻(power) |
+| **Module grouping** | Three groups: [disk+memory+network] \| [pulseaudio+clock+battery] \| [tray+power-button] |
+| **Separators** | Thin 1px `#2a2a35` vertical lines (14px tall, centered at 18px margin) between groups |
+| **Progress bars** | 2px block-character bar rendered inside disk, memory, and battery pills, colored by category accent |
+| **Animations** | Smooth 0.15s ease transitions on all modules; hover lifts pill -1px; `blink-orange` on urgent workspaces |
+| **Power button** | Slightly red-tinted gradient background, 18px font, weight 700, to stand out as the action button |
+
+### 2.3 Architecture
 
 | Decision | Choice | Rationale |
 |----------|--------|-----------|
@@ -222,52 +235,61 @@ These were settled during the grill-me session.
 | **Colors** | CSS variables via `@import "colors/cggx.css"` | Follows community convention, easy to regenerate via wallust/pywal |
 | **Single vs multi-monitor** | Single output, no `output` restriction | Only one monitor; `output` can be added later |
 | **Style files** | One `style.css` + one `colors/cggx.css` | No light/dark variant needed — CGGX is a fixed dark palette |
+| **Data modules** | Built-in `disk`, `memory`, `battery` | Simple format strings with icon prefix; no extra scripts needed |
 
-### 2.3 Module Layout
+### 2.4 Module Layout
 
 ```
-┌─────────────────────────────────────────────────────────────────────────────┐
-│ [1][2][3][4][5][6][7][8][9]  / 81% FREE │ RAM 12.6G │ SSID │ 42% │ clock │ 100%│30%│││
-└─────────────────────────────────────────────────────────────────────────────┘
- LEFT: workspaces (1-9 persistent)        RIGHT: disk + memory + network +
-        empty center                              pulseaudio + clock +
-                                                  battery + tray + power
+┌─────────────────────────────────────────────────────────────────────┐
+│ [1][2][3][4][5][6][7][8][9]  │  81% FREE  6.4Gi  SSID │  42%  Mon│⏻│
+└─────────────────────────────────────────────────────────────────────┘
+ LEFT: workspaces (1-9 persistent)   CENTER: empty       RIGHT: three groups
+                                                         sep1     │  sep2
 ```
 
-### 2.4 Module Definitions (`modules/cggx.jsonc`)
+### 2.5 Module Definitions (`modules/cggx.jsonc`)
 
 | Module ID | Type | Key Properties |
 |-----------|------|----------------|
-| `hyprland/workspaces#number` | Workspaces | 1-9 persistent, red active, orange urgent, muted empty. See color map below. |
-| `disk` | System | `{specific_used:0.2f} GB`, interval 30s |
-| `memory` | System | `{used} GiB`, interval 30s |
-| `network` | Network | `{essid}` text + signal icons via `format-icons`, click → nmtui |
-| `pulseaudio` | Audio | `{icon} {volume}%`, click → pavucontrol |
-| `clock` | Time | `{:%a %d  %H:%M}`, alt-click → date format |
-| `battery` | Power | `{icon} {capacity}%`, charge/warning states |
-| `custom/power-button` | Custom | ``, click → wlogout |
+| `hyprland/workspaces#number` | Workspaces | 1-9 persistent, red active + glow, orange urgent pulse, muted empty |
+| `disk` | System (built-in) | ` {percentage_free}% FREE`, 30s interval |
+| `memory` | System (built-in) | ` {used}G / {total}G`, 30s interval |
+| `network` | Network | ` {essid}`, click → nmtui, right-click → rfkill toggle |
+| `custom/sep1` | Separator | Empty, styled as 1px `#2a2a35` vertical line |
+| `pulseaudio` | Audio | ` {volume}%`, click → pavucontrol toggle, right-click → mute |
+| `clock` | Time | ` {:%a %d  %H:%M}`, alt-click → date format |
+| `battery` | Power (built-in) | `{icon} {capacity}%`, format-icons for level, charge/warning/critical states |
+| `custom/sep2` | Separator | Empty, styled as 1px `#2a2a35` vertical line |
+| `custom/power-button` | Custom | `⏻`, click → wlogout toggle, red-tinted pill |
 | `tray` | System | icon-size 14, spacing 10 |
 
-**Color map for workspace numbers**:
-
-```
-1 → active:  #ff2d55 (red)
-2 → empty:   #6a6a80 (muted)
-3 → urgent:  #ff6b00 (orange) + pulse animation
-4-9 → follows same pattern
-```
-
-### 2.5 Keybindings (mouse events on modules)
+### 2.6 Keybindings (mouse events on modules)
 
 | Module | Click | Right-click | Scroll |
 |--------|-------|-------------|--------|
-| `workspaces` | Switch to workspace | — | Cycle e+1 / e-1 |
+| `workspaces` | `workspace {name}` | — | Cycle e+1 / e-1 |
 | `network` | `kitty -e 'nmtui'` | `rfkill toggle wifi` | — |
-| `pulseaudio` | `pavucontrol` | `pactl set-sink-mute 0 toggle` | Volume up/down |
-| `battery` | — | — | — |
-| `custom/power-button` | `wlogout -b 5` | — | — |
+| `pulseaudio` | `pavucontrol-toggle.sh` | `pactl set-sink-mute 0 toggle` | Volume up/down |
+| `custom/battery` | `power-profile.sh` | — | — |
+| `custom/power-button` | `wlogout-toggle.sh` | — | — |
 
-### 2.6 CGGX Color Variables (`colors/cggx.css`)
+### 2.7 Category Colors
+
+| Module | Color |
+|--------|-------|
+| disk | `#c8ff00` (lime) |
+| memory | `#ff6b00` (orange) |
+| network | `#00e5ff` (cyan) |
+| pulseaudio | `#ff6b00` (orange) |
+| clock | `#00e5ff` (cyan) |
+| battery | `#c8ff00` (lime) |
+| charging | `#00e5ff` (cyan) |
+| battery warning | `#ff6b00` (orange) |
+| battery critical | `#ff2d55` (red) bg + `#0a0a0c` text |
+| power | `#ff2d55` (red) |
+| separator | `#2a2a35` |
+
+### 2.8 CGGX Color Variables (`colors/cggx.css`)
 
 ```css
 @define-color bg       #0a0a0c;
@@ -325,184 +347,51 @@ The following files need to be created in `~/.config/waybar/` during deployment:
 ]
 ```
 
-### 3.2 `style.css` Skeleton
+### 3.2 Current `style.css` (abridged)
+
+The full file is at [`configs/waybar/style.css`](./configs/waybar/style.css). Key sections:
 
 ```css
-@import "colors/cggx.css";
-
-* {
-  border: none;
-  border-radius: 0;
-  font-family: JetBrainsMonoNL Nerd Font;
-  font-weight: 600;
-  font-size: 10px;
-  min-height: 0;
-}
-
-window#waybar {
-  background: transparent;
-  color: @silver;
-}
-
-window > box {
-  background: transparent;
-  padding: 0 4px;
-}
-
-/* Workspaces — number badges */
-#workspaces {
-  margin: 6px 2px;
-}
-#workspaces button {
-  padding: 2px 8px;
-  background: rgba(26,26,32,0.88);
-  color: @muted;
-  font-size: 10px;
-  line-height: 20px;
-}
+/* Workspace buttons — inner glow on active */
 #workspaces button.active {
   background: @red;
-  color: @bg;
-}
-#workspaces button.urgent {
-  color: @orange;
-  animation: blink-orange 1s steps(12) infinite alternate;
-}
-#workspaces button:hover {
-  color: @silver;
-  background: rgba(42,42,53,0.5);
+  color:      @bg;
+  box-shadow: 0 0 12px rgba(255, 45, 85, 0.4),
+              0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
-/* Pill modules */
-#disk,
-#memory,
-#network,
-#pulseaudio,
-#clock,
-#battery,
-#custom-power-button,
-#tray {
-  background: rgba(26,26,32,0.88);
-  padding: 0 10px;
-  margin: 6px 2px;
-  line-height: 22px;
+/* Hover lift — margin shift simulates lift (GTK CSS has no transform) */
+#disk:hover,
+#memory:hover,
+/* ... */
+#custom-power-button:hover {
+  margin-top: 5px;
+  margin-bottom: 7px;
 }
 
-#disk             { color: @lime; }
-#memory           { color: @orange; }
-#network          { color: @cyan; }
-#pulseaudio       { color: @orange; }
-#clock            { color: @cyan; }
-#battery          { color: @lime; }
-#battery.charging { color: @cyan; }
-#battery.warning  { color: @orange; }
-#battery.critical { color: @red; }
+/* Separators between groups */
+#custom-sep1,
+#custom-sep2 {
+  background: @border;
+  min-width:  1px;
+  min-height: 14px;
+  margin:     28px 6px;   /* centers in 70px bar */
+}
 
+/* Power button — red-tinted background */
 #custom-power-button {
-  color: @red;
-}
-
-#tray {
-  background: transparent;
-}
-#tray > * {
-  padding: 0 2px;
-}
-
-/* Tooltips */
-tooltip {
-  background: @bg;
-  border: 1px solid @border;
-  color: @silver;
-  font-family: JetBrainsMonoNL Nerd Font;
-  font-size: 10px;
-}
-tooltip label {
-  padding: 8px;
-  color: @silver;
-}
-
-/* Urgent pulse animation */
-@keyframes blink-orange {
-  to { color: @silver; }
+  background: linear-gradient(180deg, #1a1a20 0%, rgba(255, 45, 85, 0.08) 100%);
 }
 ```
 
-### 3.3 `modules/cggx.jsonc` Skeleton
+### 3.3 Current `modules/cggx.jsonc` (abridged)
 
-```jsonc
-{
-  "hyprland/workspaces#number": {
-    "all-outputs": true,
-    "on-click": "activate",
-    "format": "{icon}",
-    "on-scroll-up": "hyprctl dispatch workspace e+1",
-    "on-scroll-down": "hyprctl dispatch workspace e-1",
-    "persistent-workspaces": {
-      "1": [], "2": [], "3": [], "4": [], "5": [],
-      "6": [], "7": [], "8": [], "9": []
-    },
-    "format-icons": {
-      "1": "1", "2": "2", "3": "3", "4": "4", "5": "5",
-      "6": "6", "7": "7", "8": "8", "9": "9",
-      "urgent": "󰁫",
-      "default": ""
-    }
-  },
-  "disk": {
-    "interval": 30,
-    "format": "{specific_used:0.2f} GB",
-    "unit": "GB"
-  },
-  "memory": {
-    "interval": 30,
-    "format": "{used} GiB"
-  },
-  "network": {
-    "interval": 30,
-    "format-wifi": "{essid}",
-    "format-ethernet": "{ifname}",
-    "format-disconnected": "󰖪",
-    "on-click": "kitty -e 'nmtui'",
-    "tooltip-format": "{ipaddr}"
-  },
-  "pulseaudio": {
-    "format": "{icon} {volume}%",
-    "format-muted": "󰖁",
-    "format-icons": {
-      "default": ["", ""]
-    },
-    "scroll-step": 1,
-    "on-click": "pavucontrol",
-    "on-click-right": "pactl set-sink-mute 0 toggle"
-  },
-  "clock": {
-    "interval": 60,
-    "format": "{:%a %d  %H:%M}",
-    "format-alt": "{:%Y-%m-%d}"
-  },
-  "battery": {
-    "interval": 60,
-    "states": {
-      "warning": 30,
-      "critical": 15
-    },
-    "format": "{icon} {capacity}%",
-    "format-charging": " {capacity}%",
-    "format-plugged": " {capacity}%",
-    "format-icons": ["", "", "", "", ""]
-  },
-  "custom/power-button": {
-    "format": "",
-    "on-click": "wlogout -b 5",
-    "tooltip": false
-  },
-  "tray": {
-    "icon-size": 14,
-    "spacing": 10
-  }
-}
-```
+The full file is at [`configs/waybar/modules/cggx.jsonc`](./configs/waybar/modules/cggx.jsonc).
+
+Key aspects:
+- **Built-in `disk`, `memory`, `battery`** — format strings include the Nerd Font icon prefix
+- **Two separator modules** (`custom/sep1`, `custom/sep2`) between the three groups
+- **New icon set**: (disk), (memory), (network), (audio), (clock), ⏻(power)
 
 ---
 
@@ -514,8 +403,10 @@ tooltip label {
 - [ ] `~/.config/waybar/modules/cggx.jsonc` — module definitions
 - [ ] Test with `waybar --config ~/.config/waybar/config.jsonc`
 - [ ] Verify all 9 workspaces render
-- [ ] Verify active/urgent/empty colors
-- [ ] Verify click actions (pavucontrol, nmtui, wlogout)
+- [ ] Verify active workspace has red bg + inner glow
+- [ ] Verify group separators (1px `#2a2a35` lines between groups)
+- [ ] Verify hover lift effect on modules
+- [ ] Verify click actions (pavucontrol toggle, nmtui, wlogout toggle, power profile)
 - [ ] `waybar -l debug` to inspect widget tree if style issues
 - [ ] `GTK_DEBUG=interactive waybar` for live CSS tweaking
 
@@ -528,3 +419,6 @@ tooltip label {
 - [Waybar Wiki — Modules](https://github.com/Alexays/Waybar/wiki/Modules)
 - [`waybar-import/`](./waybar-import/) — community dotfiles (5 bar presets)
 - CGGX Palette: `#0a0a0c`, `#1a1a20`, `#ff2d55`, `#00e5ff`, `#c8ff00`, `#ff6b00`, `#e8e8f0`, `#6a6a80`
+ `#1a1a20`, `#ff2d55`, `#00e5ff`, `#c8ff00`, `#ff6b00`, `#e8e8f0`, `#6a6a80`
+00`, `#ff6b00`, `#e8e8f0`, `#6a6a80`
+ `#1a1a20`, `#ff2d55`, `#00e5ff`, `#c8ff00`, `#ff6b00`, `#e8e8f0`, `#6a6a80`

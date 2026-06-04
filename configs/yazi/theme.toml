@@ -1,201 +1,373 @@
 # ── CGGX Yazi Theme ────────────────────────────────────
 # Place at: ~/.config/yazi/theme.toml
-# Yazi is a terminal file manager — fast, Rust-based, Kitty-native
 # https://github.com/sxyazi/yazi
 #
 # Palette: CGGX kinetic brutalist
-#   Red #ff2d55  ·  Cyan #00e5ff  ·  Lime #c8ff00
-#   Orange #ff6b00  ·  Purple #b48cff  ·  Silver #e8e8f0  ·  Muted #6a6a80
+#   Base    #0a0a0c  ·  Surface  #1a1a20  ·  Border  #2a2a35
+#   Red     #ff2d55  ·  Cyan     #00e5ff  ·  Lime    #c8ff00
+#   Orange  #ff6b00  ·  Purple   #bd00ff  ·  Lavender #b48cff
+#   Silver  #e8e8f0  ·  Muted    #6a6a80
 
 # ── File-type colors ───────────────────────────────────
 [filetype]
 rules = [
-  # Directories — cyan like waybar clock
-  { url = "*", type = "directory", fg = "#00e5ff" },
+  # Directories — lime
+  { url = "*", type = "directory", fg = "#c8ff00" },
 
-  # Images / video — purple like fetch artwork
-  { url = "*.png",  fg = "#b48cff" },
-  { url = "*.jpg",  fg = "#b48cff" },
-  { url = "*.jpeg", fg = "#b48cff" },
-  { url = "*.gif",  fg = "#b48cff" },
-  { url = "*.webp", fg = "#b48cff" },
-  { url = "*.svg",  fg = "#b48cff" },
-  { url = "*.mp4",  fg = "#b48cff" },
-  { url = "*.mov",  fg = "#b48cff" },
+  # Images — hot purple
+  { url = "*.png",  fg = "#bd00ff" },
+  { url = "*.jpg",  fg = "#bd00ff" },
+  { url = "*.jpeg", fg = "#bd00ff" },
+  { url = "*.gif",  fg = "#bd00ff" },
+  { url = "*.webp", fg = "#bd00ff" },
+  { url = "*.svg",  fg = "#bd00ff" },
+  { url = "*.ico",  fg = "#bd00ff" },
+  { url = "*.bmp",  fg = "#bd00ff" },
 
-  # Audio — red like accent
+  # Video — hot purple
+  { url = "*.mp4",  fg = "#bd00ff" },
+  { url = "*.mov",  fg = "#bd00ff" },
+  { url = "*.mkv",  fg = "#bd00ff" },
+  { url = "*.avi",  fg = "#bd00ff" },
+  { url = "*.webm", fg = "#bd00ff" },
+  { url = "*.flv",  fg = "#bd00ff" },
+
+  # Audio — red
   { url = "*.mp3",  fg = "#ff2d55" },
   { url = "*.flac", fg = "#ff2d55" },
   { url = "*.wav",  fg = "#ff2d55" },
   { url = "*.aac",  fg = "#ff2d55" },
   { url = "*.ogg",  fg = "#ff2d55" },
+  { url = "*.opus", fg = "#ff2d55" },
+  { url = "*.m4a",  fg = "#ff2d55" },
 
-  # Archives — lime like waybar disk
-  { url = "*.zip",  fg = "#c8ff00" },
-  { url = "*.tar",  fg = "#c8ff00" },
-  { url = "*.gz",   fg = "#c8ff00" },
-  { url = "*.xz",   fg = "#c8ff00" },
-  { url = "*.bz2",  fg = "#c8ff00" },
-  { url = "*.7z",   fg = "#c8ff00" },
+  # Archives / compressed — cyan
+  { url = "*.zip",   fg = "#00e5ff" },
+  { url = "*.tar",   fg = "#00e5ff" },
+  { url = "*.gz",    fg = "#00e5ff" },
+  { url = "*.xz",    fg = "#00e5ff" },
+  { url = "*.bz2",   fg = "#00e5ff" },
+  { url = "*.7z",    fg = "#00e5ff" },
+  { url = "*.rar",   fg = "#00e5ff" },
+  { url = "*.zst",   fg = "#00e5ff" },
+  { url = "*.iso",   fg = "#00e5ff" },
+  { url = "*.deb",   fg = "#00e5ff" },
+  { url = "*.rpm",   fg = "#00e5ff" },
 
-  # Config / code — orange like waybar memory
-  { url = "*.lua",  fg = "#ff6b00" },
-  { url = "*.conf", fg = "#ff6b00" },
-  { url = "*.json", fg = "#ff6b00" },
-  { url = "*.toml", fg = "#ff6b00" },
-  { url = "*.yaml", fg = "#ff6b00" },
-  { url = "*.ini",  fg = "#ff6b00" },
-  { url = "*.css",  fg = "#ff6b00" },
-  { url = "*.html", fg = "#ff6b00" },
-  { url = "*.xml",  fg = "#ff6b00" },
+  # Config / markup — orange
+  { url = "*.lua",   fg = "#ff6b00" },
+  { url = "*.conf",  fg = "#ff6b00" },
+  { url = "*.json",  fg = "#ff6b00" },
+  { url = "*.toml",  fg = "#ff6b00" },
+  { url = "*.yaml",  fg = "#ff6b00" },
+  { url = "*.yml",   fg = "#ff6b00" },
+  { url = "*.ini",   fg = "#ff6b00" },
+  { url = "*.css",   fg = "#ff6b00" },
+  { url = "*.html",  fg = "#ff6b00" },
+  { url = "*.xml",   fg = "#ff6b00" },
+  { url = "*.nix",   fg = "#ff6b00" },
+  { url = "*.env",   fg = "#ff6b00" },
+  { url = "*.cfg",   fg = "#ff6b00" },
 
-  # Source code — cyan like waybar net-icon
-  { url = "*.rs",   fg = "#00e5ff" },
-  { url = "*.py",   fg = "#00e5ff" },
-  { url = "*.js",   fg = "#00e5ff" },
-  { url = "*.ts",   fg = "#00e5ff" },
-  { url = "*.go",   fg = "#00e5ff" },
-  { url = "*.c",    fg = "#00e5ff" },
-  { url = "*.h",    fg = "#00e5ff" },
-  { url = "*.cpp",  fg = "#00e5ff" },
-  { url = "*.zig",  fg = "#00e5ff" },
+  # Source code — lime
+  { url = "*.rs",     fg = "#c8ff00" },
+  { url = "*.py",     fg = "#c8ff00" },
+  { url = "*.js",     fg = "#c8ff00" },
+  { url = "*.ts",     fg = "#c8ff00" },
+  { url = "*.go",     fg = "#c8ff00" },
+  { url = "*.c",      fg = "#c8ff00" },
+  { url = "*.h",      fg = "#c8ff00" },
+  { url = "*.cpp",    fg = "#c8ff00" },
+  { url = "*.hpp",    fg = "#c8ff00" },
+  { url = "*.zig",    fg = "#c8ff00" },
+  { url = "*.vue",    fg = "#c8ff00" },
+  { url = "*.svelte", fg = "#c8ff00" },
+
+  # Shell scripts / misc code — lavender
+  { url = "*.sh",    fg = "#b48cff" },
+  { url = "*.bash",  fg = "#b48cff" },
+  { url = "*.zsh",   fg = "#b48cff" },
+  { url = "*.fish",  fg = "#b48cff" },
+  { url = "*.java",  fg = "#b48cff" },
+  { url = "*.kt",    fg = "#b48cff" },
+  { url = "*.rb",    fg = "#b48cff" },
+  { url = "*.php",   fg = "#b48cff" },
+  { url = "*.hs",    fg = "#b48cff" },
+  { url = "*.pl",    fg = "#b48cff" },
+  { url = "*.cs",    fg = "#b48cff" },
+  { url = "*.swift", fg = "#b48cff" },
 
   # Documents — silver
-  { url = "*.md",   fg = "#e8e8f0" },
-  { url = "*.txt",  fg = "#e8e8f0" },
-  { url = "*.pdf",  fg = "#e8e8f0" },
+  { url = "*.md",    fg = "#e8e8f0" },
+  { url = "*.txt",   fg = "#e8e8f0" },
+  { url = "*.pdf",   fg = "#e8e8f0" },
+  { url = "*.doc",   fg = "#e8e8f0" },
+  { url = "*.docx",  fg = "#e8e8f0" },
+  { url = "*.rtf",   fg = "#e8e8f0" },
 
-  # Executables — lime
-  { url = "*", type = "executable", fg = "#c8ff00" },
+  # Fonts — silver
+  { url = "*.ttf",   fg = "#e8e8f0" },
+  { url = "*.otf",   fg = "#e8e8f0" },
+  { url = "*.woff",  fg = "#e8e8f0" },
+  { url = "*.woff2", fg = "#e8e8f0" },
+
+  # Logs / binary / database — muted
+  { url = "*.log",    fg = "#6a6a80" },
+  { url = "*.bin",    fg = "#6a6a80" },
+  { url = "*.dat",    fg = "#6a6a80" },
+  { url = "*.db",     fg = "#6a6a80" },
+  { url = "*.sqlite", fg = "#6a6a80" },
+  { url = "*.lock",   fg = "#6a6a80" },
+
+  # Executables — cyan
+  { url = "*", type = "executable", fg = "#00e5ff" },
 
   # Symlinks — red
   { url = "*", type = "symlink", fg = "#ff2d55" },
 
-  # Special: makefiles, docker, etc — orange
-  { url = "Makefile",  fg = "#ff6b00" },
-  { url = "Dockerfile", fg = "#ff6b00" },
+  # Special files
+  { url = "Makefile",     fg = "#ff6b00" },
+  { url = "Dockerfile",   fg = "#ff6b00" },
+  { url = ".gitignore",   fg = "#ff2d55" },
+  { url = ".gitconfig",   fg = "#ff2d55" },
+  { url = ".editorconfig", fg = "#ff6b00" },
 ]
 
-# ── Manager (file listing) ─────────────────────────────
-[manager]
-syntect_theme = "catppuccin-mocha"
-
-[manager.preview]
-selected = { fg = "#e8e8f0", bg = "#1a1a20" }
-
-# ── Folder / file icons ────────────────────────────────
+# ── File-type icons (Nerd Font) ────────────────────────
 [icon]
 rules = [
-  { url = "*", type = "directory", fg = "#00e5ff" },
-  { url = "*.png",  fg = "#b48cff" },
-  { url = "*.jpg",  fg = "#b48cff" },
-  { url = "*.webp", fg = "#b48cff" },
-  { url = "*.mp3",  fg = "#ff2d55" },
-  { url = "*.flac", fg = "#ff2d55" },
-  { url = "*.zip",  fg = "#c8ff00" },
-  { url = "*.tar",  fg = "#c8ff00" },
-  { url = "*.lua",  fg = "#ff6b00" },
-  { url = "*.json", fg = "#ff6b00" },
-  { url = "*.toml", fg = "#ff6b00" },
-  { url = "*.conf", fg = "#ff6b00" },
-  { url = "*.rs",   fg = "#00e5ff" },
-  { url = "*.py",   fg = "#00e5ff" },
-  { url = "*.js",   fg = "#00e5ff" },
-  { url = "*.md",   fg = "#e8e8f0" },
-  { url = "*", type = "executable", fg = "#c8ff00" },
-  { url = "*", type = "symlink", fg = "#ff2d55" },
+  # Directories
+  { url = "*", type = "directory", name = " " },
+
+  # Images
+  { url = "*.png",  name = " " },
+  { url = "*.jpg",  name = " " },
+  { url = "*.jpeg", name = " " },
+  { url = "*.gif",  name = " " },
+  { url = "*.webp", name = " " },
+  { url = "*.svg",  name = " " },
+  { url = "*.ico",  name = " " },
+  { url = "*.bmp",  name = " " },
+
+  # Video
+  { url = "*.mp4",  name = "󰕼 " },
+  { url = "*.mov",  name = "󰕼 " },
+  { url = "*.mkv",  name = "󰕼 " },
+  { url = "*.avi",  name = "󰕼 " },
+  { url = "*.webm", name = "󰕼 " },
+
+  # Audio
+  { url = "*.mp3",  name = " " },
+  { url = "*.flac", name = " " },
+  { url = "*.wav",  name = " " },
+  { url = "*.ogg",  name = " " },
+  { url = "*.m4a",  name = " " },
+
+  # Archives
+  { url = "*.zip",  name = " " },
+  { url = "*.tar",  name = " " },
+  { url = "*.gz",   name = " " },
+  { url = "*.7z",   name = " " },
+  { url = "*.rar",  name = " " },
+  { url = "*.zst",  name = " " },
+  { url = "*.iso",  name = " " },
+  { url = "*.deb",  name = " " },
+
+  # Config
+  { url = "*.toml", name = " " },
+  { url = "*.json", name = " " },
+  { url = "*.yaml", name = " " },
+  { url = "*.yml",  name = " " },
+  { url = "*.conf", name = " " },
+  { url = "*.ini",  name = " " },
+  { url = "*.env",  name = " " },
+
+  # Source code
+  { url = "*.rs",    name = " " },
+  { url = "*.py",    name = " " },
+  { url = "*.js",    name = " " },
+  { url = "*.ts",    name = " " },
+  { url = "*.go",    name = " " },
+  { url = "*.c",     name = " " },
+  { url = "*.cpp",   name = " " },
+  { url = "*.zig",   name = " " },
+  { url = "*.vue",   name = " " },
+  { url = "*.svelte", name = " " },
+
+  # Shell scripts
+  { url = "*.sh",   name = " " },
+  { url = "*.bash", name = " " },
+  { url = "*.zsh",  name = " " },
+  { url = "*.fish", name = " " },
+
+  # Documents
+  { url = "*.md",   name = " " },
+  { url = "*.txt",  name = " " },
+  { url = "*.pdf",  name = " " },
+
+  # Fonts
+  { url = "*.ttf",  name = " " },
+  { url = "*.otf",  name = " " },
+
+  # Logs / binary
+  { url = "*.log",  name = " " },
+  { url = "*.lock", name = " " },
+
+  # Special files
+  { url = "Makefile",    name = " " },
+  { url = "Dockerfile",  name = " " },
+  { url = ".gitignore",  name = " " },
+
+  # Executables
+  { url = "*", type = "executable", name = " " },
+
+  # Symlinks
+  { url = "*", type = "symlink", name = " " },
 ]
 
-# ── Status bar ─────────────────────────────────────────
-[status]
-separator_open = ""
-separator_close = ""
-separator_style = { fg = "#ff2d55", bg = "#1a1a20" }
+# ── Manager ────────────────────────────────────────────
+[mgr]
+syntect_theme = ""
+border_symbol = "│"
+border_style = { fg = "#2a2a35" }
 
-[status.mode_normal]
+[mgr.cwd]
 fg = "#e8e8f0"
-bg = "#ff2d55"
 
-[status.mode_select]
-fg = "#0a0a0c"
-bg = "#c8ff00"
+[mgr.find_keyword]
+fg = "#ff2d55"
 
-[status.mode_unset]
-fg = "#0a0a0c"
-bg = "#6a6a80"
+[mgr.find_position]
+fg = "#ff6b00"
+
+[mgr.symlink_target]
+fg = "#6a6a80"
+
+[mgr.marker_selected]
+fg = "#ff2d55"
+
+[mgr.marker_copied]
+fg = "#c8ff00"
+
+[mgr.marker_cut]
+fg = "#ff2d55"
+
+[mgr.marker_marked]
+fg = "#bd00ff"
+
+[mgr.count_selected]
+fg = "#ff2d55"
+
+[mgr.count_copied]
+fg = "#c8ff00"
+
+[mgr.count_cut]
+fg = "#ff2d55"
+
+[mgr.preview]
+selected = { fg = "#e8e8f0", bg = "#1a1a20" }
+
+# ── Indicator bars ─────────────────────────────────────
+[indicator]
+parent = { fg = "#6a6a80" }
+current = { fg = "#ff2d55" }
+preview = { fg = "#2a2a35" }
+padding = { open = "▌", close = "▐" }
+
+# ── Tabs ───────────────────────────────────────────────
+[tabs]
+active = { fg = "#e8e8f0", bg = "#1a1a20" }
+inactive = { fg = "#6a6a80", bg = "#0a0a0c" }
+sep_inner = { open = "", close = "" }
+sep_outer = { open = "", close = "" }
+
+# ── Mode indicators ────────────────────────────────────
+[mode]
+normal_main = { fg = "#0a0a0c", bg = "#ff2d55" }
+normal_alt = { fg = "#e8e8f0", bg = "#1a1a20" }
+select_main = { fg = "#0a0a0c", bg = "#c8ff00" }
+select_alt = { fg = "#e8e8f0", bg = "#1a1a20" }
+unset_main = { fg = "#0a0a0c", bg = "#6a6a80" }
+unset_alt = { fg = "#e8e8f0", bg = "#1a1a20" }
+
+# ── Status bar — HUD ──────────────────────────────────
+[status]
+overall = { fg = "#e8e8f0", bg = "#1a1a20" }
+sep_left = { open = "", close = "" }
+sep_right = { open = "", close = "" }
+
+[status.perm_type]
+fg = "#ff2d55"
+
+[status.perm_read]
+fg = "#e8e8f0"
+
+[status.perm_write]
+fg = "#ff6b00"
+
+[status.perm_exec]
+fg = "#c8ff00"
+
+[status.perm_sep]
+fg = "#6a6a80"
 
 [status.progress_label]
 fg = "#e8e8f0"
-bg = "#1a1a20"
 
-[status.progress_bar]
+[status.progress_normal]
 fg = "#ff2d55"
-bg = "#1a1a20"
 
-[status.permalink]
-fg = "#ff6b00"
-bg = "#0a0a0c"
+[status.progress_error]
+fg = "#ff2d55"
 
-[status.offset]
-fg = "#00e5ff"
-bg = "#0a0a0c"
-
-[status.limit]
-fg = "#b48cff"
-bg = "#0a0a0c"
-
-# ── Input bar ──────────────────────────────────────────
-[input]
-fg = "#e8e8f0"
-bg = "#0a0a0c"
-
-# ── Selection ──────────────────────────────────────────
-[select]
-fg = "#e8e8f0"
-bg = "#1a1a20"
-border = "#ff2d55"
-
-# ── Key which popup ───────────────────────────────────
+# ── Which (key hints) ─────────────────────────────────
 [which]
-fg = "#e8e8f0"
-bg = "#1a1a20"
+cols = 3
 mask = { fg = "#6a6a80", bg = "#1a1a20" }
-candidates = 10
-# Candidate key colors
-[which.key]
-fg = "#ff2d55"
-bg = "#0a0a0c"
+cand = { fg = "#ff2d55" }
+rest = { fg = "#e8e8f0" }
+desc = { fg = "#6a6a80" }
+separator = " → "
+separator_style = { fg = "#6a6a80" }
 
-[which.desc]
-fg = "#e8e8f0"
-bg = "#0a0a0c"
+# ── Confirm dialog ─────────────────────────────────────
+[confirm]
+border = { fg = "#ff2d55" }
+title = { fg = "#e8e8f0" }
+body = { fg = "#6a6a80" }
+list = { fg = "#e8e8f0" }
+btn_yes = { fg = "#0a0a0c", bg = "#ff2d55" }
+btn_no = { fg = "#e8e8f0", bg = "#1a1a20" }
+btn_labels = [">> Yes", "No"]
 
-# ── Help menu ──────────────────────────────────────────
-[help]
-fg = "#e8e8f0"
-bg = "#0a0a0c"
-on = { fg = "#ff2d55", bg = "#1a1a20" }
-desc = { fg = "#6a6a80", bg = "#0a0a0c" }
-exec = { fg = "#00e5ff", bg = "#0a0a0c" }
+# ── Spot (file details) ────────────────────────────────
+[spot]
+border = { fg = "#2a2a35" }
+title = { fg = "#e8e8f0" }
+tbl_col = { fg = "#ff2d55" }
+tbl_cell = { fg = "#e8e8f0" }
 
-# ── Hovered file ──────────────────────────────────────
-[hovered]
-fg = "#e8e8f0"
-bg = "rgba(255,45,85,0.12)"
-border = "#ff2d55"
+# ── Notifications ──────────────────────────────────────
+[notify]
+success = { fg = "#c8ff00" }
+error = { fg = "#ff2d55" }
+warn = { fg = "#ff6b00" }
+info = { fg = "#00e5ff" }
 
-# ── Footer ─────────────────────────────────────────────
-[footer]
-fg = "#6a6a80"
-bg = "#0a0a0c"
+# ── Git status signs ───────────────────────────────────
+[git]
+modified_sign  = "M"
+modified       = { fg = "#c8ff00" }
 
-# ── Tabs ───────────────────────────────────────────────
-[tab.active]
-fg = "#e8e8f0"
-bg = "#1a1a20"
+added_sign     = "+"
+added          = { fg = "#00e5ff" }
 
-[tab.inactive]
-fg = "#6a6a80"
-bg = "#0a0a0c"
+deleted_sign   = "✗"
+deleted        = { fg = "#ff2d55", bold = true }
 
-            
+ignored_sign   = "!"
+ignored        = { fg = "#6a6a80" }
+
+clean_sign     = ""
+untracked_sign = ""
+unknown_sign   = ""                      

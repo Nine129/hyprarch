@@ -160,3 +160,7 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME/bin:$PATH" ;;
 esac
 # pnpm end
+
+# ── Zoxide (smart cd) ───────────────────────────────
+eval "$(zoxide init zsh)"
+alias cd="z"

@@ -1,14 +1,15 @@
-/* ── CGGX Waybar — Style ────────────── */
+/* ── CGGX Waybar — Style (Minimal Refined) ── */
 @import "colors/cggx.css";
 
 * {
   font-family: 'JetBrainsMonoNL Nerd Font Mono', 'Share Tech Mono', sans-serif;
-  font-size:   13px;
-  font-weight: 600;
-  border:     none;
-  padding:    0;
+  font-size:      13px;
+  font-weight:    600;
+  border:         none;
+  padding:        0;
 }
 
+/* ── Bar shell ────────────────── */
 window#waybar {
   background: transparent;
 }
@@ -19,7 +20,7 @@ window > box {
   margin:     5px 12px 0 12px;
 }
 
-/* ── Workspace numbers 1-9 ── */
+/* ── Workspace numbers 1-9 ────── */
 #workspaces button {
   background:   #1a1a20;
   border:       1px solid #2a2a35;
@@ -28,13 +29,15 @@ window > box {
   padding:      8px 14px;
   margin:       4px 2px;
   font-size:    13px;
-  transition:   all 0.12s ease;
+  transition:   all 0.15s ease;
   box-shadow:   0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 #workspaces button.active {
   background: @red;
   color:      @bg;
+  box-shadow: 0 0 12px rgba(255, 45, 85, 0.4),
+              0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 #workspaces button.urgent {
@@ -45,38 +48,47 @@ window > box {
 #workspaces button:hover {
   background: #2a2a35;
   color:      @silver;
+  margin-top: 3px;
+  margin-bottom: 5px;
 }
 
-/* ── Pill modules ── */
+/* ── All pill modules ─────────── */
 #disk,
 #memory,
 #network,
 #pulseaudio,
 #clock,
 #battery,
+#tray,
 #custom-power-button {
   background:   #1a1a20;
   border:       none;
   border-radius: 0;
-  padding:      0 16px;
+  padding:      0 14px;
   margin:       6px 0.25px;
   box-shadow:   0 2px 8px rgba(0, 0, 0, 0.6);
+  transition:   all 0.15s ease;
 }
 
-/* Kill ALL separator spacing */
-separator {
-  min-width: 0px;
-  min-height: 0px;
-  padding: 0;
-  margin: 0;
+#disk:hover,
+#memory:hover,
+#network:hover,
+#pulseaudio:hover,
+#clock:hover,
+#battery:hover,
+#tray:hover,
+#custom-power-button:hover {
+  margin-top: 5px;
+  margin-bottom: 7px;
 }
 
-#disk      { color: @lime; }
-#memory    { color: @orange; }
-#network   { color: @cyan; }
+/* ── Category text colors ──────── */
+#disk       { color: @lime; }
+#memory     { color: @orange; }
+#network    { color: @cyan; }
 #pulseaudio { color: @orange; }
-#clock     { color: @cyan; }
-#battery   { color: @lime; }
+#clock      { color: @cyan; }
+#battery    { color: @lime; }
 
 #battery.charging { color: @cyan; }
 #battery.warning  { color: @orange; }
@@ -85,49 +97,60 @@ separator {
   background: @red;
 }
 
-/* ── Power button ── */
+/* ── Separators ────────────────── */
+#custom-sep1,
+#custom-sep2 {
+  background: @border;
+  min-width:  1px;
+  min-height: 14px;
+  margin:     28px 6px;
+  padding:    0;
+  border:     none;
+  border-radius: 0;
+}
+
+/* ── Power button ──────────────── */
 #custom-power-button {
   color:     @red;
   font-size: 18px;
-  padding:   0 12px;
+  font-weight: 700;
+  padding:   0 14px;
+  background: linear-gradient(180deg, #1a1a20 0%, rgba(255, 45, 85, 0.08) 100%);
+}
+#custom-power-button:hover {
+  background: #2a2a35;
 }
 
-/* ── Tray ── */
-#tray {
-  background:   #1a1a20;
-  border:       none;
-  border-radius: 0;
-  margin:       6px 0.25px;
-  padding:      0 10px;
-  box-shadow:   0 2px 8px rgba(0, 0, 0, 0.6);
-}
-
-#tray > .passive {
+/* ── Network disconnected ──────── */
+#network.disconnected {
   color: @muted;
 }
 
+/* ── Tray ──────────────────────── */
+#tray > .passive {
+  color: @muted;
+}
 #tray > .active {
   color: @silver;
 }
-
 #tray > .needs-attention {
   color: @orange;
 }
 
-/* ── Tooltips ── */
+/* ── Tooltips ──────────────────── */
 tooltip {
   background: @bg;
   border:     1px solid @border;
   color:      @silver;
-  font-size:  10px;
+  font-size:  11px;
+  font-weight: 500;
 }
-
 tooltip label {
-  padding: 8px;
+  padding: 8px 10px;
   color:   @silver;
 }
 
-/* ── Animations ── */
+/* ── Animations ────────────────── */
 @keyframes blink-orange {
   to { color: @silver; }
 }

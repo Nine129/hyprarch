@@ -1,17 +1,91 @@
 [mgr]
 show_hidden = true
 show_ignored = false
+linemode = "size"
+sort_by = "natural"
+sort_dir_first = true
+sort_reverse = false
+
+[preview]
+max_width = 1000
+max_height = 1000
+cache_dir = "~/.cache/yazi"
 
 [opener]
 edit = [
   { run = 'nvim "$@"', block = true },
 ]
+browse = [
+  { run = 'xdg-open "$@"', orphan = true },
+]
 open = [
-  { run = 'xdg-open "$@"' },
+  { run = 'xdg-open "$@"', orphan = true },
+]
+pdf = [
+  { run = 'zathura "$@"', block = true },
+]
+video = [
+  { run = 'mpv "$@"', orphan = true },
+]
+image = [
+  { run = 'imv "$@"', orphan = true },
+]
+audio = [
+  { run = 'mpv "$@"', orphan = true },
+]
+extract = [
+  { run = 'ouch d -y "$@"', desc = "Extract here with ouch" },
 ]
 
 [open]
 rules = [
-  { mime = "text/*", use = "edit" },
-  { mime = "*", use = "open" },
+  { mime = "text/html",         use = [ "browse", "edit" ] },
+  { mime = "text/*",            use = "edit" },
+  { mime = "application/pdf",   use = "pdf" },
+  { mime = "video/*",           use = "video" },
+  { mime = "image/*",           use = "image" },
+  { mime = "audio/*",           use = "audio" },
+  { mime = "application/{*zip,tar,bzip2,7z*,rar,xz,zstd,java-archive}", use = "extract" },
+  { mime = "*",                 use = "open" },
 ]
+
+# ── plugins ───────────────────────────────────────────
+[plugin]
+  prepend_preloaders = [
+    { mime = "{audio,video,image}/*", run = "mediainfo" },
+    { mime = "application/subrip", run = "mediainfo" },
+    { mime = "application/postscript", run = "mediainfo" },
+    { mime = "application/illustrator", run = "mediainfo" },
+    { mime = "application/vnd.adobe.illustrator", run = "mediainfo" },
+    { mime = "image/x-eps", run = "mediainfo" },
+    { mime = "application/eps", run = "mediainfo" },
+    { url = "*.{ai,eps,ait}", run = "mediainfo" },
+  ]
+
+  prepend_previewers = [
+    # ouch archive preview (must be before mediainfo)
+    { mime = "application/{*zip,tar,bzip2,7z*,rar,xz,zstd,java-archive}", run = "ouch" },
+    # mediainfo for media files
+    { mime = "{audio,video,image}/*", run = "mediainfo" },
+    { mime = "application/subrip", run = "mediainfo" },
+    { mime = "application/postscript", run = "mediainfo" },
+    { mime = "application/illustrator", run = "mediainfo" },
+    { mime = "application/vnd.adobe.illustrator", run = "mediainfo" },
+    { mime = "image/x-eps", run = "mediainfo" },
+    { mime = "application/eps", run = "mediainfo" },
+    { url = "*.{ai,eps,ait}", run = "mediainfo" },
+  ]
+
+[tasks]
+  image_alloc = 1073741824
+
+# git.yazi
+[[plugin.prepend_fetchers]]
+url   = "*"
+run   = "git"
+group = "git"
+
+[[plugin.prepend_fetchers]]
+url   = "*/"
+run   = "git"
+group = "git"

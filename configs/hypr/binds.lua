@@ -1,6 +1,7 @@
 -- ── CGGX Rice — Keybinds ────────────────
 -- Sourced via require("binds")
 -- Mod: SUPER (Windows key)
+local vivaldi_launching = false
 
 -- Terminal ─────────────────────────
 hl.bind("SUPER + Q",       hl.dsp.exec_cmd("kitty"))
@@ -9,7 +10,7 @@ hl.bind("SUPER + W",       hl.dsp.window.close())
 -- Launcher ────────────────────────
 hl.bind("SUPER + Super_L", hl.dsp.exec_cmd("~/.config/hypr/scripts/rofi-launcher.sh"), { release = true })
 hl.bind("SUPER + E",     hl.dsp.exec_cmd("kitty -e yazi"))
-
+hl.bind("SUPER + A", hl.dsp.exec_cmd("vivaldi --new-window vivaldi://startpage/"))
 -- Layout ──────────────────────────
 hl.bind("SUPER + F",       hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 hl.bind("SUPER + V",       hl.dsp.exec_cmd("~/.config/hypr/scripts/cliphist-rofi.sh"))

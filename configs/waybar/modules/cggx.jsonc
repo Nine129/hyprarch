@@ -1,7 +1,7 @@
 // ── CGGX Waybar — Module Definitions ───
 // Included via config: "include": "~/.config/waybar/modules/cggx.jsonc"
 {
-  // Number-style workspaces: 1-9 persistent
+  /* ── Workspaces ─────────────── */
   "hyprland/workspaces#number": {
     "all-outputs":          true,
     "format":               "{icon}",
@@ -20,58 +20,76 @@
     }
   },
 
+  /* ── Group 1: System ────────── */
   "disk": {
     "interval": 30,
-    "format":   "/ {percentage_free}% FREE"
+    "format":   " {percentage_free}% FREE"
   },
 
   "memory": {
     "interval": 30,
-    "format":   "RAM {used}G / {total}G"
+    "format":   " {used}G / {total}G"
   },
 
   "network": {
     "interval":            30,
-    "format-wifi":         "󰤨 {essid}",
+    "format-wifi":         " {essid}",
     "format-ethernet":     "{ifname}",
-    "format-disconnected": "󰖪 Disconnected",
+    "format-disconnected": "󰖪",
     "on-click":            "kitty -e 'nmtui'",
+    "on-click-right":      "rfkill toggle wifi",
     "tooltip-format":      "{ipaddr} / {essid}"
   },
 
+  /* ── Separator 1 ───────────── */
+  "custom/sep1": {
+    "format":   "",
+    "tooltip":  false,
+    "interval": "once"
+  },
+
+  /* ── Group 2: Personal UI ───── */
   "pulseaudio": {
-    "format":          " {volume}%",
-    "format-muted":    "󰖁 Muted",
-    "format-icons":    { "default": ["", "", ""] },
+    "format":          " {volume}%",
+    "format-muted":    " 󰖁",
     "scroll-step":     1,
     "on-click":        "bash ~/.config/hypr/scripts/pavucontrol-toggle.sh",
-    "on-click-right": "pactl set-sink-mute 0 toggle"
+    "on-click-right":  "pactl set-sink-mute 0 toggle"
   },
 
   "clock": {
-    "interval":  60,
-    "format":    " {:%a %d  %H:%M}",
-    "format-alt": "{:%Y-%m-%d}"
+    "interval":       60,
+    "format":         " {:%a %d  %H:%M}",
+    "format-alt":     "{:%Y-%m-%d}",
+    "tooltip-format": "{:%A, %B %d %Y}"
   },
 
   "battery": {
-    "bat":     "BAT0",
-    "interval": 60,
+    "bat":             "BAT0",
+    "interval":        60,
     "states": {
       "warning":  30,
       "critical": 15
     },
-    "format":          "{icon} {capacity}%",
+    "format":           "{icon} {capacity}%",
     "format-charging":  " {capacity}%",
-    "format-plugged":  " {capacity}%",
-    "format-icons":    ["", "", "", "", ""],
-    "on-click":        "bash ~/.config/hypr/scripts/power-profile.sh"
+    "format-plugged":   " {capacity}%",
+    "format-icons":     ["", "", "", "", ""],
+    "on-click":         "bash ~/.config/hypr/scripts/power-profile.sh"
   },
 
+  /* ── Separator 2 ───────────── */
+  "custom/sep2": {
+    "format":   "",
+    "tooltip":  false,
+    "interval": "once"
+  },
+
+  /* ── Group 3: Utilities ────── */
   "custom/power-button": {
-    "format":    "",
-    "on-click":  "/home/nine/hyprarch/configs/hypr/scripts/wlogout-toggle.sh",
-    "tooltip":   false
+    "format":   "⏻",
+    "on-click": "/home/nine/hyprarch/configs/hypr/scripts/wlogout-toggle.sh",
+    "tooltip":  false
   },
 
   "tray": {

@@ -4,7 +4,7 @@
   {
     "layer":    "top",
     "position": "top",
-    "height":   50,
+    "height":   70,
 
     "include": "~/.config/waybar/modules/cggx.jsonc",
 
@@ -15,12 +15,17 @@
     "modules-center": [],
 
     "modules-right": [
+      // Group 1: System
       "disk",
       "memory",
       "network",
+      "custom/sep1",
+      // Group 2: Personal UI
       "pulseaudio",
       "clock",
       "battery",
+      "custom/sep2",
+      // Group 3: Utilities
       "tray",
       "custom/power-button"
     ],

@@ -1,0 +1,25 @@
+[mgr]
+prepend_keymap = [
+  # Shift+Enter → show "open with" picker
+  { on = "<S-Enter>", run = "open --interactive", desc = "Open with picker" },
+
+  # e → open in editor (nvim)
+  { on = ["e"], run = "open --find=edit", desc = "Open in editor" },
+
+  # o → open in browser/xdg
+  { on = ["o"], run = "open --find=open", desc = "Open with default app" },
+
+  # x → extract archive
+  { on = ["x"], run = "open --find=extract", desc = "Extract archive" },
+
+  # C → compress selected files with ouch
+  { on = ["C"], run = "plugin ouch", desc = "Compress with ouch" },
+
+# copy file contet
+{
+on = "<Y>",
+run = ["plugin copy-file-contents"],
+desc = "Copy contents of file",
+},
+{ on = [ "q" ], run = "plugin autosession -- save-and-quit", desc = "Save session and quit" },
+]
