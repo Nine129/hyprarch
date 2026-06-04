@@ -253,6 +253,7 @@
       font-size: 0.85rem;
       line-height: 1.8;
       margin: 1rem 0;
+      white-space: pre;
     }
 
     .file-tree .dir { color: var(--cyan); }
@@ -329,15 +330,16 @@
                 ├── <span class="highlight">init.lua</span>            « requires everything
                 ├── <span class="highlight">lazy_init.lua</span>        « bootstraps lazy.nvim
                 ├── <span class="highlight">settings.lua</span>         « basic vim options
-                ├── <span class="highlight">theme.lua</span>            « colorscheme + highlights
                 ├── <span class="highlight">keymaps.lua</span>          « leader key + mappings
                 └── <span class="dir">lazy/</span>
+                    ├── <span class="highlight">tokyonight.lua</span>     « colorscheme (lazy=false)
                     ├── <span class="highlight">treesitter.lua</span>
                     ├── <span class="highlight">telescope.lua</span>
                     ├── <span class="highlight">nvimtree.lua</span>
                     ├── <span class="highlight">bufferline.lua</span>
                     ├── <span class="highlight">lsp.lua</span>
-                    └── <span class="highlight">lualine.lua</span>
+                    ├── <span class="highlight">lualine.lua</span>
+                    └── <span class="highlight">whichkey.lua</span>
       </div>
 
       <div class="step-action">
@@ -444,6 +446,8 @@ a.nvim_create_autocmd(<span class="string">"TextYankPost"</span>, {
       <h2><span class="step-num">4</span> Tokyo Night + your CGGX palette</h2>
       <p>We'll use <strong>Tokyo Night (Storm)</strong> as the base, then override the color palette to match your exact <strong>CGGX rice</strong> colors extracted from <code>kitty.conf</code> and <code>hyprlock.conf</code>.</p>
 
+      <p>Since the colorscheme needs to load at startup (before lazy processes other plugins), we add it as a lazy spec with <code>lazy = false</code> and <code>priority = 1000</code>.</p>
+
       <p>Your exact palette:</p>
       <pre><code><span class="comment"># Your CGGX palette</span>
 Background  <span class="number">#0a0a0c</span>   Surface  <span class="number">#111115</span>   Surface2  <span class="number">#1a1a20</span>
@@ -451,56 +455,64 @@ Text        <span class="number">#e8e8f0</span>   Subtext  <span class="number">
 Pink        <span class="number">#ff2d55</span>   Lime     <span class="number">#c8ff00</span>   Orange    <span class="number">#ff6b00</span>
 Cyan        <span class="number">#00e5ff</span>   Purple   <span class="number">#b48cff</span></code></pre>
 
-      <h3>Create <code>~/.config/nvim/lua/cggx/theme.lua</code></h3>
-      <pre><code><span class="comment">-- ~/.config/nvim/lua/cggx/theme.lua</span>
-<span class="func">require</span>(<span class="string">"tokyonight"</span>).setup({
-  style = <span class="string">"storm"</span>,
-  transparent = <span class="keyword">true</span>,
-  styles = {
-    comments = { italic = <span class="keyword">true</span> },
-    keywords = { bold = <span class="keyword">true</span> },
-  },
-  on_colors = <span class="keyword">function</span>(colors)
-    <span class="comment">── Override every color with your CGGX rice palette</span>
-    colors.bg       = <span class="string">"#0a0a0c"</span>    <span class="comment">── background</span>
-    colors.bg_dark  = <span class="string">"#0a0a0c"</span>
-    colors.bg_float = <span class="string">"#111115"</span>    <span class="comment">── surface</span>
-    colors.bg_popup = <span class="string">"#111115"</span>
-    colors.bg_highlight = <span class="string">"#1a1a20"</span>
-    colors.bg_sidebar = <span class="string">"#111115"</span>
-    colors.bg_statusline = <span class="string">"#111115"</span>
-    colors.blue     = <span class="string">"#00e5ff"</span>    <span class="comment">── cyan</span>
-    colors.cyan     = <span class="string">"#00e5ff"</span>
-    colors.cyan_pop = <span class="string">"#00e5ff"</span>
-    colors.green    = <span class="string">"#c8ff00"</span>    <span class="comment">── lime</span>
-    colors.green_pop = <span class="string">"#c8ff00"</span>
-    colors.orange   = <span class="string">"#ff6b00"</span>    <span class="comment">── orange</span>
-    colors.purple   = <span class="string">"#b48cff"</span>    <span class="comment">── mauve</color>
-    colors.purple_pop = <span class="string">"#b48cff"</span>
-    colors.red      = <span class="string">"#ff2d55"</span>    <span class="comment">── pink</span>
-    colors.red_pop  = <span class="string">"#ff2d55"</span>
-    colors.yellow   = <span class="string">"#ff6b00"</span>    <span class="comment">── orange dupe for warnings</span>
-    colors.fg       = <span class="string">"#e8e8f0"</span>
-    colors.fg_dark  = <span class="string">"#9090a8"</span>
-    colors.fg_float = <span class="string">"#e8e8f0"</span>
-    colors.fg_gutter = <span class="string">"#2a2a35"</span>
-    colors.fg_sidebar = <span class="string">"#9090a8"</span>
-    colors.comment  = <span class="string">"#6a6a80"</span>
-    colors.border   = <span class="string">"#2a2a35"</span>
-    colors.diff = {
-      add = <span class="string">"#1a2e0a"</span>,
-      change = <span class="string">"#1a1a2e"</span>,
-      delete = <span class="string">"#2e0a0a"</span>,
-    }
+      <h3>Create <code>~/.config/nvim/lua/cggx/lazy/tokyonight.lua</code></h3>
+      <pre><code><span class="comment">-- ~/.config/nvim/lua/cggx/lazy/tokyonight.lua</span>
+<span class="keyword">return</span> {
+  <span class="string">"folke/tokyonight.nvim"</span>,
+  <span class="comment">-- lazy=false ensures it loads on startup (theming)</span>
+  <span class="comment">-- priority=1000 ensures it loads before other plugins</span>
+  lazy = <span class="keyword">false</span>,
+  priority = <span class="number">1000</span>,
+  config = <span class="keyword">function</span>()
+    <span class="func">require</span>(<span class="string">"tokyonight"</span>).setup({
+      style = <span class="string">"storm"</span>,
+      transparent = <span class="keyword">true</span>,
+      styles = {
+        comments = { italic = <span class="keyword">true</span> },
+        keywords = { bold = <span class="keyword">true</span> },
+      },
+      on_colors = <span class="keyword">function</span>(colors)
+        <span class="comment">── Override every color with your CGGX rice palette</span>
+        colors.bg       = <span class="string">"#0a0a0c"</span>
+        colors.bg_dark  = <span class="string">"#0a0a0c"</span>
+        colors.bg_float = <span class="string">"#111115"</span>
+        colors.bg_popup = <span class="string">"#111115"</span>
+        colors.bg_highlight = <span class="string">"#1a1a20"</span>
+        colors.bg_sidebar = <span class="string">"#111115"</span>
+        colors.bg_statusline = <span class="string">"#111115"</span>
+        colors.blue     = <span class="string">"#00e5ff"</span>
+        colors.cyan     = <span class="string">"#00e5ff"</span>
+        colors.green    = <span class="string">"#c8ff00"</span>
+        colors.orange   = <span class="string">"#ff6b00"</span>
+        colors.purple   = <span class="string">"#b48cff"</span>
+        colors.red      = <span class="string">"#ff2d55"</span>
+        colors.yellow   = <span class="string">"#ff6b00"</span>
+        colors.fg       = <span class="string">"#e8e8f0"</span>
+        colors.fg_dark  = <span class="string">"#9090a8"</span>
+        colors.fg_gutter = <span class="string">"#2a2a35"</span>
+        colors.fg_sidebar = <span class="string">"#9090a8"</span>
+        colors.comment  = <span class="string">"#6a6a80"</span>
+        colors.border   = <span class="string">"#2a2a35"</span>
+        colors.diff = {
+          add = <span class="string">"#1a2e0a"</span>,
+          change = <span class="string">"#1a1a2e"</span>,
+          delete = <span class="string">"#2e0a0a"</span>,
+        }
+      <span class="keyword">end</span>,
+      on_highlights = <span class="keyword">function</span>(hl, colors)
+        hl.TelescopeBorder = { fg = colors.blue }
+        hl.NvimTreeNormal = { bg = colors.bg }
+        hl.NvimTreeIndentMarker = { fg = <span class="string">"#2a2a35"</span> }
+        hl.BufferLineIndicator = { fg = colors.red }
+      <span class="keyword">end</span>,
+    })
+    vim.cmd.colorscheme(<span class="string">"tokyonight"</span>)
   <span class="keyword">end</span>,
-  on_highlights = <span class="keyword">function</span>(hl, colors)
-    hl.TelescopeBorder = { fg = colors.blue }
-    hl.NvimTreeNormal = { bg = colors.bg }
-    hl.NvimTreeIndentMarker = { fg = <span class="string">"#2a2a35"</span> }
-    hl.BufferLineIndicator = { fg = colors.red }
-  <span class="keyword">end</span>,
-})
-vim.cmd.colorscheme(<span class="string">"tokyonight"</span>)</code></pre>
+}</code></pre>
+
+      <div class="tip">
+        <p><strong>💡 Why lazy=false?</strong> If we put this in a regular lazy spec, lazy would defer loading the colorscheme. Setting <code>lazy = false</code> makes it load immediately at startup so the theme is applied before you see the editor.</p>
+      </div>
 
       <div class="step-action">
         <p><strong>Create this file now →</strong></p>
@@ -524,7 +536,7 @@ vim.cmd.colorscheme(<span class="string">"tokyonight"</span>)</code></pre>
   <span class="string">"nvim-treesitter/nvim-treesitter"</span>,
   build = <span class="string">":TSUpdate"</span>,
   config = <span class="keyword">function</span>()
-    <span class="func">require</span>(<span class="string">"nvim-treesitter.configs"</span>).setup({
+    <span class="func">require</span>(<span class="string">"nvim-treesitter.config"</span>).setup({
       ensure_installed = { <span class="string">"lua"</span>, <span class="string">"bash"</span>, <span class="string">"vim"</span>, <span class="string">"vimdoc"</span> },
       auto_install = <span class="keyword">true</span>,
       highlight = { enable = <span class="keyword">true</span> },
@@ -697,33 +709,61 @@ rg --version</code></pre>
       <span class="func">require</span>(<span class="string">"mason-lspconfig"</span>).setup({
         ensure_installed = { <span class="string">"lua_ls"</span>, <span class="string">"bashls"</span> },
         automatic_installation = <span class="keyword">true</span>,
+        handlers = {},  <span class="comment">── We configure via vim.lsp.config manually</span>
       })
     <span class="keyword">end</span>,
   },
+  <span class="comment">── nvim-lspconfig + nvim-cmp ──────────</span>
   {
     <span class="string">"neovim/nvim-lspconfig"</span>,
     dependencies = { <span class="string">"williamboman/mason-lspconfig.nvim"</span> },
     config = <span class="keyword">function</span>()
-      <span class="keyword">local</span> on_attach = <span class="keyword">function</span>(client, bufnr)
-        <span class="keyword">local</span> opts = { buffer = bufnr, noremap = <span class="keyword">true</span>, silent = <span class="keyword">true</span> }
-        vim.keymap.set(<span class="string">"n"</span>, <span class="string">"gd"</span>, vim.lsp.buf.definition, opts)
-        vim.keymap.set(<span class="string">"n"</span>, <span class="string">"K"</span>, vim.lsp.buf.hover, opts)
-        vim.keymap.set(<span class="string">"n"</span>, <span class="string">"gi"</span>, vim.lsp.buf.implementation, opts)
-        vim.keymap.set(<span class="string">"n"</span>, <span class="string">"gr"</span>, vim.lsp.buf.references, opts)
-        vim.keymap.set(<span class="string">"n"</span>, <span class="string">"[d"</span>, vim.diagnostic.goto_prev, opts)
-        vim.keymap.set(<span class="string">"n"</span>, <span class="string">"]d"</span>, vim.diagnostic.goto_next, opts)
-        vim.keymap.set(<span class="string">"n"</span>, <span class="string">"&lt;leader&gt;e"</span>, vim.diagnostic.open_float, opts)
-      <span class="keyword">end</span>
-
       <span class="keyword">local</span> capabilities = <span class="func">require</span>(<span class="string">"cmp_nvim_lsp"</span>).default_capabilities()
 
-      <span class="keyword">local</span> servers = { <span class="string">"lua_ls"</span>, <span class="string">"bashls"</span> }
-      <span class="keyword">for</span> _, server <span class="keyword">in</span> <span class="func">ipairs</span>(servers) <span class="keyword">do</span>
-        <span class="func">require</span>(<span class="string">"lspconfig"</span>)[server].setup({
-          on_attach = on_attach,
-          capabilities = capabilities,
-        })
-      <span class="keyword">end</span>
+      <span class="comment">── Lua Language Server</span>
+      vim.lsp.config.lua_ls = {
+        cmd = { <span class="string">"lua-language-server"</span> },
+        filetypes = { <span class="string">"lua"</span> },
+        root_markers = { <span class="string">".luarc.json"</span>, <span class="string">".luacheckrc"</span>, <span class="string">".stylua.toml"</span>, <span class="string">"selene.toml"</span> },
+        settings = {
+          Lua = {
+            runtime = { version = <span class="string">"LuaJIT"</span> },
+            diagnostics = { globals = { <span class="string">"vim"</span> } },
+            workspace = {
+              library = vim.api.nvim_get_runtime_file(<span class="string">""</span>, <span class="keyword">true</span>),
+              checkThirdParty = <span class="keyword">false</span>,
+            },
+            telemetry = { enable = <span class="keyword">false</span> },
+          },
+        },
+        capabilities = capabilities,
+      }
+
+      <span class="comment">── Bash Language Server</span>
+      vim.lsp.config.bashls = {
+        cmd = { <span class="string">"bash-language-server"</span>, <span class="string">"start"</span> },
+        filetypes = { <span class="string">"sh"</span>, <span class="string">"bash"</span>, <span class="string">"zsh"</span> },
+        root_markers = { <span class="string">".git"</span> },
+        capabilities = capabilities,
+      }
+
+      <span class="comment">── Enable both servers</span>
+      vim.lsp.enable({ <span class="string">"lua_ls"</span>, <span class="string">"bashls"</span> })
+
+      <span class="comment">── Global keymaps (applies to all LSP-attached buffers)</span>
+      vim.api.nvim_create_autocmd(<span class="string">"LspAttach"</span>, {
+        group = vim.api.nvim_create_augroup(<span class="string">"cggx-lsp"</span>, { clear = <span class="keyword">true</span> }),
+        callback = <span class="keyword">function</span>(args)
+          <span class="keyword">local</span> opts = { buffer = args.buf, noremap = <span class="keyword">true</span>, silent = <span class="keyword">true</span> }
+          vim.keymap.set(<span class="string">"n"</span>, <span class="string">"gd"</span>, vim.lsp.buf.definition, opts)
+          vim.keymap.set(<span class="string">"n"</span>, <span class="string">"K"</span>, vim.lsp.buf.hover, opts)
+          vim.keymap.set(<span class="string">"n"</span>, <span class="string">"gi"</span>, vim.lsp.buf.implementation, opts)
+          vim.keymap.set(<span class="string">"n"</span>, <span class="string">"gr"</span>, vim.lsp.buf.references, opts)
+          vim.keymap.set(<span class="string">"n"</span>, <span class="string">"[d"</span>, vim.diagnostic.goto_prev, opts)
+          vim.keymap.set(<span class="string">"n"</span>, <span class="string">"]d"</span>, vim.diagnostic.goto_next, opts)
+          vim.keymap.set(<span class="string">"n"</span>, <span class="string">"&lt;leader&gt;e"</span>, vim.diagnostic.open_float, opts)
+        <span class="keyword">end</span>,
+      })
     <span class="keyword">end</span>,
   },
   {
@@ -877,11 +917,12 @@ map(<span class="string">"n"</span>, <span class="string">"&lt;Esc&gt;"</span>, 
       <pre><code><span class="comment">-- ~/.config/nvim/lua/cggx/init.lua</span>
 <span class="comment">── Leader must be set BEFORE lazy</span>
 vim.g.mapleader = <span class="string">" "</span>
+vim.g.maplocalleader = <span class="string">" "</span>
 
 <span class="func">require</span>(<span class="string">"cggx.lazy_init"</span>)   <span class="comment">── bootstrap lazy.nvim</span>
 <span class="func">require</span>(<span class="string">"cggx.settings"</span>)     <span class="comment">── base vim options</span>
-<span class="func">require</span>(<span class="string">"cggx.theme"</span>)        <span class="comment">── Tokyo Night + CGGX palette</span>
-<span class="func">require</span>(<span class="string">"cggx.keymaps"</span>)      <span class="comment">── leader + keybindings</span></code></pre>
+<span class="func">require</span>(<span class="string">"cggx.keymaps"</span>)      <span class="comment">── leader + keybindings</span>
+<span class="comment">── Colorscheme is handled by lazy/tokyonight.lua (lazy=false)</span></code></pre>
 
       <h3>Create <code>~/.config/nvim/init.lua</code></h3>
       <pre><code><span class="comment">-- ~/.config/nvim/init.lua</span>

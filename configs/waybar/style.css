@@ -22,22 +22,14 @@ window > box {
 
 /* ── Workspace numbers 1-9 ────── */
 #workspaces button {
-  background:   #1a1a20;
-  border:       1px solid #2a2a35;
-  border-radius: 0;
-  color:        @muted;
-  padding:      8px 14px;
-  margin:       4px 2px;
-  font-size:    13px;
-  transition:   all 0.15s ease;
-  box-shadow:   0 2px 8px rgba(0, 0, 0, 0.6);
+  background: #1a1a20; border: 1px solid #2a2a35; border-radius: 0; color: @silver;
+  padding: 4px 8px; margin: 0 2px; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  transition: all 0.15s ease;
 }
 
 #workspaces button.active {
-  background: @red;
-  color:      @bg;
-  box-shadow: 0 0 12px rgba(255, 45, 85, 0.4),
-              0 2px 8px rgba(0, 0, 0, 0.6);
+  background: @red; color: @bg;
+  box-shadow: 0 0 12px rgba(255,45,85,0.4), 0 2px 8px rgba(0,0,0,0.6);
 }
 
 #workspaces button.urgent {
@@ -46,85 +38,46 @@ window > box {
 }
 
 #workspaces button:hover {
-  background: #2a2a35;
-  color:      @silver;
-  margin-top: 3px;
-  margin-bottom: 5px;
+  background: #2a2a35; color: @silver;
 }
 
-/* ── All pill modules ─────────── */
-#disk,
-#memory,
-#network,
-#pulseaudio,
-#clock,
-#battery,
-#tray,
-#custom-power-button {
-  background:   #1a1a20;
-  border:       none;
-  border-radius: 0;
-  padding:      0 14px;
-  margin:       6px 0.25px;
-  box-shadow:   0 2px 8px rgba(0, 0, 0, 0.6);
-  transition:   all 0.15s ease;
+#workspaces button.empty {
+  color: @muted;
 }
 
-#disk:hover,
-#memory:hover,
-#network:hover,
-#pulseaudio:hover,
-#clock:hover,
-#battery:hover,
-#tray:hover,
-#custom-power-button:hover {
-  margin-top: 5px;
-  margin-bottom: 7px;
+/* ── Pill modules ──────────────── */
+#disk, #memory, #temperature, #pulseaudio, #clock, #battery, #tray, #custom-power-button {
+  border: none; border-radius: 0;
+  padding: 4px 14px; margin: 0 0.25px; box-shadow: 0 2px 8px rgba(0,0,0,0.6);
 }
+#disk, #memory, #temperature, #tray, #custom-power-button { background: #1a1a20; }
 
-/* ── Category text colors ──────── */
-#disk       { color: @lime; }
-#memory     { color: @orange; }
-#network    { color: @cyan; }
-#pulseaudio { color: @orange; }
-#clock      { color: @cyan; }
-#battery    { color: @lime; }
 
-#battery.charging { color: @cyan; }
-#battery.warning  { color: @orange; }
-#battery.critical {
-  color:      @bg;
-  background: @red;
-}
+
+/* ── System: dark bg, colored text ── */
+#disk { color: @lime; } #memory { color: @orange; } #temperature { color: @cyan; font-size: 14px; }
+
+/* ── Personal: colored bg, black text ── */
+#pulseaudio { background: @orange; color: #0a0a0c; font-size: 14px; }
+#clock { background: @cyan; color: #0a0a0c; font-size: 14px; }
+#battery, #battery.charging, #battery.warning, #battery.critical { font-size: 14px; }
+#battery { background: @lime; color: #0a0a0c; }
+#battery.charging { background: @cyan; color: #0a0a0c; }
+#battery.warning { background: @orange; color: #0a0a0c; }
+#battery.critical { background: @red; color: @bg; }
 
 /* ── Separators ────────────────── */
-#custom-sep1,
-#custom-sep2 {
-  background: @border;
-  min-width:  1px;
-  min-height: 14px;
-  margin:     28px 6px;
-  padding:    0;
-  border:     none;
-  border-radius: 0;
+#custom-sep1, #custom-sep2 {
+  background: @border; min-width: 1px; min-height: 14px;
+  margin: 5px 6px; padding: 0; border: none; border-radius: 0;
 }
 
 /* ── Power button ──────────────── */
 #custom-power-button {
-  color:     @red;
-  font-size: 18px;
-  font-weight: 700;
-  padding:   0 14px;
-  background: linear-gradient(180deg, #1a1a20 0%, rgba(255, 45, 85, 0.08) 100%);
+  color: #0a0a0c; font-size: 20px; font-weight: 700; padding: 0 14px;
+  background: linear-gradient(180deg,#ff2d55,rgba(255,45,85,0.85));
 }
-#custom-power-button:hover {
-  background: #2a2a35;
-}
-
-/* ── Network disconnected ──────── */
-#network.disconnected {
-  color: @muted;
-}
+#custom-power-button:hover { background: #cc2444; }
 
 /* ── Tray ──────────────────────── */
 #tray > .passive {

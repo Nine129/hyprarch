@@ -23,22 +23,19 @@
   /* ── Group 1: System ────────── */
   "disk": {
     "interval": 30,
-    "format":   " {percentage_free}% FREE"
+    "format":   "/ {percentage_free}% FREE"
   },
 
   "memory": {
     "interval": 30,
-    "format":   " {used}G / {total}G"
+    "format":   "<span size='15360' rise='-2048'></span> {used}G / {total}G"
   },
 
-  "network": {
-    "interval":            30,
-    "format-wifi":         " {essid}",
-    "format-ethernet":     "{ifname}",
-    "format-disconnected": "󰖪",
-    "on-click":            "kitty -e 'nmtui'",
-    "on-click-right":      "rfkill toggle wifi",
-    "tooltip-format":      "{ipaddr} / {essid}"
+  "temperature": {
+    "interval":       5,
+    "thermal-zone":   0,
+    "format":         "<span size='15360' rise='-1024'></span> {temperatureC}°C",
+    "tooltip-format": "{temperatureC}°C / {temperatureF}°F"
   },
 
   /* ── Separator 1 ───────────── */
@@ -50,8 +47,8 @@
 
   /* ── Group 2: Personal UI ───── */
   "pulseaudio": {
-    "format":          " {volume}%",
-    "format-muted":    " 󰖁",
+    "format":          "<span size='16384' rise='-2048'></span> {volume}%",
+    "format-muted":    "<span size='16384' rise='-2048'></span> 󰖁",
     "scroll-step":     1,
     "on-click":        "bash ~/.config/hypr/scripts/pavucontrol-toggle.sh",
     "on-click-right":  "pactl set-sink-mute 0 toggle"
@@ -59,7 +56,7 @@
 
   "clock": {
     "interval":       60,
-    "format":         " {:%a %d  %H:%M}",
+    "format":         "<span size='15360' rise='-2048'></span> {:%a %d  %H:%M}",
     "format-alt":     "{:%Y-%m-%d}",
     "tooltip-format": "{:%A, %B %d %Y}"
   },
@@ -71,9 +68,9 @@
       "warning":  30,
       "critical": 15
     },
-    "format":           "{icon} {capacity}%",
-    "format-charging":  " {capacity}%",
-    "format-plugged":   " {capacity}%",
+    "format":           "<span size='15360' rise='-1024'>{icon}</span> {capacity}%",
+    "format-charging":  "<span size='15360' rise='-1024'></span> {capacity}%",
+    "format-plugged":   "<span size='15360' rise='-1024'></span> {capacity}%",
     "format-icons":     ["", "", "", "", ""],
     "on-click":         "bash ~/.config/hypr/scripts/power-profile.sh"
   },

@@ -4,7 +4,7 @@
   {
     "layer":    "top",
     "position": "top",
-    "height":   70,
+    "height":   36,
 
     "include": "~/.config/waybar/modules/cggx.jsonc",
 
@@ -18,7 +18,7 @@
       // Group 1: System
       "disk",
       "memory",
-      "network",
+      "temperature",
       "custom/sep1",
       // Group 2: Personal UI
       "pulseaudio",
