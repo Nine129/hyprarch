@@ -38,3 +38,10 @@ hl.layer_rule({
   match = { namespace = "logout_dialog" },
   blur  = true,
 })
+-- Obsidian higher opacity
+hl.window_rule({ 
+    match = { class = "obsidian" }, 
+    opacity = "0.9 override 0.8 override",
+    
+})
+	

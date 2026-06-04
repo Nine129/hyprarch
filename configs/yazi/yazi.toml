@@ -2,7 +2,16 @@
 show_hidden = true
 show_ignored = false
 
+[opener]
+edit = [
+  { run = 'nvim "$@"', block = true },
+]
+open = [
+  { run = 'xdg-open "$@"' },
+]
+
 [open]
 rules = [
-  { mime = "*/*", use = "/usr/bin/xdg-open" },
+  { mime = "text/*", use = "edit" },
+  { mime = "*", use = "open" },
 ]

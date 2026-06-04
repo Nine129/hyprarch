@@ -22,12 +22,14 @@ window > box {
 /* ── Workspace numbers 1-9 ── */
 #workspaces button {
   background:   #1a1a20;
+  border:       1px solid #2a2a35;
   border-radius: 0;
   color:        @muted;
   padding:      8px 14px;
   margin:       4px 2px;
   font-size:    13px;
   transition:   all 0.12s ease;
+  box-shadow:   0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 #workspaces button.active {
@@ -54,9 +56,19 @@ window > box {
 #battery,
 #custom-power-button {
   background:   #1a1a20;
+  border:       none;
   border-radius: 0;
   padding:      0 16px;
-  margin:       6px 2px;
+  margin:       6px 0.25px;
+  box-shadow:   0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* Kill ALL separator spacing */
+separator {
+  min-width: 0px;
+  min-height: 0px;
+  padding: 0;
+  margin: 0;
 }
 
 #disk      { color: @lime; }
@@ -82,10 +94,12 @@ window > box {
 
 /* ── Tray ── */
 #tray {
-  background: #1a1a20;
+  background:   #1a1a20;
+  border:       none;
   border-radius: 0;
-  margin:     6px 2px;
-  padding:    0 10px;
+  margin:       6px 0.25px;
+  padding:      0 10px;
+  box-shadow:   0 2px 8px rgba(0, 0, 0, 0.6);
 }
 
 #tray > .passive {
