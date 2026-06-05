@@ -8,126 +8,160 @@
 #   Orange  #ff6b00  ·  Purple   #bd00ff  ·  Lavender #b48cff
 #   Silver  #e8e8f0  ·  Muted    #6a6a80
 
-# ── File-type colors (hybrid MIME + url) ───────────────
+# ── File-type colors ───────────────────────────────────
 [filetype]
 rules = [
-  # Source code — amber (before catch-alls)
-  { url = "*.rs",     name = " ", fg = "#E0A500" },
-  { url = "*.py",     name = " ", fg = "#E0A500" },
-  { url = "*.js",     name = " ", fg = "#E0A500" },
-  { url = "*.ts",     name = " ", fg = "#E0A500" },
-  { url = "*.go",     name = " ", fg = "#E0A500" },
-  { url = "*.c",      name = " ", fg = "#E0A500" },
-  { url = "*.h",      name = " ", fg = "#E0A500" },
-  { url = "*.cpp",    name = " ", fg = "#E0A500" },
-  { url = "*.hpp",    name = " ", fg = "#E0A500" },
-  { url = "*.zig",    name = " ", fg = "#E0A500" },
-  { url = "*.vue",    name = " ", fg = "#E0A500" },
-  { url = "*.svelte", name = " ", fg = "#E0A500" },
+  # Source code — amber (before directory catch-all)
+  { url = "*.rs",     fg = "#E0A500" },
+  { url = "*.py",     fg = "#E0A500" },
+  { url = "*.js",     fg = "#E0A500" },
+  { url = "*.ts",     fg = "#E0A500" },
+  { url = "*.go",     fg = "#E0A500" },
+  { url = "*.c",      fg = "#E0A500" },
+  { url = "*.h",      fg = "#E0A500" },
+  { url = "*.cpp",    fg = "#E0A500" },
+  { url = "*.hpp",    fg = "#E0A500" },
+  { url = "*.zig",    fg = "#E0A500" },
+  { url = "*.vue",    fg = "#E0A500" },
+  { url = "*.svelte", fg = "#E0A500" },
+
+  # Directories — lime
+  { url = "*", type = "directory", fg = "#c8ff00" },
+
+  # Images — hot purple
+  { url = "*.png",  fg = "#bd00ff" },
+  { url = "*.jpg",  fg = "#bd00ff" },
+  { url = "*.jpeg", fg = "#bd00ff" },
+  { url = "*.gif",  fg = "#bd00ff" },
+  { url = "*.webp", fg = "#bd00ff" },
+  { url = "*.svg",  fg = "#bd00ff" },
+  { url = "*.ico",  fg = "#bd00ff" },
+  { url = "*.bmp",  fg = "#bd00ff" },
+
+  # Video — hot purple
+  { url = "*.mp4",  fg = "#bd00ff" },
+  { url = "*.mov",  fg = "#bd00ff" },
+  { url = "*.mkv",  fg = "#bd00ff" },
+  { url = "*.avi",  fg = "#bd00ff" },
+  { url = "*.webm", fg = "#bd00ff" },
+  { url = "*.flv",  fg = "#bd00ff" },
+
+  # Audio — red
+  { url = "*.mp3",  fg = "#ff2d55" },
+  { url = "*.flac", fg = "#ff2d55" },
+  { url = "*.wav",  fg = "#ff2d55" },
+  { url = "*.aac",  fg = "#ff2d55" },
+  { url = "*.ogg",  fg = "#ff2d55" },
+  { url = "*.opus", fg = "#ff2d55" },
+  { url = "*.m4a",  fg = "#ff2d55" },
+
+  # Archives / compressed — cyan
+  { url = "*.zip",   fg = "#00e5ff" },
+  { url = "*.tar",   fg = "#00e5ff" },
+  { url = "*.gz",    fg = "#00e5ff" },
+  { url = "*.xz",    fg = "#00e5ff" },
+  { url = "*.bz2",   fg = "#00e5ff" },
+  { url = "*.7z",    fg = "#00e5ff" },
+  { url = "*.rar",   fg = "#00e5ff" },
+  { url = "*.zst",   fg = "#00e5ff" },
+  { url = "*.iso",   fg = "#00e5ff" },
+  { url = "*.deb",   fg = "#00e5ff" },
+  { url = "*.rpm",   fg = "#00e5ff" },
 
   # Config / markup — orange
-  { url = "*.html",   name = " ", fg = "#ff6b00" },
-  { url = "*.css",    name = " ", fg = "#ff6b00" },
-  { url = "*.toml",   name = " ", fg = "#ff6b00" },
-  { url = "*.yaml",   name = " ", fg = "#ff6b00" },
-  { url = "*.yml",    name = " ", fg = "#ff6b00" },
-  { url = "*.json",   name = " ", fg = "#ff6b00" },
-  { url = "*.lua",    name = " ", fg = "#ff6b00" },
-  { url = "*.conf",   name = " ", fg = "#ff6b00" },
-  { url = "*.ini",    name = " ", fg = "#ff6b00" },
-  { url = "*.nix",    name = " ", fg = "#ff6b00" },
-  { url = "*.env",    name = " ", fg = "#ff6b00" },
-  { url = "*.cfg",    name = " ", fg = "#ff6b00" },
+  { url = "*.lua",   fg = "#ff6b00" },
+  { url = "*.conf",  fg = "#ff6b00" },
+  { url = "*.json",  fg = "#ff6b00" },
+  { url = "*.toml",  fg = "#ff6b00" },
+  { url = "*.yaml",  fg = "#ff6b00" },
+  { url = "*.yml",   fg = "#ff6b00" },
+  { url = "*.ini",   fg = "#ff6b00" },
+  { url = "*.css",   fg = "#ff6b00" },
+  { url = "*.html",  fg = "#ff6b00" },
+  { url = "*.xml",   fg = "#ff6b00" },
+  { url = "*.nix",   fg = "#ff6b00" },
+  { url = "*.env",   fg = "#ff6b00" },
+  { url = "*.cfg",   fg = "#ff6b00" },
 
   # Shell scripts / misc code — lavender
-  { url = "*.sh",     name = " ", fg = "#b48cff" },
-  { url = "*.bash",   name = " ", fg = "#b48cff" },
-  { url = "*.zsh",    name = " ", fg = "#b48cff" },
-  { url = "*.fish",   name = " ", fg = "#b48cff" },
-  { url = "*.java",   name = " ", fg = "#b48cff" },
-  { url = "*.kt",     name = " ", fg = "#b48cff" },
-  { url = "*.rb",     name = " ", fg = "#b48cff" },
-  { url = "*.php",    name = " ", fg = "#b48cff" },
-  { url = "*.hs",     name = " ", fg = "#b48cff" },
-  { url = "*.pl",     name = " ", fg = "#b48cff" },
-  { url = "*.cs",     name = " ", fg = "#b48cff" },
-  { url = "*.swift",  name = " ", fg = "#b48cff" },
+  { url = "*.sh",    fg = "#b48cff" },
+  { url = "*.bash",  fg = "#b48cff" },
+  { url = "*.zsh",   fg = "#b48cff" },
+  { url = "*.fish",  fg = "#b48cff" },
+  { url = "*.java",  fg = "#b48cff" },
+  { url = "*.kt",    fg = "#b48cff" },
+  { url = "*.rb",    fg = "#b48cff" },
+  { url = "*.php",   fg = "#b48cff" },
+  { url = "*.hs",    fg = "#b48cff" },
+  { url = "*.pl",    fg = "#b48cff" },
+  { url = "*.cs",    fg = "#b48cff" },
+  { url = "*.swift", fg = "#b48cff" },
 
-  # Directories — silver
-  { url = "*/",       name = " ", fg = "#e8e8f0" },
-
-  # Images — hot purple (MIME)
-  { mime = "image/*", name = " ", fg = "#bd00ff" },
-
-  # Video — hot purple (MIME)
-  { mime = "video/*", name = " ", fg = "#bd00ff" },
-
-  # Audio — red (MIME)
-  { mime = "audio/*", name = " ", fg = "#ff2d55" },
-
-  # Archives / compressed — cyan (url)
-  { url = "*.zip",    name = " ", fg = "#00e5ff" },
-  { url = "*.tar",    name = " ", fg = "#00e5ff" },
-  { url = "*.gz",     name = " ", fg = "#00e5ff" },
-  { url = "*.xz",     name = " ", fg = "#00e5ff" },
-  { url = "*.bz2",    name = " ", fg = "#00e5ff" },
-  { url = "*.7z",     name = " ", fg = "#00e5ff" },
-  { url = "*.rar",    name = " ", fg = "#00e5ff" },
-  { url = "*.zst",    name = " ", fg = "#00e5ff" },
-  { url = "*.iso",    name = " ", fg = "#00e5ff" },
-  { url = "*.deb",    name = " ", fg = "#00e5ff" },
-  { url = "*.rpm",    name = " ", fg = "#00e5ff" },
-
-  # Documents — lime
-  { url = "*.md",     name = " ", fg = "#c8ff00" },
-  { url = "*.txt",    name = " ", fg = "#c8ff00" },
-  { url = "*.pdf",    name = " ", fg = "#c8ff00" },
-  { url = "*.doc",    name = " ", fg = "#c8ff00" },
-  { url = "*.docx",   name = " ", fg = "#c8ff00" },
-  { url = "*.rtf",    name = " ", fg = "#c8ff00" },
+  # Documents — silver
+  { url = "*.md",    fg = "#e8e8f0" },
+  { url = "*.txt",   fg = "#e8e8f0" },
+  { url = "*.pdf",   fg = "#e8e8f0" },
+  { url = "*.doc",   fg = "#e8e8f0" },
+  { url = "*.docx",  fg = "#e8e8f0" },
+  { url = "*.rtf",   fg = "#e8e8f0" },
 
   # Fonts — silver
-  { url = "*.ttf",    name = " ", fg = "#e8e8f0" },
-  { url = "*.otf",    name = " ", fg = "#e8e8f0" },
-  { url = "*.woff",   name = " ", fg = "#e8e8f0" },
-  { url = "*.woff2",  name = " ", fg = "#e8e8f0" },
+  { url = "*.ttf",   fg = "#e8e8f0" },
+  { url = "*.otf",   fg = "#e8e8f0" },
+  { url = "*.woff",  fg = "#e8e8f0" },
+  { url = "*.woff2", fg = "#e8e8f0" },
 
   # Logs / binary / database — muted
-  { url = "*.log",    name = " ", fg = "#6a6a80" },
-  { url = "*.bin",    name = " ", fg = "#6a6a80" },
-  { url = "*.dat",    name = " ", fg = "#6a6a80" },
-  { url = "*.db",     name = " ", fg = "#6a6a80" },
-  { url = "*.sqlite", name = " ", fg = "#6a6a80" },
-  { url = "*.lock",   name = " ", fg = "#6a6a80" },
+  { url = "*.log",    fg = "#6a6a80" },
+  { url = "*.bin",    fg = "#6a6a80" },
+  { url = "*.dat",    fg = "#6a6a80" },
+  { url = "*.db",     fg = "#6a6a80" },
+  { url = "*.sqlite", fg = "#6a6a80" },
+  { url = "*.lock",   fg = "#6a6a80" },
 
   # Executables — cyan
-  { url = "*", is = "exec", name = " ", fg = "#00e5ff" },
+  { url = "*", type = "executable", fg = "#00e5ff" },
 
   # Symlinks — red
-  { url = "*", is = "orphan", name = " ", fg = "#ff2d55" },
+  { url = "*", type = "symlink", fg = "#ff2d55" },
 
   # Special files
-  { url = "Makefile",      name = " ", fg = "#ff6b00" },
-  { url = "Dockerfile",    name = " ", fg = "#ff6b00" },
-  { url = ".gitignore",    name = " ", fg = "#ff2d55" },
-  { url = ".gitconfig",    name = " ", fg = "#ff2d55" },
-  { url = ".editorconfig", name = " ", fg = "#ff6b00" },
+  { url = "Makefile",     fg = "#ff6b00" },
+  { url = "Dockerfile",   fg = "#ff6b00" },
+  { url = ".gitignore",   fg = "#ff2d55" },
+  { url = ".gitconfig",   fg = "#ff2d55" },
+  { url = ".editorconfig", fg = "#ff6b00" },
 ]
 
 # ── File-type icons (Nerd Font) ────────────────────────
 [icon]
 rules = [
   # Directories
-  { url = "*/", name = " " },
+  { url = "*", type = "directory", name = " " },
 
   # Images
-  { mime = "image/*", name = " " },
+  { url = "*.png",  name = " " },
+  { url = "*.jpg",  name = " " },
+  { url = "*.jpeg", name = " " },
+  { url = "*.gif",  name = " " },
+  { url = "*.webp", name = " " },
+  { url = "*.svg",  name = " " },
+  { url = "*.ico",  name = " " },
+  { url = "*.bmp",  name = " " },
 
   # Video
-  { mime = "video/*", name = "󰕼 " },
+  { url = "*.mp4",  name = "󰕼 " },
+  { url = "*.mov",  name = "󰕼 " },
+  { url = "*.mkv",  name = "󰕼 " },
+  { url = "*.avi",  name = "󰕼 " },
+  { url = "*.webm", name = "󰕼 " },
 
   # Audio
-  { mime = "audio/*", name = " " },
+  { url = "*.mp3",  name = " " },
+  { url = "*.flac", name = " " },
+  { url = "*.wav",  name = " " },
+  { url = "*.ogg",  name = " " },
+  { url = "*.m4a",  name = " " },
 
   # Archives
   { url = "*.zip",  name = " " },
@@ -175,7 +209,7 @@ rules = [
   { url = "*.ttf",  name = " " },
   { url = "*.otf",  name = " " },
 
-  # Logs
+  # Logs / binary
   { url = "*.log",  name = " " },
   { url = "*.lock", name = " " },
 
@@ -185,10 +219,10 @@ rules = [
   { url = ".gitignore",  name = " " },
 
   # Executables
-  { url = "*", is = "exec", name = " " },
+  { url = "*", type = "executable", name = " " },
 
   # Symlinks
-  { url = "*", is = "orphan", name = " " },
+  { url = "*", type = "symlink", name = " " },
 ]
 
 # ── Manager ────────────────────────────────────────────
@@ -336,4 +370,4 @@ ignored        = { fg = "#6a6a80" }
 
 clean_sign     = ""
 untracked_sign = ""
-unknown_sign   = ""
+unknown_sign   = ""                      

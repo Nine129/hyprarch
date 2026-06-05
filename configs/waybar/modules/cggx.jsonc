@@ -50,7 +50,7 @@
     "format":          "<span size='16384' rise='-2048'></span> {volume}%",
     "format-muted":    "<span size='16384' rise='-2048'></span> 󰖁",
     "scroll-step":     1,
-    "on-click":        "bash ~/.config/hypr/scripts/pavucontrol-toggle.sh",
+    "on-click":        "bash /home/nine/hyprarch/configs/quickshell/scripts/toggle-volume.sh",
     "on-click-right":  "pactl set-sink-mute 0 toggle"
   },
 

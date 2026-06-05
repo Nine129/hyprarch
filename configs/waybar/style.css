@@ -16,20 +16,18 @@ window#waybar {
 
 window > box {
   background: transparent;
-  padding:    0 12px;
-  margin:     5px 12px 0 12px;
+  padding: 0;
+  margin: 5px 12px 0 12px;
 }
 
 /* ── Workspace numbers 1-9 ────── */
 #workspaces button {
   background: #1a1a20; border: 1px solid #2a2a35; border-radius: 0; color: @silver;
-  padding: 4px 8px; margin: 0 2px; font-size: 13px; box-shadow: 0 2px 8px rgba(0,0,0,0.6);
-  transition: all 0.15s ease;
+  padding: 4px 8px; margin: 0 2px; font-size: 13px;
 }
 
 #workspaces button.active {
   background: @red; color: @bg;
-  box-shadow: 0 0 12px rgba(255,45,85,0.4), 0 2px 8px rgba(0,0,0,0.6);
 }
 
 #workspaces button.urgent {
@@ -48,7 +46,8 @@ window > box {
 /* ── Pill modules ──────────────── */
 #disk, #memory, #temperature, #pulseaudio, #clock, #battery, #tray, #custom-power-button {
   border: none; border-radius: 0;
-  padding: 4px 14px; margin: 0 0.25px; box-shadow: 0 2px 8px rgba(0,0,0,0.6);
+  padding: 4px 14px; margin: 0 0.25px;
+  box-shadow: 1px 0 3px rgba(0,0,0,0.4);
 }
 #disk, #memory, #temperature, #tray, #custom-power-button { background: #1a1a20; }
 
@@ -71,6 +70,7 @@ window > box {
   background: @border; min-width: 1px; min-height: 14px;
   margin: 5px 6px; padding: 0; border: none; border-radius: 0;
 }
+
 
 /* ── Power button ──────────────── */
 #custom-power-button {

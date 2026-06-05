@@ -21,7 +21,7 @@
 
     // ── Software ──
     { "type": "packages","key": "Packages", "keyColor": "bright_green" },
-    { "type": "shell",   "key": "Shell",    "keyColor": "bright_green" },
+    { "type": "shell",   "user":"shell",    "keyColor": "bright_green" },
     { "type": "wm",      "key": "WM",       "keyColor": "bright_green" },
     { "type": "terminal","key": "Terminal", "keyColor": "bright_green" },
 

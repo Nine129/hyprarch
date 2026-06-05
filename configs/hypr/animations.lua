@@ -47,7 +47,10 @@ hl.animation({ leaf = "fadeOut",     enabled = true, speed = 5, bezier = "myBezi
 hl.animation({ leaf = "fadeSwitch",  enabled = true, speed = 5, bezier = "myBezier" })
 hl.animation({ leaf = "fadeShadow",  enabled = true, speed = 5, bezier = "myBezier" })
 hl.animation({ leaf = "fadeDim",     enabled = true, speed = 5, bezier = "myBezier" })
-hl.animation({ leaf = "fadeLayers",  enabled = true, speed = 5, bezier = "myBezier" })
+hl.animation({ leaf = "fadeLayers",  enabled = false })
+
+-- Layer shell resize ───────────────
+hl.animation({ leaf = "layers", enabled = true, speed = 1, bezier = "myBezier" })
 
 -- Border ────────────────────────────
 --  Curve:     myBezier (smooth accent transitions)

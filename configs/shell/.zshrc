@@ -164,3 +164,8 @@ esac
 # ── Zoxide (smart cd) ───────────────────────────────
 eval "$(zoxide init zsh)"
 alias cd="z"
+
+# FastFetch
+alias ff="fastfetch"
+# xdg-open
+alias open="xdg-open"
