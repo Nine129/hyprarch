@@ -24,7 +24,7 @@ PanelWindow {
 
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
-    margins { right: 84; top: 2 }
+    margins { right: 126; top: 2 }
     implicitWidth: 320
     implicitHeight: contentCol.implicitHeight + 32
     color: "transparent"
@@ -49,7 +49,7 @@ PanelWindow {
 
     Rectangle {
         anchors.fill: parent
-        color: popout.bg
+        color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.90)
     }
 
     ColumnLayout {
