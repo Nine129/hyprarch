@@ -252,18 +252,11 @@ sudo pacman -S --needed \
   ttf-jetbrains-mono-nerd \
   ttf-nerd-fonts-symbols-mono \
   ttf-liberation
-
-# Share Tech Mono — used by Waybar, Kitty, Rofi, Hyprlock
-# This is OPTIONAL but strongly recommended for the correct look
-# If missing, apps will fall back to the system monospace font
-yay -S ttf-share-tech-mono
 ```
 
-> **Share Tech Mono is not optional for the intended look** — it's used in waybar
-> (`font-family: 'Share Tech Mono'`), kitty (`font_family Share Tech Mono`),
-> rofi (`font: "Share Tech Mono 10"`), hyprlock (`font_family = Share Tech Mono`),
-> and all rofi-based scripts. Without it, every app falls back to a default monospace
-> and the aesthetic breaks.
+> **JetBrainsMonoNL Nerd Font Mono** is the primary font used across Waybar, Rofi,
+> Kitty, Hyprlock, and all rofi-based scripts. It's included in `ttf-jetbrains-mono-nerd`.
+> Without it, every app falls back to a default monospace and the aesthetic breaks.
 
 ### 6.2 Cursor & Icons (optional)
 
@@ -276,11 +269,14 @@ yay -S bibata-cursor-theme papirus-icon-theme
 
 ### 6.3 GTK Theme
 
-The config uses **Adwaita-dark** (included with `gtk3`).
+The config uses **Colloid-Red-Dark** (installed via `colloid-icon-theme` or AUR).
 
 ```bash
-sudo pacman -S --needed gtk3
+yay -S colloid-icon-theme
 ```
+
+> Set in `~/.config/gtk-3.0/settings.ini` as `gtk-theme-name=Colloid-Red-Dark`.
+> Icon theme is **Papirus-Dark**. Cursor is **Bibata-Modern-Ice**.
 
 ---
 
@@ -711,25 +707,37 @@ See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for detailed fixes.
 | Binding | Action |
 |---------|--------|
 | `SUPER + Q` | Launch Kitty |
-| `SUPER + SPACE` | App launcher (rofi -show drun) |
+| `SUPER + Super_L` (release) | Custom Rofi launcher (category-colored, Pango markup) |
+| `SUPER + A` | Open Vivaldi browser |
 | `SUPER + E` | File manager (kitty -e yazi) |
 | `SUPER + C` | Clipboard picker (cliphist-rofi.sh) |
+| `SUPER + SHIFT + C` | Clear clipboard history |
 | `SUPER + W` | Close focused window |
+| `SUPER + F` | Fullscreen toggle |
+| `SUPER + X` | Toggle float |
+| `SUPER + V` | Clipboard history picker |
+| `SUPER + P` | Toggle pseudo-tiling |
+| `SUPER + J` | Toggle split direction |
+| `SUPER + Tab` | Focus last window |
 | `SUPER + 1..9` | Switch to workspace |
 | `SUPER + SHIFT + 1..9` | Move window to workspace |
+| `SUPER + arrow` | Focus window in direction |
+| `SUPER + SHIFT + arrow` | Move window in direction |
+| `SUPER + CTRL + arrow` | Swap window in direction |
+| `SUPER + SHIFT + CTRL + arrow` | Resize window |
 | `SUPER + L` | Lock screen (hyprlock) |
-| `SUPER + SHIFT + Q` | Power menu (rofi) |
+| `SUPER + S` | Toggle scratchpad |
+| `SUPER + SHIFT + S` | Move to scratchpad |
+| `SUPER + SHIFT + Q` | Power menu (wlogout — shutdown/reboot/lock/logout/suspend) |
+| `SUPER + SHIFT + Escape` | Exit Hyprland |
 | `Click battery` in Waybar | Power profile switcher (rofi) |
-| `SUPER + SHIFT + ESC` | Exit Hyprland |
 | `Print` | Screenshot region → clipboard (grimblast) |
 | `SUPER + Print` | Screenshot region → swappy editor |
 | `SUPER + SHIFT + Print` | Screenshot full screen → clipboard |
-| `SUPER + D` | Screenshot menu (rofi) |
-| `SUPER + V` | Toggle float |
-| `SUPER + F` | Toggle fullscreen |
-| `SUPER + S` | Toggle scratchpad |
+| `SUPER + D` | Screenshot menu (rofi — full/region/swappy/clipboard) |
 | Volume keys | Volume up/down/mute (SwayOSD) |
 | Brightness keys | Brightness up/down (SwayOSD) |
+| Media keys | Next/prev/play-pause (SwayOSD/playerctl) |
 
 ---
 
@@ -752,12 +760,10 @@ sudo pacman -S --needed \
   fd ripgrep bat tealdeer easyeffects brightnessctl p7zip unrar xdg-utils cronie \
   yt-dlp python-mutagen \
   papirus-icon-theme \
-  xorg-xcursorgen imagemagick \
-  noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-mono ttf-liberation \
-  gtk3
+  noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-mono ttf-liberation
 
 # AUR
-yay -S vivaldi vivaldi-ffmpeg-codecs swayosd-git grimblast-git ttf-share-tech-mono bibata-cursor-theme timeshift
+yay -S vivaldi vivaldi-ffmpeg-codecs swayosd-git grimblast-git bibata-cursor-theme timeshift colloid-icon-theme
 ```
 
 Then:

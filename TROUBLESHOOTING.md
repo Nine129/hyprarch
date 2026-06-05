@@ -97,17 +97,23 @@ killall waybar; waybar &
 
 ### Workspace numbers not showing
 
-**Cause:** The `wlr/workspaces` module needs the `all-outputs` setting for a single-monitor setup.
+**Cause:** The `hyprland/workspaces#number` module needs `all-outputs` for a single-monitor setup.
 **Fix:** In `modules/cggx.jsonc`, ensure:
 
 ```jsonc
-"wlr/workspaces": {
-    "format": "{icon}",
-    "on-click": "activate",
+"hyprland/workspaces#number": {
     "all-outputs": true,
+    "format": "{icon}",
+    "on-click": "workspace {name}",
+    "persistent-workspaces": {
+      "1": [], "2": [], "3": [], "4": [], "5": [],
+      "6": [], "7": [], "8": [], "9": []
+    },
     "format-icons": {
-        "1": "1", "2": "2", "3": "3", "4": "4",
-        "5": "5", "6": "6", "7": "7", "8": "8", "9": "9"
+      "1": "1", "2": "2", "3": "3", "4": "4", "5": "5",
+      "6": "6", "7": "7", "8": "8", "9": "9",
+      "urgent": "",
+      "default": ""
     }
 }
 ```
@@ -134,11 +140,11 @@ sudo pacman -S nerd-fonts
 
 | Symptom | Fix |
 |---------|-----|
-| Rounded corners | Set `corner-radius: 0;` in `config.rasi` |
-| Footer visible | `configuration { show-icons: true; }` — ensure no mode-switcher |
+| Rounded corners | Set `border-radius: 0;` in `config.rasi` |
+| Footer visible | `configuration { show-icons: false; }` — mode-switcher is disabled |
 | No blur | Rofi doesn't support `backdrop-filter`. The glass effect uses `background-color: rgba(10,10,12,0.70);` |
-| App names not cyan | Verify `element-text { text-color: @secondary; }` is in your `config.rasi` script section |
-| Wrong colors | Check `@base`, `@primary`, `@secondary` values match the CGGX palette |
+| App names not colored | Verify `element-selected-normal` has the correct background color |
+| Wrong colors | Check `@bg`, `@red`, `@border` values match the CGGX palette |
 
 ---
 
@@ -541,6 +547,7 @@ progress { background: #ff2d55; }  /* Red accent fill */
 | SwayNC | `swaync-client --reload-config; swaync-client --reload-css` |
 | Kitty | `kitty @ load-config` or `Ctrl+Shift+R` |
 | Fastfetch | *(config read on launch)* |
+| Btop | *(config read on launch)* |
 | Zsh | `source ~/.zshrc` |
 
 ### Color mismatch between tools

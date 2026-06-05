@@ -1,6 +1,6 @@
 # ── CGGX Starship Prompt ───────────────────────────────
 # Place at: ~/.config/starship.toml
-# Kinetic brutalist palette — matches waybar / hyprland / yazi
+# Kinetic cyberpunk palette — matches waybar / hyprland / yazi
 # Reload: pkill -USR1 starship || exec $SHELL
 
 # ── Format ─────────────────────────────────────────────

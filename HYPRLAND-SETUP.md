@@ -99,9 +99,9 @@ uwsm start hyprland
 ```
 # ~/.config/uwsm/env
 export XCURSOR_SIZE=24
-export XCURSOR_THEME=capitaine-cursors
+export XCURSOR_THEME=Bibata-Modern-Ice
 
-export GTK_THEME=Catppuccin-Mocha-Standard-Blue-Dark
+export GTK_THEME=Colloid-Red-Dark
 export GTK_ICON_THEME=Papirus-Dark
 
 export QT_QPA_PLATFORM=wayland;xcb
@@ -109,12 +109,10 @@ export QT_WAYLAND_DISABLE_WINDOWDECORATION=1
 export QT_QPA_PLATFORMTHEME=qt5ct
 export QT_AUTO_SCREEN_SCALE_FACTOR=1
 
-export GDK_BACKEND=wayland,x11,*
+export GDK_BACKEND=wayland
 export SDL_VIDEODRIVER=wayland
-export CLUTTER_BACKEND=wayland
-
-export NIXOS_OZONE_WL=1            # for electron apps on NixOS
 export _JAVA_AWT_WM_NONREPARENTING=1
+export MOZ_ENABLE_WAYLAND=1
 ```
 
 **Shutdown:** use `hyprshutdown` (not the `exit` dispatcher) for clean teardown.
@@ -372,14 +370,19 @@ hl.window_rule({ match = { float = false, workspace = "f[1]" },   border_size = 
 | Keys | Action |
 |------|--------|
 | `SUPER + Q` | Open Kitty |
+| `SUPER + Super_L` (release) | Custom Rofi launcher (category-colored, Pango markup) |
+| `SUPER + A` | Open Vivaldi browser |
+| `SUPER + E` | Open kitty + yazi file manager |
 | `SUPER + W` | Close window (killactive) |
-| `SUPER + R` | Open Rofi (drun) |
 | `SUPER + F` | Fullscreen toggle |
-| `SUPER + V` | Float toggle |
+| `SUPER + X` | Float toggle |
+| `SUPER + V` | Clipboard history picker |
 | `SUPER + P` | Pseudo-tile toggle |
 | `SUPER + J` | Toggle split direction |
+| `SUPER + Tab` | Focus last window |
 | `SUPER + arrows` | Move focus |
 | `SUPER + SHIFT + arrows` | Move window |
+| `SUPER + CTRL + arrows` | Swap window |
 | `SUPER + SHIFT + CTRL + arrows` | Resize window |
 | `SUPER + 1..9` | Switch workspace |
 | `SUPER + SHIFT + 1..9` | Move window to workspace |
@@ -390,10 +393,13 @@ hl.window_rule({ match = { float = false, workspace = "f[1]" },   border_size = 
 | `SUPER + mouse:273` | Resize window (floating) |
 | `SUPER + Print` | Screenshot region → swappy markup → auto-save |
 | `SUPER + SHIFT + Print` | Screenshot full → clipboard |
-| `SUPER + L` | Lock screen (hyprlock) |
-| `SUPER + SHIFT + Q` | Power menu (shutdown/reboot/lock/logout/suspend) |
 | `SUPER + D` | Screenshot menu (full/region/swappy/clipboard) |
 | `Print` | Screenshot region → clipboard |
+| `SUPER + L` | Lock screen (hyprlock) |
+| `SUPER + SHIFT + Q` | Power menu (wlogout — shutdown/reboot/lock/logout/suspend) |
+| `SUPER + SHIFT + Escape` | Exit Hyprland |
+| `SUPER + C` | Clipboard history picker |
+| `SUPER + SHIFT + C` | Clear clipboard history |
 
 ### Media keys
 
@@ -410,15 +416,23 @@ hl.window_rule({ match = { float = false, workspace = "f[1]" },   border_size = 
 
 ## 11. Autostart
 
+Most daemons are managed by **systemd user services** for crash resilience:
+
 ```lua
 hl.on("hyprland.start", function()
-  hl.exec_cmd("waybar")
-  hl.exec_cmd("hyprpaper")
-    hl.exec_cmd("swaync")                                    -- Notification daemon + control center
-  hl.exec_cmd("nm-applet")
+  -- Managed by systemd user services:
+  -- waybar, hyprpaper, hypridle, swaync, cliphist
+
+  hl.exec_cmd("swayosd-server")                     -- On-screen display (volume/brightness)
+  hl.exec_cmd("nm-applet")                          -- NetworkManager tray icon
+  hl.exec_cmd("blueman-applet")                     -- Bluetooth tray icon
   hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
+  -- Wallpaper set via IPC (hyprpaper v0.8.4 config preload doesn't work at startup)
+  hl.exec_cmd("hyprctl hyprpaper wallpaper eDP-1,/home/nine/.local/share/wallpapers/cggx.webp")
 end)
 ```
+
+> See [SETUP-GUIDE.md §7.2](./SETUP-GUIDE.md#72-hyprland-user-services-recommended) for systemd service setup.
 
 ---
 
@@ -428,15 +442,17 @@ end)
 
 ```bash
 # Core
-sudo pacman -S hyprland hyprpaper hyprlock hypridle hyprpicker swayosd
-sudo pacman -S waybar rofi-lbonn-wayland-git   # or rofi-wayland
-sudo pacman -S kitty swaync wlogout grim slurp swappy jq
+sudo pacman -S hyprland hyprpaper hyprlock hypridle hyprpicker
+sudo pacman -S waybar rofi-wayland
+sudo pacman -S kitty swaync grim slurp swappy jq
 sudo pacman -S wl-clipboard cliphist yazi
-sudo pacman -S xdg-desktop-portal-hyprland polkit-gnome
+sudo pacman -S xdg-desktop-portal-hyprland xdg-desktop-portal-gtk polkit-gnome
 sudo pacman -S nm-applet brightnessctl
-sudo pacman -S nwg-look qt5ct qt6ct
-sudo pacman -S ttf-jetbrains-mono-nerd noto-fonts noto-fonts-cjk noto-fonts-emoji
-sudo pacman -S pipewire wireplumber
+sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-jetbrains-mono-nerd
+sudo pacman -S pipewire wireplumber btop fastfetch neovim zsh starship
+
+# AUR
+yay -S swayosd-git grimblast-git vivaldi bibata-cursor-theme colloid-icon-theme
 ```
 
 ### Notes on each
@@ -445,12 +461,12 @@ sudo pacman -S pipewire wireplumber
 |------|-------------|-------|
 | **waybar** | `~/.config/waybar/style.css` + `config.jsonc` | Transparent bar, floating pill modules |
 | **rofi** | `~/.config/rofi/config.rasi` | CGGX theme, red accent, sharp corners |
-| **kitty** | `~/.config/kitty/kitty.conf` | Share Tech Mono font, CGGX colors |
+| **kitty** | `~/.config/kitty/kitty.conf` | JetBrainsMono Nerd Font, CGGX colors |
 | **swaync** | `~/.config/swaync/config.json` + `style.css` | Notification daemon + control center panel |
 | **hyprpaper** | `~/.config/hypr/hyprpaper.conf` | Static wallpaper with dim overlay |
 | **hyprlock** | `~/.config/hypr/hyprlock.conf` | Lock screen matching CGGX style |
 | **hypridle** | `~/.config/hypr/hypridle.conf` | DPMS + lock on idle |
-| **wlogout** | `~/.config/wlogout/layout` + `style.css` | Power menu bound to waybar power btn |
+| **wlogout** | `~/.local/bin/wlogout` | Power menu (called via wlogout-toggle.sh) |
 | **grim** | — | Screenshots via keybinds (grimblast from AUR) |
 | **swayosd** | `~/.config/swayosd/style.css` | Volume/brightness OSD overlay |
 | **swappy** | `~/.config/swappy/config` | Screenshot annotation auto-save |
@@ -469,11 +485,11 @@ systemctl --user enable --now xdg-desktop-portal-hyprland
 ### Theme chain
 
 ```
-GTK apps ──► nwg-look/catppuccin-gtk-theme ──► dark CGGX palette
-Qt apps   ──► qt5ct (kvantum theme)          ──► same dark palette
-Terminals ──► kitty.conf hardcoded colors     ──► CGGX palette
-Waybar    ──► style.css custom colors         ──► CGGX palette
-Rofi      ──► config.rasi colors              ──► CGGX palette
+GTK apps ──► colloid-icon-theme/Papirus-Dark    ──► dark CGGX palette
+Qt apps   ──► qt5ct (kvantum theme)               ──► same dark palette
+Terminals ──► kitty.conf hardcoded colors          ──► CGGX palette
+Waybar    ──► style.css custom colors              ──► CGGX palette
+Rofi      ──► config.rasi colors                   ──► CGGX palette
 ```
 
 ---

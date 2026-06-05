@@ -622,7 +622,9 @@ window#osd {
 
   #container { margin: 16px 20px; }
 
-  image, label { color: #e8e8f0; }
+  image { color: #00e5ff; }
+
+  label { color: #e8e8f0; }
 
   progressbar:disabled,
   image:disabled { opacity: 0.35; }

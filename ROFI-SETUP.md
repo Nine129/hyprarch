@@ -1,7 +1,7 @@
 # Rofi Setup — CGGX Rice
 
 > Rofi: Application launcher, window switcher, and dmenu replacement.
-> Part of the CGGX Hyprland rice — brutalist, zero-radius, red-cyan-lime palette.
+> Part of the CGGX Hyprland rice — neon cyberpunk, zero-radius, red-cyan-lime palette.
 >
 > See also: **[HYPRLAND-SETUP.md](./HYPRLAND-SETUP.md)** — Hyprland config, architecture, Lua reference |
 > **[WAYBAR-SETUP.md](./WAYBAR-SETUP.md)** — Waybar styling, modules, decisions |
@@ -86,13 +86,13 @@ The old GitHub Wiki is **deprecated** — it redirects to the MkDocs site above.
 | Active items | Cyan accent |
 | Window width | 520px — centered on screen |
 | Transparency | `"real"` — requires Wayland compositor (Hyprland) |
-| Font | Share Tech Mono 10 |
-| Icons | Papirus-Dark theme |
+| Font | JetBrainsMonoNL Nerd Font Mono 13 |
+| Icons | Disabled — custom launcher uses Nerd Font glyphs via Pango markup |
 | Search placeholder | "search..." in muted (#6a6a80) |
 | Cursor color | Red (#ff2d55) |
-| Element layout | `[element-icon, element-text]` horizontal |
-| Scrollbar | Disabled — cleaner look with 8 visible lines |
-| Mode switcher | Enabled — shows LAUNCH / RUN / WINDOW buttons at bottom |
+| Element layout | `[element-text]` horizontal (text-only, no icon widget) |
+| Scrollbar | Disabled — cleaner look with 12 visible lines |
+| Mode switcher | Disabled — clean minimal look |
 
 ### 2.4 Color Palette (CGGX → Rofi)
 
@@ -257,8 +257,8 @@ Set inside `configuration { ... }`:
 | `modes` | `[ drun, run, window ]` | Enabled modes in order |
 | `terminal` | `"kitty"` | Terminal for run mode |
 | `combi-modes` | `[ window, drun, run ]` | Modes for combi view |
-| `show-icons` | `true` | Display app icons |
-| `icon-theme` | `"Papirus-Dark"` | Icon set |
+| `show-icons` | `false` | Icons disabled — custom launcher uses Nerd Font glyphs via Pango markup |
+| `icon-theme` | `"Papirus-Dark"` | Icon set (not used when show-icons is false) |
 | `drun-display-format` | `"{name}"` | What to show in drun list |
 | `display-drun` | `"❯ LAUNCH"` | Prompt text for drun mode |
 | `display-run` | `" RUN"` | Prompt text for run mode |
@@ -387,7 +387,7 @@ width: calc( 40% min 500px );
 
 | Keybind | Action |
 |---------|--------|
-| `SUPER + SPACE` | Open rofi in drun (app launcher) mode |
+| `SUPER + Super_L` (release) | Custom Rofi launcher (category-colored, Pango markup) |
 
 ### 7.2 Navigation
 

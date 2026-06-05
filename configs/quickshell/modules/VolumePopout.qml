@@ -24,8 +24,8 @@ PanelWindow {
 
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
-    margins { right: 126; top: 2 }
-    implicitWidth: 320
+    margins { right: 146; top: 2 }
+    implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 32
     color: "transparent"
     visible: shouldShow
@@ -206,12 +206,20 @@ PanelWindow {
         }
 
         // ── Ticks ────────────────────────
-        RowLayout {
-            Layout.fillWidth: true; Layout.leftMargin: 38; Layout.rightMargin: 38; Layout.bottomMargin: 14
-            Repeater {
-                model: ["0", "25", "50", "75", "100"]
-                Text { text: modelData; font.family: popout.font; font.pixelSize: 9; color: popout.muted; Layout.fillWidth: true; horizontalAlignment: index === 0 ? Text.AlignLeft : (index === 4 ? Text.AlignRight : Text.AlignHCenter) }
-            }
+        Item {
+            Layout.fillWidth: true; Layout.preferredHeight: 14
+            Layout.leftMargin: 38; Layout.rightMargin: 76; Layout.bottomMargin: 14
+
+            // 0 at slider 0%
+            Text { text: "0"; font.family: popout.font; font.pixelSize: 9; color: popout.muted; anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter }
+            // 25 at slider 25%
+            Text { text: "25"; font.family: popout.font; font.pixelSize: 9; color: popout.muted; anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: -parent.width * 0.25 - 2; anchors.verticalCenter: parent.verticalCenter }
+            // 50 at slider 50%
+            Text { text: "50"; font.family: popout.font; font.pixelSize: 9; color: popout.muted; anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: -2; anchors.verticalCenter: parent.verticalCenter }
+            // 75 at slider 75%
+            Text { text: "75"; font.family: popout.font; font.pixelSize: 9; color: popout.muted; anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: parent.width * 0.25; anchors.verticalCenter: parent.verticalCenter }
+            // 100 at slider 100%
+            Text { text: "100"; font.family: popout.font; font.pixelSize: 9; color: popout.muted; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter }
         }
 
         // ── Device selector ──────────────
