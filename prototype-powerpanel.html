@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CGGX PowerPanel — Prototype</title>
+<style>
+/* ── Reset & base ────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:#0a0a0c;
+  color:#e8e8f0;
+  font-family:'JetBrainsMono Nerd Font','JetBrains Mono','Consolas',monospace;
+  display:flex;justify-content:center;align-items:center;
+  min-height:100vh;margin:0;overflow:hidden;
+}
+
+/* ── Theme palette ──────────────── */
+:root{
+  --bg:#0a0a0c;
+  --surface:#1a1a20;
+  --border:#2a2a35;
+  --red:#ff2d55;
+  --cyan:#00e5ff;
+  --lime:#c8ff00;
+  --orange:#ff6b00;
+  --silver:#e8e8f0;
+  --muted:#6a6a80;
+  --pink:#ff007f;
+  --profile-saver:#00e5ff;
+  --profile-balanced:#c8ff00;
+  --profile-perf:#ff6b00;
+}
+
+/* ── Screen background ──────────── */
+.screen{
+  width:1920px;height:1080px;
+  background:#0a0a0c;
+  position:relative;
+  display:flex;justify-content:center;align-items:flex-start;
+  overflow:hidden;
+}
+
+/* ── Wallpaper (subtle) ─────────── */
+.screen::before{
+  content:'';position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 30%, rgba(255,45,85,0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 20% 70%, rgba(0,229,255,0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 50% 50%, rgba(200,255,0,0.04) 0%, transparent 50%);
+  pointer-events:none;
+}
+
+/* ── Waybar simulation ──────────── */
+.waybar{
+  position:absolute;top:5px;left:12px;right:12px;
+  height:36px;display:flex;align-items:center;
+  pointer-events:none;z-index:1;
+}
+.waybar-pill{
+  background:var(--surface);padding:0 14px;height:28px;
+  display:flex;align-items:center;gap:8px;
+  pointer-events:auto;
+}
+.waybar-pill.battery{
+  margin-left:auto;
+  color:var(--lime);font-size:13px;font-weight:600;
+}
+.waybar-pill.battery .icon{font-size:14px;}
+.waybar-pill.battery .pct{font-size:13px;}
+.waybar-pill.battery.active{
+  background:var(--red);color:#0a0a0c;
+  position:relative;
+}
+.waybar-pill.battery.active::after{
+  content:'';
+  position:absolute;bottom:-6px;left:50%;transform:translateX(-50%);
+  width:0;height:0;
+  border-left:5px solid transparent;
+  border-right:5px solid transparent;
+  border-top:5px solid var(--red);
+}
+
+/* ── Popup base ─────────────────── */
+.popup{
+  position:absolute;top:47px;right:60px;
+  width:300px;
+  background:rgba(10,10,12,0.94);
+  border:1px solid var(--border);
+  z-index:10;
+  overflow:hidden;
+}
+.popup-inner{padding:14px;}
+
+/* ── Shared widgets ─────────────── */
+.section-label{
+  font-size:9px;font-weight:700;letter-spacing:2.5px;
+  color:var(--muted);margin-bottom:6px;
+}
+.stat-row{
+  display:flex;align-items:center;gap:8px;
+  height:22px;font-size:11px;
+}
+.stat-row .icon{width:16px;text-align:center;}
+.stat-row .label{color:var(--muted);flex:1;}
+.stat-row .value{font-weight:700;color:var(--silver);}
+
+/* ── Divider line ───────────────── */
+.divider{margin:10px 0;border:0;height:1px;background:var(--border);opacity:0.5;}
+
+/* ── Animate variant transitions ── */
+.popup{opacity:0;transition:opacity .2s ease;}
+.popup.show{opacity:1;}
+
+/* ═══════════════════════════════════════════════════════════════
+   VARIANT A — Dashboard (data-first)
+   ═══════════════════════════════════════════════════════════════ */
+.variant-a .hero{
+  display:flex;align-items:center;gap:14px;
+  margin-bottom:14px;
+}
+.variant-a .battery-ring{
+  width:56px;height:56px;border-radius:50%;
+  background:conic-gradient(var(--lime) 0deg 227deg, var(--border) 227deg 360deg);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;flex-shrink:0;
+}
+.variant-a .battery-ring .inner{
+  width:42px;height:42px;border-radius:50%;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:700;color:var(--silver);
+}
+.variant-a .hero-text{
+  flex:1;
+}
+.variant-a .hero-text .status{
+  font-size:10px;color:var(--muted);letter-spacing:1px;
+}
+.variant-a .hero-text .pct{
+  font-size:28px;font-weight:700;color:var(--lime);line-height:1;
+}
+.variant-a .hero-text .label{
+  font-size:9px;color:var(--muted);letter-spacing:2.5px;font-weight:700;
+}
+.variant-a .stats-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;
+  margin-bottom:12px;
+}
+.variant-a .stat-card{
+  background:var(--surface);
+  padding:10px 12px;
+}
+.variant-a .stat-card .num{
+  font-size:16px;font-weight:700;margin-top:2px;
+}
+.variant-a .stat-card .num.lime{color:var(--lime);}
+.variant-a .stat-card .num.cyan{color:var(--cyan);}
+.variant-a .stat-card .num.orange{color:var(--orange);}
+.variant-a .stat-card .num.muted{color:var(--muted);}
+.variant-a .profile-strip{
+  display:flex;gap:4px;margin-bottom:10px;
+}
+.variant-a .profile-chip{
+  flex:1;padding:8px 0;
+  text-align:center;font-size:9px;font-weight:600;
+  background:var(--surface);border:1px solid var(--border);
+  cursor:pointer;transition:all .1s;
+}
+.variant-a .profile-chip.active{
+  border-left:3px solid;
+  background:rgba(255,255,255,0.05);
+}
+.variant-a .profile-chip.saver.active{border-color:var(--profile-saver);color:var(--profile-saver);}
+.variant-a .profile-chip.balanced.active{border-color:var(--profile-balanced);color:var(--profile-balanced);}
+.variant-a .profile-chip.perf.active{border-color:var(--profile-perf);color:var(--profile-perf);}
+.variant-a .profile-chip .icon{font-size:14px;display:block;margin-bottom:2px;}
+.variant-a .charge-strip{display:flex;gap:4px;}
+.variant-a .charge-chip{
+  flex:1;padding:7px 0;text-align:center;
+  font-size:10px;font-weight:600;
+  background:var(--surface);border:1px solid var(--border);
+  cursor:pointer;transition:all .1s;
+}
+.variant-a .charge-chip.active{
+  background:rgba(200,255,0,0.12);
+  border-color:rgba(200,255,0,0.4);
+  color:var(--lime);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VARIANT B — Control Center (action-first)
+   ═══════════════════════════════════════════════════════════════ */
+.variant-b .top-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.variant-b .profile-blocks{
+  display:flex;flex-direction:column;gap:5px;
+  margin-bottom:16px;
+}
+.variant-b .profile-block{
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  cursor:pointer;transition:all .1s;
+  position:relative;
+}
+.variant-b .profile-block:hover{
+  background:rgba(255,255,255,0.04);
+}
+.variant-b .profile-block.active{
+  background:rgba(255,255,255,0.06);
+  border-left:4px solid var(--lime);
+}
+.variant-b .profile-block .block-icon{
+  font-size:20px;width:28px;text-align:center;
+  color:var(--lime);
+}
+.variant-b .profile-block .block-info{flex:1;}
+.variant-b .profile-block .block-name{
+  font-size:12px;font-weight:700;
+}
+.variant-b .profile-block .block-glow{
+  position:absolute;inset:1px;
+  border:1px solid transparent;
+  pointer-events:none;
+}
+.variant-b .profile-block.active .block-glow{
+  border-color:rgba(255,255,255,0.06);
+}
+.variant-b .charge-group{
+  display:flex;gap:6px;
+}
+.variant-b .charge-btn{
+  flex:1;padding:10px 0;
+  text-align:center;font-size:11px;font-weight:700;
+  background:var(--surface);border:1px solid var(--border);
+  cursor:pointer;transition:all .1s;
+}
+.variant-b .charge-btn:hover{
+  background:rgba(255,255,255,0.04);
+}
+.variant-b .charge-btn.active{
+  background:rgba(0,229,255,0.12);
+  border-color:var(--cyan);
+  color:var(--cyan);
+}
+.variant-b .bottom-info{
+  display:flex;justify-content:space-between;
+  margin-top:10px;font-size:9px;color:var(--muted);
+}
+.variant-b .top-bar{
+  margin-bottom:12px;
+}
+.variant-b .vol-header{
+  display:flex;align-items:center;width:100%;
+}
+.variant-b .vol-header .label{
+  font-size:16px;font-weight:700;letter-spacing:2px;
+  color:var(--lime);
+}
+.variant-b .vol-header .spacer{
+  flex:1;
+}
+.variant-b .vol-header .value{
+  font-size:28px;font-weight:700;
+  color:var(--silver);
+}
+.variant-b .stats-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:6px;
+  margin-bottom:12px;
+}
+.variant-b .stat-card{
+  background:var(--surface);
+  padding:10px 12px;
+}
+.variant-b .stat-card .num{
+  font-size:16px;font-weight:700;margin-top:2px;
+}
+.variant-b .stat-card .num.lime{color:var(--lime);}
+.variant-b .stat-card .num.cyan{color:var(--cyan);}
+.variant-b .stat-card .num.orange{color:var(--orange);}
+.variant-b .stat-card .num.muted{color:var(--muted);}
+
+/* ═══════════════════════════════════════════════════════════════
+   VARIANT C — Slim Popout (info-first, compact)
+   ═══════════════════════════════════════════════════════════════ */
+.variant-c .popup{width:260px;}
+.variant-c .compact-header{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:10px;
+}
+.variant-c .compact-header .pct-big{
+  font-size:30px;font-weight:700;line-height:1;
+}
+.variant-c .compact-header .pct-big.lime{color:var(--lime);}
+.variant-c .compact-header .pct-big.orange{color:var(--orange);}
+.variant-c .compact-header .pct-big.red{color:var(--red);}
+.variant-c .compact-header .meta{
+  flex:1;
+}
+.variant-c .compact-header .meta .label{
+  font-size:9px;font-weight:700;letter-spacing:2.5px;
+}
+.variant-c .compact-header .meta .status{
+  font-size:10px;color:var(--muted);margin-top:1px;
+}
+.variant-c .profile-indicator{
+  display:flex;gap:3px;margin-bottom:12px;
+}
+.variant-c .profile-indicator .seg{
+  flex:1;height:3px;
+  background:var(--border);transition:background .15s;
+}
+.variant-c .profile-indicator .seg.active.one{background:var(--profile-saver);}
+.variant-c .profile-indicator .seg.active.two{background:var(--profile-balanced);}
+.variant-c .profile-indicator .seg.active.three{background:var(--profile-perf);}
+.variant-c .profile-selector-row{
+  display:flex;gap:4px;margin-bottom:12px;
+}
+.variant-c .profile-selector-row .opt{
+  flex:1;padding:6px 0;
+  text-align:center;font-size:9px;font-weight:600;
+  background:transparent;border:1px solid var(--border);
+  cursor:pointer;transition:all .1s;
+}
+.variant-c .profile-selector-row .opt:hover{
+  background:rgba(255,255,255,0.04);
+}
+.variant-c .profile-selector-row .opt.active{
+  background:rgba(255,255,255,0.06);
+  border-left:3px solid;
+}
+.variant-c .profile-selector-row .opt.saver.active{border-color:var(--profile-saver);color:var(--profile-saver);}
+.variant-c .profile-selector-row .opt.balanced.active{border-color:var(--profile-balanced);color:var(--profile-balanced);}
+.variant-c .profile-selector-row .opt.perf.active{border-color:var(--profile-perf);color:var(--profile-perf);}
+.variant-c .stats-inline{
+  display:flex;gap:10px;margin-bottom:10px;
+}
+.variant-c .stats-inline .stat-mini{
+  flex:1;text-align:center;
+  padding:8px 4px;
+  background:var(--surface);
+}
+.variant-c .stats-inline .stat-mini .num{
+  font-size:13px;font-weight:700;
+}
+.variant-c .stats-inline .stat-mini .lbl{
+  font-size:8px;color:var(--muted);letter-spacing:1px;margin-top:2px;
+}
+.variant-c .charge-inline{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 10px;
+  background:var(--surface);
+}
+.variant-c .charge-inline .lbl{
+  font-size:9px;color:var(--muted);letter-spacing:1.5px;font-weight:700;flex:1;
+}
+.variant-c .charge-inline .val{
+  font-size:14px;font-weight:700;
+}
+.variant-c .charge-inline .adj{
+  width:22px;height:22px;
+  display:flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid var(--border);
+  cursor:pointer;font-size:12px;color:var(--muted);
+  transition:all .1s;
+}
+.variant-c .charge-inline .adj:hover{
+  background:var(--border);color:var(--silver);
+}
+
+/* ── Floating variant switcher ──── */
+.switcher{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:16px;
+  padding:8px 18px;
+  background:rgba(26,26,32,0.95);
+  border:1px solid var(--border);
+  z-index:999;
+  font-size:12px;
+  user-select:none;
+}
+.switcher .arrow{
+  cursor:pointer;color:var(--muted);
+  font-size:18px;padding:2px 6px;
+  transition:color .1s;
+}
+.switcher .arrow:hover{color:var(--silver);}
+.switcher .label{color:var(--muted);}
+.switcher .label strong{color:var(--silver);}
+.switcher .dots{display:flex;gap:6px;}
+.switcher .dot{
+  width:6px;height:6px;
+  background:var(--border);
+  cursor:pointer;transition:background .1s;
+}
+.switcher .dot.current{background:var(--red);}
+.switcher .hint{font-size:9px;color:var(--muted);margin-left:8px;}
+
+/* ── No animations if user prefers reduced motion ── */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{transition-duration:0ms!important;animation-duration:0ms!important;}
+}
+</style>
+</head>
+<body>
+
+<div class="screen" id="screen">
+
+  <!-- Waybar simulation -->
+  <div class="waybar">
+    <div class="waybar-pill" style="color:var(--silver)">1 2 3 4 5 6 7 8 9</div>
+    <div class="waybar-pill battery" id="batteryPill">
+      <span class="icon"></span>
+      <span class="pct">63%</span>
+    </div>
+  </div>
+
+  <!-- Popup container — variant rendered here -->
+  <div class="popup show" id="popup"></div>
+
+</div>
+
+<!-- Variant Switcher -->
+<div class="switcher" id="switcher">
+  <span class="arrow" id="prevArrow">◂</span>
+  <div class="dots" id="dots"></div>
+  <span class="label" id="variantLabel">A — <strong>Dashboard</strong></span>
+  <span class="arrow" id="nextArrow">▸</span>
+  <span class="hint">← →</span>
+</div>
+
+<script>
+// ── Data ─────────────────────────────────────────────────────
+const state = {
+  profile: 'balanced',
+  pct: 63,
+  health: 93.5,
+  cycles: 57,
+  draw: 0.0,
+  status: 'Plugged in',
+  statusDetail: 'Fully charged',
+  chargeLimit: 80,
+  onBattery: false,
+};
+
+const variants = [
+  { key:'A', name:'Dashboard',      desc:'data-first metrics panel' },
+  { key:'B', name:'Control Center', desc:'action-first block layout' },
+  { key:'C', name:'Slim Popout',    desc:'info-first compact panel' },
+];
+
+// ── Profile helpers ──────────────────────────────────────────
+const profileColors = { 'low-power':'#00e5ff', 'balanced':'#c8ff00', 'performance':'#ff6b00' };
+const profileIcons  = { 'low-power':'󰌪', 'balanced':'', 'performance':'' };
+const profileLabels = { 'low-power':'Saver', 'balanced':'Balanced', 'performance':'Performance' };
+const profileKeys   = ['low-power','balanced','performance'];
+
+function pctColor(p){
+  if(p > 60) return 'var(--lime)';
+  if(p > 30) return 'var(--orange)';
+  return 'var(--red)';
+}
+
+// ── Render variant ───────────────────────────────────────────
+const popup = document.getElementById('popup');
+
+function renderVariant(variantKey){
+  const v = variantKey;
+  let html = '';
+
+  if(v === 'A'){
+    const pct = state.pct;
+    const ringDeg = (pct / 100) * 360;
+    const ringColor = pct > 60 ? 'var(--lime)' : (pct > 30 ? 'var(--orange)' : 'var(--red)');
+    const activeIdx = profileKeys.indexOf(state.profile);
+
+    html = `
+    <div class="popup-inner variant-a">
+      <div class="hero">
+        <div class="battery-ring" style="background:conic-gradient(${ringColor} 0deg ${ringDeg}deg, var(--border) ${ringDeg}deg 360deg)">
+          <div class="inner">${pct}%</div>
+        </div>
+        <div class="hero-text">
+          <div class="label">POWER</div>
+          <div class="pct" style="color:${ringColor}">${pct}%</div>
+          <div class="status">${state.statusDetail} · ${state.status}</div>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="section-label">HEALTH</div>
+          <div class="num lime">${state.health}%</div>
+        </div>
+        <div class="stat-card">
+          <div class="section-label">CYCLES</div>
+          <div class="num lime">${state.cycles}</div>
+        </div>
+        <div class="stat-card">
+          <div class="section-label">DRAW</div>
+          <div class="num lime">${state.draw.toFixed(1)}W</div>
+        </div>
+        <div class="stat-card">
+          <div class="section-label">CHARGE LIMIT</div>
+          <div class="num lime">${state.chargeLimit}%</div>
+        </div>
+      </div>
+      <div class="section-label">PROFILE</div>
+      <div class="profile-strip">
+        ${profileKeys.map((k,i) => `
+          <div class="profile-chip ${k} ${state.profile===k?'active':''}" data-profile="${k}">
+            <span class="icon">${profileIcons[k]}</span>
+            ${profileLabels[k]}
+          </div>
+        `).join('')}
+      </div>
+      <div class="section-label">CHARGE LIMIT</div>
+      <div class="charge-strip">
+        ${[60,80,100].map(v2 => `
+          <div class="charge-chip ${state.chargeLimit===v2?'active':''}" data-limit="${v2}">${v2}%</div>
+        `).join('')}
+      </div>
+    </div>`;
+  }
+
+  else if(v === 'B'){
+    const pct = state.pct;
+    const ringDeg = (pct / 100) * 360;
+    const ringColor = pct > 60 ? 'var(--lime)' : (pct > 30 ? 'var(--orange)' : 'var(--red)');
+
+    html = `
+    <div class="popup-inner variant-b">
+      <div class="top-bar">
+        <div class="vol-header">
+          <span class="value">${state.pct}%</span>
+          <span class="spacer"></span>
+          <span class="label">POWER</span>
+        </div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="section-label">HEALTH</div>
+          <div class="num lime">${state.health}%</div>
+        </div>
+        <div class="stat-card">
+          <div class="section-label">CYCLES</div>
+          <div class="num lime">${state.cycles}</div>
+        </div>
+        <div class="stat-card">
+          <div class="section-label">DRAW</div>
+          <div class="num lime">${state.draw.toFixed(1)}W</div>
+        </div>
+        <div class="stat-card">
+          <div class="section-label">CHARGE LIMIT</div>
+          <div class="num lime">${state.chargeLimit}%</div>
+        </div>
+      </div>
+      <div class="section-label">PERFORMANCE PROFILE</div>
+      <div class="profile-blocks">
+        ${profileKeys.map((k,i) => {
+          const active = state.profile === k;
+          return `
+          <div class="profile-block ${k} ${active?'active':''}" data-profile="${k}">
+            <div class="block-icon">${profileIcons[k]}</div>
+            <div class="block-info">
+              <div class="block-name">${profileLabels[k]}</div>
+            </div>
+            <div class="block-glow"></div>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>`;
+  }
+
+  else if(v === 'C'){
+    const pc = pctColor(state.pct);
+    const pClass = state.pct > 60 ? 'lime' : (state.pct > 30 ? 'orange' : 'red');
+    const activeIdx = profileKeys.indexOf(state.profile);
+    html = `
+    <div class="popup-inner variant-c">
+      <div class="compact-header">
+        <div class="pct-big ${pClass}">${state.pct}%</div>
+        <div class="meta">
+          <div class="label" style="color:${pc}">POWER</div>
+          <div class="status">${state.status} · ${state.statusDetail}</div>
+        </div>
+      </div>
+      <div class="profile-indicator">
+        ${profileKeys.map((k,i) => `
+          <div class="seg ${state.profile===k?'active':''} ${['one','two','three'][i]}"></div>
+        `).join('')}
+      </div>
+      <div class="profile-selector-row">
+        ${profileKeys.map((k,i) => `
+          <div class="opt ${k} ${state.profile===k?'active':''}" data-profile="${k}">
+            ${profileIcons[k]} ${profileLabels[k]}
+          </div>
+        `).join('')}
+      </div>
+      <div class="stats-inline">
+        <div class="stat-mini">
+          <div class="num" style="color:var(--lime)">${state.health}%</div>
+          <div class="lbl">HEALTH</div>
+        </div>
+        <div class="stat-mini">
+          <div class="num" style="color:var(--cyan)">${state.cycles}</div>
+          <div class="lbl">CYCLES</div>
+        </div>
+        <div class="stat-mini">
+          <div class="num" style="color:var(--orange)">${state.draw.toFixed(1)}W</div>
+          <div class="lbl">DRAW</div>
+        </div>
+      </div>
+      <div class="charge-inline">
+        <span class="lbl">CHARGE LIMIT</span>
+        <span class="adj" data-limit-dir="-1">−</span>
+        <span class="val" style="color:${state.chargeLimit===100?'var(--silver)':'var(--cyan)'}">${state.chargeLimit}%</span>
+        <span class="adj" data-limit-dir="1">+</span>
+      </div>
+    </div>`;
+  }
+
+  popup.innerHTML = html;
+  popup.className = 'popup show';
+  popup.style.width = v === 'C' ? '260px' : '300px';
+
+  // Re-bind click events
+  popup.querySelectorAll('[data-profile]').forEach(el => {
+    el.addEventListener('click', () => {
+      state.profile = el.dataset.profile;
+      renderVariant(v);
+      updateBatteryPill();
+    });
+  });
+  popup.querySelectorAll('[data-limit]').forEach(el => {
+    el.addEventListener('click', () => {
+      state.chargeLimit = parseInt(el.dataset.limit);
+      renderVariant(v);
+    });
+  });
+  popup.querySelectorAll('[data-limit-dir]').forEach(el => {
+    el.addEventListener('click', () => {
+      const dir = parseInt(el.dataset.limitDir);
+      const steps = [60,80,100];
+      let idx = steps.indexOf(state.chargeLimit);
+      idx = Math.max(0, Math.min(steps.length-1, idx + dir));
+      state.chargeLimit = steps[idx];
+      renderVariant(v);
+    });
+  });
+}
+
+// ── Battery pill ─────────────────────────────────────────────
+function updateBatteryPill(){
+  const pill = document.getElementById('batteryPill');
+  const pct = state.pct;
+  pill.querySelector('.pct').textContent = pct + '%';
+  pill.querySelector('.icon').textContent = pct > 75 ? '' : (pct > 50 ? '' : (pct > 25 ? '' : ''));
+}
+
+// ── Switcher ─────────────────────────────────────────────────
+let currentIdx = 0;
+
+function getVariantFromURL(){
+  const p = new URLSearchParams(window.location.search);
+  const v = p.get('variant');
+  const idx = variants.findIndex(x => x.key === v);
+  return idx >= 0 ? idx : 0;
+}
+
+function updateURL(idx){
+  const url = new URL(window.location);
+  url.searchParams.set('variant', variants[idx].key);
+  window.history.replaceState({}, '', url);
+}
+
+function updateSwitcher(idx){
+  currentIdx = idx;
+  const v = variants[idx];
+  document.getElementById('variantLabel').innerHTML = `${v.key} — <strong>${v.name}</strong>`;
+  document.querySelectorAll('#dots .dot').forEach((d,i) => {
+    d.classList.toggle('current', i === idx);
+  });
+  renderVariant(v.key);
+  updateURL(idx);
+}
+
+function prevVariant(){ updateSwitcher((currentIdx - 1 + variants.length) % variants.length); }
+function nextVariant(){ updateSwitcher((currentIdx + 1) % variants.length); }
+
+// Build dots
+const dotsEl = document.getElementById('dots');
+variants.forEach((v,i) => {
+  const d = document.createElement('span');
+  d.className = 'dot';
+  d.addEventListener('click', () => updateSwitcher(i));
+  dotsEl.appendChild(d);
+});
+
+document.getElementById('prevArrow').addEventListener('click', prevVariant);
+document.getElementById('nextArrow').addEventListener('click', nextVariant);
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if(e.target.matches('input,textarea,[contenteditable]')) return;
+  if(e.key === 'ArrowLeft') { e.preventDefault(); prevVariant(); }
+  if(e.key === 'ArrowRight') { e.preventDefault(); nextVariant(); }
+});
+
+// ── Init ─────────────────────────────────────────────────────
+const startIdx = getVariantFromURL();
+updateSwitcher(startIdx);
+updateBatteryPill();
+</script>
+</body>
+</html>

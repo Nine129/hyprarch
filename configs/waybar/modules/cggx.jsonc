@@ -72,7 +72,7 @@
     "format-charging":  "<span size='15360' rise='-1024'></span> {capacity}%",
     "format-plugged":   "<span size='15360' rise='-1024'></span> {capacity}%",
     "format-icons":     ["", "", "", "", ""],
-    "on-click":         "bash ~/.config/hypr/scripts/power-profile.sh"
+    "on-click":         "bash /home/nine/hyprarch/configs/quickshell/scripts/toggle-power.sh"
   },
 
   /* ── Separator 2 ───────────── */
