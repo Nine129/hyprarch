@@ -133,14 +133,14 @@ PanelWindow {
                         font.pixelSize: 8
                         font.bold: true
                         font.letterSpacing: 2
-                        color: popout.muted
+                        color: popout.lime
                     }
                     Text {
                         text: popout.fmtFloat(power.healthPercent)
                         font.family: popout.font
                         font.pixelSize: 16
                         font.bold: true
-                        color: popout.lime
+                        color: popout.silver
                     }
                 }
             }
@@ -164,14 +164,14 @@ PanelWindow {
                         font.pixelSize: 8
                         font.bold: true
                         font.letterSpacing: 2
-                        color: popout.muted
+                        color: popout.lime
                     }
                     Text {
                         text: popout.fmtInt(power.cycleCount)
                         font.family: popout.font
                         font.pixelSize: 16
                         font.bold: true
-                        color: popout.lime
+                        color: popout.silver
                     }
                 }
             }
@@ -195,14 +195,14 @@ PanelWindow {
                         font.pixelSize: 8
                         font.bold: true
                         font.letterSpacing: 2
-                        color: popout.muted
+                        color: popout.lime
                     }
                     Text {
                         text: popout.fmtDraw(power.powerDraw)
                         font.family: popout.font
                         font.pixelSize: 16
                         font.bold: true
-                        color: popout.lime
+                        color: popout.silver
                     }
                 }
             }
@@ -221,19 +221,19 @@ PanelWindow {
                     spacing: 2
 
                     Text {
-                        text: "CHRG"
+                        text: "CHARGE LIMIT"
                         font.family: popout.font
                         font.pixelSize: 8
                         font.bold: true
                         font.letterSpacing: 2
-                        color: popout.muted
+                        color: popout.lime
                     }
                     Text {
                         text: power.chargeThreshold > 0 ? power.chargeThreshold + "%" : "—"
                         font.family: popout.font
                         font.pixelSize: 16
                         font.bold: true
-                        color: popout.lime
+                        color: popout.silver
                     }
                 }
             }
@@ -246,7 +246,7 @@ PanelWindow {
             font.pixelSize: 9
             font.bold: true
             font.letterSpacing: 2.5
-            color: popout.muted
+            color: popout.lime
             Layout.bottomMargin: 6
         }
 
