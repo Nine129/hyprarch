@@ -41,36 +41,38 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
     margins { right: 146; top: 2 }
+    focusable: true
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 28
     color: "transparent"
     visible: shouldShow
 
-    // ── Escape binding ───────────────────
+    // ── Escape dismissal ──
     onVisibleChanged: {
-        if (visible)
-            closeProc.running = true
-        else
-            unbindProc.running = true
+        if (visible) {
+            contentRoot.forceActiveFocus()
+        }
     }
 
     Process {
-        id: closeProc
-        command: ["hyprctl", "keyword", "bind", "Escape", "exec",
-            "sh -c /home/nine/hyprarch/configs/quickshell/scripts/close-power.sh"]
-    }
-
-    Process {
-        id: unbindProc
-        command: ["hyprctl", "keyword", "unbind", "Escape"]
+        id: writeCloseProc
+        // command set dynamically
     }
 
     // ── Background ───────────────────────
     Rectangle {
+        id: contentRoot
         anchors.fill: parent
         color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.94)
         border.color: popout.border
         border.width: 1
+        focus: true
+        Keys.enabled: true
+        Keys.onEscapePressed: {
+            popout.shouldShow = false
+            writeCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-power-state"]
+            writeCloseProc.running = true
+        }
     }
 
     // ── Main layout ──────────────────────

@@ -25,31 +25,35 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
     margins { right: 146; top: 2 }
+    focusable: true
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 32
     color: "transparent"
     visible: shouldShow
 
+    // ── Escape dismissal ──
     onVisibleChanged: {
-        if (visible)
-            closeProc.running = true
-        else
-            unbindProc.running = true
+        if (visible) {
+            contentRoot.forceActiveFocus()
+        }
     }
 
     Process {
-        id: closeProc
-        command: ["hyprctl", "keyword", "bind", "Escape", "exec", "sh -c /home/nine/.config/quickshell/scripts/close-volume.sh"]
-    }
-
-    Process {
-        id: unbindProc
-        command: ["hyprctl", "keyword", "unbind", "Escape"]
+        id: writeCloseProc
+        // command set dynamically
     }
 
     Rectangle {
+        id: contentRoot
         anchors.fill: parent
         color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.90)
+        focus: true
+        Keys.enabled: true
+        Keys.onEscapePressed: {
+            popout.shouldShow = false
+            writeCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-volume-state"]
+            writeCloseProc.running = true
+        }
     }
 
     ColumnLayout {
