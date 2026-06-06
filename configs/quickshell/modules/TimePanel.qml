@@ -125,26 +125,27 @@ PanelWindow {
         }
     }
 
-    // ── Escape binding ──
+    // ── Escape dismissal ──
+    focus: true
+    Keys.enabled: true
+    Keys.onEscapePressed: {
+        shouldShow = false
+        // Sync the state file so Waybar toggle stays consistent
+        writeCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-cal-state"]
+        writeCloseProc.running = true
+    }
+
     onVisibleChanged: {
         if (visible) {
-            closeProc.running = true
             // Refresh on open
             rebuildCalendar()
             tickClock()
-        } else {
-            unbindProc.running = true
         }
     }
 
     Process {
-        id: closeProc
-        command: ["hyprctl", "keyword", "bind", "Escape", "exec",
-            "sh -c 'echo 0 > /tmp/qs-cal-state'"]
-    }
-    Process {
-        id: unbindProc
-        command: ["hyprctl", "keyword", "unbind", "Escape"]
+        id: writeCloseProc
+        // command set dynamically
     }
 
     // ── Clock tick timer ──
