@@ -219,19 +219,27 @@ PanelWindow {
             readonly property real slotWidth: width / 7
             readonly property int total: popout.timezones.length
 
+            // 3 copies for seamless circular scrolling
+            property var wrappedTZ: {
+                var r = []
+                for (var i = 0; i < 3; i++)
+                    for (var j = 0; j < total; j++)
+                        r.push(popout.timezones[j])
+                return r
+            }
+
             Row {
                 id: tzInner
                 y: 0
                 height: tzContainer.height
-                x: -(popout.tzIndex * tzContainer.slotWidth) + tzContainer.slotWidth * 3
+                x: -((popout.tzIndex + tzContainer.total) * tzContainer.slotWidth) + tzContainer.slotWidth * 3
 
                 Behavior on x {
-                    enabled: tzInner.x !== 0 || tzContainer.slotWidth > 0
                     SmoothedAnimation { velocity: 400; duration: 200; easing.type: Easing.OutCubic }
                 }
 
                 Repeater {
-                    model: popout.timezones
+                    model: tzContainer.wrappedTZ
 
                     delegate: Item {
                         required property int index
@@ -239,20 +247,21 @@ PanelWindow {
                         width: tzContainer.slotWidth
                         height: parent.height
 
+                        readonly property int centerOffset: popout.tzIndex + popout.timezones.length
+                        readonly property int dist: Math.abs(index - centerOffset)
+                        property bool hovered: false
+
                         Text {
                             anchors.centerIn: parent
                             text: modelData.name
                             font.family: popout.font
                             font.pixelSize: 12
-                            font.weight: index === popout.tzIndex ? Font.Bold : Font.Medium
+                            font.weight: index === centerOffset ? Font.Bold : Font.Medium
                             color: {
-                                if (index === popout.tzIndex) return popout.cyan
-                                var dist = Math.abs(index - popout.tzIndex)
-                                // Circular distance
-                                var wrap = popout.timezones.length
-                                var circ = Math.min(dist, wrap - dist)
-                                if (circ === 1) return popout.silver
-                                if (circ === 2) return popout.muted
+                                if (hovered) return popout.silver
+                                if (index === centerOffset) return popout.cyan
+                                if (dist === 1) return popout.silver
+                                if (dist === 2) return popout.muted
                                 return popout.border
                             }
                         }
@@ -262,18 +271,8 @@ PanelWindow {
                             anchors.margins: -4
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
-                            onClicked: popout.selectTZ(index)
-                            onContainsMouseChanged: {
-                                parent.children[0].color = containsMouse ? popout.silver : Qt.binding(function() {
-                                    if (index === popout.tzIndex) return popout.cyan
-                                    var d = Math.abs(index - popout.tzIndex)
-                                    var w = popout.timezones.length
-                                    var c = Math.min(d, w - d)
-                                    if (c === 1) return popout.silver
-                                    if (c === 2) return popout.muted
-                                    return popout.border
-                                })
-                            }
+                            onClicked: popout.selectTZ(index % popout.timezones.length)
+                            onContainsMouseChanged: parent.hovered = containsMouse
                         }
                     }
                 }
