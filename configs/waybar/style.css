@@ -22,7 +22,7 @@ window > box {
 
 /* ── Workspace numbers 1-9 ────── */
 #workspaces button {
-  background: #151518; border: 1px solid #2a2a35; border-radius: 0; color: @silver;
+  background: #1a1a20; border: 1px solid #2a2a35; border-radius: 0; color: @silver;
   padding: 4px 8px; margin: 0 2px; font-size: 13px;
 }
 
