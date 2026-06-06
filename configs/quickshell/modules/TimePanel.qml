@@ -45,9 +45,7 @@ PanelWindow {
     property int dispYear:  new Date().getFullYear()
     property int dispMonth: new Date().getMonth()
     property string clockText: "00:00:00"
-    property var tzCarouselItems: []
     property var calendarCells: []
-    property int pendingTZIdx: -1
 
     // ── Timezone helpers ──
     function getOffset(tzOff) {
@@ -69,22 +67,6 @@ PanelWindow {
     }
 
     // ── Rebuild TZ carousel ──
-    function rebuildTZCarousel() {
-        var total = timezones.length
-        var items = []
-        for (var offset = -3; offset <= 3; offset++) {
-            var idx = ((tzIndex + offset) % total + total) % total
-            var dist = Math.abs(offset)
-            items.push({
-                name: timezones[idx].name,
-                idx: idx,
-                dist: dist,
-                isCenter: dist === 0
-            })
-        }
-        tzCarouselItems = items
-    }
-
     // ── Rebuild calendar ──
     function rebuildCalendar() {
         var tzOff = timezones[tzIndex].offset
@@ -134,28 +116,12 @@ PanelWindow {
         rebuildCalendar()
     }
 
-    // ── Select timezone (with fade animation) ──
+    // ── Select timezone ──
     function selectTZ(idx) {
         if (idx !== tzIndex) {
-            pendingTZIdx = idx
-            tzRow.opacity = 0
-            tzFadeTimer.start()
-        }
-    }
-
-    // ── TZ carousel fade timer ──
-    Timer {
-        id: tzFadeTimer
-        interval: 120
-        onTriggered: {
-            if (pendingTZIdx >= 0) {
-                tzIndex = pendingTZIdx
-                pendingTZIdx = -1
-                rebuildTZCarousel()
-                rebuildCalendar()
-                tickClock()
-                tzRow.opacity = 1
-            }
+            tzIndex = idx
+            rebuildCalendar()
+            tickClock()
         }
     }
 
@@ -164,7 +130,6 @@ PanelWindow {
         if (visible) {
             closeProc.running = true
             // Refresh on open
-            rebuildTZCarousel()
             rebuildCalendar()
             tickClock()
         } else {
@@ -244,54 +209,69 @@ PanelWindow {
         }
 
         // ── TZ carousel ──
-        Row {
-            id: tzRow
+        Item {
+            id: tzContainer
             Layout.fillWidth: true
             Layout.preferredHeight: 26
             Layout.bottomMargin: 16
-            Layout.leftMargin: 0
-            Layout.rightMargin: 0
-            opacity: 1
-            Behavior on opacity { NumberAnimation { duration: 100; easing.type: Easing.InOutQuad } }
+            clip: true
 
-            Repeater {
-                model: popout.tzCarouselItems
+            readonly property real slotWidth: width / 7
+            readonly property int total: popout.timezones.length
 
-                delegate: Item {
-                    required property var modelData
-                    width: parent.width / 7
-                    height: parent.height
+            Row {
+                id: tzInner
+                y: 0
+                x: -(popout.tzIndex * tzContainer.slotWidth) + tzContainer.slotWidth * 3
 
-                    Text {
-                        anchors.centerIn: parent
-                        text: modelData.name
-                        font.family: popout.font
-                        font.pixelSize: 12
-                        font.weight: modelData.isCenter ? Font.Bold : Font.Medium
-                        color: {
-                            if (modelData.dist === 0) return popout.cyan
-                            if (modelData.dist === 1) return popout.silver
-                            if (modelData.dist === 2) return popout.muted
-                            return popout.border
+                Behavior on x {
+                    SmoothedAnimation { velocity: 400; duration: 200; easing.type: Easing.OutCubic }
+                }
+
+                Repeater {
+                    model: popout.timezones
+
+                    delegate: Item {
+                        required property int index
+                        required property var modelData
+                        width: tzContainer.slotWidth
+                        height: parent.height
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: modelData.name
+                            font.family: popout.font
+                            font.pixelSize: 12
+                            font.weight: index === popout.tzIndex ? Font.Bold : Font.Medium
+                            color: {
+                                if (index === popout.tzIndex) return popout.cyan
+                                var dist = Math.abs(index - popout.tzIndex)
+                                // Circular distance
+                                var wrap = popout.timezones.length
+                                var circ = Math.min(dist, wrap - dist)
+                                if (circ === 1) return popout.silver
+                                if (circ === 2) return popout.muted
+                                return popout.border
+                            }
                         }
-                    }
 
-                    MouseArea {
-                        anchors.fill: parent
-                        anchors.margins: -4
-                        cursorShape: Qt.PointingHandCursor
-                        hoverEnabled: true
-                        onClicked: popout.selectTZ(modelData.idx)
-                        onContainsMouseChanged: {
-                            if (containsMouse)
-                                parent.children[0].color = popout.silver
-                            else
-                                parent.children[0].color = Qt.binding(function() {
-                                    if (modelData.dist === 0) return popout.cyan
-                                    if (modelData.dist === 1) return popout.silver
-                                    if (modelData.dist === 2) return popout.muted
+                        MouseArea {
+                            anchors.fill: parent
+                            anchors.margins: -4
+                            cursorShape: Qt.PointingHandCursor
+                            hoverEnabled: true
+                            onClicked: popout.selectTZ(index)
+                            onContainsMouseChanged: {
+                                parent.children[0].color = containsMouse ? popout.silver : Qt.binding(function() {
+                                    if (index === popout.tzIndex) return popout.cyan
+                                    var d = Math.abs(index - popout.tzIndex)
+                                    var w = popout.timezones.length
+                                    var c = Math.min(d, w - d)
+                                    if (c === 1) return popout.silver
+                                    if (c === 2) return popout.muted
                                     return popout.border
                                 })
+                            }
                         }
                     }
                 }
