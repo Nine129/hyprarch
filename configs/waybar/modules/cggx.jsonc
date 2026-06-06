@@ -17,7 +17,13 @@
     }
   },
 
-  /* ── Group 1: System ────────── */
+  /* ── Group 1: System (gapless) ── */
+  "group/sysmon": {
+    "orientation": "horizontal",
+    "modules": ["disk", "memory", "temperature"],
+    "spacing": 0
+  },
+
   "disk": {
     "interval": 30,
     "format":   "/ {percentage_free}% FREE"

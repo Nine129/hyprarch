@@ -15,10 +15,8 @@
     "modules-center": [],
 
     "modules-right": [
-      // Group 1: System
-      "disk",
-      "memory",
-      "temperature",
+      // Group 1: System (gapless)
+      "group/sysmon",
       "custom/sep1",
       // Group 2: Personal UI
       "pulseaudio",

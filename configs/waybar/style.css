@@ -51,9 +51,12 @@ window > box {
 }
 #disk, #memory, #temperature, #tray, #custom-power-button { background: #151518; }
 
+/* ── System group (gapless) ────── */
+#disk, #memory, #temperature {
+  margin: 0; box-shadow: none;
+}
 
-
-/* ── System: dark bg, colored text ── */
+/* ── System: colored text ── */
 #disk { color: @lime; } #memory { color: @orange; } #temperature { color: @cyan; font-size: 14px; }
 
 /* ── Personal: colored bg, black text ── */
