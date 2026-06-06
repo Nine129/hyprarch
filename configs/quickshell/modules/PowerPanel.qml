@@ -41,15 +41,18 @@ PanelWindow {
 
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
-    margins { right: 146; top: 2 }
+    margins { right: 146; top: 38 }
+    focusable: true
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 28
     color: "transparent"
     visible: shouldShow
 
-    // ── Escape dismiss (global shortcut) ──
+    // ── Escape dismiss (Keys + global shortcut fallback) ──
     onVisibleChanged: {
-        // no-op
+        if (visible) {
+            contentRoot.forceActiveFocus()
+        }
     }
 
     GlobalShortcut {
@@ -77,6 +80,13 @@ PanelWindow {
         color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.94)
         border.color: popout.border
         border.width: 1
+        focus: true
+
+        Keys.onEscapePressed: {
+            popout.shouldShow = false
+            bgCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-power-state"]
+            bgCloseProc.running = true
+        }
 
         // Click background to dismiss
         MouseArea {

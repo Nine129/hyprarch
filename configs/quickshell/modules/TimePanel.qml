@@ -126,9 +126,10 @@ PanelWindow {
         }
     }
 
-    // ── Escape dismiss (global shortcut, no focus needed) ──
+    // ── Escape dismiss (Keys + global shortcut fallback) ──
     onVisibleChanged: {
         if (visible) {
+            contentRoot.forceActiveFocus()
             // Refresh on open
             rebuildCalendar()
             tickClock()
@@ -171,7 +172,8 @@ PanelWindow {
     // ── Layout ──
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
-    margins { right: 146; top: 2 }
+    margins { right: 146; top: 38 }
+    focusable: true
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 36
     color: "transparent"
@@ -183,6 +185,13 @@ PanelWindow {
         color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.94)
         border.color: popout.border
         border.width: 1
+        focus: true
+
+        Keys.onEscapePressed: {
+            popout.shouldShow = false
+            bgCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-cal-state"]
+            bgCloseProc.running = true
+        }
 
         // Click background to dismiss
         MouseArea {
