@@ -125,27 +125,15 @@ PanelWindow {
         }
     }
 
-    // ── Escape dismiss (via Hyprland global bind) ──
+    // ── Escape dismiss ──
     onVisibleChanged: {
         if (visible) {
-            closeProc.running = true
             // Refresh on open
             rebuildCalendar()
             tickClock()
-        } else {
-            unbindProc.running = true
         }
     }
 
-    Process {
-        id: closeProc
-        command: ["hyprctl", "keyword", "bind", "Escape", "exec",
-            "sh -c 'echo 0 > /tmp/qs-cal-state'"]
-    }
-    Process {
-        id: unbindProc
-        command: ["hyprctl", "keyword", "unbind", "Escape"]
-    }
     Process {
         id: bgCloseProc
         // command set dynamically
