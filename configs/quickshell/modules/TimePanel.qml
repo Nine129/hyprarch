@@ -126,16 +126,9 @@ PanelWindow {
     }
 
     // ── Escape dismissal ──
-    Keys.enabled: true
-    Keys.onEscapePressed: {
-        shouldShow = false
-        // Sync the state file so Waybar toggle stays consistent
-        writeCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-cal-state"]
-        writeCloseProc.running = true
-    }
-
     onVisibleChanged: {
         if (visible) {
+            contentRoot.forceActiveFocus()
             // Refresh on open
             rebuildCalendar()
             tickClock()
@@ -172,10 +165,18 @@ PanelWindow {
     visible: shouldShow
 
     Rectangle {
+        id: contentRoot
         anchors.fill: parent
         color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.94)
         border.color: popout.border
         border.width: 1
+        focus: true
+        Keys.enabled: true
+        Keys.onEscapePressed: {
+            popout.shouldShow = false
+            writeCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-cal-state"]
+            writeCloseProc.running = true
+        }
     }
 
     ColumnLayout {
