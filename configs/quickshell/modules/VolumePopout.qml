@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Hyprland._GlobalShortcuts
 import "../services" as QsServices
 
 PanelWindow {
@@ -25,19 +26,27 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
     margins { right: 146; top: 2 }
-    focusable: true
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 32
     color: "transparent"
     visible: shouldShow
 
     // ── Escape dismiss ──
-    // ── Escape dismiss (Keys + deferred focus) ──
+    // ── Escape dismiss (global shortcut) ──
     onVisibleChanged: {
-        if (visible) {
-            Qt.callLater(function() {
-                contentRoot.forceActiveFocus()
-            })
+        // no-op
+    }
+
+    GlobalShortcut {
+        appid: "quickshell.volume"
+        name: "Escape"
+        description: "Dismiss VolumePanel"
+        onPressed: {
+            if (popout.shouldShow) {
+                popout.shouldShow = false
+                bgCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-volume-state"]
+                bgCloseProc.running = true
+            }
         }
     }
 
@@ -50,13 +59,6 @@ PanelWindow {
         id: contentRoot
         anchors.fill: parent
         color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.90)
-        focus: true
-
-        Keys.onEscapePressed: {
-            popout.shouldShow = false
-            bgCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-volume-state"]
-            bgCloseProc.running = true
-        }
 
         // Click background to dismiss
         MouseArea {

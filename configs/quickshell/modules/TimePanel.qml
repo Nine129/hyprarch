@@ -3,6 +3,7 @@ import QtQuick.Layouts
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
+import Quickshell.Hyprland._GlobalShortcuts
 
 // ═══════════════════════════════════════════════════════════════
 // TimePanel — Clock + month calendar with timezone carousel
@@ -125,16 +126,25 @@ PanelWindow {
         }
     }
 
-    // ── Escape dismiss (Keys + deferred focus) ──
+    // ── Escape dismiss (global shortcut, no focus needed) ──
     onVisibleChanged: {
         if (visible) {
-            // Deferred focus grab to avoid Wayland eating the next click
-            Qt.callLater(function() {
-                contentRoot.forceActiveFocus()
-            })
             // Refresh on open
             rebuildCalendar()
             tickClock()
+        }
+    }
+
+    GlobalShortcut {
+        appid: "quickshell.timepanel"
+        name: "Escape"
+        description: "Dismiss TimePanel"
+        onPressed: {
+            if (popout.shouldShow) {
+                popout.shouldShow = false
+                bgCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-cal-state"]
+                bgCloseProc.running = true
+            }
         }
     }
 
@@ -162,7 +172,6 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
     margins { right: 146; top: 2 }
-    focusable: true
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 36
     color: "transparent"
@@ -174,13 +183,6 @@ PanelWindow {
         color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.94)
         border.color: popout.border
         border.width: 1
-        focus: true
-
-        Keys.onEscapePressed: {
-            popout.shouldShow = false
-            bgCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-cal-state"]
-            bgCloseProc.running = true
-        }
 
         // Click background to dismiss
         MouseArea {
