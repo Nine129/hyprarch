@@ -49,7 +49,7 @@ window > box {
   padding: 4px 14px; margin: 0 0.25px;
   box-shadow: 1px 0 3px rgba(0,0,0,0.4);
 }
-#disk, #memory, #temperature, #tray, #custom-power-button { background: #151518; }
+#disk, #memory, #temperature, #tray, #custom-power-button { background: #1a1a20; }
 
 
 
