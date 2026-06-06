@@ -103,11 +103,4 @@ ShellRoot {
         console.log("CGGX QuickShell loaded")
     }
 
-    // ── Persistent Escape keybind ──
-    // Single global bind that closes whichever panel is open.
-    Process {
-        command: ["hyprctl", "keyword", "bind", "Escape", "exec",
-            "sh -c 'for f in /tmp/qs-cal-state /tmp/qs-power-state /tmp/qs-volume-state; do if [ -f \"$f\" ] && [ \"$(cat \"$f\")\" = \"1\" ]; then echo 0 > \"$f\"; fi; done'"]
-        running: true
-    }
 }

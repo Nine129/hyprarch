@@ -30,6 +30,23 @@ PanelWindow {
     color: "transparent"
     visible: shouldShow
 
+    // ── Escape dismiss ──
+    onVisibleChanged: {
+        if (visible)
+            closeProc.running = true
+        else
+            unbindProc.running = true
+    }
+
+    Process {
+        id: closeProc
+        command: ["hyprctl", "keyword", "bind", "Escape", "exec",
+            "sh -c 'echo 0 > /tmp/qs-volume-state'"]
+    }
+    Process {
+        id: unbindProc
+        command: ["hyprctl", "keyword", "unbind", "Escape"]
+    }
     Process {
         id: bgCloseProc
         // command set dynamically
