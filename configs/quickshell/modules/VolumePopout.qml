@@ -27,11 +27,10 @@ PanelWindow {
     anchors { top: true; right: true }
     margins { right: 84 + trayWidth; top: 2 }
     implicitWidth: 303
-    implicitHeight: contentCol.implicitHeight + 32
+    implicitHeight: contentCol.implicitHeight + 44
     color: "transparent"
     visible: shouldShow
 
-    // ── Escape dismiss ──
     // ── Escape dismiss (via hyprctl) ──
     onVisibleChanged: {
         if (visible)
@@ -83,15 +82,15 @@ PanelWindow {
     ColumnLayout {
         id: contentCol
         anchors.fill: parent
-        anchors.margins: 16
-        anchors.bottomMargin: 32
+        anchors.margins: 18
+        anchors.bottomMargin: 28
         spacing: 0
 
         // ── Header ───────────────────────
         RowLayout {
             Layout.fillWidth: true
-            Layout.bottomMargin: 12
-            Text { text: "VOLUME"; font.family: popout.font; font.pixelSize: 16; font.bold: true; color: popout.pink; font.letterSpacing: 2 }
+            Layout.bottomMargin: 16
+            Text { text: "VOLUME"; font.family: popout.font; font.pixelSize: 16; font.bold: true; color: popout.orange; font.letterSpacing: 2 }
             Item { Layout.fillWidth: true }
             Text {
                 id: pctText
@@ -104,14 +103,18 @@ PanelWindow {
         // ── Mute | Slider | − | + ────────
         RowLayout {
             Layout.fillWidth: true
-            Layout.bottomMargin: 4
+            Layout.bottomMargin: 6
             spacing: 10
 
-            Rectangle {
+            // Mute toggle
+            Text {
                 id: muteBtn
-                width: 28; height: 28; color: muteMouse.pressed ? Qt.rgba(popout.pink.r, popout.pink.g, popout.pink.b, 0.3) : (muteMouse.containsMouse ? Qt.rgba(popout.pink.r, popout.pink.g, popout.pink.b, 0.15) : popout.surface)
-                border.color: audio.muted ? popout.red : (muteMouse.pressed ? popout.pink : popout.border); border.width: 1
-                Text { anchors.centerIn: parent; text: audio.muted ? "󰝟" : "󰕾"; font.family: popout.font; font.pixelSize: 18; color: audio.muted ? popout.red : (muteMouse.pressed ? popout.pink : popout.silver) }
+                text: audio.muted ? "󰝟" : "󰕾"
+                font.family: popout.font; font.pixelSize: 18
+                color: audio.muted ? popout.red : (muteMouse.containsMouse ? popout.orange : popout.silver)
+                horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter
+                Layout.preferredWidth: 28; Layout.preferredHeight: 28
+
                 MouseArea {
                     id: muteMouse
                     anchors.fill: parent; anchors.margins: -4
@@ -146,29 +149,16 @@ PanelWindow {
                 Rectangle {
                     anchors.verticalCenter: parent.verticalCenter
                     width: parent.width; height: 6
-                    color: popout.surface; border.color: popout.border; border.width: 1
+                    color: popout.surface
                     Rectangle {
                         width: sliderRoot.fillW; height: parent.height
-                        gradient: Gradient {
-                            orientation: Gradient.Horizontal
-                            GradientStop { color: popout.pink }
-                            GradientStop { position: 1; color: popout.orange }
-                        }
-                    }
-                    // Orange glow when holding
-                    Rectangle {
-                        width: sliderRoot.fillW; height: parent.height + 8
-                        anchors.verticalCenter: parent.verticalCenter
-                        color: "transparent"
-                        border.color: sliderRoot.holding ? Qt.rgba(popout.orange.r, popout.orange.g, popout.orange.b, 0.4) : "transparent"
-                        border.width: 2
-                        visible: sliderRoot.holding
+                        color: popout.orange
                     }
                 }
 
                 Rectangle {
                     id: thumb
-                    width: 18; height: 18; color: popout.pink
+                    width: 18; height: 18; color: popout.orange
                     border.color: popout.bg; border.width: 2
                     anchors.verticalCenter: parent.verticalCenter
                     x: sliderRoot.fillW - width / 2
@@ -185,7 +175,6 @@ PanelWindow {
                     }
                     onPressed: function(mouse) {
                         sliderRoot.dragging = true
-                        sliderRoot.holding = true
                         sliderRoot.dragPct = pctFromX(mouse.x)
                         commitTimer.restart()
                     }
@@ -199,17 +188,19 @@ PanelWindow {
                         if (sliderRoot.dragPct >= 0)
                             audio.setVolume(sliderRoot.dragPct / 100)
                         sliderRoot.dragging = false
-                        sliderRoot.holding = false
                         commitTimer.stop()
                     }
                 }
             }
 
-            Rectangle {
-                id: minusBtn
-                width: 28; height: 28; color: minusMouse.pressed ? Qt.rgba(popout.pink.r, popout.pink.g, popout.pink.b, 0.3) : (minusMouse.containsMouse ? Qt.rgba(popout.pink.r, popout.pink.g, popout.pink.b, 0.15) : popout.surface)
-                border.color: minusMouse.pressed ? popout.pink : popout.border; border.width: 1
-                Text { anchors.centerIn: parent; text: "−"; font.family: popout.font; font.pixelSize: 20; color: popout.pressed ? popout.pink : popout.silver }
+            // −
+            Text {
+                text: "−"
+                font.family: popout.font; font.pixelSize: 20
+                color: minusMouse.containsMouse ? popout.orange : popout.silver
+                horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter
+                Layout.preferredWidth: 28; Layout.preferredHeight: 28
+
                 MouseArea {
                     id: minusMouse
                     anchors.fill: parent; anchors.margins: -4
@@ -218,11 +209,15 @@ PanelWindow {
                     onClicked: audio.setVolume(Math.max(0, audio.volume - 0.01))
                 }
             }
-            Rectangle {
-                id: plusBtn
-                width: 28; height: 28; color: plusMouse.pressed ? Qt.rgba(popout.pink.r, popout.pink.g, popout.pink.b, 0.3) : (plusMouse.containsMouse ? Qt.rgba(popout.pink.r, popout.pink.g, popout.pink.b, 0.15) : popout.surface)
-                border.color: plusMouse.pressed ? popout.pink : popout.border; border.width: 1
-                Text { anchors.centerIn: parent; text: "+"; font.family: popout.font; font.pixelSize: 20; color: plusMouse.pressed ? popout.pink : popout.silver }
+
+            // +
+            Text {
+                text: "+"
+                font.family: popout.font; font.pixelSize: 20
+                color: plusMouse.containsMouse ? popout.orange : popout.silver
+                horizontalAlignment: Text.AlignHCenter; verticalAlignment: Text.AlignVCenter
+                Layout.preferredWidth: 28; Layout.preferredHeight: 28
+
                 MouseArea {
                     id: plusMouse
                     anchors.fill: parent; anchors.margins: -4
@@ -233,37 +228,37 @@ PanelWindow {
             }
         }
 
-        // ── Ticks ────────────────────────
-        Item {
-            Layout.fillWidth: true; Layout.preferredHeight: 14
-            Layout.leftMargin: 38; Layout.rightMargin: 76; Layout.bottomMargin: 14
-
-            // 0 at slider 0%
-            Text { text: "0"; font.family: popout.font; font.pixelSize: 9; color: popout.muted; anchors.left: parent.left; anchors.verticalCenter: parent.verticalCenter }
-            // 25 at slider 25%
-            Text { text: "25"; font.family: popout.font; font.pixelSize: 9; color: popout.muted; anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: -parent.width * 0.25 - 2; anchors.verticalCenter: parent.verticalCenter }
-            // 50 at slider 50%
-            Text { text: "50"; font.family: popout.font; font.pixelSize: 9; color: popout.muted; anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: -2; anchors.verticalCenter: parent.verticalCenter }
-            // 75 at slider 75%
-            Text { text: "75"; font.family: popout.font; font.pixelSize: 9; color: popout.muted; anchors.horizontalCenter: parent.horizontalCenter; anchors.horizontalCenterOffset: parent.width * 0.25; anchors.verticalCenter: parent.verticalCenter }
-            // 100 at slider 100%
-            Text { text: "100"; font.family: popout.font; font.pixelSize: 9; color: popout.muted; anchors.right: parent.right; anchors.verticalCenter: parent.verticalCenter }
+        // ── Device selector ──────────────
+        Rectangle {
+            Layout.fillWidth: true
+            height: 1
+            color: popout.border
         }
 
-        // ── Device selector ──────────────
         ColumnLayout {
             Layout.fillWidth: true; spacing: 0
-            Rectangle {
-                id: devBtn
-                Layout.fillWidth: true; Layout.preferredHeight: 36
-                color: devMouse.pressed ? popout.border : (devMouse.containsMouse ? Qt.rgba(popout.pink.r, popout.pink.g, popout.pink.b, 0.15) : popout.surface)
-                border.color: devDropdownOpen ? popout.pink : (devMouse.pressed ? popout.pink : popout.border); border.width: 1
-                RowLayout {
-                    anchors.fill: parent; anchors.leftMargin: 10; anchors.rightMargin: 10; spacing: 8
-                    Text { text: "󰓃"; font.family: popout.font; font.pixelSize: 14; color: popout.pink }
-                    Text { text: audio.defaultSinkName; font.family: popout.font; font.pixelSize: 11; font.bold: true; color: devMouse.containsMouse ? popout.silver : popout.muted; Layout.fillWidth: true; elide: Text.ElideRight }
-                    Text { text: "▾"; font.family: popout.font; font.pixelSize: 10; color: popout.muted; rotation: devDropdownOpen ? 180 : 0; Behavior on rotation { NumberAnimation { duration: 150 } } }
+
+            RowLayout {
+                Layout.fillWidth: true; Layout.preferredHeight: 40
+                spacing: 8
+
+                Text { text: "󰓃"; font.family: popout.font; font.pixelSize: 14; color: popout.orange; verticalAlignment: Text.AlignVCenter }
+                Text {
+                    text: audio.defaultSinkName
+                    font.family: popout.font; font.pixelSize: 11; font.bold: true
+                    color: devMouse.containsMouse ? popout.silver : popout.muted
+                    Layout.fillWidth: true; elide: Text.ElideRight
+                    verticalAlignment: Text.AlignVCenter
                 }
+                Text {
+                    text: "▾"
+                    font.family: popout.font; font.pixelSize: 10
+                    color: popout.muted
+                    rotation: devDropdownOpen ? 180 : 0
+                    Behavior on rotation { NumberAnimation { duration: 150 } }
+                    verticalAlignment: Text.AlignVCenter
+                }
+
                 MouseArea {
                     id: devMouse
                     anchors.fill: parent
@@ -272,19 +267,19 @@ PanelWindow {
                     onClicked: devDropdownOpen = !devDropdownOpen
                 }
             }
+
+            // Dropdown
             ColumnLayout {
                 Layout.fillWidth: true; Layout.leftMargin: 4; Layout.rightMargin: 4; Layout.topMargin: 4; spacing: 2
                 visible: devDropdownOpen
                 Repeater {
                     model: audio.availableSinks
-                    delegate: Rectangle {
+                    delegate: Item {
                         Layout.fillWidth: true; Layout.preferredHeight: 30
-                        color: modelData.isDefault ? Qt.rgba(popout.pink.r, popout.pink.g, popout.pink.b, 0.15) : "transparent"
-                        border.color: modelData.isDefault ? popout.pink : "transparent"; border.width: 1
                         RowLayout {
                             anchors.fill: parent; anchors.leftMargin: 8; anchors.rightMargin: 8; spacing: 6
-                            Text { text: modelData.isDefault ? "●" : "○"; font.family: popout.font; font.pixelSize: 9; color: modelData.isDefault ? popout.pink : popout.muted }
-                            Text { text: modelData.name; font.family: popout.font; font.pixelSize: 11; font.bold: true; color: modelData.isDefault ? popout.pink : popout.silver; Layout.fillWidth: true; elide: Text.ElideRight }
+                            Text { text: modelData.isDefault ? "●" : "○"; font.family: popout.font; font.pixelSize: 9; color: modelData.isDefault ? popout.orange : popout.muted }
+                            Text { text: modelData.name; font.family: popout.font; font.pixelSize: 11; font.bold: true; color: modelData.isDefault ? popout.orange : popout.silver; Layout.fillWidth: true; elide: Text.ElideRight }
                         }
                         MouseArea { anchors.fill: parent; cursorShape: Qt.PointingHandCursor; onClicked: { audio.switchSink(modelData.id); devDropdownOpen = false } }
                     }
@@ -293,21 +288,21 @@ PanelWindow {
         }
 
         // ── Streams ──────────────────────
-        RowLayout {
-            Layout.fillWidth: true; Layout.bottomMargin: 8
-            Text { text: "PLAYBACK"; font.family: popout.font; font.pixelSize: 10; font.bold: true; color: popout.pink; font.letterSpacing: 2; Layout.topMargin: 8 }
+        Text {
+            text: "PLAYBACK"
+            font.family: popout.font; font.pixelSize: 10; font.bold: true
+            color: popout.orange; font.letterSpacing: 2
+            Layout.topMargin: 18; Layout.bottomMargin: 10
         }
 
         Repeater {
             model: audio.sinkInputs
-            delegate: Rectangle {
-                Layout.fillWidth: true; Layout.preferredHeight: 52
-                color: popout.surface
-                border.color: modelData.muted ? Qt.rgba(popout.red.r, popout.red.g, popout.red.b, 0.5) : popout.border; border.width: 1
+            delegate: Item {
+                Layout.fillWidth: true; Layout.preferredHeight: 56
 
                 ColumnLayout {
-                    anchors.fill: parent; anchors.leftMargin: 10; anchors.rightMargin: 10; anchors.topMargin: 6; anchors.bottomMargin: 6
-                    spacing: 4
+                    anchors.fill: parent; anchors.leftMargin: 0; anchors.rightMargin: 0; anchors.topMargin: 8; anchors.bottomMargin: 8
+                    spacing: 10
 
                     RowLayout {
                         Layout.fillWidth: true
@@ -328,7 +323,6 @@ PanelWindow {
                         Layout.fillWidth: true; Layout.preferredHeight: 14
 
                         property bool dragging: false
-                        property bool holding: false
                         property real dragPct: -1
                         property real basePct: modelData.muted ? 0 : modelData.volume
                         property real displayPct: dragPct >= 0 ? dragPct : basePct
@@ -347,25 +341,16 @@ PanelWindow {
                         Rectangle {
                             anchors.verticalCenter: parent.verticalCenter
                             width: parent.width; height: 3
-                            color: popout.border
+                            color: popout.surface
                             Rectangle {
                                 width: parent.parent.fillW; height: parent.height
                                 color: modelData.muted ? Qt.rgba(popout.red.r, popout.red.g, popout.red.b, 0.5) : popout.orange
-                            }
-                            // Orange glow when holding
-                            Rectangle {
-                                width: parent.parent.fillW; height: parent.height + 6
-                                anchors.verticalCenter: parent.verticalCenter
-                                color: "transparent"
-                                border.color: parent.parent.holding ? Qt.rgba(popout.orange.r, popout.orange.g, popout.orange.b, 0.4) : "transparent"
-                                border.width: 1
-                                visible: parent.parent.holding
                             }
                         }
 
                         Rectangle {
                             width: 12; height: 12
-                            color: popout.pink; border.color: popout.bg; border.width: 1
+                            color: popout.orange; border.color: popout.bg; border.width: 1
                             anchors.verticalCenter: parent.verticalCenter
                             x: parent.fillW - width / 2
                             z: 2
@@ -381,7 +366,6 @@ PanelWindow {
                             }
                             onPressed: function(mouse) {
                                 parent.dragging = true
-                                parent.holding = true
                                 parent.dragPct = pctFromX(mouse.x)
                                 sCommitTimer.restart()
                             }
@@ -395,7 +379,6 @@ PanelWindow {
                                 if (parent.dragPct >= 0 && parent.inputIdx >= 0)
                                     audio.setStreamVolume(parent.inputIdx, parent.dragPct / 100)
                                 parent.dragging = false
-                                parent.holding = false
                                 sCommitTimer.stop()
                             }
                         }
@@ -409,7 +392,7 @@ PanelWindow {
             text: "No active streams"
             font.family: popout.font; font.pixelSize: 10; color: popout.muted
             Layout.fillWidth: true; horizontalAlignment: Text.AlignHCenter
-            Layout.topMargin: 4; Layout.bottomMargin: 4
+            Layout.topMargin: 6; Layout.bottomMargin: 4
         }
     }
 }

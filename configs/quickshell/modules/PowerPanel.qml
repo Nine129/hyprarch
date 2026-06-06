@@ -135,21 +135,21 @@ PanelWindow {
         GridLayout {
             Layout.fillWidth: true
             Layout.bottomMargin: 12
-            columns: 2
+            columns: 3
             columnSpacing: 6
             rowSpacing: 6
 
             // HEALTH
-            Rectangle {
+            Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 52
-                color: popout.surface
-                border.color: popout.border
-                border.width: 1
 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 10
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 10
+                    anchors.rightMargin: 10
+                    anchors.bottomMargin: 10
                     spacing: 2
 
                     Text {
@@ -171,16 +171,16 @@ PanelWindow {
             }
 
             // CYCLES
-            Rectangle {
+            Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 52
-                color: popout.surface
-                border.color: popout.border
-                border.width: 1
 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 10
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 10
+                    anchors.rightMargin: 10
+                    anchors.bottomMargin: 10
                     spacing: 2
 
                     Text {
@@ -201,52 +201,21 @@ PanelWindow {
                 }
             }
 
-            // DRAW
-            Rectangle {
+            // CHARGE
+            Item {
                 Layout.fillWidth: true
                 Layout.preferredHeight: 52
-                color: popout.surface
-                border.color: popout.border
-                border.width: 1
 
                 ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 10
+                    anchors.leftMargin: 0
+                    anchors.topMargin: 10
+                    anchors.rightMargin: 10
+                    anchors.bottomMargin: 10
                     spacing: 2
 
                     Text {
-                        text: "DRAW"
-                        font.family: popout.font
-                        font.pixelSize: 10
-                        font.bold: true
-                        font.letterSpacing: 2
-                        color: popout.lime
-                    }
-                    Text {
-                        text: popout.fmtDraw(power.powerDraw)
-                        font.family: popout.font
-                        font.pixelSize: 16
-                        font.bold: true
-                        color: popout.silver
-                    }
-                }
-            }
-
-            // CHARGE LIMIT
-            Rectangle {
-                Layout.fillWidth: true
-                Layout.preferredHeight: 52
-                color: popout.surface
-                border.color: popout.border
-                border.width: 1
-
-                ColumnLayout {
-                    anchors.fill: parent
-                    anchors.margins: 10
-                    spacing: 2
-
-                    Text {
-                        text: "CHARGE LIMIT"
+                        text: "CHARGE"
                         font.family: popout.font
                         font.pixelSize: 10
                         font.bold: true
@@ -283,49 +252,32 @@ PanelWindow {
             Repeater {
                 model: power.profileDefs
 
-                delegate: Rectangle {
+                delegate: Item {
                     id: profileBlock
                     required property var modelData
 
                     Layout.fillWidth: true
                     Layout.preferredHeight: 44
-                    color: mouseArea.containsMouse
-                        ? Qt.rgba(1, 1, 1, 0.04)
-                        : (isActive ? Qt.rgba(1, 1, 1, 0.06) : popout.surface)
-                    border.color: popout.border
-                    border.width: 1
 
                     readonly property bool isActive: power.currentProfile === modelData.id
-                    readonly property color accent: popout.lime
-
-                    // Active left border
-                    Rectangle {
-                        anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
-                        width: 4
-                        color: isActive ? accent : "transparent"
-                    }
-
-                    // Subtle inner glow when active
-                    Rectangle {
-                        anchors.fill: parent
-                        anchors.margins: 1
-                        color: "transparent"
-                        border.color: isActive ? Qt.rgba(1, 1, 1, 0.06) : "transparent"
-                        border.width: 1
-                        visible: isActive
-                    }
 
                     RowLayout {
                         anchors.fill: parent
-                        anchors.leftMargin: 14
+                        anchors.leftMargin: 0
                         anchors.rightMargin: 14
                         spacing: 12
 
-                        Text {
-                            text: modelData.icon
-                            font.family: popout.font
-                            font.pixelSize: 20
-                            color: popout.lime
+                        Item {
+                            Layout.preferredWidth: 32
+                            Layout.preferredHeight: parent.height
+
+                            Text {
+                                anchors.centerIn: parent
+                                text: modelData.icon
+                                font.family: popout.font
+                                font.pixelSize: 20
+                                color: mouseArea.containsMouse ? popout.silver : popout.lime
+                            }
                         }
 
                         Text {
@@ -333,7 +285,7 @@ PanelWindow {
                             font.family: popout.font
                             font.pixelSize: 12
                             font.bold: true
-                            color: popout.silver
+                            color: isActive ? popout.lime : (mouseArea.containsMouse ? popout.silver : popout.muted)
                             Layout.fillWidth: true
                         }
                     }

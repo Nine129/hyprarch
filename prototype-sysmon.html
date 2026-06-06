@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Monitor — CGGX Prototype</title>
+<style>
+/* ═══════════════════════════════════════════
+   CGGX Palette (faithful to Waybar/Quickshell)
+   ═══════════════════════════════════════════ */
+:root {
+  --bg:       #0a0a0c;
+  --surface:  #151518;
+  --surface2: #1a1a20;
+  --border:   #2a2a35;
+  --red:      #ff2d55;
+  --cyan:     #00e5ff;
+  --lime:     #c8ff00;
+  --orange:   #ff6b00;
+  --silver:   #e8e8f0;
+  --muted:    #6a6a80;
+  --font:     'JetBrainsMonoNL Nerd Font Mono', 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--silver);
+  font-family: var(--font);
+  font-size: 13px;
+  line-height: 1.4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* ── Popout frame (matches Quickshell PanelWindow) ── */
+.popout {
+  width: 580px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: 4px 4px 12px rgba(0,0,0,0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Variant A: Tabbed Dashboard ─────────── */
+.v-a .tab-bar {
+  display: flex;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+.v-a .tab-btn {
+  padding: 10px 20px;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+.v-a .tab-btn:hover { color: var(--silver); background: rgba(255,255,255,0.04); }
+.v-a .tab-btn.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+.v-a .tab-panel { display: none; padding: 16px; }
+.v-a .tab-panel.active { display: block; }
+
+/* ── Metric cards grid (Performance tab) ─── */
+.metric-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.metric-card {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 14px;
+  position: relative;
+}
+.metric-card .label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.metric-card .value {
+  font-size: 24px;
+  font-weight: 700;
+}
+.metric-card .sub {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.metric-card .extra {
+  font-size: 11px;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+}
+.sparkline {
+  height: 40px;
+  margin-top: 10px;
+  position: relative;
+}
+.sparkline svg { width: 100%; height: 100%; display: block; }
+
+/* ── Disk mount list ─────────────────────── */
+.mount-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  gap: 12px;
+}
+.mount-row:last-child { border-bottom: none; }
+.mount-icon { font-size: 18px; width: 28px; text-align: center; opacity: 0.7; }
+.mount-info { flex: 1; min-width: 0; }
+.mount-path { font-size: 13px; font-weight: 600; }
+.mount-detail { font-size: 11px; color: var(--muted); }
+.mount-bar-wrap { width: 160px; }
+.mount-bar-bg { height: 8px; background: rgba(255,255,255,0.06); position: relative; }
+.mount-bar-fill { height: 100%; transition: width 0.3s; }
+.mount-bar-label { font-size: 11px; text-align: right; margin-top: 2px; }
+
+/* ── Process table ───────────────────────── */
+.proc-search {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--silver);
+  font-family: var(--font);
+  font-size: 12px;
+  margin-bottom: 8px;
+  outline: none;
+}
+.proc-search:focus { border-color: var(--cyan); }
+.proc-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.proc-table th {
+  text-align: left;
+  padding: 6px 8px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+}
+.proc-table th:hover { color: var(--silver); }
+.proc-table th .sort-arrow { color: var(--cyan); margin-left: 4px; }
+.proc-table td { padding: 5px 8px; border-bottom: 1px solid rgba(42,42,53,0.4); }
+.proc-table tr:hover td { background: rgba(0,229,255,0.04); }
+.proc-name { font-weight: 600; }
+.proc-cpu-badge, .proc-mem-badge {
+  display: inline-block;
+  padding: 1px 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.proc-cpu-badge.high { color: var(--red); background: rgba(255,45,85,0.12); }
+.proc-cpu-badge.med  { color: var(--orange); background: rgba(255,107,0,0.1); }
+.proc-cpu-badge.low  { color: var(--silver); background: rgba(255,255,255,0.04); }
+.proc-mem-badge.high { color: var(--red); background: rgba(255,45,85,0.12); }
+.proc-mem-badge.med  { color: var(--orange); background: rgba(255,107,0,0.1); }
+.proc-mem-badge.low  { color: var(--silver); background: rgba(255,255,255,0.04); }
+.proc-pid { color: var(--muted); }
+.proc-expand {
+  cursor: pointer;
+  color: var(--muted);
+  user-select: none;
+  font-size: 10px;
+}
+.proc-expanded-row td { padding: 8px 8px 12px; background: rgba(0,0,0,0.15); }
+.proc-expanded-detail { font-size: 11px; color: var(--muted); }
+.proc-expanded-detail span { color: var(--silver); }
+
+/* ── Variant B: Compact HUD ──────────────── */
+.v-b { padding: 14px; }
+
+/* ── Gauges row ─── */
+.gauge-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 14px;
+  justify-content: center;
+}
+.gauge-wrap {
+  width: 90px;
+  height: 90px;
+  position: relative;
+}
+.gauge-wrap svg { width: 100%; height: 100%; }
+.gauge-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.gauge-label .val { font-size: 16px; font-weight: 700; }
+.gauge-label .sub { font-size: 9px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 1px; }
+
+/* ── Inline metric rows ─── */
+.metric-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(42,42,53,0.3);
+}
+.metric-inline:last-child { border-bottom: none; }
+.metric-inline .icon { font-size: 16px; width: 24px; text-align: center; }
+.metric-inline .info { flex: 1; min-width: 0; }
+.metric-inline .info .title { font-size: 11px; font-weight: 600; }
+.metric-inline .info .sub { font-size: 10px; color: var(--muted); }
+.metric-inline .stat { font-size: 14px; font-weight: 700; text-align: right; }
+.metric-inline .mini-spark { width: 80px; height: 24px; }
+
+/* ── Compact mounts ─── */
+.compact-mount {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(42,42,53,0.2);
+}
+.compact-mount .mpath { font-weight: 600; min-width: 60px; }
+.compact-mount .mbar { flex: 1; height: 6px; background: rgba(255,255,255,0.06); }
+.compact-mount .mfill { height: 100%; }
+.compact-mount .mpct { min-width: 36px; text-align: right; }
+
+/* ── Compact process list ─── */
+.compact-proc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 0;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(42,42,53,0.15);
+}
+.compact-proc .pname { flex: 1; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.compact-proc .pcpu { width: 44px; text-align: right; color: var(--muted); }
+.compact-proc .pmem { width: 48px; text-align: right; color: var(--muted); }
+.compact-proc .ppid { width: 40px; text-align: right; color: var(--muted); font-size: 10px; }
+
+/* ── Variant C: Terminal Monitor ─────────── */
+.v-c { padding: 14px; }
+.v-c .term-header {
+  border: 1px solid var(--border);
+  padding: 12px;
+  margin-bottom: 12px;
+  background: var(--surface2);
+}
+.v-c .term-header .title-line {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.v-c .term-header .info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px 20px;
+  font-size: 11px;
+}
+.v-c .term-header .info-grid .kv { display: flex; gap: 6px; }
+.v-c .term-header .info-grid .k { color: var(--muted); }
+.v-c .term-header .info-grid .v { color: var(--silver); }
+
+/* ── ASCII progress bars ─── */
+.ascii-bar-wrap { margin-bottom: 10px; }
+.ascii-bar-wrap:last-child { margin-bottom: 14px; }
+.ascii-bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  margin-bottom: 2px;
+}
+.ascii-bar-label .ab-name { font-weight: 600; }
+.ascii-bar-label .ab-val { color: var(--muted); }
+.ascii-bar {
+  font-family: var(--font);
+  font-size: 14px;
+  letter-spacing: 1px;
+  line-height: 1.3;
+  white-space: pre;
+}
+
+/* ── Terminal process table ─── */
+.v-c .proc-table th { font-size: 10px; letter-spacing: 1px; }
+.v-c .proc-table td { font-size: 11px; padding: 3px 6px; font-family: var(--font); }
+
+/* ── Section headers (shared) ────────────── */
+.section-title {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  padding: 8px 0 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+/* ── Scrollable areas ────────────────────── */
+.scroll-y { overflow-y: auto; max-height: 420px; }
+.scroll-y::-webkit-scrollbar { width: 4px; }
+.scroll-y::-webkit-scrollbar-track { background: transparent; }
+.scroll-y::-webkit-scrollbar-thumb { background: var(--border); }
+
+/* ── Variant D: Clean (TimePanel-aligned) ── */
+.v-d {
+  width: 303px;
+  padding: 16px;
+}
+.v-d .vd-title {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-align: center;
+  margin-bottom: 12px;
+}
+.v-d .vd-big {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--silver);
+  text-align: center;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+.v-d .vd-sub {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  margin-bottom: 16px;
+}
+.v-d .vd-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.v-d .vd-cell {
+  padding: 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+}
+.v-d .vd-cell .lbl {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.v-d .vd-cell .val {
+  font-size: 18px;
+  font-weight: 700;
+}
+.v-d .vd-cell .sub {
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+.v-d .vd-section {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  text-align: center;
+  padding: 8px 0 6px;
+  border-top: 1px solid var(--border);
+  margin-bottom: 6px;
+}
+.v-d .vd-proc {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 0;
+  font-size: 11px;
+  border-bottom: 1px solid rgba(42,42,53,0.2);
+}
+.v-d .vd-proc:last-child { border-bottom: none; }
+.v-d .vd-proc .pn { flex: 1; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.v-d .vd-proc .pc { width: 40px; text-align: right; }
+.v-d .vd-proc .pp { width: 34px; text-align: right; color: var(--muted); font-size: 10px; }
+.v-d .vd-empty {
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  padding: 8px 0;
+}
+
+/* ═══════════════════════════════════════════
+   Prototype Switcher Bar (not part of design)
+   ═══════════════════════════════════════════ */
+.switcher {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--surface2);
+  border: 1px solid var(--red);
+  padding: 8px 18px;
+  z-index: 999;
+  box-shadow: 0 0 20px rgba(255,45,85,0.3);
+  user-select: none;
+}
+.switcher-arrow {
+  background: none;
+  border: none;
+  color: var(--silver);
+  font-family: var(--font);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 2px 8px;
+  line-height: 1;
+}
+.switcher-arrow:hover { color: var(--red); }
+.switcher-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  min-width: 200px;
+  text-align: center;
+  color: var(--silver);
+}
+.switcher-label em { color: var(--red); font-style: normal; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     Variant A — Dashboard (tabbed)
+     ════════════════════════════════════════════ -->
+<div class="popout" id="varA">
+  <div class="v-a">
+    <div class="tab-bar">
+      <button class="tab-btn active" data-tab="perf">Performance</button>
+      <button class="tab-btn" data-tab="disks">Disks</button>
+      <button class="tab-btn" data-tab="procs">Processes</button>
+    </div>
+
+    <!-- ── Performance tab ── -->
+    <div class="tab-panel active" id="tab-perf">
+      <div class="metric-grid">
+        <div class="metric-card" style="border-left: 3px solid var(--cyan);">
+          <div class="label" style="color:var(--cyan);">CPU</div>
+          <div class="value" style="color:var(--cyan);" id="cpuVal">23.5%</div>
+          <div class="sub">AMD Ryzen 7 5800X · 8 cores</div>
+          <div class="extra" style="color:var(--muted);">52°C</div>
+          <div class="sparkline" id="cpuSpark"></div>
+        </div>
+        <div class="metric-card" style="border-left: 3px solid var(--orange);">
+          <div class="label" style="color:var(--orange);">Memory</div>
+          <div class="value" style="color:var(--orange);" id="memVal">6.2 / 16 GB</div>
+          <div class="sub">38.7% · Swap: 0.4 GB</div>
+          <div class="extra" style="color:var(--muted);"></div>
+          <div class="sparkline" id="memSpark"></div>
+        </div>
+        <div class="metric-card" style="border-left: 3px solid var(--orange);">
+          <div class="label" style="color:var(--cyan);">Network</div>
+          <div class="value" style="color:var(--silver);font-size:20px;" id="netVal">↓ 1.2 MB/s</div>
+          <div class="sub">↑ 340 KB/s</div>
+          <div class="extra" style="color:var(--muted);"></div>
+          <div class="sparkline" id="netSpark"></div>
+        </div>
+        <div class="metric-card" style="border-left: 3px solid var(--lime);">
+          <div class="label" style="color:var(--lime);">Disk I/O</div>
+          <div class="value" style="color:var(--silver);font-size:20px;" id="diskIOVal">R: 45 MB/s</div>
+          <div class="sub">W: 12 MB/s</div>
+          <div class="extra" style="color:var(--muted);"></div>
+          <div class="sparkline" id="diskSpark"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Disks tab ── -->
+    <div class="tab-panel" id="tab-disks">
+      <div class="section-title" style="margin-top:0;">Mount Points</div>
+      <div id="mountList"></div>
+    </div>
+
+    <!-- ── Processes tab ── -->
+    <div class="tab-panel" id="tab-procs">
+      <input class="proc-search" id="procSearch" type="text" placeholder="Search processes by name, PID, or command...">
+      <div class="scroll-y" style="max-height:360px;">
+        <table class="proc-table" id="procTableV1"></table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     Variant B — Compact HUD (scroll-all)
+     ════════════════════════════════════════════ -->
+<div class="popout" id="varB" style="display:none;">
+  <div class="v-b">
+    <!-- Circular gauges -->
+    <div class="gauge-row">
+      <div class="gauge-wrap" id="gCpu"></div>
+      <div class="gauge-wrap" id="gMem"></div>
+      <div class="gauge-wrap" id="gDisk"></div>
+    </div>
+
+    <!-- Performance inline -->
+    <div class="section-title">Performance</div>
+    <div id="perfInline"></div>
+
+    <!-- Mounts -->
+    <div class="section-title">Mounts</div>
+    <div id="compactMounts"></div>
+
+    <!-- Processes -->
+    <div class="section-title">Processes (top by CPU)</div>
+    <div class="scroll-y" style="max-height:140px;" id="compactProcList"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     Variant C — Terminal Monitor
+     ════════════════════════════════════════════ -->
+<div class="popout" id="varC" style="display:none;">
+  <div class="v-c">
+    <!-- System info header -->
+    <div class="term-header">
+      <div class="title-line">═ System Information ═</div>
+      <div class="info-grid">
+        <div class="kv"><span class="k">Hostname</span><span class="v" id="cHost">archlinux</span></div>
+        <div class="kv"><span class="k">Kernel</span><span class="v" id="cKernel">6.12.10-arch1-1</span></div>
+        <div class="kv"><span class="k">Uptime</span><span class="v" id="cUptime">3h 42m</span></div>
+        <div class="kv"><span class="k">Load</span><span class="v" id="cLoad">1.24  0.87  0.63</span></div>
+        <div class="kv"><span class="k">Procs</span><span class="v" id="cProcs">247</span></div>
+        <div class="kv"><span class="k">Distribution</span><span class="v" id="cDistro">Arch Linux</span></div>
+      </div>
+    </div>
+
+    <!-- ASCII bars -->
+    <div id="asciiBars"></div>
+
+    <!-- Process table -->
+    <div class="section-title">Process List (sorted by CPU ↓)</div>
+    <div class="scroll-y" style="max-height:260px;">
+      <table class="proc-table" id="procTableV3"></table>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     Variant D — Clean (TimePanel-aligned)
+     ════════════════════════════════════════════ -->
+<div class="popout" id="varD" style="display:none;width:303px;">
+  <div class="v-d">
+    <div class="vd-title">System</div>
+    <div class="vd-big" id="vdHost">archlinux</div>
+    <div class="vd-sub" id="vdSub">Arch Linux · Linux 6.12.10 · up 3h 42m</div>
+
+    <div class="vd-grid">
+      <div class="vd-cell">
+        <div class="lbl" style="color:var(--cyan);">CPU</div>
+        <div class="val" style="color:var(--cyan);" id="vdCpu">23.5%</div>
+        <div class="sub">52°C · 8 cores</div>
+      </div>
+      <div class="vd-cell">
+        <div class="lbl" style="color:var(--orange);">Memory</div>
+        <div class="val" style="color:var(--orange);" id="vdMem">6.2 GB</div>
+        <div class="sub">38.7% of 16 GB</div>
+      </div>
+      <div class="vd-cell">
+        <div class="lbl" style="color:var(--lime);">Disk (/)</div>
+        <div class="val" style="color:var(--lime);" id="vdDisk">89 GB</div>
+        <div class="sub">38% of 237 GB</div>
+      </div>
+      <div class="vd-cell">
+        <div class="lbl" style="color:var(--silver);">Network</div>
+        <div class="val" style="color:var(--silver);font-size:16px;" id="vdNet">↓1.2 MB/s</div>
+        <div class="sub">↑ 340 KB/s</div>
+      </div>
+    </div>
+
+    <div class="vd-section">Processes</div>
+    <div id="vdProcList"></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════
+     Prototype Switcher (not part of design)
+     ════════════════════════════════════════════ -->
+<div class="switcher" id="switcher">
+  <button class="switcher-arrow" id="prevBtn">◀</button>
+  <span class="switcher-label" id="switchLabel">A — <em>Dashboard</em> (tabbed)</span>
+  <button class="switcher-arrow" id="nextBtn">▶</button>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+// Shared mock data
+// ═══════════════════════════════════════════════
+
+const PROCESSES = [
+  { pid: 1823, name: 'firefox', cpu: 24.7, memKB: 1843200, memPct: 11.2, fullCmd: '/usr/lib/firefox/firefox -new-window' },
+  { pid: 2456, name: 'chromium', cpu: 18.2, memKB: 2457600, memPct: 15.0, fullCmd: '/usr/bin/chromium --enable-features=...' },
+  { pid: 984,  name: 'Xorg', cpu: 8.5, memKB: 184320,  memPct: 1.1, fullCmd: '/usr/lib/Xorg :0 -seat seat0 -keeptty' },
+  { pid: 3102, name: 'kitty', cpu: 5.1, memKB: 92160,   memPct: 0.6, fullCmd: '/usr/bin/kitty --single-instance' },
+  { pid: 1567, name: 'waybar', cpu: 4.3, memKB: 46080,   memPct: 0.3, fullCmd: '/usr/bin/waybar' },
+  { pid: 421,  name: 'systemd-journal', cpu: 3.8, memKB: 61440, memPct: 0.4, fullCmd: '/usr/lib/systemd/systemd-journald' },
+  { pid: 1892, name: 'pipewire', cpu: 2.9, memKB: 32768,   memPct: 0.2, fullCmd: '/usr/bin/pipewire' },
+  { pid: 772,  name: 'polkitd', cpu: 2.1, memKB: 81920,   memPct: 0.5, fullCmd: '/usr/lib/polkit-1/polkitd' },
+  { pid: 1,    name: 'systemd', cpu: 1.8, memKB: 122880,  memPct: 0.8, fullCmd: '/sbin/init' },
+  { pid: 2901, name: 'nvim', cpu: 1.5, memKB: 65536,    memPct: 0.4, fullCmd: '/usr/bin/nvim /home/user/project/main.go' },
+  { pid: 1234, name: 'pulseaudio', cpu: 1.2, memKB: 45056,   memPct: 0.3, fullCmd: '/usr/bin/pulseaudio --daemonize=no' },
+  { pid: 567,  name: 'networkmanager', cpu: 0.9, memKB: 53248, memPct: 0.3, fullCmd: '/usr/bin/NetworkManager --no-daemon' },
+  { pid: 3301, name: 'quickshell', cpu: 0.7, memKB: 38912,   memPct: 0.2, fullCmd: '/usr/bin/quickshell' },
+  { pid: 2048, name: 'hyprland', cpu: 0.5, memKB: 98304,  memPct: 0.6, fullCmd: '/usr/bin/Hyprland' },
+];
+
+const MOUNTS = [
+  { path: '/', dev: '/dev/nvme0n1p2', fs: 'ext4', size: '237G', used: '89G', pct: 38 },
+  { path: '/home', dev: '/dev/nvme0n1p4', fs: 'ext4', size: '891G', used: '412G', pct: 46 },
+  { path: '/boot', dev: '/dev/nvme0n1p1', fs: 'vfat', size: '512M', used: '87M', pct: 17 },
+  { path: '/mnt/data', dev: '/dev/sda1', fs: 'ntfs', size: '1.8T', used: '1.4T', pct: 78 },
+  { path: '/run/media/usb', dev: '/dev/sdb1', fs: 'vfat', size: '32G', used: '12G', pct: 38 },
+];
+
+const MOUNT_ICONS = { '/': '🏠', '/home': '👤', 'boot': '🧠', 'data': '💾', 'usb': '🔌' };
+function mountIcon(p) {
+  if (p === '/') return '🏠';
+  if (p === '/home') return '👤';
+  if (p.includes('boot')) return '🧠';
+  if (p.includes('data')) return '💾';
+  if (p.includes('media') || p.includes('mnt')) return '🔌';
+  return '📁';
+}
+function mountColor(pct) { return pct > 90 ? 'var(--red)' : pct > 80 ? 'var(--orange)' : 'var(--cyan)'; }
+
+// ── Percentage badge helper ──
+function pctBadge(val, high, med) {
+  if (val >= high) return 'high';
+  if (val >= med) return 'med';
+  return 'low';
+}
+
+// ── Sparkline SVG generator ──
+function sparklineSVG(data, color = '#00e5ff', h = 40) {
+  if (!data || data.length < 2) return '';
+  const max = Math.max(...data) * 1.1 || 1;
+  const w = 200;
+  const pts = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - (v / max) * (h * 0.75);
+    return `${x},${y}`;
+  }).join(' ');
+  const fillPts = pts + ` ${w},${h} 0,${h}`;
+  return `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" width="100%" height="100%">
+    <defs><linearGradient id="g-${color.replace('#','')}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${color}" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="${color}" stop-opacity="0.02"/>
+    </linearGradient></defs>
+    <polygon points="${fillPts}" fill="url(#g-${color.replace('#','')})"/>
+    <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+// ── Generate mock history ──
+function mockHistory(base, variance, n = 30) {
+  const h = [];
+  for (let i = 0; i < n; i++) {
+    h.push(Math.max(0, base + (Math.random() - 0.5) * variance * 2));
+  }
+  return h;
+}
+const cpuHist    = mockHistory(24, 15);
+const memHist    = mockHistory(39, 8);
+const netRxHist  = mockHistory(1.2, 0.8);
+const diskRdHist = mockHistory(45, 20);
+
+// ═══════════════════════════════════════════════
+// Variant A — Render
+// ═══════════════════════════════════════════════
+
+function renderVA() {
+  // Sparklines
+  document.getElementById('cpuSpark').innerHTML    = sparklineSVG(cpuHist, '#00e5ff');
+  document.getElementById('memSpark').innerHTML    = sparklineSVG(memHist, '#ff6b00');
+  document.getElementById('netSpark').innerHTML    = sparklineSVG(netRxHist, '#00e5ff');
+  document.getElementById('diskSpark').innerHTML   = sparklineSVG(diskRdHist, '#c8ff00');
+
+  // Mounts
+  document.getElementById('mountList').innerHTML = MOUNTS.map(m => `
+    <div class="mount-row">
+      <div class="mount-icon">${mountIcon(m.path)}</div>
+      <div class="mount-info">
+        <div class="mount-path">${m.path}</div>
+        <div class="mount-detail">${m.dev} · ${m.fs}</div>
+      </div>
+      <div class="mount-bar-wrap">
+        <div class="mount-bar-bg"><div class="mount-bar-fill" style="width:${m.pct}%;background:${mountColor(m.pct)};"></div></div>
+        <div class="mount-bar-label" style="color:${mountColor(m.pct)};">${m.used} / ${m.size}</div>
+      </div>
+      <div style="font-size:12px;font-weight:700;width:36px;text-align:right;color:${mountColor(m.pct)};">${m.pct}%</div>
+    </div>
+  `).join('');
+
+  // Tab switching
+  document.querySelectorAll('.v-a .tab-btn').forEach(btn => {
+    btn.onclick = () => {
+      document.querySelectorAll('.v-a .tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.v-a .tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    };
+  });
+
+  renderProcTable('procTableV1', PROCESSES, true);
+}
+
+// ── Render process table (shared) ──
+let expandPid = '';
+function renderProcTable(id, procs, expandable) {
+  const table = document.getElementById(id);
+  const search = document.getElementById('procSearch');
+  const q = search ? search.value.toLowerCase() : '';
+
+  const filtered = q ? procs.filter(p =>
+    p.name.toLowerCase().includes(q) ||
+    p.pid.toString().includes(q) ||
+    p.fullCmd.toLowerCase().includes(q)
+  ) : procs;
+
+  table.innerHTML = `
+    <thead><tr>
+      ${expandable ? '<th style="width:20px;"></th>' : ''}
+      <th>Name</th><th style="width:70px;">CPU</th><th style="width:80px;">Memory</th><th style="width:60px;">PID</th>
+    </tr></thead>
+    <tbody>${filtered.map(p => {
+      const cpuCls = pctBadge(p.cpu, 50, 20);
+      const memCls = pctBadge(p.memPct, 20, 10);
+      const expanded = expandable && expandPid === p.pid.toString();
+      return `
+        <tr class="${expanded ? '' : ''}" data-pid="${p.pid}">
+          ${expandable ? `<td class="proc-expand" data-pid="${p.pid}">${expanded ? '▾' : '▸'}</td>` : ''}
+          <td><span class="proc-name">${p.name}</span></td>
+          <td><span class="proc-cpu-badge ${cpuCls}">${p.cpu.toFixed(1)}%</span></td>
+          <td><span class="proc-mem-badge ${memCls}">${(p.memKB/1024/1024).toFixed(1)}G</span></td>
+          <td class="proc-pid">${p.pid}</td>
+        </tr>
+        ${expanded ? `<tr class="proc-expanded-row"><td colspan="5">
+          <div class="proc-expanded-detail">
+            <strong style="color:var(--muted);">Full Command:</strong> <span>${p.fullCmd}</span><br>
+            <strong style="color:var(--muted);">Memory:</strong> <span>${p.memPct.toFixed(1)}% · ${(p.memKB/1024).toFixed(0)} MB</span>
+          </div>
+        </td></tr>` : ''}
+      `;
+    }).join('')}</tbody>
+  `;
+
+  if (expandable) {
+    table.querySelectorAll('.proc-expand').forEach(el => {
+      el.onclick = (e) => {
+        e.stopPropagation();
+        const pid = el.dataset.pid;
+        expandPid = expandPid === pid ? '' : pid;
+        renderProcTable(id, procs, true);
+      };
+    });
+  }
+
+  if (search) {
+    search.oninput = () => renderProcTable(id, procs, expandable);
+  }
+}
+
+// ═══════════════════════════════════════════════
+// Variant B — Render
+// ═══════════════════════════════════════════════
+
+function renderVB() {
+  // ── Circular gauges ──
+  function gaugeSVG(pct, color, label, sub, val) {
+    const r = 34, cx = 45, cy = 45, circ = 2 * Math.PI * r;
+    const offset = circ * (1 - pct / 100);
+    return `<svg viewBox="0 0 90 90">
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="rgba(42,42,53,0.3)" stroke-width="6"/>
+      <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="6"
+        stroke-dasharray="${circ}" stroke-dashoffset="${offset}"
+        stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>
+      <text x="${cx}" y="${cy - 4}" text-anchor="middle" font-size="18" font-weight="700" fill="${color}" font-family="var(--font)">${val}</text>
+      <text x="${cx}" y="${cy + 14}" text-anchor="middle" font-size="9" font-weight="600" fill="var(--muted)" font-family="var(--font)" letter-spacing="1">${label}</text>
+    </svg>`;
+  }
+
+  document.getElementById('gCpu').innerHTML  = gaugeSVG(24, '#00e5ff',  'CPU',     '24%', '24');
+  document.getElementById('gMem').innerHTML  = gaugeSVG(39, '#ff6b00',  'MEMORY',  '6.2G', '39%');
+  document.getElementById('gDisk').innerHTML = gaugeSVG(38, '#c8ff00',  'DISK',    '/',    '38%');
+
+  // ── Inline metrics ──
+  document.getElementById('perfInline').innerHTML = `
+    ${[
+      { icon:'🧠', title:'CPU',     sub:'8 cores · 52°C',      stat:'23.5%',              color:'var(--cyan)',   hist:cpuHist },
+      { icon:'💾', title:'Memory',  sub:'6.2 / 16 GB · Swap: 0.4G', stat:'38.7%',          color:'var(--orange)', hist:memHist },
+      { icon:'🌐', title:'Network', sub:'↑ 340 KB/s · ↓ 1.2 MB/s',    stat:'1.2 MB/s ↓',    color:'var(--cyan)',   hist:netRxHist },
+      { icon:'💿', title:'Disk',    sub:'R: 45 MB/s · W: 12 MB/s',    stat:'45 MB/s',        color:'var(--lime)',   hist:diskRdHist },
+    ].map(m => `
+      <div class="metric-inline">
+        <div class="icon">${m.icon}</div>
+        <div class="info">
+          <div class="title" style="color:${m.color};">${m.title}</div>
+          <div class="sub">${m.sub}</div>
+        </div>
+        <div class="mini-spark">${sparklineSVG(m.hist, m.color, 24)}</div>
+        <div class="stat" style="color:${m.color};">${m.stat}</div>
+      </div>
+    `).join('')}
+  `;
+
+  // ── Compact mounts ──
+  document.getElementById('compactMounts').innerHTML = MOUNTS.map(m => `
+    <div class="compact-mount">
+      <span class="mpath">${m.path}</span>
+      <div class="mbar"><div class="mfill" style="width:${m.pct}%;background:${mountColor(m.pct)};"></div></div>
+      <span class="mpct" style="color:${mountColor(m.pct)};">${m.pct}%</span>
+      <span style="color:var(--muted);font-size:10px;">${m.used}</span>
+    </div>
+  `).join('');
+
+  // ── Compact processes ──
+  const top5 = [...PROCESSES].sort((a,b) => b.cpu - a.cpu).slice(0, 8);
+  document.getElementById('compactProcList').innerHTML = top5.map(p => `
+    <div class="compact-proc">
+      <span class="pname">${p.name}</span>
+      <span class="pcpu" style="color:${p.cpu > 20 ? 'var(--red)' : p.cpu > 8 ? 'var(--orange)' : 'var(--muted)'};">${p.cpu.toFixed(1)}%</span>
+      <span class="pmem">${(p.memKB/1024/1024).toFixed(1)}G</span>
+      <span class="ppid">${p.pid}</span>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════
+// Variant C — Render
+// ═══════════════════════════════════════════════
+
+function renderVC() {
+  // ── ASCII progress bars ──
+  function asciiBar(pct, w = 20) {
+    const filled = Math.round(pct / 100 * w);
+    const empty = w - filled;
+    return '█'.repeat(filled) + '░'.repeat(empty) + `  ${pct}%`;
+  }
+
+  document.getElementById('asciiBars').innerHTML = `
+    <div class="ascii-bar-wrap">
+      <div class="ascii-bar-label"><span class="ab-name" style="color:var(--cyan);">CPU</span><span class="ab-val">23.5%</span></div>
+      <div class="ascii-bar" style="color:var(--cyan);">${asciiBar(24)}</div>
+    </div>
+    <div class="ascii-bar-wrap">
+      <div class="ascii-bar-label"><span class="ab-name" style="color:var(--orange);">Memory</span><span class="ab-val">6.2 GB / 16 GB</span></div>
+      <div class="ascii-bar" style="color:var(--orange);">${asciiBar(39)}</div>
+    </div>
+    <div class="ascii-bar-wrap">
+      <div class="ascii-bar-label"><span class="ab-name" style="color:var(--lime);">Disk (/)</span><span class="ab-val">89 GB / 237 GB</span></div>
+      <div class="ascii-bar" style="color:var(--lime);">${asciiBar(38)}</div>
+    </div>
+    <div class="ascii-bar-wrap" style="margin-bottom:14px;">
+      <div class="ascii-bar-label"><span class="ab-name" style="color:var(--muted);">Disk (/home)</span><span class="ab-val">412 GB / 891 GB</span></div>
+      <div class="ascii-bar" style="color:var(--muted);">${asciiBar(46)}</div>
+    </div>
+  `;
+
+  // ── Terminal process table ── (no expand, no search, htop style)
+  const sorted = [...PROCESSES].sort((a,b) => b.cpu - a.cpu);
+  const table = document.getElementById('procTableV3');
+  table.innerHTML = `
+    <thead><tr>
+      <th style="width:50px;">PID</th><th style="width:50px;">CPU%</th><th style="width:60px;">MEM%</th><th>Command</th>
+    </tr></thead>
+    <tbody>${sorted.map(p => `
+      <tr>
+        <td style="color:var(--muted);font-size:11px;">${p.pid}</td>
+        <td style="color:${p.cpu > 20 ? 'var(--red)' : p.cpu > 8 ? 'var(--orange)' : 'var(--silver)'};">${p.cpu.toFixed(1)}</td>
+        <td style="color:${p.memPct > 15 ? 'var(--red)' : p.memPct > 5 ? 'var(--orange)' : 'var(--muted)'};">${p.memPct.toFixed(1)}</td>
+        <td style="font-size:11px;"><span style="font-weight:700;">${p.name}</span> <span style="color:var(--muted);font-weight:400;">${p.fullCmd}</span></td>
+      </tr>
+    `).join('')}</tbody>
+  `;
+}
+
+// ═══════════════════════════════════════════════
+// Variant D — Render
+// ═══════════════════════════════════════════════
+
+function renderVD() {
+  const top = [...PROCESSES].sort((a,b) => b.cpu - a.cpu).slice(0, 7);
+  document.getElementById('vdProcList').innerHTML = top.map(p => `
+    <div class="vd-proc">
+      <span class="pn">${p.name}</span>
+      <span class="pc" style="color:${p.cpu > 20 ? 'var(--red)' : p.cpu > 8 ? 'var(--orange)' : 'var(--muted)'};">${p.cpu.toFixed(1)}%</span>
+      <span class="pp">${p.pid}</span>
+    </div>
+  `).join('');
+
+  // If fewer than 7, fill with empty
+  if (top.length < 7) {
+    for (let i = top.length; i < 7; i++) {
+      document.getElementById('vdProcList').innerHTML +=
+        '<div class="vd-empty">—</div>';
+    }
+  }
+}
+
+// ═══════════════════════════════════════════════
+// Prototype Switcher
+// ═══════════════════════════════════════════════
+
+const VARIANTS = [
+  { id: 'varA', label: 'Dashboard',   desc: 'Tabbed interface — metric cards, sparklines, mount bars, expandable process table' },
+  { id: 'varB', label: 'Compact HUD', desc: 'Single-column scroll — circular gauges, inline metrics, compact process list' },
+  { id: 'varC', label: 'Terminal',    desc: 'htop-inspired — system info header, ASCII bars, full terminal-style process table' },
+  { id: 'varD', label: 'Clean',       desc: 'TimePanel-aligned — big hostname, 2×2 metric grid, compact process list' },
+];
+
+let currentVariant = 0;
+
+function showVariant(idx) {
+  idx = ((idx % VARIANTS.length) + VARIANTS.length) % VARIANTS.length;
+  currentVariant = idx;
+  VARIANTS.forEach((v, i) => {
+    document.getElementById(v.id).style.display = i === idx ? 'block' : 'none';
+  });
+  document.getElementById('switchLabel').innerHTML =
+    `${String.fromCharCode(65 + idx)} — <em>${VARIANTS[idx].label}</em> ${VARIANTS[idx].desc}`;
+  // Update URL
+  const url = new URL(window.location);
+  url.searchParams.set('variant', String.fromCharCode(65 + idx));
+  window.history.replaceState({}, '', url);
+}
+
+document.getElementById('prevBtn').onclick = () => showVariant(currentVariant - 1);
+document.getElementById('nextBtn').onclick = () => showVariant(currentVariant + 1);
+
+document.addEventListener('keydown', e => {
+  if (e.target.matches('input, textarea, [contenteditable]')) return;
+  if (e.key === 'ArrowLeft') { e.preventDefault(); showVariant(currentVariant - 1); }
+  if (e.key === 'ArrowRight') { e.preventDefault(); showVariant(currentVariant + 1); }
+});
+
+// ── Init from URL ──
+const params = new URLSearchParams(window.location.search);
+const variantParam = params.get('variant');
+if (variantParam) {
+  const idx = variantParam.toUpperCase().charCodeAt(0) - 65;
+  if (idx >= 0 && idx < VARIANTS.length) currentVariant = idx;
+}
+
+showVariant(currentVariant);
+renderVA();
+renderVB();
+renderVC();
+renderVD();
+
+// ── Simulate live updates ──
+setInterval(() => {
+  // Update A values
+  const cpu = (15 + Math.random() * 25).toFixed(1);
+  document.getElementById('cpuVal').textContent = cpu + '%';
+  // Update sparklines
+  cpuHist.push(parseFloat(cpu)); cpuHist.shift();
+  document.getElementById('cpuSpark').innerHTML = sparklineSVG(cpuHist, '#00e5ff');
+
+  const mem = (32 + Math.random() * 14).toFixed(1);
+  document.getElementById('memVal').textContent = (mem * 0.16).toFixed(1) + ' / 16 GB';
+  memHist.push(parseFloat(mem)); memHist.shift();
+  document.getElementById('memSpark').innerHTML = sparklineSVG(memHist, '#ff6b00');
+
+  const net = (0.5 + Math.random() * 2).toFixed(1);
+  document.getElementById('netVal').textContent = '↓ ' + net + ' MB/s';
+  netRxHist.push(parseFloat(net)); netRxHist.shift();
+  document.getElementById('netSpark').innerHTML = sparklineSVG(netRxHist, '#00e5ff');
+
+  const disk = (20 + Math.random() * 50).toFixed(1);
+  document.getElementById('diskIOVal').textContent = 'R: ' + disk + ' MB/s';
+  diskRdHist.push(parseFloat(disk)); diskRdHist.shift();
+  document.getElementById('diskSpark').innerHTML = sparklineSVG(diskRdHist, '#c8ff00');
+
+  // ── Update D values ──
+  document.getElementById('vdCpu').textContent  = cpu + '%';
+  document.getElementById('vdMem').textContent  = (mem * 0.16).toFixed(1) + ' GB';
+  document.getElementById('vdDisk').textContent = (80 + Math.random() * 20).toFixed(0) + ' GB';
+  document.getElementById('vdNet').textContent  = '↓' + net + ' MB/s';
+  // Refresh process list (CPU ordering shifts)
+  renderVD();
+}, 1200);
+</script>
+
+</body>
+</html>

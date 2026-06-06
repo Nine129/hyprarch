@@ -55,6 +55,10 @@ hl.on("hyprland.start", function()
   -- hl.exec_cmd("wl-paste --watch cliphist store")  -- Clipboard history daemon
   -- Set wallpaper via IPC (hyprpaper v0.8.4 config preload doesn't work at startup)
   hl.exec_cmd("hyprctl hyprpaper wallpaper eDP-1,/home/nine/.local/share/wallpapers/cggx.webp")
+  -- # Launch kitty in background on Hyprland start
+  hl.exec_cmd("kitty --daemon")
+  -- Quickshell
+  hl.exec_cmd("quickshell -p ~/.config/quickshell")
 end)
 -- Window Rules ───────────────────────────
 -- Window Rules chuẩn chỉ theo Hyprland Wiki v0.55.2 Lua API

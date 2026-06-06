@@ -169,3 +169,4 @@ alias cd="z"
 alias ff="fastfetch"
 # xdg-open
 alias open="xdg-open"
+fastfetch

@@ -4,7 +4,7 @@
 local vivaldi_launching = false
 
 -- Terminal ─────────────────────────
-hl.bind("SUPER + Q",       hl.dsp.exec_cmd("kitty"))
+hl.bind("SUPER + Q",       hl.dsp.exec_cmd("kitty --single-instance"))
 hl.bind("SUPER + W",       hl.dsp.window.close())
 
 -- Launcher ────────────────────────
