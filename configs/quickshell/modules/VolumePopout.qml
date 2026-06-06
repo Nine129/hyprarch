@@ -54,6 +54,14 @@ PanelWindow {
     }
 
     Rectangle {
+        id: shadow
+        x: 2; y: 2
+        width: parent.width + 2; height: parent.height + 2
+        color: Qt.rgba(0, 0, 0, 0.2)
+        z: -1
+    }
+
+    Rectangle {
         id: contentRoot
         anchors.fill: parent
         color: popout.bg
