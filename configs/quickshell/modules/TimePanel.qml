@@ -126,7 +126,6 @@ PanelWindow {
     }
 
     // ── Escape dismissal ──
-    focus: true
     Keys.enabled: true
     Keys.onEscapePressed: {
         shouldShow = false
