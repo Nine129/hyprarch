@@ -12,7 +12,7 @@ PanelWindow {
     property bool devDropdownOpen: false
     readonly property var audio: QsServices.Audio
 
-    readonly property color bg:      "#0a0a0c"
+    readonly property color bg:      "#1a1a20"
     readonly property color surface: "#1a1a20"
     readonly property color border:  "#2a2a35"
     readonly property color orange:  "#ff6b00"
@@ -56,7 +56,7 @@ PanelWindow {
     Rectangle {
         id: contentRoot
         anchors.fill: parent
-        color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.90)
+        color: popout.bg
 
         // Click background to dismiss
         MouseArea {
