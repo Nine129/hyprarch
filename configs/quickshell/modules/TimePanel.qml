@@ -128,7 +128,6 @@ PanelWindow {
     // ── Escape dismissal ──
     onVisibleChanged: {
         if (visible) {
-            contentRoot.forceActiveFocus()
             // Refresh on open
             rebuildCalendar()
             tickClock()
@@ -159,7 +158,6 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
     margins { right: 146; top: 2 }
-    focusable: true
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 36
     color: "transparent"
@@ -171,15 +169,17 @@ PanelWindow {
         color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.94)
         border.color: popout.border
         border.width: 1
-        focus: true
 
-        Component.onCompleted: forceActiveFocus()
-
-        Keys.enabled: true
-        Keys.onEscapePressed: {
-            popout.shouldShow = false
-            writeCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-cal-state"]
-            writeCloseProc.running = true
+        // Click background to dismiss
+        MouseArea {
+            anchors.fill: parent
+            propagateComposedEvents: true
+            onClicked: function(mouse) {
+                popout.shouldShow = false
+                writeCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-cal-state"]
+                writeCloseProc.running = true
+                mouse.accepted = false
+            }
         }
     }
 

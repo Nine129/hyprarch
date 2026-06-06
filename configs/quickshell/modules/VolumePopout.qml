@@ -25,17 +25,13 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
     margins { right: 146; top: 2 }
-    focusable: true
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 32
     color: "transparent"
     visible: shouldShow
 
-    // ── Escape dismissal ──
     onVisibleChanged: {
-        if (visible) {
-            contentRoot.forceActiveFocus()
-        }
+        // no-op, kept for future use
     }
 
     Process {
@@ -47,12 +43,17 @@ PanelWindow {
         id: contentRoot
         anchors.fill: parent
         color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.90)
-        focus: true
-        Keys.enabled: true
-        Keys.onEscapePressed: {
-            popout.shouldShow = false
-            writeCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-volume-state"]
-            writeCloseProc.running = true
+
+        // Click background to dismiss
+        MouseArea {
+            anchors.fill: parent
+            propagateComposedEvents: true
+            onClicked: function(mouse) {
+                popout.shouldShow = false
+                writeCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-volume-state"]
+                writeCloseProc.running = true
+                mouse.accepted = false
+            }
         }
     }
 
