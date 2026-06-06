@@ -222,9 +222,11 @@ PanelWindow {
             Row {
                 id: tzInner
                 y: 0
+                height: tzContainer.height
                 x: -(popout.tzIndex * tzContainer.slotWidth) + tzContainer.slotWidth * 3
 
                 Behavior on x {
+                    enabled: tzInner.x !== 0 || tzContainer.slotWidth > 0
                     SmoothedAnimation { velocity: 400; duration: 200; easing.type: Easing.OutCubic }
                 }
 
