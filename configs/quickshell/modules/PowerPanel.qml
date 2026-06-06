@@ -46,12 +46,25 @@ PanelWindow {
     color: "transparent"
     visible: shouldShow
 
+    // ── Escape dismiss (via Hyprland global bind) ──
     onVisibleChanged: {
-        // no-op, kept for future use
+        if (visible)
+            closeProc.running = true
+        else
+            unbindProc.running = true
     }
 
     Process {
-        id: writeCloseProc
+        id: closeProc
+        command: ["hyprctl", "keyword", "bind", "Escape", "exec",
+            "sh -c 'echo 0 > /tmp/qs-power-state'"]
+    }
+    Process {
+        id: unbindProc
+        command: ["hyprctl", "keyword", "unbind", "Escape"]
+    }
+    Process {
+        id: bgCloseProc
         // command set dynamically
     }
 
@@ -69,8 +82,8 @@ PanelWindow {
             propagateComposedEvents: true
             onClicked: function(mouse) {
                 popout.shouldShow = false
-                writeCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-power-state"]
-                writeCloseProc.running = true
+                bgCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-power-state"]
+                bgCloseProc.running = true
                 mouse.accepted = false
             }
         }

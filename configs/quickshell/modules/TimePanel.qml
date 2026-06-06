@@ -125,17 +125,29 @@ PanelWindow {
         }
     }
 
-    // ── Escape dismissal ──
+    // ── Escape dismiss (via Hyprland global bind) ──
     onVisibleChanged: {
         if (visible) {
+            closeProc.running = true
             // Refresh on open
             rebuildCalendar()
             tickClock()
+        } else {
+            unbindProc.running = true
         }
     }
 
     Process {
-        id: writeCloseProc
+        id: closeProc
+        command: ["hyprctl", "keyword", "bind", "Escape", "exec",
+            "sh -c 'echo 0 > /tmp/qs-cal-state'"]
+    }
+    Process {
+        id: unbindProc
+        command: ["hyprctl", "keyword", "unbind", "Escape"]
+    }
+    Process {
+        id: bgCloseProc
         // command set dynamically
     }
 
@@ -176,8 +188,8 @@ PanelWindow {
             propagateComposedEvents: true
             onClicked: function(mouse) {
                 popout.shouldShow = false
-                writeCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-cal-state"]
-                writeCloseProc.running = true
+                bgCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-cal-state"]
+                bgCloseProc.running = true
                 mouse.accepted = false
             }
         }
