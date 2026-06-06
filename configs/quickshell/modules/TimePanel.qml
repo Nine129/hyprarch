@@ -11,6 +11,7 @@ PanelWindow {
     id: popout
 
     property bool shouldShow: false
+    property int trayWidth: 0
 
     // ── Palette ──
     readonly property color bg:      "#151518"
@@ -169,7 +170,7 @@ PanelWindow {
     // ── Layout ──
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
-    margins { right: 146; top: 2 }
+    margins { right: 84 + trayWidth; top: 2 }
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 36
     color: "transparent"

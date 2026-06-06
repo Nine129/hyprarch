@@ -10,6 +10,7 @@ PanelWindow {
 
     property bool shouldShow: false
     property bool devDropdownOpen: false
+    property int trayWidth: 0
     readonly property var audio: QsServices.Audio
 
     readonly property color bg:      "#151518"
@@ -24,7 +25,7 @@ PanelWindow {
 
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
-    margins { right: 146; top: 2 }
+    margins { right: 84 + trayWidth; top: 2 }
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 32
     color: "transparent"
