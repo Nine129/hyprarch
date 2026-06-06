@@ -125,27 +125,19 @@ PanelWindow {
         }
     }
 
-    // ── Escape dismiss ──
+    // ── Escape dismiss (Keys + deferred focus) ──
     onVisibleChanged: {
         if (visible) {
-            closeProc.running = true
+            // Deferred focus grab to avoid Wayland eating the next click
+            Qt.callLater(function() {
+                contentRoot.forceActiveFocus()
+            })
             // Refresh on open
             rebuildCalendar()
             tickClock()
-        } else {
-            unbindProc.running = true
         }
     }
 
-    Process {
-        id: closeProc
-        command: ["hyprctl", "keyword", "bind", "Escape", "exec",
-            "sh -c 'echo 0 > /tmp/qs-cal-state'"]
-    }
-    Process {
-        id: unbindProc
-        command: ["hyprctl", "keyword", "unbind", "Escape"]
-    }
     Process {
         id: bgCloseProc
         // command set dynamically
@@ -170,6 +162,7 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
     margins { right: 146; top: 2 }
+    focusable: true
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 36
     color: "transparent"
@@ -181,6 +174,13 @@ PanelWindow {
         color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.94)
         border.color: popout.border
         border.width: 1
+        focus: true
+
+        Keys.onEscapePressed: {
+            popout.shouldShow = false
+            bgCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-cal-state"]
+            bgCloseProc.running = true
+        }
 
         // Click background to dismiss
         MouseArea {

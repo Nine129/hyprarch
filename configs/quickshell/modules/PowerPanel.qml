@@ -41,28 +41,21 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
     margins { right: 146; top: 2 }
+    focusable: true
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 28
     color: "transparent"
     visible: shouldShow
 
-    // ── Escape dismiss ──
+    // ── Escape dismiss (Keys + deferred focus) ──
     onVisibleChanged: {
-        if (visible)
-            closeProc.running = true
-        else
-            unbindProc.running = true
+        if (visible) {
+            Qt.callLater(function() {
+                contentRoot.forceActiveFocus()
+            })
+        }
     }
 
-    Process {
-        id: closeProc
-        command: ["hyprctl", "keyword", "bind", "Escape", "exec",
-            "sh -c 'echo 0 > /tmp/qs-power-state'"]
-    }
-    Process {
-        id: unbindProc
-        command: ["hyprctl", "keyword", "unbind", "Escape"]
-    }
     Process {
         id: bgCloseProc
         // command set dynamically
@@ -75,6 +68,13 @@ PanelWindow {
         color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.94)
         border.color: popout.border
         border.width: 1
+        focus: true
+
+        Keys.onEscapePressed: {
+            popout.shouldShow = false
+            bgCloseProc.command = ["sh", "-c", "echo 0 > /tmp/qs-power-state"]
+            bgCloseProc.running = true
+        }
 
         // Click background to dismiss
         MouseArea {
