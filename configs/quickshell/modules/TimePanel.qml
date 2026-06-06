@@ -159,6 +159,7 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
     margins { right: 146; top: 2 }
+    focusable: true
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 36
     color: "transparent"
@@ -171,6 +172,9 @@ PanelWindow {
         border.color: popout.border
         border.width: 1
         focus: true
+
+        Component.onCompleted: forceActiveFocus()
+
         Keys.enabled: true
         Keys.onEscapePressed: {
             popout.shouldShow = false
