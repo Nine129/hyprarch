@@ -55,7 +55,7 @@
     "interval":       60,
     "format":         "<span size='15360' rise='-2048'></span> {:%a %d  %H:%M}",
     "tooltip-format": "{:%A, %B %d %Y}",
-    "on-click":       ""
+    "on-click":       "sh -c 'v=$(cat /tmp/qs-cal-state 2>/dev/null || echo 0); echo $((1-v)) > /tmp/qs-cal-state'"
   },
 
   "battery": {

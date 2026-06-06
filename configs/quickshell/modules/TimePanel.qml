@@ -1,0 +1,408 @@
+import QtQuick
+import QtQuick.Layouts
+import Quickshell
+import Quickshell.Io
+import Quickshell.Wayland
+
+// ═══════════════════════════════════════════════════════════════
+// TimePanel — Clock + month calendar with timezone carousel
+// ═══════════════════════════════════════════════════════════════
+PanelWindow {
+    id: popout
+
+    property bool shouldShow: false
+
+    // ── Palette ──
+    readonly property color bg:      "#0a0a0c"
+    readonly property color surface: "#1a1a20"
+    readonly property color border:  "#2a2a35"
+    readonly property color cyan:    "#00e5ff"
+    readonly property color silver:  "#e8e8f0"
+    readonly property color muted:   "#6a6a80"
+    readonly property string font:   "JetBrainsMono Nerd Font"
+
+    // ── State ──
+    property int tzIndex: 0
+    property var timezones: [
+        { name: "Local", offset: -new Date().getTimezoneOffset() / 60 },
+        { name: "HST", offset: -10 },
+        { name: "AKT", offset: -9 },
+        { name: "PT",  offset: -8 },
+        { name: "MT",  offset: -7 },
+        { name: "CT",  offset: -6 },
+        { name: "ET",  offset: -5 },
+        { name: "BRT", offset: -3 },
+        { name: "UTC", offset: 0 },
+        { name: "GMT", offset: 0 },
+        { name: "CET", offset: 1 },
+        { name: "MSK", offset: 3 },
+        { name: "IST", offset: 5.5 },
+        { name: "CST", offset: 8 },
+        { name: "JST", offset: 9 },
+        { name: "AET", offset: 10 },
+        { name: "NZT", offset: 12 },
+    ]
+    property int dispYear:  new Date().getFullYear()
+    property int dispMonth: new Date().getMonth()
+    property string clockText: "00:00:00"
+    property var tzCarouselItems: []
+    property var calendarCells: []
+    property int pendingTZIdx: -1
+
+    // ── Timezone helpers ──
+    function getOffset(tzOff) {
+        return (tzOff + new Date().getTimezoneOffset() / 60) * 3600000
+    }
+
+    function nowInTZ(tzOff) {
+        return new Date(new Date().getTime() + getOffset(tzOff))
+    }
+
+    function fmtTime(d) {
+        var h = d.getHours().toString()
+        var m = d.getMinutes().toString()
+        var s = d.getSeconds().toString()
+        if (h.length < 2) h = "0" + h
+        if (m.length < 2) m = "0" + m
+        if (s.length < 2) s = "0" + s
+        return h + ":" + m + ":" + s
+    }
+
+    // ── Rebuild TZ carousel ──
+    function rebuildTZCarousel() {
+        var total = timezones.length
+        var items = []
+        for (var offset = -3; offset <= 3; offset++) {
+            var idx = ((tzIndex + offset) % total + total) % total
+            var dist = Math.abs(offset)
+            items.push({
+                name: timezones[idx].name,
+                idx: idx,
+                dist: dist,
+                isCenter: dist === 0
+            })
+        }
+        tzCarouselItems = items
+    }
+
+    // ── Rebuild calendar ──
+    function rebuildCalendar() {
+        var tzOff = timezones[tzIndex].offset
+        var nowTZ = nowInTZ(tzOff)
+        var todayD = nowTZ.getDate()
+        var todayM = nowTZ.getMonth()
+        var todayY = nowTZ.getFullYear()
+
+        var first = new Date(dispYear, dispMonth, 1)
+        var last = new Date(dispYear, dispMonth + 1, 0)
+        var daysInMonth = last.getDate()
+        var startDow = first.getDay()          // 0=Sun
+        var adjStart = (startDow + 6) % 7      // 0=Mon
+        var prevLast = new Date(dispYear, dispMonth, 0).getDate()
+
+        var cells = []
+        for (var i = adjStart - 1; i >= 0; i--)
+            cells.push({ day: prevLast - i, isCur: false, isToday: false })
+        for (var d = 1; d <= daysInMonth; d++) {
+            cells.push({
+                day: d,
+                isCur: true,
+                isToday: d === todayD && dispMonth === todayM && dispYear === todayY
+            })
+        }
+        var n = 1
+        while (cells.length < 42)
+            cells.push({ day: n++, isCur: false, isToday: false })
+        calendarCells = cells
+    }
+
+    // ── Clock tick ──
+    function tickClock() {
+        var tzOff = timezones[tzIndex].offset
+        clockText = fmtTime(nowInTZ(tzOff))
+    }
+
+    // ── Navigate months ──
+    function prevMonth() {
+        dispMonth--
+        if (dispMonth < 0) { dispMonth = 11; dispYear-- }
+        rebuildCalendar()
+    }
+    function nextMonth() {
+        dispMonth++
+        if (dispMonth > 11) { dispMonth = 0; dispYear++ }
+        rebuildCalendar()
+    }
+
+    // ── Select timezone (with fade animation) ──
+    function selectTZ(idx) {
+        if (idx !== tzIndex) {
+            pendingTZIdx = idx
+            tzRow.opacity = 0
+            tzFadeTimer.start()
+        }
+    }
+
+    // ── TZ carousel fade timer ──
+    Timer {
+        id: tzFadeTimer
+        interval: 120
+        onTriggered: {
+            if (pendingTZIdx >= 0) {
+                tzIndex = pendingTZIdx
+                pendingTZIdx = -1
+                rebuildTZCarousel()
+                rebuildCalendar()
+                tickClock()
+                tzRow.opacity = 1
+            }
+        }
+    }
+
+    // ── Escape binding ──
+    onVisibleChanged: {
+        if (visible) {
+            closeProc.running = true
+            // Refresh on open
+            rebuildTZCarousel()
+            rebuildCalendar()
+            tickClock()
+        } else {
+            unbindProc.running = true
+        }
+    }
+
+    Process {
+        id: closeProc
+        command: ["hyprctl", "keyword", "bind", "Escape", "exec",
+            "sh -c 'echo 0 > /tmp/qs-cal-state'"]
+    }
+    Process {
+        id: unbindProc
+        command: ["hyprctl", "keyword", "unbind", "Escape"]
+    }
+
+    // ── Clock tick timer ──
+    Timer {
+        interval: 1000
+        running: popout.shouldShow
+        repeat: true
+        onTriggered: tickClock()
+    }
+
+    // ── Month names ──
+    property var monthNames: [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ]
+    property var dayHeaders: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+
+    // ── Layout ──
+    screen: Quickshell.screens[0]
+    anchors { top: true; right: true }
+    margins { right: 146; top: 2 }
+    implicitWidth: 303
+    implicitHeight: contentCol.implicitHeight + 36
+    color: "transparent"
+    visible: shouldShow
+
+    Rectangle {
+        anchors.fill: parent
+        color: Qt.rgba(popout.bg.r, popout.bg.g, popout.bg.b, 0.94)
+        border.color: popout.border
+        border.width: 1
+    }
+
+    ColumnLayout {
+        id: contentCol
+        anchors.fill: parent
+        anchors.margins: 16
+        spacing: 0
+
+        // ── TIME title ──
+        Text {
+            text: "TIME"
+            font.family: popout.font
+            font.pixelSize: 16
+            font.bold: true
+            font.letterSpacing: 4
+            color: popout.cyan
+            Layout.alignment: Qt.AlignHCenter
+            Layout.bottomMargin: 10
+        }
+
+        // ── Clock ──
+        Text {
+            text: popout.clockText
+            font.family: popout.font
+            font.pixelSize: 36
+            font.bold: true
+            color: popout.silver
+            Layout.alignment: Qt.AlignHCenter
+            Layout.bottomMargin: 8
+            font.letterSpacing: 1
+        }
+
+        // ── TZ carousel ──
+        Row {
+            id: tzRow
+            Layout.fillWidth: true
+            Layout.preferredHeight: 26
+            Layout.bottomMargin: 16
+            Layout.leftMargin: 0
+            Layout.rightMargin: 0
+            opacity: 1
+            Behavior on opacity { NumberAnimation { duration: 100; easing.type: Easing.InOutQuad } }
+
+            Repeater {
+                model: popout.tzCarouselItems
+
+                delegate: Item {
+                    required property var modelData
+                    width: parent.width / 7
+                    height: parent.height
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: modelData.name
+                        font.family: popout.font
+                        font.pixelSize: 12
+                        font.weight: modelData.isCenter ? Font.Bold : Font.Medium
+                        color: {
+                            if (modelData.dist === 0) return popout.cyan
+                            if (modelData.dist === 1) return popout.silver
+                            if (modelData.dist === 2) return popout.muted
+                            return popout.border
+                        }
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        anchors.margins: -4
+                        cursorShape: Qt.PointingHandCursor
+                        hoverEnabled: true
+                        onClicked: popout.selectTZ(modelData.idx)
+                        onContainsMouseChanged: {
+                            if (containsMouse)
+                                parent.children[0].color = popout.silver
+                            else
+                                parent.children[0].color = Qt.binding(function() {
+                                    if (modelData.dist === 0) return popout.cyan
+                                    if (modelData.dist === 1) return popout.silver
+                                    if (modelData.dist === 2) return popout.muted
+                                    return popout.border
+                                })
+                        }
+                    }
+                }
+            }
+        }
+
+        // ── Month nav ──
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.bottomMargin: 8
+            Layout.preferredHeight: 20
+            spacing: 12
+
+            Item { Layout.fillWidth: true; Layout.preferredHeight: 1 }
+
+            Text {
+                text: "◂"
+                font.family: popout.font
+                font.pixelSize: 14
+                color: mouseA.containsMouse ? popout.cyan : popout.muted
+                MouseArea {
+                    id: mouseA
+                    anchors.fill: parent
+                    anchors.margins: -4
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    onClicked: popout.prevMonth()
+                }
+            }
+
+            Text {
+                text: popout.monthNames[popout.dispMonth] + " " + popout.dispYear
+                font.family: popout.font
+                font.pixelSize: 16
+                font.bold: true
+                font.letterSpacing: 2
+                color: popout.cyan
+                Layout.minimumWidth: 80
+                horizontalAlignment: Text.AlignHCenter
+            }
+
+            Text {
+                text: "▸"
+                font.family: popout.font
+                font.pixelSize: 14
+                color: mouseB.containsMouse ? popout.cyan : popout.muted
+                MouseArea {
+                    id: mouseB
+                    anchors.fill: parent
+                    anchors.margins: -4
+                    cursorShape: Qt.PointingHandCursor
+                    hoverEnabled: true
+                    onClicked: popout.nextMonth()
+                }
+            }
+
+            Item { Layout.fillWidth: true; Layout.preferredHeight: 1 }
+        }
+
+        // ── Day-of-week headers ──
+        RowLayout {
+            Layout.fillWidth: true
+            Layout.bottomMargin: 3
+            spacing: 0
+
+            Repeater {
+                model: popout.dayHeaders
+                delegate: Text {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignHCenter
+                    text: modelData
+                    font.family: popout.font
+                    font.pixelSize: 10
+                    font.bold: true
+                    color: popout.muted
+                }
+            }
+        }
+
+        // ── Calendar grid ──
+        GridLayout {
+            Layout.fillWidth: true
+            Layout.bottomMargin: 4
+            columns: 7
+            columnSpacing: 0
+            rowSpacing: 2
+
+            Repeater {
+                model: popout.calendarCells
+
+                delegate: Rectangle {
+                    required property var modelData
+
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: 28
+                    color: modelData.isToday ? popout.cyan : "transparent"
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: modelData.day
+                        font.family: popout.font
+                        font.pixelSize: modelData.isToday ? 14 : 13
+                        font.weight: modelData.isToday ? Font.Bold : Font.Medium
+                        color: {
+                            if (modelData.isToday) return popout.bg
+                            if (modelData.isCur)   return popout.silver
+                            return popout.border
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

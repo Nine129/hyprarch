@@ -117,7 +117,7 @@ PanelWindow {
             // HEALTH
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 48
+                Layout.preferredHeight: 52
                 color: popout.surface
                 border.color: popout.border
                 border.width: 1
@@ -130,7 +130,7 @@ PanelWindow {
                     Text {
                         text: "HEALTH"
                         font.family: popout.font
-                        font.pixelSize: 8
+                        font.pixelSize: 10
                         font.bold: true
                         font.letterSpacing: 2
                         color: popout.lime
@@ -148,7 +148,7 @@ PanelWindow {
             // CYCLES
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 48
+                Layout.preferredHeight: 52
                 color: popout.surface
                 border.color: popout.border
                 border.width: 1
@@ -161,7 +161,7 @@ PanelWindow {
                     Text {
                         text: "CYCLES"
                         font.family: popout.font
-                        font.pixelSize: 8
+                        font.pixelSize: 10
                         font.bold: true
                         font.letterSpacing: 2
                         color: popout.lime
@@ -179,7 +179,7 @@ PanelWindow {
             // DRAW
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 48
+                Layout.preferredHeight: 52
                 color: popout.surface
                 border.color: popout.border
                 border.width: 1
@@ -192,7 +192,7 @@ PanelWindow {
                     Text {
                         text: "DRAW"
                         font.family: popout.font
-                        font.pixelSize: 8
+                        font.pixelSize: 10
                         font.bold: true
                         font.letterSpacing: 2
                         color: popout.lime
@@ -210,7 +210,7 @@ PanelWindow {
             // CHARGE LIMIT
             Rectangle {
                 Layout.fillWidth: true
-                Layout.preferredHeight: 48
+                Layout.preferredHeight: 52
                 color: popout.surface
                 border.color: popout.border
                 border.width: 1
@@ -223,7 +223,7 @@ PanelWindow {
                     Text {
                         text: "CHARGE LIMIT"
                         font.family: popout.font
-                        font.pixelSize: 8
+                        font.pixelSize: 10
                         font.bold: true
                         font.letterSpacing: 2
                         color: popout.lime
@@ -243,7 +243,7 @@ PanelWindow {
         Text {
             text: "PERFORMANCE PROFILE"
             font.family: popout.font
-            font.pixelSize: 9
+            font.pixelSize: 10
             font.bold: true
             font.letterSpacing: 2.5
             color: popout.lime
