@@ -13,7 +13,7 @@ PanelWindow {
     property bool shouldShow: false
 
     // ── Palette ──
-    readonly property color bg:      "#151518"
+    readonly property color bg:      "#1a1a20"
     readonly property color surface: "#1a1a20"
     readonly property color border:  "#2a2a35"
     readonly property color cyan:    "#00e5ff"
