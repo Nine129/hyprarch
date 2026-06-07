@@ -68,15 +68,7 @@ export LS_COLORS="di=00;38;5;81:fi=00;38;5;254:ln=00;38;5;39:ex=00;38;5;47:*.md=
 
 # ── Aliases ────────────────────────────────────────────
 # System
-alias ls='ls --color=auto'
-alias ll='ls -lah'
-alias la='ls -A'
-alias l='ls -CF'
-alias grep='grep --color=auto'
-alias df='df -h'
-alias du='du -hc'
 alias free='free -h'
-
 # Confirm before overwriting
 alias cp='cp -i'
 alias mv='mv -i'
@@ -169,4 +161,18 @@ alias cd="z"
 alias ff="fastfetch"
 # xdg-open
 alias open="xdg-open"
+# reload audio
+alias rd="systemctl --user restart pipewire pipewire-pulse wireplumber"
+# Eza
+alias ls="eza --icons --group-directories-first"
+alias ll="eza -la --icons --git --group-directories-first"
+# Dust
+alias du="dust"
+# duf
+alias df="duf"
+# fd
+alias find="fd"
+# tty clock
+alias clock="tty-clock -b -s -S -c"
 fastfetch
+

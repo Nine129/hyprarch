@@ -41,7 +41,7 @@ PanelWindow {
 
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
-    margins { right: 84 + trayWidth; top: 2 }
+    margins { right: 84 + trayWidth; top: 0 }
     implicitWidth: 303
     implicitHeight: contentCol.implicitHeight + 28
     color: "transparent"

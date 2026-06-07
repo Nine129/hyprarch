@@ -4,7 +4,7 @@
 (
     address: "127.0.0.1:6600",
     password: None,
-    theme: Some"nord",
+    theme: "cggx",
     cache_dir: None,
     on_song_change: None,
     volume_step: 5,
@@ -169,7 +169,7 @@
                 direction: Horizontal,
                 panes: [
                     (
-                        size: "35%",
+                        size: "45%",
                         pane: Pane(AlbumArt)
                     ),
                     (
@@ -178,7 +178,7 @@
                             direction: Vertical,
                             panes: [
                                 (
-                                    size: "100%",
+                                    size: "5%",
                                     pane: Split(
                                         direction: Horizontal,
                                         panes: [
@@ -194,11 +194,7 @@
                                     )
                                 ),
                                 (
-                                    size: "1",
-                                    pane: Pane(Empty())
-                                ),
-                                (
-                                    size: "100%",
+                                    size: "45%",
                                     pane: Split(
                                         direction: Horizontal,
                                         panes: [
@@ -214,14 +210,10 @@
                                     )
                                 ),
                                 (
-                                    size: "1",
-                                    pane: Pane(Empty())
-                                ),
-                                (
-                                    size: "100%",
+                                    size: "50%",
                                     pane: Pane(Cava)
                                 ),
-                            ],
+                            ]
                         )
                     ),
                 ],
