@@ -82,8 +82,8 @@ hl.bind("Print",               hl.dsp.exec_cmd("grimblast copy area"))          
 hl.bind("SUPER + Print",       hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot-swappy.sh"))      -- Region → swappy → save
 hl.bind("SUPER + SHIFT + Print",  hl.dsp.exec_cmd("grimblast copy output"))                         -- Full → clipboard
 
--- Clipboard manager ─────────────────
-hl.bind("SUPER + C",           hl.dsp.exec_cmd("~/.config/hypr/scripts/cliphist-rofi.sh"))
+-- Clipboard manager and rmpc i guess ─────────────────
+hl.bind("SUPER + Z",           hl.dsp.exec_cmd("kitty -e rmpc"))
 hl.bind("SUPER + SHIFT + C",   hl.dsp.exec_cmd("cliphist wipe && notify-send 'Clipboard' 'History cleared'"))
 
 -- Lock & exit ─────────────────────

@@ -174,5 +174,9 @@ alias df="duf"
 alias find="fd"
 # tty clock
 alias clock="tty-clock -b -s -S -c"
+# others i will stop tagging 
+alias path='echo $PATH | tr ":" "\n"'
+alias reload='source ~/.zshrc'
+alias mkdir='mkdir -p'
 fastfetch
 

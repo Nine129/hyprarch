@@ -4,11 +4,12 @@
 (
     address: "127.0.0.1:6600",
     password: None,
+    on_song_change: ["~/.config/rmpc/notify.sh"],
     theme: "cggx",
     cache_dir: None,
-    on_song_change: None,
     volume_step: 5,
-    max_fps: 30,
+    max_fps: 60,
+    music_directory: "~/Music",
     scrolloff: 0,
     wrap_navigation: false,
     enable_mouse: true,
@@ -85,7 +86,7 @@
             "6":          SwitchToTab("Playlists"),
             "7":          SwitchToTab("Search"),
             "<C-u>":      Update,
-            "<C-U>":      Rescan,
+            "r":      Rescan,
             "R":          AddRandom,
         },
         navigation: {
@@ -133,7 +134,6 @@
             "<C-z>":      ContextMenu(),
             "<C-s>s":     Save(kind: Modal(all: false, duplicates_strategy: Ask)),
             "<C-s>a":     Save(kind: Modal(all: true, duplicates_strategy: Ask)),
-            "r":          Rate(),
         },
         queue: {
             "d":          Delete,
