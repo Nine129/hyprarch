@@ -57,32 +57,35 @@
     ),
     song_table_format: [
         (prop: (kind: Property(Position), style: (fg: "#c8ff00")),
-            width: "6", alignment: Left, label: ""),
+            width: "4", alignment: Left, label: ""),
         (prop: (kind: Property(Artist), style: (fg: "#ff6b00"),
             default: (kind: Text("Unknown Artist"), style: (fg: "#6a6a80"))),
-            width: "22%",
+            width: "20%",
             label_prop: (kind: Group([
-                (kind: Text("Artist "), style: (fg: "#d8dee9")),
+                (kind: Text("Artist  "), style: (fg: "#d8dee9")),
             ]))
         ),
         (prop: (kind: Property(Title), style: (fg: "#00e5ff"),
             default: (kind: Property(Filename), style: (fg: "#e8e8f0"),
                 default: (kind: Text("Unknown Title"), style: (fg: "#e8e8f0")))),
-            width: "36%",
+            width: "50%",
             label_prop: (kind: Group([
-                (kind: Text("Title "), style: (fg: "#d8dee9")),
+                (kind: Text("Title   "), style: (fg: "#d8dee9")),
             ]))
         ),
-        (prop: (kind: Property(Album), style: (fg: "#e8e8f0"),
-            default: (kind: Text("Unknown Album"), style: (fg: "#6a6a80"))),
-            width: "33%",
+        (prop: (kind: Group([
+                (kind: Text(" ")),
+                (kind: Property(Album)),
+            ]), style: (fg: "#e8e8f0"),
+            default: (kind: Text(" Unknown Album"), style: (fg: "#6a6a80"))),
+            width: "20%",
             label_prop: (kind: Group([
                 (kind: Text("Album "), style: (fg: "#d8dee9")),
             ]))
         ),
         (prop: (kind: Property(Duration), style: (fg: "#e8e8f0"),
             default: (kind: Text("-"))),
-            width: "8%",
+            width: "10%",
             alignment: Right,
             label_prop: (kind: Group([
                 (kind: Text("Length "), style: (fg: "#d8dee9")),
