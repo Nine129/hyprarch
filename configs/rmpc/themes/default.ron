@@ -1,0 +1,9 @@
+#![enable(implicit_some)]
+#![enable(unwrap_newtypes)]
+#![enable(unwrap_variant_newtypes)]
+(
+    borders_style: (fg: "red"),
+    highlight_border_style: (fg: "red"),
+    highlighted_item_style: (fg: "red", modifiers: "Bold"),
+    current_item_style: (fg: "black", bg: "red", modifiers: "Bold"),
+)
