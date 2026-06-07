@@ -121,6 +121,7 @@
             "<Space>":    Select,
             "<C-Space>":  InvertSelection,
             "/":          EnterSearch,
+            "f":          EnterSearch,
             "n":          NextResult,
             "N":          PreviousResult,
             "a":          Add,
