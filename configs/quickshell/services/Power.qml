@@ -30,7 +30,7 @@ Singleton {
 
     // ── Profile definitions ─────────────────
     readonly property var profileDefs: [
-        { id: "low-power",    label: "Saver",       icon: "󰌪", color: "#00e5ff" },
+        { id: "power-saver",  label: "Saver",       icon: "󰌪", color: "#00e5ff" },
         { id: "balanced",     label: "Balanced",     icon: "",  color: "#c8ff00" },
         { id: "performance",  label: "Performance",  icon: "",  color: "#ff6b00" }
     ]
@@ -54,7 +54,7 @@ Singleton {
 
     Process {
         id: pollProfile
-        command: ["cat", "/sys/firmware/acpi/platform_profile"]
+        command: ["powerprofilesctl", "get"]
         stdout: StdioCollector {
             onStreamFinished: {
                 const p = text.trim()
@@ -103,9 +103,27 @@ Singleton {
     // ── Actions ─────────────────────────────
     function setProfile(profile) {
         if (profile === root.currentProfile) return
-        setProfileProc.command = ["sh", "/home/nine/hyprarch/configs/quickshell/scripts/power-helper.sh", "profile", profile]
+        setProfileProc.command = ["powerprofilesctl", "set", profile]
         setProfileProc.running = true
         root.currentProfile = profile
+
+        // Find matching def for notification
+        var def = null
+        for (var i = 0; i < profileDefs.length; i++) {
+            if (profileDefs[i].id === profile) {
+                def = profileDefs[i]
+                break
+            }
+        }
+        if (def) {
+            profileNotifyProc.command = ["notify-send",
+                "-a", "Power Panel",
+                "-t", "1000",
+                "-h", "string:x-canonical-private-synchronous:power-profile",
+                "Power Profile: " + def.label,
+                "<span color='" + def.color + "'>" + def.icon + " Switched to " + def.label + " mode</span>"]
+            profileNotifyProc.running = true
+        }
     }
 
     function setChargeLimit(limit) {
@@ -117,4 +135,5 @@ Singleton {
     // ── Fire-and-forget processes ───────────
     Process { id: setProfileProc }
     Process { id: setChargeProc }
+    Process { id: profileNotifyProc }
 }
