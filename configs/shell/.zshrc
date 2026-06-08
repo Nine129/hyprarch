@@ -48,21 +48,6 @@ bindkey '^W' backward-kill-word
 bindkey '^U' kill-whole-line
 bindkey '^L' clear-screen
 
-# ── Zsh plugins (manual, no Oh-My-Zsh) ──────────────
-# ── Zsh-autosuggestions ────────────────────────────────
-# Brighter suggestion text so it's actually readable
-ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9a9ab0"
-
-if [[ -d "$HOME/.zsh/plugins/zsh-autosuggestions" ]]; then
-  source "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
-fi
-if [[ -d "$HOME/.zsh/plugins/zsh-syntax-highlighting" ]]; then
-  source "$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
-fi
-
-# ── Starship prompt ───────────────────────────────────
-eval "$(starship init zsh)"
-
 # ── Dir colors ────────────────────────────────────────
 export LS_COLORS="di=00;38;5;81:fi=00;38;5;254:ln=00;38;5;39:ex=00;38;5;47:*.md=00;38;5;220:*.txt=00;38;5;254:*.gz=00;38;5;244:*.zip=00;38;5;244:*.tar=00;38;5;244:*.zst=00;38;5;244:*.png=00;38;5;213:*.jpg=00;38;5;213:*.mp4=00;38;5;213:*.mp3=00;38;5;140:*.lua=00;38;5;81:*.rs=00;38;5;47:*.toml=00;38;5;220:*.json=00;38;5;220:*.yaml=00;38;5;220:*.html=00;38;5;81:*.css=00;38;5;81:*.js=00;38;5;47:*.ts=00;38;5;81:*.py=00;38;5;47:*.go=00;38;5;81:*.c=00;38;5;81:*.h=00;38;5;81:*.cfg=00;38;5;244:*.conf=00;38;5;244:*.rasi=00;38;5;81"
 
@@ -153,6 +138,9 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+# ── Starship prompt ───────────────────────────────────
+eval "$(starship init zsh)"
+
 # ── Zoxide (smart cd) ───────────────────────────────
 eval "$(zoxide init zsh)"
 alias cd="z"
@@ -180,3 +168,91 @@ alias reload='source ~/.zshrc'
 alias mkdir='mkdir -p'
 fastfetch
 
+
+# Pi
+export PATH="/home/nine/.local/share/pi-node/node-v22.22.3-linux-x64/bin:$PATH"
+
+# ── Zsh plugins (must be last!) ──────────────────────
+# Zsh-autosuggestions — brighter text so it's readable
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9a9ab0"
+
+if [[ -d "$HOME/.zsh/plugins/zsh-autosuggestions" ]]; then
+  source "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
+fi
+
+# Zsh-syntax-highlighting — MUST be the very last thing
+if [[ -d "$HOME/.zsh/plugins/zsh-syntax-highlighting" ]]; then
+  source "$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+  # ── CGGX syntax highlighting ─────────────────────────
+  # Terminal palette: green = #c8ff00 (lime), white = #e8e8f0 (silver)
+  #                   yellow = #ff6b00 (orange), cyan = #00e5ff
+  #                   magenta = #b48cff (purple), red = #ff2d55
+  #
+  # Commands & executables
+  ZSH_HIGHLIGHT_STYLES[command]="fg=green,bold"
+  ZSH_HIGHLIGHT_STYLES[builtin]="fg=green"
+  ZSH_HIGHLIGHT_STYLES[alias]="fg=green"
+  ZSH_HIGHLIGHT_STYLES[suffix-alias]="fg=green,underline"
+  ZSH_HIGHLIGHT_STYLES[function]="fg=green"
+  ZSH_HIGHLIGHT_STYLES[precommand]="fg=green,underline"
+  ZSH_HIGHLIGHT_STYLES[hashed]="fg=green"
+  ZSH_HIGHLIGHT_STYLES[arg0]="fg=green"
+  ZSH_HIGHLIGHT_STYLES[global-alias]="fg=green"
+
+  # Paths
+  ZSH_HIGHLIGHT_STYLES[path]="fg=white,underline"
+  ZSH_HIGHLIGHT_STYLES[path_prefix]="none"
+  ZSH_HIGHLIGHT_STYLES[path_pathseparator]="fg=white"
+  ZSH_HIGHLIGHT_STYLES[path_prefix_pathseparator]="fg=white"
+
+  # Strings & quotes
+  ZSH_HIGHLIGHT_STYLES[single-quoted-argument]="fg=yellow"
+  ZSH_HIGHLIGHT_STYLES[double-quoted-argument]="fg=yellow"
+  ZSH_HIGHLIGHT_STYLES[dollar-quoted-argument]="fg=yellow"
+  ZSH_HIGHLIGHT_STYLES[back-quoted-argument]="none"
+  ZSH_HIGHLIGHT_STYLES[back-quoted-argument-delimiter]="fg=magenta"
+  ZSH_HIGHLIGHT_STYLES[dollar-double-quoted-argument]="fg=cyan"
+  ZSH_HIGHLIGHT_STYLES[back-dollar-quoted-argument]="fg=cyan"
+  ZSH_HIGHLIGHT_STYLES[rc-quote]="fg=cyan"
+
+  # Options & flags
+  ZSH_HIGHLIGHT_STYLES[single-hyphen-option]="fg=white"
+  ZSH_HIGHLIGHT_STYLES[double-hyphen-option]="fg=white,bold"
+
+  # Operators & redirections
+  ZSH_HIGHLIGHT_STYLES[redirection]="fg=yellow"
+  ZSH_HIGHLIGHT_STYLES[commandseparator]="fg=red"
+
+  # Reserved words & control flow
+  ZSH_HIGHLIGHT_STYLES[reserved-word]="fg=yellow,bold"
+
+  # Assignments & expansions
+  ZSH_HIGHLIGHT_STYLES[assign]="fg=white"
+  ZSH_HIGHLIGHT_STYLES[globbing]="fg=magenta"
+  ZSH_HIGHLIGHT_STYLES[history-expansion]="fg=magenta"
+  ZSH_HIGHLIGHT_STYLES[process-substitution]="none"
+  ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]="fg=magenta"
+  ZSH_HIGHLIGHT_STYLES[command-substitution]="none"
+  ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]="fg=magenta"
+
+  # Misc
+  ZSH_HIGHLIGHT_STYLES[comment]="fg=white"
+  ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=red,bold"
+  ZSH_HIGHLIGHT_STYLES[autodirectory]="fg=green,underline"
+  ZSH_HIGHLIGHT_STYLES[named-fd]="fg=cyan"
+  ZSH_HIGHLIGHT_STYLES[numeric-fd]="fg=yellow"
+  ZSH_HIGHLIGHT_STYLES[default]="none"
+
+  # Brackets
+  ZSH_HIGHLIGHT_STYLES[bracket-level-1]="fg=cyan,bold"
+  ZSH_HIGHLIGHT_STYLES[bracket-level-2]="fg=green,bold"
+  ZSH_HIGHLIGHT_STYLES[bracket-level-3]="fg=magenta,bold"
+  ZSH_HIGHLIGHT_STYLES[bracket-level-4]="fg=yellow,bold"
+  ZSH_HIGHLIGHT_STYLES[bracket-level-5]="fg=white,bold"
+  ZSH_HIGHLIGHT_STYLES[bracket-error]="fg=red,bold"
+
+  # Cursor
+  ZSH_HIGHLIGHT_STYLES[cursor]="standout"
+  ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]="standout"
+fi

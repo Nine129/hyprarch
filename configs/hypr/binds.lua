@@ -9,7 +9,7 @@ hl.bind("SUPER + W",       hl.dsp.window.close())
 
 -- Launcher ────────────────────────
 hl.bind("SUPER + Super_L", hl.dsp.exec_cmd("~/.config/hypr/scripts/rofi-launcher.sh"), { release = true })
-hl.bind("SUPER + E",     hl.dsp.exec_cmd("kitty -e yazi"))
+hl.bind("SUPER + E",     hl.dsp.exec_cmd("kitty --single-instance yazi"))
 hl.bind("SUPER + A", hl.dsp.exec_cmd("vivaldi --new-window vivaldi://startpage/"))
 -- Layout ──────────────────────────
 hl.bind("SUPER + F",       hl.dsp.window.fullscreen({ mode = "fullscreen" }))
@@ -83,7 +83,7 @@ hl.bind("SUPER + Print",       hl.dsp.exec_cmd("~/.config/hypr/scripts/screensho
 hl.bind("SUPER + SHIFT + Print",  hl.dsp.exec_cmd("grimblast copy output"))                         -- Full → clipboard
 
 -- Clipboard manager and rmpc i guess ─────────────────
-hl.bind("SUPER + Z",           hl.dsp.exec_cmd("kitty -e rmpc"))
+hl.bind("SUPER + Z",           hl.dsp.exec_cmd("kitty --single-instance rmpc"))
 hl.bind("SUPER + SHIFT + C",   hl.dsp.exec_cmd("cliphist wipe && notify-send 'Clipboard' 'History cleared'"))
 
 -- Lock & exit ─────────────────────

@@ -20,10 +20,10 @@
     { "type": "uptime",  "key": "Uptime",   "keyColor": "red" },
 
     // ── Software ──
-    { "type": "packages","key": "Packages", "keyColor": "bright_green" },
-    { "type": "shell",   "user":"shell",    "keyColor": "bright_green" },
-    { "type": "wm",      "key": "WM",       "keyColor": "bright_green" },
-    { "type": "terminal","key": "Terminal", "keyColor": "bright_green" },
+    { "type": "packages","key": "Packages", "keyColor": "#C8FF00" },
+    { "type": "shell",   "user":"shell",    "keyColor": "#C8FF00" },
+    { "type": "wm",      "key": "WM",       "keyColor": "#C8FF00" },
+    { "type": "terminal","key": "Terminal", "keyColor": "#C8FF00" },
 
     // ── Hardware ──
     { "type": "cpu",     "key": "CPU",     "keyColor": "magenta" },

@@ -12,7 +12,7 @@ palette = "cggx"
 [palettes.cggx]
 red = "#ff2d55"
 cyan = "#00e5ff"
-lime = "#c8ff00"
+lime = "#C8FF00"
 orange = "#ff6b00"
 purple = "#b48cff"
 silver = "#e8e8f0"

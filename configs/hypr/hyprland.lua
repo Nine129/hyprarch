@@ -30,7 +30,7 @@ hl.config({
   input = {
     kb_layout      = "us",
     follow_mouse   = 1,
-    sensitivity    = 1.2,
+    sensitivity    = 1.4,
     accel_profile  = "flat",
   },
 
@@ -59,7 +59,14 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("kitty --daemon")
   -- Quickshell
   hl.exec_cmd("quickshell -p ~/.config/quickshell")
+  hl.exec_cmd("kitty --show-as=hidden")
+  hl.exec_cmd("hyprpaper")
+  hl.exec_cmd("swaync")
+  hl.exec_cmd("hypridle")
+  hl.exec_cmd("wl-paste --type text --watch cliphist store")
+  hl.exec_cmd("wl-paste --type image --watch cliphist store")
 end)
+
 -- Window Rules ───────────────────────────
 -- Window Rules chuẩn chỉ theo Hyprland Wiki v0.55.2 Lua API
 hl.window_rule({ 

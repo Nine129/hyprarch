@@ -26,19 +26,22 @@
 
   "disk": {
     "interval": 30,
-    "format":   "/ {percentage_free}% FREE"
+    "format":   "/ {percentage_free}% FREE",
+    "on-click": "kitty --single-instance btop"
   },
 
   "memory": {
     "interval": 30,
-    "format":   "<span size='15360' rise='-2048'></span> {used}G / {total}G"
+    "format":   "<span size='15360' rise='-2048'></span> {used}G / {total}G",
+    "on-click": "kitty --single-instance btop"
   },
 
   "temperature": {
     "interval":       5,
     "thermal-zone":   0,
     "format":         "<span size='15360' rise='-1024'></span> {temperatureC}°C",
-    "tooltip-format": "{temperatureC}°C / {temperatureF}°F"
+    "tooltip-format": "{temperatureC}°C / {temperatureF}°F",
+    "on-click":       "kitty --single-instance btop"
   },
 
   /* ── Separator 1 ───────────── */
