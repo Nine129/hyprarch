@@ -51,10 +51,22 @@ hl.window_rule({
      opaque = true,
    }
  )
+ -- blah blah
  hl.window_rule(
    {
      match = { class = "vesktop"},
      opaque = true,
+     border_color = "rgba(c8ff00ee)",
    }
- 
+ )
+ hl.window_rule(
+   {
+     match = { class = "kitty"},
+   }
+ )
+ hl.window_rule(
+   {
+     match = { class = "vivaldi-stable" },
+     
+   }
  )

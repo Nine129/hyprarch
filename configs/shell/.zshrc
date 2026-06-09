@@ -166,6 +166,8 @@ alias clock="tty-clock -b -s -S -c"
 alias path='echo $PATH | tr ":" "\n"'
 alias reload='source ~/.zshrc'
 alias mkdir='mkdir -p'
+alias lsgrub="grep -oP \"(?<=menuentry ')[^']+\" /boot/grub/grub.cfg"
+
 fastfetch
 
 
