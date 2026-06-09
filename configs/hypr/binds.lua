@@ -8,7 +8,7 @@ hl.bind("SUPER + Q",       hl.dsp.exec_cmd("kitty --single-instance"))
 hl.bind("SUPER + W",       hl.dsp.window.close())
 
 -- Launcher ────────────────────────
-hl.bind("SUPER + Super_L", hl.dsp.exec_cmd("~/.config/hypr/scripts/rofi-launcher.sh"), { release = true })
+hl.bind("SUPER + backspace", hl.dsp.exec_cmd("~/.config/hypr/scripts/rofi-launcher.sh"), { release = true })
 hl.bind("SUPER + E",     hl.dsp.exec_cmd("kitty --single-instance yazi"))
 hl.bind("SUPER + A", hl.dsp.exec_cmd("vivaldi --new-window vivaldi://startpage/"))
 -- Layout ──────────────────────────

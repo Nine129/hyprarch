@@ -92,7 +92,15 @@
         navigation: {
             "<C-c>":      Close,
             "<Esc>":      Close,
-            "<CR>":       Confirm,
+            "<CR>":      Confirm,
+            "<BS>":  AddOptions(
+    kind: Action(
+        all: false,
+        autoplay: Hovered,
+        position: EndOfQueue,
+    )
+),                      
+                         
             "k":          Up,
             "<Up>":       Up,
             "j":          Down,
