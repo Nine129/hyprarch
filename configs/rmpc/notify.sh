@@ -1,14 +1,13 @@
 #!/usr/bin/env sh
 TMP_DIR="/tmp/rmpc"
 mkdir -p "$TMP_DIR"
-LOCK="$TMP_DIR/notify.lock"
 
-# Kill if already running
-[ -f "$LOCK" ] && kill "$(cat $LOCK)" 2>/dev/null
-echo $$ > "$LOCK"
-
-# Small delay to let the second fire cancel the first
-sleep 0.3
+# Atomic lock via mkdir — first to grab it wins, no race
+LOCKDIR="$TMP_DIR/notify.lock"
+if ! mkdir "$LOCKDIR" 2>/dev/null; then
+    exit 0
+fi
+trap 'rmdir "$LOCKDIR" 2>/dev/null' EXIT
 
 ALBUM_ART_PATH="$TMP_DIR/notification_cover"
 DEFAULT_ALBUM_ART_PATH="$HOME/.config/rmpc/default_cover.jpg"
@@ -24,5 +23,3 @@ notify-send \
     --expire-time 3000 \
     "$TITLE" \
     "$ARTIST"
-
-rm -f "$LOCK"
