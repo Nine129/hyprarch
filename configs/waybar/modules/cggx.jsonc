@@ -20,7 +20,7 @@
     "player":         "mpd",
     "format":          "{dynamic}",
     "format-playing":  "<span size='15360' rise='-1024'></span> {dynamic}",
-    "format-paused":   "<span size='15360' rise='-1024'></span> {dynamic}",
+    "format-paused":   "<span size='15360' rise='-1024'></span> {dynamic}",
     "format-stopped":  "Nothing playing",
     "tooltip-format":         "{artist} — {title}\nMPD via mpd-mpris",
     "tooltip-format-playing":  "{artist} — {title}\nMPD via mpd-mpris",

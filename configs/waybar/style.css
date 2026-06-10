@@ -23,25 +23,36 @@ window > box {
 /* ── Workspace numbers 1-9 ────── */
 #workspaces button {
   background: #151518; border: none; border-radius: 0; color: @silver;
-  padding: 4px 12px; margin: 0 2px; font-size: 13px;
+  padding: 4px 10px; margin: 0;
   box-shadow: 1px 0 3px rgba(0,0,0,0.4);
 }
 
-#workspaces button.active {
-  background: @red; color: @bg;
+#workspaces .workspace-label {
+  font-size: 14px;
+  font-weight: 600;
 }
 
-#workspaces button.urgent {
+#workspaces button.urgent .workspace-label {
   color: @orange;
   animation: blink-orange 1s steps(12) infinite alternate;
 }
 
 #workspaces button:hover {
-  background: #2a2a35; color: @silver;
+  background: #2a2a35;
 }
 
-#workspaces button.empty {
-  color: @muted;
+#workspaces button.empty .workspace-label {
+  color: @silver;
+}
+
+#workspaces button.active {
+  background: @red;
+}
+
+#workspaces button.active .workspace-label {
+  color: @bg;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* ── Pill modules ──────────────── */
@@ -71,9 +82,9 @@ window > box {
 
 /* ── MPD now-playing ──────────── */
 #mpris {
-  border: none; border-radius: 0;
-  padding: 4px 14px; margin: 0 0 0 4px;
-  box-shadow: 1px 0 3px rgba(0,0,0,0.4);
+  border: 1px solid @border; border-radius: 0;
+  padding: 4px 14px; margin: 0 0 0 2px;
+  box-shadow: 0 0 4px rgba(0,0,0,0.5);
   background: #151518; color: @red; font-size: 14px;
 }
 #mpris:hover {
