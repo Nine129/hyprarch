@@ -1,0 +1,10 @@
+#!/bin/bash
+set -euo pipefail
+
+PKG_LIST=/home/nine/hyprarch/packages_list
+
+new=$(sudo -u nine pacman -Qqe | sort) || exit 1
+
+if ! printf '%s\n' "$new" | cmp -s - "$PKG_LIST"; then
+    printf '%s\n' "$new" | sudo -u nine tee "$PKG_LIST" >/dev/null
+fi

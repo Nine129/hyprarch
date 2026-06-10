@@ -165,6 +165,18 @@ alias lsgrub="grep -oP \"(?<=menuentry ')[^']+\" /boot/grub/grub.cfg"
 function z() {
     __zoxide_z "$@" && eza --icons --group-directories-first
 }
+bat() {
+    local has_md=0
+    for f in "$@"; do
+        [[ "$f" == *.md ]] && has_md=1 && break
+    done
+    if [[ $has_md -eq 1 ]]; then
+        mdterm "$@"
+    else
+        command bat "$@"
+    fi
+}
+
 fastfetch
 
 

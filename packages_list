@@ -21,6 +21,7 @@ cmatrix
 colloid-catppuccin-gtk-theme-git
 colloid-dracula-gtk-theme-git
 colloid-gtk-theme-git
+cowsay
 duf
 dust
 easyeffects
@@ -91,6 +92,7 @@ nm-connection-editor
 noto-fonts
 noto-fonts-cjk
 noto-fonts-emoji
+ntfsprogs
 nwg-look
 os-prober
 papirus-icon-theme
@@ -150,6 +152,5 @@ yazi
 yt-dlp
 zathura
 zathura-pdf-mupdf
-zen-browser-bin
 zoxide
 zsh

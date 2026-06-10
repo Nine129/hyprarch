@@ -1,0 +1,11 @@
+[Trigger]
+Operation = Install
+Operation = Remove
+Operation = Upgrade
+Type = Package
+Target = *
+
+[Action]
+Description = Sync packages_list to dotfiles
+When = PostTransaction
+Exec = /usr/local/bin/sync-packages-list
