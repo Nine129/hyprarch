@@ -1,0 +1,24 @@
+[Unit]
+Description=Downloads auto-organizer (inotify watcher)
+Documentation=https://github.com/Nine129/hyprarch
+After=graphical-session.target
+PartOf=graphical-session.target
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/download-organizer
+Restart=on-failure
+RestartSec=5
+TimeoutStopSec=10
+KillSignal=SIGTERM
+Environment=PYTHONUNBUFFERED=1
+
+# Security hardening
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=%h/Downloads %h/.cache/download-organizer
+
+[Install]
+WantedBy=graphical-session.target

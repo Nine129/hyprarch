@@ -1,0 +1,102 @@
+# download-organizer config
+# https://github.com/Nine129/hyprarch
+
+cooldown_seconds: 2
+notifications: summary       # none | summary
+log_max_entries: 200
+
+categories:
+  01_images:
+    - jpg
+    - jpeg
+    - png
+    - gif
+    - webp
+    - bmp
+    - svg
+    - tiff
+    - ico
+    - heic
+    - avif
+  02_videos:
+    - mp4
+    - mkv
+    - mov
+    - avi
+    - flv
+    - wmv
+    - webm
+    - m4v
+  03_audio:
+    - mp3
+    - wav
+    - flac
+    - aac
+    - ogg
+    - wma
+    - m4a
+    - opus
+  04_documents:
+    - pdf
+    - doc
+    - docx
+    - xls
+    - xlsx
+    - ppt
+    - pptx
+    - txt
+    - rtf
+    - csv
+    - md
+    - epub
+    - mobi
+    - odt
+    - ods
+  05_archives:
+    - zip
+    - rar
+    - "7z"
+    - tar
+    - gz
+    - xz
+    - bz2
+    - zst
+  06_executables:
+    - exe
+    - msi
+    - deb
+    - rpm
+    - AppImage
+    - flatpakref
+    - img
+    - iso
+  07_code:
+    - html
+    - css
+    - js
+    - jsx
+    - ts
+    - tsx
+    - py
+    - ipynb
+    - cpp
+    - c
+    - h
+    - java
+    - json
+    - xml
+    - yaml
+    - yml
+    - toml
+    - sql
+    - php
+    - sh
+    - bash
+    - zsh
+    - ps1
+    - bat
+  08_fonts:
+    - ttf
+    - otf
+    - woff2
+  09_misc: []

@@ -1,0 +1,530 @@
+#!/usr/bin/env python3
+"""
+download-organizer — Auto-categorize files in ~/Downloads via inotify.
+
+  download-organizer              Start inotify watcher daemon
+  download-organizer --run        One-shot sort all existing files
+  download-organizer --dry-run    Preview sort without moving
+  download-organizer --undo N     Reverse last N moves from log
+  download-organizer --undo-file NAME  Reverse a specific file
+"""
+
+import argparse
+import hashlib
+import json
+import os
+import select
+import shutil
+import signal
+import struct
+import subprocess
+import sys
+import threading
+import time
+from ctypes import CDLL, c_int, c_char_p, c_uint32, get_errno
+from pathlib import Path
+
+# ── inotify constants ───────────────────────────────────────────
+_libc = CDLL("libc.so.6", use_errno=True)
+
+def _inotify_init():
+    fd = _libc.inotify_init1(c_int(0))
+    if fd == -1:
+        raise OSError(get_errno(), "inotify_init1 failed")
+    return fd
+
+def _inotify_add_watch(fd: int, path: str, mask: int) -> int:
+    wd = _libc.inotify_add_watch(c_int(fd), c_char_p(path.encode()), c_uint32(mask))
+    if wd == -1:
+        raise OSError(get_errno(), f"inotify_add_watch failed for {path}")
+    return wd
+
+IN_CLOSE_WRITE = 0x00000008
+IN_MOVED_TO    = 0x00000080
+IN_CREATE      = 0x00000100
+
+EVENT_SIZE = struct.calcsize("iIII")
+
+# ── paths ────────────────────────────────────────────────────────
+DOWNLOADS = Path.home() / "Downloads"
+CONFIG_DIR = Path.home() / ".config" / "download-organizer"
+CONFIG_FILE = CONFIG_DIR / "config.yaml"
+CACHE_DIR = Path.home() / ".cache" / "download-organizer"
+LOG_FILE = CACHE_DIR / "moves.log"
+LOG_MAX = 200
+
+# ── defaults (overridden by config.yaml) ─────────────────────────
+DEFAULT_CONFIG = {
+    "cooldown_seconds": 2,
+    "notifications": "summary",   # "none" | "summary"
+    "log_max_entries": 200,
+    "categories": {
+        "01_images":     ["jpg", "jpeg", "png", "gif", "webp", "bmp", "svg", "tiff", "ico", "heic", "avif"],
+        "02_videos":     ["mp4", "mkv", "mov", "avi", "flv", "wmv", "webm", "m4v"],
+        "03_audio":      ["mp3", "wav", "flac", "aac", "ogg", "wma", "m4a", "opus"],
+        "04_documents":  ["pdf", "doc", "docx", "xls", "xlsx", "ppt", "pptx", "txt", "rtf", "csv", "md", "epub", "mobi", "odt", "ods"],
+        "05_archives":   ["zip", "rar", "7z", "tar", "gz", "xz", "bz2", "zst"],
+        "06_executables": ["exe", "msi", "deb", "rpm", "AppImage", "flatpakref", "img", "iso"],
+        "07_code":       ["html", "css", "js", "jsx", "ts", "tsx", "py", "ipynb", "cpp", "c", "h", "java", "json", "xml", "yaml", "yml", "toml", "sql", "php", "sh", "bash", "zsh", "ps1", "bat"],
+        "08_fonts":      ["ttf", "otf", "woff2"],
+        "09_misc":       [],
+    },
+}
+
+
+# ── config ───────────────────────────────────────────────────────
+def load_config() -> dict:
+    """Load YAML config, falling back to defaults for missing keys."""
+    cfg = {
+        "cooldown_seconds": DEFAULT_CONFIG["cooldown_seconds"],
+        "notifications": DEFAULT_CONFIG["notifications"],
+        "log_max_entries": DEFAULT_CONFIG["log_max_entries"],
+        "categories": dict(DEFAULT_CONFIG["categories"]),
+    }
+
+    if CONFIG_FILE.exists():
+        try:
+            import yaml
+            raw = yaml.safe_load(CONFIG_FILE.read_text()) or {}
+        except Exception as e:
+            print(f"Warning: failed to parse config ({e}), using defaults", file=sys.stderr)
+            raw = {}
+
+        for key in ("cooldown_seconds", "notifications", "log_max_entries"):
+            if key in raw:
+                cfg[key] = raw[key]
+        if "categories" in raw:
+            # Merge: user categories replace/add to defaults
+            cfg["categories"].update(raw["categories"])
+
+    return cfg
+
+
+def build_ext_map(categories: dict) -> dict[str, str]:
+    """Build ext → category_dir mapping from categories config."""
+    ext_map = {}
+    for cat_dir, exts in categories.items():
+        for ext in exts:
+            ext_map[ext.lower()] = cat_dir
+    return ext_map
+
+
+# ── log ──────────────────────────────────────────────────────────
+def read_log() -> list[dict]:
+    """Read undo log entries, newest first."""
+    if not LOG_FILE.exists():
+        return []
+    entries = []
+    for line in LOG_FILE.read_text().strip().splitlines():
+        if line.strip():
+            try:
+                entries.append(json.loads(line))
+            except json.JSONDecodeError:
+                pass
+    entries.reverse()  # newest first
+    return entries
+
+
+def write_log(entries: list[dict]):
+    """Write log entries, newest first in-memory → oldest first on disk."""
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    with open(LOG_FILE, "w") as f:
+        for e in reversed(entries):  # oldest first on disk
+            json.dump(e, f)
+            f.write("\n")
+
+
+def log_move_entry(src: Path, dst: Path, md5: str, ts: float | None = None):
+    """Append a move entry to the log."""
+    if ts is None:
+        ts = time.time()
+
+    entry = {
+        "ts": ts,
+        "src": str(src),
+        "dst": str(dst),
+        "md5": md5,
+    }
+
+    entries = read_log()
+    entries.insert(0, entry)  # newest first
+    if len(entries) > LOG_MAX:
+        entries = entries[:LOG_MAX]
+    write_log(entries)
+
+
+def remove_log_entry(entry: dict):
+    """Remove a specific entry from the log (after undo)."""
+    entries = read_log()
+    # Match by all fields
+    entries = [e for e in entries if not (
+        e["src"] == entry["src"]
+        and e["dst"] == entry["dst"]
+        and abs(e["ts"] - entry["ts"]) < 1.0
+    )]
+    write_log(entries)
+
+
+# ── core logic ───────────────────────────────────────────────────
+def determine_category(file: Path, ext_map: dict[str, str]) -> str:
+    """Return the target category folder name for a file."""
+    ext = file.suffix.lstrip(".").lower()
+    return ext_map.get(ext, "09_misc")
+
+
+def resolve_conflict(dst: Path) -> Path:
+    """If dst exists, append increment: file.txt → file (1).txt"""
+    if not dst.exists():
+        return dst
+    stem = dst.stem
+    # Strip existing increment: "file (3)" → "file"
+    import re as _re
+    m = _re.match(r"^(.+) \((\d+)\)$", stem)
+    if m:
+        base = m.group(1)
+        n = int(m.group(2)) + 1
+    else:
+        base = stem
+        n = 1
+
+    while True:
+        new = dst.with_stem(f"{base} ({n})")
+        if not new.exists():
+            return new
+        n += 1
+
+
+def sort_file(file: Path, ext_map: dict[str, str], dry_run: bool = False) -> dict | None:
+    """
+    Move a single file to its category folder.
+    Returns a dict {src, dst, category} if moved, None if skipped.
+    """
+    # Skip dirs, hidden files, symlinks, and our own artifacts
+    if not file.is_file():
+        return None
+    if file.name.startswith("."):
+        return None
+    if file.is_symlink():
+        return None
+    # Skip files being actively written (browser temp patterns)
+    if file.suffix.lower() in (".crdownload", ".part", ".tmp", ".~"):
+        return None
+
+    cat = determine_category(file, ext_map)
+    target_dir = DOWNLOADS / cat
+    target_dir.mkdir(exist_ok=True)
+    dst = resolve_conflict(target_dir / file.name)
+
+    if file.resolve() == dst.resolve():
+        return None  # already in place
+
+    if dry_run:
+        return {"src": str(file), "dst": str(dst), "category": cat}
+
+    try:
+        # Compute md5 before moving (file won't be at src after move)
+        try:
+            md5 = hashlib.md5(file.read_bytes()).hexdigest()
+        except (OSError, IOError):
+            md5 = "00000000000000000000000000000000"
+
+        shutil.move(str(file), str(dst))
+    except OSError as e:
+        print(f"Error moving {file.name}: {e}", file=sys.stderr)
+        return None
+
+    log_move_entry(file, dst, md5)
+    return {"src": str(file), "dst": str(dst), "category": cat}
+
+
+def sort_all(ext_map: dict[str, str], dry_run: bool = False) -> list[dict]:
+    """Sort all existing files in Downloads root. Returns list of results."""
+    results = []
+    try:
+        for entry in sorted(DOWNLOADS.iterdir()):
+            result = sort_file(entry, ext_map, dry_run)
+            if result:
+                results.append(result)
+                if dry_run:
+                    print(f"  [DRY] {entry.name} → {result['category']}/")
+                else:
+                    print(f"  {entry.name} → {result['category']}/")
+    except FileNotFoundError:
+        print(f"Error: {DOWNLOADS} not found", file=sys.stderr)
+        sys.exit(1)
+    return results
+
+
+# ── notifications ────────────────────────────────────────────────
+# CGGX rice color palette
+CATEGORY_COLORS = {
+    "01_images":      "#00e5ff",  # cyan
+    "02_videos":      "#ff2d55",  # red
+    "03_audio":       "#c8ff00",  # lime
+    "04_documents":   "#ff6b00",  # orange
+    "05_archives":    "#b48cff",  # pink
+    "06_executables": "#ff2d55",  # red
+    "07_code":        "#00e5ff",  # cyan
+    "08_fonts":       "#c8ff00",  # lime
+    "09_misc":        "#6a6a80",  # muted
+}
+
+
+def notify_results(results: list[dict]):
+    """Send a desktop notification summarizing sorted files."""
+    if not results:
+        return
+    lines = []
+    for r in results[:10]:
+        name = Path(r["src"]).name
+        cat = r["category"]
+        color = CATEGORY_COLORS.get(cat, "#6a6a80")
+        lines.append(
+            f'<span color="{color}">{name}</span> → <span color="#e8e8f0">{cat}/</span>'
+        )
+    body = "\n".join(lines)
+    if len(results) > 10:
+        body += f'\n<span color="#6a6a80">... and {len(results) - 10} more</span>'
+
+    summary = f"Sorted {len(results)} file{'s' if len(results) > 1 else ''}"
+    try:
+        subprocess.run(
+            ["notify-send",
+             "-a", "download-organizer",
+             "-h", "string:body-markup:true",
+             summary, body],
+            timeout=5,
+        )
+    except Exception:
+        pass  # notification is best-effort
+
+
+# ── undo ─────────────────────────────────────────────────────────
+def undo_last(n: int) -> int:
+    """Reverse the last n moves. Returns count of files restored."""
+    entries = read_log()
+    count = 0
+    for i in range(min(n, len(entries))):
+        e = entries[i]
+        src = Path(e["src"])
+        dst = Path(e["dst"])
+        if dst.exists():
+            try:
+                src.parent.mkdir(parents=True, exist_ok=True)
+                shutil.move(str(dst), str(src))
+                print(f"  Restored: {dst.name} → {src}")
+                count += 1
+                remove_log_entry(e)
+            except OSError as err:
+                print(f"  Error restoring {dst.name}: {err}", file=sys.stderr)
+        else:
+            print(f"  Skipped (not found): {dst.name}")
+            remove_log_entry(e)  # stale entry
+    return count
+
+
+def undo_file(name: str) -> int:
+    """Reverse the move of a specific file by its original name."""
+    entries = read_log()
+    lowered = name.lower()
+    count = 0
+    for e in entries:
+        src_path = Path(e["src"])
+        if src_path.name.lower() == lowered or Path(e["dst"]).name.lower() == lowered:
+            dst = Path(e["dst"])
+            if dst.exists():
+                try:
+                    src_path.parent.mkdir(parents=True, exist_ok=True)
+                    shutil.move(str(dst), str(src_path))
+                    print(f"  Restored: {dst.name} → {src_path}")
+                    count += 1
+                    remove_log_entry(e)
+                except OSError as err:
+                    print(f"  Error restoring {dst.name}: {err}", file=sys.stderr)
+            else:
+                print(f"  Skipped (not found): {dst.name}")
+                remove_log_entry(e)
+            break
+    if count == 0:
+        print(f"  No log entry found for '{name}'")
+    return count
+
+
+# ── inotify watcher ──────────────────────────────────────────────
+class Watcher:
+    """inotify-based file watcher with per-file debounce."""
+
+    def __init__(self, ext_map: dict[str, str], cooldown: float, notify: str):
+        self.ext_map = ext_map
+        self.cooldown = cooldown
+        self.notify_mode = notify
+        self._fd = None
+        self._pending: dict[str, threading.Timer] = {}
+        self._batch: list[dict] = []
+        self._batch_lock = threading.Lock()
+        self._batch_timer: threading.Timer | None = None
+        self._stop = threading.Event()
+
+    def start(self):
+        self._fd = _inotify_init()
+        _inotify_add_watch(self._fd, str(DOWNLOADS),
+                          IN_CLOSE_WRITE | IN_MOVED_TO | IN_CREATE)
+
+        # Set non-blocking so we can poll with a timeout
+        os.set_blocking(self._fd, False)
+
+        # Graceful shutdown on SIGTERM/SIGINT
+        signal.signal(signal.SIGTERM, self._on_signal)
+        signal.signal(signal.SIGINT, self._on_signal)
+
+        print(f"Watching {DOWNLOADS} (CLOSE_WRITE + MOVED_TO, "
+              f"{self.cooldown}s debounce)")
+
+        while not self._stop.is_set():
+            try:
+                ready, _, _ = select.select([self._fd], [], [], 1.0)
+                if not ready:
+                    continue
+                data = os.read(self._fd, 4096)
+            except (InterruptedError, BlockingIOError):
+                continue
+            except OSError:
+                break
+
+            offset = 0
+            while offset < len(data):
+                wd, mask, cookie, name_len = struct.unpack_from("iIII", data, offset)
+                offset += EVENT_SIZE
+                name = data[offset:offset + name_len].rstrip(b"\x00").decode("utf-8", errors="replace")
+                offset += name_len
+
+                if not name:
+                    continue
+
+                filepath = DOWNLOADS / name
+                self._debounce(filepath)
+
+        self._cleanup()
+
+    def _debounce(self, path: Path):
+        """Per-file debounce: reset timer on each event, fire after cooldown."""
+        key = str(path)
+        if key in self._pending:
+            self._pending[key].cancel()
+
+        t = threading.Timer(self.cooldown, self._on_ready, args=[path])
+        self._pending[key] = t
+        t.daemon = True
+        t.start()
+
+    def _on_ready(self, path: Path):
+        """File is ready — sort it."""
+        key = str(path)
+        self._pending.pop(key, None)
+
+        if not path.exists():
+            return
+
+        result = sort_file(path, self.ext_map)
+        if result:
+            with self._batch_lock:
+                self._batch.append(result)
+                # Fire notification after a short batch window
+                if self._batch_timer:
+                    self._batch_timer.cancel()
+                self._batch_timer = threading.Timer(1.0, self._flush_batch)
+                self._batch_timer.daemon = True
+                self._batch_timer.start()
+
+    def _flush_batch(self):
+        """Send a single summary notification for the batch."""
+        with self._batch_lock:
+            batch, self._batch = self._batch, []
+            self._batch_timer = None
+        if batch and self.notify_mode == "summary":
+            notify_results(batch)
+
+    def _on_signal(self, signum, frame):
+        print("\nShutting down...")
+        self._stop.set()
+
+    def _cleanup(self):
+        for t in self._pending.values():
+            t.cancel()
+        self._pending.clear()
+        if self._batch_timer:
+            self._batch_timer.cancel()
+            self._batch_timer = None
+        self._flush_batch()
+        if self._fd is not None:
+            os.close(self._fd)
+            self._fd = None
+
+
+# ── CLI ──────────────────────────────────────────────────────────
+def main():
+    parser = argparse.ArgumentParser(
+        description="Auto-categorize files in ~/Downloads",
+        epilog="With no flags, starts the inotify watcher daemon.",
+    )
+    parser.add_argument("--run", action="store_true",
+                       help="One-shot sort all existing files")
+    parser.add_argument("--dry-run", action="store_true",
+                       help="Preview --run without moving files")
+    parser.add_argument("--undo", type=int, nargs="?", const=1,
+                       metavar="N",
+                       help="Reverse last N moves (default: 1)")
+    parser.add_argument("--undo-file", type=str, metavar="NAME",
+                       help="Reverse the move of a specific file by name")
+
+    args = parser.parse_args()
+
+    cfg = load_config()
+    ext_map = build_ext_map(cfg["categories"])
+
+    # Validate path
+    if not DOWNLOADS.exists():
+        print(f"Error: {DOWNLOADS} does not exist", file=sys.stderr)
+        sys.exit(1)
+
+    # ── Undo mode ──
+    if args.undo_file:
+        print(f"Undoing '{args.undo_file}'...")
+        undo_file(args.undo_file)
+        return
+
+    if args.undo is not None:
+        n = args.undo
+        print(f"Undoing last {n} move{'s' if n > 1 else ''}...")
+        restored = undo_last(n)
+        print(f"Restored {restored} file{'s' if restored != 1 else ''}.")
+        return
+
+    # ── Dry-run mode ──
+    if args.dry_run:
+        print(f"DRY RUN — no files will be moved\n{'-'*40}")
+        results = sort_all(ext_map, dry_run=True)
+        print(f"{'-'*40}\nWould sort: {len(results)} file{'s' if len(results) != 1 else ''}")
+        if results and cfg["notifications"] != "none":
+            notify_results(results)
+        return
+
+    # ── One-shot mode ──
+    if args.run:
+        print(f"Sorting {DOWNLOADS}...\n{'-'*40}")
+        results = sort_all(ext_map)
+        print(f"{'-'*40}\nSorted: {len(results)} file{'s' if len(results) != 1 else ''}")
+        if results and cfg["notifications"] != "none":
+            notify_results(results)
+        return
+
+    # ── Watcher mode (default) ──
+    watcher = Watcher(ext_map, cfg["cooldown_seconds"], cfg["notifications"])
+    try:
+        watcher.start()
+    except KeyboardInterrupt:
+        pass
+
+
+if __name__ == "__main__":
+    main()
