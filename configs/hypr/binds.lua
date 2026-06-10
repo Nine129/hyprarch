@@ -105,4 +105,7 @@ hl.bind("XF86AudioPlay",         hl.dsp.exec_cmd("swayosd-client --playerctl pla
 hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("swayosd-client --brightness raise"),                  { repeating = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness lower"),                 { repeating = true })
 
+-- Notification center ──────────────
+hl.bind("SUPER + N", hl.dsp.exec_cmd("sh -c 'test -f /tmp/qs-notif-state && rm -f /tmp/qs-notif-state || touch /tmp/qs-notif-state'"))
+
 -- Volume popout ─────────────────────

@@ -42,17 +42,34 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
     margins { right: 84 + trayWidth; top: 0 }
-    implicitWidth: 303
+    implicitWidth: _effectiveVisible ? 303 : 0
     implicitHeight: contentCol.implicitHeight + 28
     color: "transparent"
-    visible: shouldShow
+    visible: true
 
-    // ── Escape dismiss (via hyprctl) ──
-    onVisibleChanged: {
-        if (visible)
+    // ── Slide state ─────────────────
+    property bool _effectiveVisible: false
+    property bool _animOpen: false
+
+    onShouldShowChanged: {
+        if (shouldShow) {
+            _effectiveVisible = true
+            _animOpen = true
             closeProc.running = true
-        else
+        } else {
+            _animOpen = false
             unbindProc.running = true
+            hideTimer.start()
+        }
+    }
+
+    Timer {
+        id: hideTimer
+        interval: 250
+        repeat: false
+        onTriggered: {
+            if (!shouldShow) _effectiveVisible = false
+        }
     }
 
     Process {
@@ -68,6 +85,15 @@ PanelWindow {
         id: bgCloseProc
         // command set dynamically
     }
+
+    Item {
+        id: slideWrapper
+        anchors.fill: parent
+        transform: Translate {
+            id: slide
+            y: popout._animOpen ? 0 : -popout.height
+            Behavior on y { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+        }
 
     Rectangle {
         id: shadow
@@ -302,4 +328,5 @@ PanelWindow {
             }
         }
     }
+    }  // slideWrapper
 }

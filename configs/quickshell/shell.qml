@@ -12,6 +12,8 @@ ShellRoot {
 
     readonly property var audio: QsServices.Audio
     readonly property var power: QsServices.Power
+    readonly property var mpris: QsServices.MprisService
+    readonly property var notifs: QsServices.NotificationService
 
     // ── Dynamic tray-offset for panel alignment ──
     property int trayWidth: 0
@@ -38,7 +40,7 @@ ShellRoot {
     // ── Combined state polling (single tick, atomic read) ──
     Timer {
         id: stateTimer
-        interval: 200
+        interval: 50
         running: true
         repeat: true
         property bool volLast: false
@@ -135,6 +137,12 @@ ShellRoot {
                 if (!isNaN(val)) root.trayWidth = val
             }
         }
+    }
+
+    // ── Notification Center ──────────────
+    NotificationCenter {
+        id: notifCenter
+        trayWidth: root.trayWidth
     }
 
     Component.onCompleted: {

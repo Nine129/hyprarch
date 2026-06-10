@@ -118,11 +118,6 @@ alias yr='yay -Rns'
 alias yq='yay -Q'
 alias yu='yay -Syu'
 
-# Screenshot
-alias ss='grimblast copy area && wl-paste | swappy -f -'                   # Region → swappy markup
-alias ss-full='grimblast copy output && wl-paste | swappy -f -'            # Full → swappy markup
-alias ss-window='grimblast copy active && wl-paste | swappy -f -'          # Active window → swappy
-alias ss-save='grimblast save area'                                         # Region → file
 # Gparted
 alias gparted='sudo -E gparted'
 # ── Autostart (first shell only) ──────────────────────
@@ -167,7 +162,9 @@ alias path='echo $PATH | tr ":" "\n"'
 alias reload='source ~/.zshrc'
 alias mkdir='mkdir -p'
 alias lsgrub="grep -oP \"(?<=menuentry ')[^']+\" /boot/grub/grub.cfg"
-
+function z() {
+    __zoxide_z "$@" && eza --icons --group-directories-first
+}
 fastfetch
 
 

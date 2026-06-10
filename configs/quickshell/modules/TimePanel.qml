@@ -127,16 +127,7 @@ PanelWindow {
     }
 
     // ── Escape dismiss (via hyprctl) ──
-    onVisibleChanged: {
-        if (visible) {
-            closeProc.running = true
-            // Refresh on open
-            rebuildCalendar()
-            tickClock()
-        } else {
-            unbindProc.running = true
-        }
-    }
+    // Handled in onShouldShowChanged above
 
     Process {
         id: closeProc
@@ -171,10 +162,46 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true }
     margins { right: 84 + trayWidth; top: 0 }
-    implicitWidth: 303
+    implicitWidth: _effectiveVisible ? 303 : 0
     implicitHeight: contentCol.implicitHeight + 36
     color: "transparent"
-    visible: shouldShow
+    visible: true
+
+    // ── Slide state ─────────────────
+    property bool _effectiveVisible: false
+    property bool _animOpen: false
+
+    onShouldShowChanged: {
+        if (shouldShow) {
+            _effectiveVisible = true
+            _animOpen = true
+            rebuildCalendar()
+            tickClock()
+            closeProc.running = true
+        } else {
+            _animOpen = false
+            unbindProc.running = true
+            hideTimer.start()
+        }
+    }
+
+    Timer {
+        id: hideTimer
+        interval: 250
+        repeat: false
+        onTriggered: {
+            if (!shouldShow) _effectiveVisible = false
+        }
+    }
+
+    Item {
+        id: slideWrapper
+        anchors.fill: parent
+        transform: Translate {
+            id: slide
+            y: popout._animOpen ? 0 : -popout.height
+            Behavior on y { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+        }
 
     Rectangle {
         id: shadow
@@ -412,4 +439,5 @@ PanelWindow {
             }
         }
     }
+    }  // slideWrapper
 }
