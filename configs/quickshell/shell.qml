@@ -79,6 +79,9 @@ ShellRoot {
                         timePanel.shouldShow = false
                         cmds.push("echo 0 > /tmp/qs-cal-state")
                     }
+                    // Also close notification center when any popout opens
+                    notifCenter.open = false
+                    cmds.push("rm -f /tmp/qs-notif-state")
                     if (cmds.length > 0) {
                         forceCloseProc.command = ["sh", "-c", cmds.join("; ")]
                         forceCloseProc.running = true

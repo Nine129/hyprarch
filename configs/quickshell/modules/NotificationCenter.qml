@@ -27,9 +27,16 @@ PanelWindow {
     onOpenChanged: {
         if (open) {
             _effectiveVisible = true
+            // Close volume/power/time popouts when notif center opens
+            closeOthersProc.running = true
         } else {
             hideTimer.start()
         }
+    }
+
+    Process {
+        id: closeOthersProc
+        command: ["sh", "-c", "echo 0 > /tmp/qs-volume-state; echo 0 > /tmp/qs-power-state; echo 0 > /tmp/qs-cal-state"]
     }
 
     Timer {

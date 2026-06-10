@@ -12,7 +12,7 @@ Item {
     property string timeText: ""
     property int notifId: 0
 
-    implicitHeight: infoCol.implicitHeight + 20
+    implicitHeight: infoCol.implicitHeight + 20 + 24
     implicitWidth: parent ? parent.width : 340
 
     opacity: 1
@@ -99,5 +99,12 @@ Item {
             wrapMode: Text.WrapAnywhere
             visible: itemRoot.body.length > 0
         }
+    }
+
+    // ── Separator ────────────────────────
+    Rectangle {
+        anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+        height: 1
+        color: "#2a2a35"
     }
 }
