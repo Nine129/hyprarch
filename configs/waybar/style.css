@@ -22,8 +22,9 @@ window > box {
 
 /* ── Workspace numbers 1-9 ────── */
 #workspaces button {
-  background: #151518; border: none  #2a2a35; border-radius: 0; color: @silver;
+  background: #151518; border: none; border-radius: 0; color: @silver;
   padding: 4px 12px; margin: 0 2px; font-size: 13px;
+  box-shadow: 1px 0 3px rgba(0,0,0,0.4);
 }
 
 #workspaces button.active {
@@ -67,6 +68,17 @@ window > box {
 #battery.charging { background: @cyan; color: #0a0a0c; }
 #battery.warning { background: @orange; color: #0a0a0c; }
 #battery.critical { background: @red; color: @bg; }
+
+/* ── MPD now-playing ──────────── */
+#mpris {
+  border: none; border-radius: 0;
+  padding: 4px 14px; margin: 0 0 0 4px;
+  box-shadow: 1px 0 3px rgba(0,0,0,0.4);
+  background: #151518; color: @red; font-size: 14px;
+}
+#mpris:hover {
+  margin-top: 1px; margin-bottom: -1px;
+}
 
 /* ── Separators ────────────────── */
 #custom-sep1, #custom-sep2 {

@@ -6,15 +6,34 @@
     "all-outputs":          true,
     "format":               "{icon}",
     "persistent-workspaces": {
-      "1": [], "2": [], "3": [], "4": [], "5": [],
-      "6": [], "7": [], "8": [], "9": []
+      "1": [], "2": [], "3": [], "4": [], "5": []
     },
     "format-icons": {
       "1": "1", "2": "2", "3": "3", "4": "4", "5": "5",
-      "6": "6", "7": "7", "8": "8", "9": "9",
       "urgent": "",
       "default": ""
     }
+  },
+
+  /* ── MPD now-playing ────────── */
+  "mpris": {
+    "player":         "mpd",
+    "format":          "{dynamic}",
+    "format-playing":  "<span size='15360' rise='-1024'></span> {dynamic}",
+    "format-paused":   "<span size='15360' rise='-1024'></span> {dynamic}",
+    "format-stopped":  "Nothing playing",
+    "tooltip-format":         "{artist} — {title}\nMPD via mpd-mpris",
+    "tooltip-format-playing":  "{artist} — {title}\nMPD via mpd-mpris",
+    "tooltip-format-paused":   "{artist} — {title}\nMPD via mpd-mpris",
+    "tooltip-format-stopped":  "Nothing playing",
+    "dynamic-order":   ["title", "artist"],
+    "title-len":       30,
+    "artist-len":      20,
+    "escape":          true,
+    "interval":        0,
+    "on-click-right":  "kitty --single-instance rmpc",
+    "on-scroll-up":    "playerctl next",
+    "on-scroll-down":  "playerctl previous"
   },
 
   /* ── Group 1: System (gapless) ── */

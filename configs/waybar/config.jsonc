@@ -9,7 +9,8 @@
     "include": "~/.config/waybar/modules/cggx.jsonc",
 
     "modules-left": [
-      "hyprland/workspaces#number"
+      "hyprland/workspaces#number",
+      "mpris"
     ],
 
     "modules-center": [],
