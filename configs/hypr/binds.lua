@@ -87,11 +87,11 @@ hl.bind("SUPER + SHIFT + C",   hl.dsp.exec_cmd("cliphist wipe && notify-send 'Cl
 
 -- Lock & exit ─────────────────────
 hl.bind("SUPER + L",           hl.dsp.exec_cmd("hyprlock"))
-hl.bind("SUPER + SHIFT + Q",   hl.dsp.exec_cmd("/home/nine/hyprarch/configs/hypr/scripts/wlogout-toggle.sh"))
+hl.bind("SUPER + SHIFT + Q",   hl.dsp.exec_cmd("pkill fuzzel || /home/nine/hyprarch/configs/fuzzel/scripts/power-menu.sh"))
 hl.bind("SUPER + SHIFT + Escape",  hl.dsp.exec_cmd("hyprctl dispatch exit"))
 
 -- Screenshot menu ─────────────────────
-hl.bind("SUPER + D",           hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot-menu.sh"))
+hl.bind("CTRL + Print",           hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot-menu.sh"))
 
 -- Media keys ─────────────────────────
 hl.bind("XF86AudioRaiseVolume",  hl.dsp.exec_cmd("swayosd-client --output-volume raise --max-volume 150"), { repeating = true })
