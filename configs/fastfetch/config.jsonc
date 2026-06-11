@@ -1,38 +1,64 @@
 {
   "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+
   "logo": {
-    "source": "/home/nine/.config/fastfetch/logo.txt",
-    "type": "file",
-    "padding": {
-      "right": 2
+    "source": "/home/nine/hyprarch/configs/fastfetch/newlogo.png",
+    "type": "kitty",
+    "width": 33,
+    "preserveAspectRatio": true,
+    "padding": { "right": 6 }
+  },
+
+  "logoColors": [
+    "#E0A500",
+    "#E0A500",
+    "#E0A500",
+    "#0a0a0c",
+    "#1a1a20",
+    "#6a6a80",
+    "#ff6b00",
+    "#e8e8f0",
+    "#2a2a35"
+  ],
+
+  "display": {
+    "key": { "width": 10 },
+    "separator": " ",
+    "color": { "keys": "#e8e8f0" },
+    "percent": {
+      "color": {
+        "green": "#ff6b00",
+        "yellow": "#ff6b00",
+        "red": "#ff6b00"
+      }
     }
   },
-  "display": {
-    "separator": "  →  "
-  },
+
   "modules": [
-    { "type": "title", "outputColor": "cyan" },
-    "separator",
+    "break",
 
-    // ── System ──
-    { "type": "os",      "key": "OS",       "keyColor": "red" },
-    { "type": "kernel",  "key": "Kernel",   "keyColor": "red" },
-    { "type": "uptime",  "key": "Uptime",   "keyColor": "red" },
+    { "type": "command", "key": "  USER", "keyColor": "bold_#ff2d55", "outputColor": "#e8e8f0", "text": "echo $(whoami)@$(hostnamectl hostname)" },
 
-    // ── Software ──
-    { "type": "packages","key": "Packages", "keyColor": "#C8FF00" },
-    { "type": "shell",   "user":"shell",    "keyColor": "#C8FF00" },
-    { "type": "wm",      "key": "WM",       "keyColor": "#C8FF00" },
-    { "type": "terminal","key": "Terminal", "keyColor": "#C8FF00" },
+    { "type": "os",      "key": "  OS",     "keyColor": "bold_#ff2d55" },
+    { "type": "kernel",  "key": "  KER",    "keyColor": "bold_#ff2d55" },
+    { "type": "uptime",  "key": "󰥔  UP",     "keyColor": "bold_#ff2d55" },
 
-    // ── Hardware ──
-    { "type": "cpu",     "key": "CPU",     "keyColor": "magenta" },
-    { "type": "gpu",     "key": "GPU",     "keyColor": "magenta" },
-    { "type": "memory",  "key": "Memory",  "keyColor": "magenta" },
-    { "type": "disk",    "key": "Disk",    "keyColor": "magenta" },
-    { "type": "battery", "key": "Battery", "keyColor": "magenta" },
+    "break",
 
-    "separator",
-    { "type": "colors", "symbol": "circle" }
+    { "type": "packages","key": "󰏗  PKGS",   "keyColor": "bold_#c8ff00" },
+    { "type": "shell",   "key": "󰆍  SH",     "keyColor": "bold_#c8ff00" },
+    { "type": "wm",      "key": "  WM",     "keyColor": "bold_#c8ff00" },
+    { "type": "terminal","key": "  TERM",   "keyColor": "bold_#c8ff00" },
+
+    "break",
+
+    { "type": "cpu",     "key": "󰻠  CPU",   "keyColor": "bold_#00e5ff" },
+    { "type": "gpu",     "key": "󰢮  GPU",   "keyColor": "bold_#00e5ff" },
+    { "type": "memory",  "key": "󰍛  RAM",   "keyColor": "bold_#00e5ff" },
+    { "type": "disk",    "key": "󰋊  SSD",   "keyColor": "bold_#00e5ff" },
+    { "type": "battery", "key": "󰂄  BAT",   "keyColor": "bold_#00e5ff" },
+
+    "break",
+    "break"
   ]
 }

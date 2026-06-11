@@ -62,7 +62,8 @@ hl.window_rule({
  hl.window_rule(
    {
      match = { class = "kitty"},
-   }
+     
+  }
  )
  hl.window_rule(
    {
@@ -70,3 +71,15 @@ hl.window_rule({
      
    }
  )
+
+ hl.window_rule(
+   {
+    match={ class = "kitty-float"},
+    float= true,
+    center=true,
+    size={750,450},
+    opaque=true,
+
+   }
+ )
+

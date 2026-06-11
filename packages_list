@@ -15,6 +15,7 @@ cachyos-keyring
 cachyos-mirrorlist
 cachyos-v3-mirrorlist
 cachyos-v4-mirrorlist
+calf
 cava
 cliphist
 cmake
@@ -38,6 +39,7 @@ fzf
 git
 github-cli
 google-chrome
+gopreload-git
 grim
 grimblast-git
 grub
@@ -81,6 +83,7 @@ linux-firmware
 linux-headers
 linux-lts
 linux-lts-headers
+lsp-plugins
 lutris
 mediainfo
 mpd
@@ -151,6 +154,7 @@ xdg-utils
 yay-bin
 yay-bin-debug
 yazi
+ydotool
 yt-dlp
 zathura
 zathura-pdf-mupdf
