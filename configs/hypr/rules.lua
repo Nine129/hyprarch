@@ -83,4 +83,13 @@ hl.window_rule({
    }
  )
 
+ hl.window_rule(
+   {
+    match={ class = "otter-launcher"},
+    float= true,
+    center=true,
+    size={500,290},
+    opaque=true,
 
+   }
+ )

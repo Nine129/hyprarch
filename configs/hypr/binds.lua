@@ -7,6 +7,7 @@ local vivaldi_launching = false
 hl.bind("SUPER + Q",       hl.dsp.exec_cmd("kitty --single-instance"))
 hl.bind("SUPER + W",       hl.dsp.window.close())
 hl.bind("SUPER + CTRL + Q", hl.dsp.exec_cmd("kitty --single-instance --class kitty-float"))
+hl.bind("SUPER + Backspace", hl.dsp.exec_cmd("pkill otter-launcher || kitty --single-instance --class otter-launcher -e otter-launcher"))
 -- Launcher ────────────────────────
 hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd("pkill fuzzel || fuzzel"),  { release = true })  
 hl.bind("SUPER + E",     hl.dsp.exec_cmd("kitty --single-instance yazi"))
@@ -105,6 +106,5 @@ hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("swayosd-client --brightness ra
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness lower"),                 { repeating = true })
 
 -- Notification center ──────────────
-hl.bind("SUPER + N", hl.dsp.exec_cmd("sh -c 'test -f /tmp/qs-notif-state && rm -f /tmp/qs-notif-state || touch /tmp/qs-notif-state'"))
 
 -- Volume popout ─────────────────────

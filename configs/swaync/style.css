@@ -1,56 +1,327 @@
-/* ── CGGX SwayNC ──────────────────────────────────── */
-/* Theme variables — overrides default SCSS variables  */
-:root {
-  --cc-bg: rgba(10, 10, 12, 0.85);
+/* ═══════════════════════════════════════════════════════════════════
+   CGGX SwayNC — Full Color Spectrum
+   ═══════════════════════════════════════════════════════════════════ */
 
-  --noti-border-color: rgba(255, 45, 85, 0.2);
-  --noti-bg: 26, 26, 32;
-  --noti-bg-alpha: 0.88;
-  --noti-bg-darker: rgb(15, 15, 20);
-  --noti-bg-hover: rgb(36, 36, 44);
-  --noti-bg-focus: rgba(255, 45, 85, 0.15);
-  --noti-close-bg: rgb(42, 42, 52);
-  --noti-close-bg-hover: rgb(255, 45, 85);
+/* ── CGGX Palette ────────────────────────────────────────────────── */
+@define-color bg       #0a0a0c;
+@define-color surface  #151518;
+@define-color red      #ff2d55;
+@define-color cyan     #00e5ff;
+@define-color lime     #c8ff00;
+@define-color orange   #ff6b00;
+@define-color silver   #e8e8f0;
+@define-color muted    #6a6a80;
 
-  --text-color: #e8e8f0;
-  --text-color-disabled: #6a6a80;
+/* Assigned accents */
+@define-color accent   @lime;      /* primary: title, borders */
+@define-color media    @cyan;      /* mpris */
+@define-color active   @lime;      /* dnd toggle, on states */
+@define-color warn     @lime;      /* low urgency */
 
-  --bg-selected: rgb(255, 45, 85);
+/* ── Layers (fully opaque) ───────────────────────────────────────── */
+@define-color cc_bg    @surface;
+@define-color card_bg  @surface;
+@define-color btn_bg   alpha(@accent, 0.1);
+@define-color btn_hv   alpha(@accent, 0.22);
+@define-color close_bg alpha(@red, 0.1);
+@define-color acc_brd  @accent;
+@define-color med_dim  alpha(@media, 0.25);
+@define-color med_brd  alpha(@media, 0.4);
 
-  --border: 1px solid rgba(255, 45, 85, 0.2);
-  --border-radius: 0;
+/* ── Global Reset ────────────────────────────────────────────────── */
+* {
+  font-family: "JetBrainsMono Nerd Font";
+  font-weight: 700;
+  color: @silver;
+  background: none;
+  border: none;
+  border-radius: 10px;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  text-shadow: none;
+  outline: none;
 }
 
-/* Notifications — floating popups */
-.notification {
-  border-radius: 0;
-  border: var(--border);
-  background: rgba(26, 26, 32, 0.88);
-
-  &.critical {
-    border: 1px solid rgba(255, 45, 85, 0.6);
-  }
-
-  .summary { color: #00e5ff; font-weight: 700; }
-  .time    { color: #6a6a80; font-size: 12px; }
-  .body    { color: #6a6a80; }
+/* Window transparency */
+.blank-window {
+  background: transparent;
 }
 
-/* Control center panel */
+/* ═══════════════════════════════════════════════════════════════════
+   CONTROL CENTER
+   ═══════════════════════════════════════════════════════════════════ */
 .control-center {
-  background: var(--cc-bg);
-  border-radius: 0;
+  background: @cc_bg;
+  border: 2px solid @accent;
+  border-radius: 10px;
+  padding: 22px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+.control-center-list { background: transparent; }
+
+/* ═══════════════════════════════════════════════════════════════════
+   DND — top row  (green accent)
+   ═══════════════════════════════════════════════════════════════════ */
+.widget-dnd {
+  margin: 0 0 14px 0;
+  padding: 10px 14px;
+  background: none;
+  border: none;
+  border-radius: 8px;
+}
+.widget-dnd > label {
+  font-size: 13px;
+  font-weight: 700;
+  color: @silver;
+  margin-left: 10px;
 }
 
-/* Progress bar */
-progressbar trough {
-  background: #6a6a80;
-  border-radius: 0;
-  progress { background: #ff2d55; }
+.widget-dnd > switch {
+  min-width: 46px;
+  min-height: 28px;
+  border-radius: 20px;
+  background: alpha(@silver, 0.1);
+}
+.widget-dnd > switch:checked {
+  background: @accent;
+}
+.widget-dnd > switch slider {
+  background: @silver;
+  border-radius: 20px;
+  min-width: 22px;
+  min-height: 22px;
 }
 
-/* Close button */
-.close-button {
-  border-radius: 0;
-  &:hover { background: #ff2d55; }
-}  
+/* ═══════════════════════════════════════════════════════════════════
+   MPRIS — matching quickshell NowPlaying rice
+   ═══════════════════════════════════════════════════════════════════ */
+.widget-mpris {
+  padding: 0;
+  border: none;
+  background: transparent;
+  margin-bottom: 14px;
+}
+.widget-mpris .widget-mpris-player {
+  background: @surface;
+  border: 1px solid alpha(@silver, 0.08);
+  border-radius: 8px;
+  padding: 16px;
+}
+.widget-mpris .widget-mpris-album-art {
+  min-width: 64px;
+  min-height: 64px;
+  border-radius: 10px;
+  margin-right: 14px;
+}
+.widget-mpris .widget-mpris-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: @accent;
+  margin-bottom: 2px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+.widget-mpris .widget-mpris-subtitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: @cyan;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+.widget-mpris .widget-mpris-player button {
+  all: unset;
+  font-size: 20px;
+  min-width: 34px;
+  min-height: 34px;
+  color: @silver;
+  transition: color 0.15s ease;
+}
+.widget-mpris .widget-mpris-player button:hover {
+  color: @accent;
+}
+.widget-mpris .widget-mpris-player button:disabled {
+  color: alpha(@muted, 0.25);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   TITLE — red accent
+   ═══════════════════════════════════════════════════════════════════ */
+.widget-title {
+  background: transparent;
+  border: none;
+  padding: 2px 8px 14px 8px;
+  margin-bottom: 4px;
+}
+.widget-title label {
+  font-size: 18px;
+  font-weight: 700;
+  color: @accent;
+  letter-spacing: 1px;
+}
+.widget-title button {
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  background: none;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 16px;
+  transition: all 0.2s ease;
+}
+.widget-title button,
+.widget-title button label,
+.widget-title button > label {
+  color: @lime !important;
+}
+.widget-title button:hover {
+  color: alpha(@lime, 0.7) !important;
+}
+.widget-title button:hover {
+  background: alpha(@accent, 0.8) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   NOTIFICATIONS — Control Center
+   ═══════════════════════════════════════════════════════════════════ */
+.control-center .notification-row {
+  margin-bottom: 10px;
+  transition: all 0.2s ease;
+}
+.control-center .notification-background {
+  background: @card_bg;
+  border: 2px solid @accent;
+  border-radius: 6px;
+  padding: 16px;
+  transition: all 0.2s ease;
+}
+.control-center .notification-row:hover .notification-background {
+  border-color: @accent;
+}
+/* Low urgency → orange glow */
+.control-center .notification.low .notification-background {
+  box-shadow: 0 0 8px alpha(@warn, 0.15);
+}
+/* Critical → pulsing red */
+.control-center .notification.critical .notification-background {
+  border-color: @red;
+  box-shadow: 0 0 12px alpha(@red, 0.2);
+}
+.control-center .notification .summary {
+  font-size: 15px;
+  font-weight: 700;
+  color: @silver;
+  margin-bottom: 4px;
+}
+.control-center .notification .body {
+  font-size: 13px;
+  font-weight: 400;
+  color: @muted;
+  line-height: 1.4;
+}
+.control-center .notification .time {
+  font-size: 11px;
+  font-weight: 700;
+  color: @muted;
+  margin-left: 10px;
+}
+.control-center .notification image {
+  margin-right: 12px;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: 50%;
+}
+.control-center .close-button {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   FLOATING NOTIFICATIONS — red accent popups
+   ═══════════════════════════════════════════════════════════════════ */
+.floating-notifications .notification-row {
+  margin-bottom: 8px;
+}
+.floating-notifications .notification-background {
+  background: @surface;
+  border: 2px solid @accent;
+  border-radius: 8px;
+  padding: 18px 20px;
+  margin: 6px 12px;
+  box-shadow: 0 0 16px alpha(@accent, 0.2);
+  transition: all 0.2s ease;
+}
+.floating-notifications .notification-row:hover .notification-background {
+  border-color: @accent;
+}
+
+/* ===== hide inline close buttons in notifications ===== */
+.control-center .notification .close-button,
+.notification .close-button,
+.notification-body .close-button {
+  display: none;
+}
+/* Low urgency → orange bar */
+.floating-notifications .notification.low .notification-background {
+  border-color: alpha(@warn, 0.3);
+  border-left: 3px solid @warn;
+}
+.floating-notifications .notification.low .summary { color: @warn; }
+/* Critical → red glow */
+.floating-notifications .notification.critical .notification-background {
+  border-color: alpha(@red, 0.5);
+  border-left: 3px solid @red;
+  box-shadow: 0 4px 24px alpha(@red, 0.15);
+}
+.floating-notifications .notification.critical .summary { color: @red; }
+/* Normal → red accent */
+.floating-notifications .notification .summary {
+  font-size: 15px;
+  font-weight: 700;
+  color: @accent;
+}
+.floating-notifications .notification .body {
+  font-size: 13px;
+  font-weight: 400;
+  color: @silver;
+  line-height: 1.4;
+  margin-top: 4px;
+}
+.floating-notifications .notification .time {
+  font-size: 11px;
+  font-weight: 700;
+  color: @muted;
+  margin-left: 10px;
+}
+.floating-notifications .notification image {
+  min-width: 44px;
+  min-height: 44px;
+  margin-right: 14px;
+  border-radius: 50%;
+}
+.floating-notifications .close-button {
+  background: @close_bg;
+  border-radius: 6px;
+  min-width: 26px;
+  min-height: 26px;
+  transition: all 0.2s ease;
+}
+.floating-notifications .close-button:hover { background: @red; color: @bg; }
+.floating-notifications .close-button image { color: @muted; }
+.floating-notifications .close-button:hover image { color: @bg; }
+
+/* ── Action buttons ──────────────────────────────────────────────── */
+.floating-notifications .notification-action button,
+.floating-notifications .notification-alt-actions button {
+  font-size: 13px;
+  font-weight: 700;
+  color: @silver;
+  background: alpha(@accent, 0.1);
+  border: 1px solid @accent;
+  border-radius: 8px;
+  padding: 8px 18px;
+  margin-top: 12px;
+  transition: all 0.2s ease;
+}
+.floating-notifications .notification-action button:hover,
+.floating-notifications .notification-alt-actions button:hover {
+  background: alpha(@accent, 0.22);
+  border-color: @accent;
+}

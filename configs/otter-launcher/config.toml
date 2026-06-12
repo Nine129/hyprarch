@@ -1,0 +1,214 @@
+
+
+#   ██████╗ ████████╗████████╗███████╗██████╗                         
+#  ██╔═══██╗╚══██╔══╝╚══██╔══╝██╔════╝██╔══██╗                        
+#  ██║   ██║   ██║      ██║   █████╗  ██████╔╝█████╗                  
+#  ██║   ██║   ██║      ██║   ██╔══╝  ██╔══██╗╚════╝                  
+#  ╚██████╔╝   ██║      ██║   ███████╗██║  ██║                        
+#   ╚═════╝    ╚═╝      ╚═╝   ╚══════╝╚═╝  ╚═╝                        
+#  ██╗      █████╗ ██╗   ██╗███╗   ██╗ ██████╗██╗  ██╗███████╗██████╗ 
+#  ██║     ██╔══██╗██║   ██║████╗  ██║██╔════╝██║  ██║██╔════╝██╔══██╗
+#  ██║     ███████║██║   ██║██╔██╗ ██║██║     ███████║█████╗  ██████╔╝
+#  ██║     ██╔══██║██║   ██║██║╚██╗██║██║     ██╔══██║██╔══╝  ██╔══██╗
+#  ███████╗██║  ██║╚██████╔╝██║ ╚████║╚██████╗██║  ██║███████╗██║  ██║
+#  ╚══════╝╚═╝  ╚═╝ ╚═════╝ ╚═╝  ╚═══╝ ╚═════╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+
+# Terminal shell script launcher, written in rust
+# Source Code: https://github.com/kuokuo123/otter-launcher
+
+# Recommended to be used in companion with fsel or sway-launcher-desktop to launch desktop applications
+
+
+[general]
+# module to run when no prefix is matched
+default_module = "gg"
+# run with an empty prompt
+empty_module = "app"
+# exec command of your shell, eg. "zsh -c" for zsh; accept wm commands like "hyprctl dispatch exec"
+exec_cmd = "sh -c"
+# set true to use vi keybinds, false emacs keybinds
+vi_mode = false
+esc_to_abort = true
+# when prompted, will show a list of configured modules
+cheatsheet_entry = "?"
+# command to show cheatsheet; through piping stdout
+cheatsheet_viewer = "less -R; clear"
+clear_screen_after_execution = false
+# don't quit after executing a module, useful with scratchpads; stderr is hidden in loop mode
+loop_mode = false
+# if set, press ctrl+x ctrl+ee (or v in vi normal mode) to edit prompt in the specified program
+external_editor = "vi"
+# sometimes the otter runs too fast even before the terminal window is ready; this slows it down by milliseconds; useful when chafa image is skewed
+delay_startup = 30
+# if set, will run after module execution; for example, calling swaymsg to adjust window size
+callback = ""
+
+
+# ANSI color codes are allowed. However, \x1b should be replaced with \u001B, because the rust toml crate cannot read \x as an escaped character
+[interface]
+# use three quotes to write longer codes
+header = """
+
+
+
+ \u001B[34;1m  \u001B[0m\u001B[38;2;255;107;0m$USER@$(printf $HOSTNAME)\u001B[0m$(printf '\u001B[999C\u001B[14D')\u001B[31m\u001B[0m $(mpstat | awk 'FNR ==4 {print $4}') \u001B[33m󰍛\u001B[0m $(free -h | awk 'FNR == 2 {print $3}' | sed 's/i//')
+    """
+# texts to show at the input field
+place_holder = "type & search"
+# available options: list, hint
+suggestion_mode = "list"
+# add a line between intput field and suggestion list; only effective in list mode
+separator = """
+$( \
+    printf "\u001B[0;90m%*s" 29 ""; \
+    printf -v line '%*s' "$(( COLUMNS - 2 - 29 - 11 ))" ''; \
+    printf '%s' "${line// /─}" \
+)"""
+# add a line after suggestion list
+footer = ""
+# 0 to disable suggestions and tab completion
+suggestion_lines = 11
+list_prefix = "    "
+selection_prefix = "  \u001B[31;1m▌ "
+# format prefixes to have a uniformed width
+prefix_padding = 3
+# shown when the default module is in use
+default_module_message = "    \u001B[33msearch\u001B[0m the internet"
+# shown when the empty module is in use
+empty_module_message = ""
+# false to list suggestions/hints alphabetically; true to list them as per the configured order in the below [[modules]] section
+customized_list_order = false
+# the sign showing whether a module should run with an argument
+indicator_with_arg_module = ""
+indicator_no_arg_module = ""
+# below color options affect all modules; per-module coloring can be configured using ansi codes individually
+prefix_color = "\u001B[92m"
+description_color = "\u001B[39m"
+place_holder_color = "\u001B[90m"
+# suggestion color in hint mode
+hint_color = "\u001B[30m"
+# move the interface rightward or downward
+move_interface_right = 25
+move_interface_down = 0
+
+
+# overlay is a floating layer that can be printed with stdout and moved around; useful for integrating chafa images; check docs in repo for example usage
+[overlay]
+# run a command and print stdout on the overlay layer
+overlay_cmd = "chafa -s x14 $HOME/.config/otter-launcher/images/logo.png"
+# remove trailing lines from overlay_cmd output
+overlay_trimmed_lines = 0
+# set overlay size; 0 to be auto; 1 is one line, 2 two lines, etc; kitty & sixel image size can be determined automatically; others should be set mannually; try modify this whenever you meet issues releated to image height
+overlay_height = 0
+# move the overlay layer around for theming
+move_overlay_right = 0
+move_overlay_down = 2
+
+
+# modules are defined as followed
+[[modules]]
+description = "google search"
+prefix = "\u001B[92mgg\u001B[0m"
+cmd = "xdg-open https://www.google.com/search?q='{}'"
+# if with_argument is true, {} in cmd will be replaced with user input. if not explicitly set, taken as false.
+with_argument = true
+# url_encode should be true when calling webpages; this ensures special characters in url being readable to browsers; taken as false if not explicitly set
+url_encode = true
+# run cmd in a forked shell as opposed to as a child process (simply by prepending setsid -f to the configured cmd); useful for launching gui programs; taken as false if not explicitly set
+unbind_proc = true
+
+# fzf is needed to run below functions
+[[modules]]
+description = "desktop programs"
+prefix = "\u001B[38;2;255;107;0mapp\u001B[0m"
+cmd = """
+desktop_file() {
+find /usr/share/applications -name "*.desktop" 2>/dev/null
+find /usr/local/share/applications -name "*.desktop" 2>/dev/null
+find "$HOME/.local/share/applications" -name "*.desktop" 2>/dev/null
+find /var/lib/flatpak/exports/share/applications -name "*.desktop" 2>/dev/null
+find "$HOME/.local/share/flatpak/exports/share/applications" -name "*.desktop" 2>/dev/null
+}
+selected="$(desktop_file | awk -F/ '{name=$NF; sub(/\\.desktop$/, "", name); print name}' | sort -k1,1 | cut -f2- | fzf --info-command 'echo -e " desktop apps ($FZF_POS/$FZF_TOTAL_COUNT)"' --cycle --gutter " " --pointer " ▌" --color "bg+:-1,pointer:1,info:8,separator:8,scrollbar:0" --prompt '  ' -m -d / --with-nth -1 )"
+[ -z "$selected" ] && exit 0
+while IFS= read -r line; do
+  [ -n "$line" ] && setsid -f gtk-launch "$(basename "$line")"
+done <<< "$selected"
+pkill otter-launcher
+"""
+
+[[modules]]
+description = "power menu (fzf)"
+prefix = "\u001B[91mpo\u001B[0m"
+cmd = """
+function power {
+if [[ -n $1 ]]; then
+case $1 in
+"logout") session=`loginctl session-status | head -n 1 | awk '{print $1}'`; loginctl terminate-session $session ;;
+"suspend") systemctl suspend ;;
+"hibernate") systemctl hibernate ;;
+"reboot") systemctl reboot ;;
+"shutdown") systemctl poweroff ;;
+esac fi }
+power $(echo -e 'reboot\nshutdown\nlogout\nsuspend\nhibernate' | fzf --info-command 'printf " power menu ($FZF_POS/$FZF_TOTAL_COUNT)"' --cycle --gutter " " --pointer " ▌" --color "bg+:-1,pointer:1,info:8,separator:8,scrollbar:0" --prompt '  ' | tail -1)
+"""
+
+[[modules]]
+description = "run commands"
+prefix = "\u001B[92msh\u001B[0m"
+cmd = """
+$(printf $TERM | sed 's/xterm-//g') -e sh -c "{}"
+"""
+with_argument = true
+unbind_proc = true
+
+[[modules]]
+description = "search archwiki"
+prefix = "\u001B[96maw\u001B[0m"
+cmd = "xdg-open https://wiki.archlinux.org/index.php?search='{}'"
+with_argument = true
+url_encode = true
+unbind_proc = true
+
+[[modules]]
+description = "search packages"
+prefix = "\u001B[96mpac\u001B[0m"
+cmd = "xdg-open https://archlinux.org/packages/?q='{}'"
+with_argument = true
+url_encode = true
+unbind_proc = true
+
+[[modules]]
+description = "search the AUR"
+prefix = "\u001B[38;2;255;107;0maur\u001B[0m"
+cmd = "xdg-open https://aur.archlinux.org/packages?K='{}'"
+with_argument = true
+url_encode = true
+unbind_proc = true
+
+[[modules]]
+description = "cambridge dict"
+prefix = "\u001B[91mdc\u001B[0m"
+cmd = "xdg-open 'https://dictionary.cambridge.org/dictionary/english/{}'"
+with_argument = true
+url_encode = true
+unbind_proc = true
+
+[[modules]]
+description = "open files (fzf)"
+prefix = "\u001B[92mfo\u001B[0m"
+cmd = """
+find $HOME -type f -not -path '*/.cache/*' 2>/dev/null | fzf --info-command 'printf " files ($FZF_POS/$FZF_TOTAL_COUNT)"' --cycle --gutter ' ' --pointer ' ▌' --color 'bg+:-1,pointer:1,info:8,separator:8,scrollbar:0' --prompt '  ' | setsid -f xargs -r -I [] xdg-open '[]'
+"""
+
+[[modules]]
+description = "open dirs (yazi)"
+prefix = "\u001B[91myz\u001B[0m"
+cmd = """
+find $HOME -type d -not -path '*/.cache/*' 2>/dev/null | fzf --info-command 'printf " directories ($FZF_POS/$FZF_TOTAL_COUNT)"' --cycle --gutter ' ' --pointer ' ▌' --color 'bg+:-1,pointer:1,info:8,separator:8,scrollbar:0' --prompt '  ' | xargs -r -I [] setsid -f "$(echo $TERM | sed 's/xterm-//g')" -e yazi '[]'
+"""
+
+[[modules]]
+description = "color picker"
+prefix = "\u001B[96mcp\u001B[0m"
+cmd = "hyprpicker -n > /tmp/hyprcolor && wl-copy < /tmp/hyprcolor && kitty @ close-window"

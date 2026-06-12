@@ -17,6 +17,7 @@ cachyos-v3-mirrorlist
 cachyos-v4-mirrorlist
 calf
 cava
+chafa
 cliphist
 cmake
 cmatrix
@@ -100,6 +101,7 @@ noto-fonts-emoji
 ntfsprogs
 nwg-look
 os-prober
+otter-launcher
 papirus-icon-theme
 pavucontrol
 pipewire
@@ -135,6 +137,7 @@ topgrade
 ttf-jetbrains-mono-nerd
 ttf-liberation
 ttf-nerd-fonts-symbols-mono
+tty-clock
 unrar
 uwsm
 vesktop-bin
