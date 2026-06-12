@@ -1,6 +1,6 @@
 # CGGX Btop theme — v5 (minimal red)
 
-theme[main_bg]="#0a0a0c"
+theme[main_bg]="#151518"
 theme[main_fg]="#e8e8f0"
 
 theme[title]="#e8e8f0"

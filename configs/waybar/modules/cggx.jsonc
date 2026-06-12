@@ -110,7 +110,7 @@
   /* ── Group 3: Utilities ────── */
   "custom/power-button": {
     "format":   "⏻",
-    "on-click": "/home/nine/hyprarch/configs/hypr/scripts/wlogout-toggle.sh",
+    "on-click": "wlogout --css ~/.config/wlogout/style.css --buttons-per-row 5 -T 410 -B 410 -L 200 -R 200",
     "tooltip":  false
   },
 
