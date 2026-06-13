@@ -9,6 +9,7 @@ Singleton {
 
     // ── Notification history model ────────
     property ListModel model: ListModel {}
+    property var warnApps: ["Power", "System", "Battery"]
     property int _nextId: 1
 
     // ── Spy process ───────────────────────

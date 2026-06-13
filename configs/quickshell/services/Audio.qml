@@ -12,6 +12,7 @@ Singleton {
     property bool muted: false
     property real volume: 0.5
     readonly property int percentage: Math.round(volume * 100)
+    readonly property int displayPercentage: Math.round(volume * 150)
 
     // ── Input (source) ──────────────────────
     property bool sourceReady: false

@@ -116,7 +116,6 @@ Singleton {
             }
             // Keep position fresh even on same track
             if (root.player.positionSupported) {
-                root.player.positionChanged()
                 root.position = root.player.position || 0
                 root.isPlaying = root.player.isPlaying || false
             }

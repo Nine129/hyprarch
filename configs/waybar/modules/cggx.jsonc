@@ -72,18 +72,16 @@
 
   /* ── Group 2: Personal UI ───── */
   "pulseaudio": {
-    "format":          "<span size='16384' rise='-2048'></span> {volume}%",
-    "format-muted":    "<span size='16384' rise='-2048'></span> 󰖁",
+    "format":          "<span size='16384' rise='-2048'>\uf028</span> {volume}%",
+    "format-muted":    "<span size='16384' rise='-2048'>\uf028</span> \u2571",
     "scroll-step":     1,
-    "on-click":        "bash /home/nine/hyprarch/configs/quickshell/scripts/toggle-volume.sh",
     "on-click-right":  "pactl set-sink-mute 0 toggle"
   },
 
   "clock": {
     "interval":       60,
-    "format":         "<span size='15360' rise='-2048'></span> {:%a %d  %H:%M}",
-    "tooltip-format": "{:%A, %B %d %Y}",
-    "on-click":       "sh -c 'v=$(cat /tmp/qs-cal-state 2>/dev/null || echo 0); echo $((1-v)) > /tmp/qs-cal-state'"
+    "format":         "<span size='15360' rise='-2048'>\uf073</span> {:%a %d  %H:%M}",
+    "tooltip-format": "{:%A, %B %d %Y}"
   },
 
   "battery": {
@@ -96,8 +94,7 @@
     "format":           "<span size='15360' rise='-1024'>{icon}</span> {capacity}%",
     "format-charging":  "<span size='15360' rise='-1024'></span> {capacity}%",
     "format-plugged":   "<span size='15360' rise='-1024'></span> {capacity}%",
-    "format-icons":     ["", "", "", "", ""],
-    "on-click":         "bash /home/nine/hyprarch/configs/quickshell/scripts/toggle-power.sh"
+    "format-icons":     ["", "", "", "", ""]
   },
 
   /* ── Separator 2 ───────────── */
@@ -110,7 +107,7 @@
   /* ── Group 3: Utilities ────── */
   "custom/power-button": {
     "format":   "⏻",
-    "on-click": "wlogout --css ~/.config/wlogout/style.css --buttons-per-row 5 -T 410 -B 410 -L 200 -R 200",
+    "on-click": "sh -c 'if [ -f /tmp/qs-control-panel ]; then rm /tmp/qs-control-panel; else touch /tmp/qs-control-panel; fi'",
     "tooltip":  false
   },
 

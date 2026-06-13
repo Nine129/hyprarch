@@ -80,6 +80,7 @@ lib32-pipewire-jack
 lib32-sdl2-compat
 lib32-v4l-utils
 lib32-vulkan-intel
+libreoffice-fresh
 libva-intel-driver
 linux
 linux-cachyos
@@ -105,6 +106,7 @@ noto-fonts-emoji
 ntfsprogs
 nwg-look
 onefetch
+opencode
 os-prober
 otf-font-awesome
 otter-launcher
