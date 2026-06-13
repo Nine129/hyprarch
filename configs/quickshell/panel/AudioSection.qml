@@ -22,7 +22,7 @@ Item {
 
     Frame {
         id: frame
-        zone: "lime"
+        zone: "orange"
         header: "Audio"
         badge: audio.muted ? "MUTED" : audio.percentage + "%"
         bodyPad: -20
@@ -64,7 +64,7 @@ Item {
                         value: audio.percentage
                         trackHeight: 5
                         showThumb: true
-                        startColor: lime
+                        startColor: orange
                         endColor: orange
 
                         onMoved: audio.setVolume(pct / 100)
@@ -109,7 +109,9 @@ Item {
                             Rectangle {
                                 Layout.preferredWidth: 6
                                 Layout.preferredHeight: 6
-                                color: modelData.muted ? "#F9364B" : lime
+                                Layout.leftMargin: 12
+                                anchors.verticalCenter: parent.verticalCenter
+                                color: modelData.muted ? "#F9364B" : orange
                             }
 
                             Text {
@@ -128,7 +130,7 @@ Item {
                                 value: modelData.muted ? 0 : modelData.volume
                                 trackHeight: 4
                                 showThumb: false
-                                startColor: lime
+                                startColor: orange
                                 endColor: orange
 
                                 onMoved: audio.setStreamVolume(modelData.inputIdx, pct / 100)
@@ -138,7 +140,7 @@ Item {
                                 text: modelData.muted ? "—" : modelData.volume + "%"
                                 font.family: "JetBrainsMono Nerd Font"
                                 font.pixelSize: 11
-                                color: muted
+                                color: silver
                                 Layout.preferredWidth: 34
                                 horizontalAlignment: Text.AlignRight
                             }

@@ -106,9 +106,11 @@
 
   /* ── Group 3: Utilities ────── */
   "custom/power-button": {
-    "format":   "⏻",
-    "on-click": "sh -c 'if [ -f /tmp/qs-control-panel ]; then rm /tmp/qs-control-panel; else touch /tmp/qs-control-panel; fi'",
-    "tooltip":  false
+    "exec":        "~/.config/waybar/scripts/panel-gear.sh",
+    "return-type": "json",
+    "interval":    1,
+    "on-click":    "sh -c 'if [ -f /tmp/qs-control-panel ]; then rm /tmp/qs-control-panel; else touch /tmp/qs-control-panel; fi'",
+    "tooltip":     true
   },
 
   "tray": {

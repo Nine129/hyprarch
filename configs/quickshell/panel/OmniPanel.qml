@@ -10,7 +10,6 @@ import "../services" as QsServices
 PanelWindow {
     id: panel
 
-    property int trayWidth: 0
     readonly property var audio: QsServices.Audio
     readonly property var power: QsServices.Power
     readonly property var mpris: QsServices.MprisService
@@ -26,8 +25,8 @@ PanelWindow {
 
     screen: Quickshell.screens[0]
     anchors { top: true; right: true; bottom: true }
-    margins { top: 4; right: -80 + trayWidth; bottom: 100 }
-    implicitWidth: panel._effectiveVisible ? 440 : 0
+    margins { top: 2; right: 11; bottom: 100 }
+    implicitWidth: 440
     color: "transparent"
     visible: true
     exclusiveZone: 0
@@ -35,19 +34,30 @@ PanelWindow {
     // ── Open state ────────────────────────
     property bool open: false
     property bool _effectiveVisible: false
+    property real slideX: 500
 
     onOpenChanged: {
         if (open) {
             _effectiveVisible = true
+            slideX = 500
             if (flickable) flickable.contentY = 0
+            slideInTimer.start()
         } else {
+            slideX = 500
             hideTimer.start()
         }
     }
 
     Timer {
+        id: slideInTimer
+        interval: 16
+        repeat: false
+        onTriggered: slideX = 0
+    }
+
+    Timer {
         id: hideTimer
-        interval: 200
+        interval: 260
         repeat: false
         onTriggered: {
             if (!panel.open) panel._effectiveVisible = false
@@ -87,6 +97,11 @@ PanelWindow {
         command: ["sh", "-c", "rm -f /tmp/qs-control-panel"]
     }
 
+    Process {
+        id: wlogoutProc
+        command: ["sh", "-c", "wlogout --css ~/.config/wlogout/style.css --buttons-per-row 5 -T 410 -B 410 -L 200 -R 200"]
+    }
+
     // ── Visual tree ───────────────────────
     Item {
         id: slideWrapper
@@ -95,17 +110,10 @@ PanelWindow {
 
         transform: Translate {
             id: slide
-            x: panel.open ? 0 : 440
-            Behavior on x { NumberAnimation { duration: 200; easing.type: Easing.OutCubic } }
+            x: slideX
+            Behavior on x { NumberAnimation { duration: 250; easing.type: Easing.OutCubic } }
         }
 
-        // Black outline behind panel
-        Rectangle {
-            anchors.fill: parent
-            anchors.margins: -2
-            color: "#000000"
-            z: -1
-        }
 
         // Background surface
         Rectangle {
@@ -155,7 +163,7 @@ PanelWindow {
 
                         Text {
                             anchors.centerIn: parent
-                            text: "\u23FC" // standby symbol (distinct from waybar power pill)
+                            text: "\u23FB" // power symbol
                             font.family: "JetBrainsMono Nerd Font"
                             font.pixelSize: 16
                             color: closeMouse.containsMouse ? panel.red : panel.silver
@@ -166,7 +174,7 @@ PanelWindow {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
-                            onClicked: panel.closePanel()
+                            onClicked: wlogoutProc.running = true
                         }
                     }
                 }
@@ -185,7 +193,7 @@ PanelWindow {
                     font.pixelSize: 14
                     font.bold: true
                     font.letterSpacing: 2.5
-                    color: "#6a6a80"
+                    color: "#F9364B"
                     textFormat: Text.PlainText
                     Layout.topMargin: 4
                     Layout.bottomMargin: -6
@@ -225,7 +233,7 @@ PanelWindow {
         Rectangle {
             // Top border
             anchors { left: parent.left; right: parent.right; top: parent.top }
-            height: 3
+            height: 4
             z: 10
             gradient: Gradient {
                 orientation: Gradient.Horizontal
@@ -239,13 +247,13 @@ PanelWindow {
         Rectangle {
             // Left border
             anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
-            width: 3
+            width: 4
             z: 10
             gradient: Gradient {
                 orientation: Gradient.Vertical
                 GradientStop { position: 0.0; color: red }
-                GradientStop { position: 0.33; color: cyan }
-                GradientStop { position: 0.66; color: lime }
+                GradientStop { position: 0.33; color: lime }
+                GradientStop { position: 0.66; color: cyan }
                 GradientStop { position: 1.0; color: red }
             }
         }
@@ -253,13 +261,13 @@ PanelWindow {
         Rectangle {
             // Right border
             anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
-            width: 3
+            width: 4
             z: 10
             gradient: Gradient {
                 orientation: Gradient.Vertical
                 GradientStop { position: 0.0; color: red }
-                GradientStop { position: 0.33; color: cyan }
-                GradientStop { position: 0.66; color: lime }
+                GradientStop { position: 0.33; color: lime }
+                GradientStop { position: 0.66; color: cyan }
                 GradientStop { position: 1.0; color: red }
             }
         }
@@ -267,7 +275,7 @@ PanelWindow {
         Rectangle {
             // Bottom border
             anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-            height: 3
+            height: 4
             z: 10
             gradient: Gradient {
                 orientation: Gradient.Horizontal

@@ -76,7 +76,7 @@ window > box {
 #clock { background: @cyan; color: #0a0a0c; font-size: 14px; }
 #battery, #battery.charging, #battery.warning, #battery.critical { font-size: 14px; }
 #battery { background: @lime; color: #0a0a0c; }
-#battery.charging { background: @cyan; color: #0a0a0c; }
+#battery.charging { background: @lime; color: #0a0a0c; }
 #battery.warning { background: @orange; color: #0a0a0c; }
 #battery.critical { background: @red; color: @bg; }
 
@@ -100,7 +100,7 @@ window > box {
 
 /* ── Power button ──────────────── */
 #custom-power-button {
-  color: #0a0a0c; font-size: 20px; font-weight: 700; padding: 0 14px;
+  color: #0a0a0c; font-size: 24px; font-weight: 700; padding: 0 14px;
   background: linear-gradient(180deg,#ff2d55,rgba(255,45,85,0.85));
 }
 #custom-power-button:hover { background: #cc2444; }

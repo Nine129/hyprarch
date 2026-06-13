@@ -33,7 +33,7 @@ Item {
 
     Frame {
         id: frame
-        zone: "red"
+        zone: "lime"
         header: "Battery"
         bodyPad: 0
         bodyHeight: content.implicitHeight
@@ -149,8 +149,8 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.leftMargin: index > 0 ? -1 : 0
-                    color: isActive ? Qt.rgba(red.r, red.g, red.b, 0.10) : Qt.rgba(1, 1, 1, 0.03)
-                    border.color: isActive ? Qt.rgba(red.r, red.g, red.b, 0.35) : Qt.rgba(1, 1, 1, 0.06)
+                    color: isActive ? Qt.rgba(lime.r, lime.g, lime.b, 0.10) : Qt.rgba(1, 1, 1, 0.03)
+                    border.color: isActive ? Qt.rgba(lime.r, lime.g, lime.b, 0.35) : Qt.rgba(1, 1, 1, 0.06)
                     border.width: 1
 
                     required property int index
@@ -165,7 +165,7 @@ Item {
                             text: modelData.icon
                             font.family: "JetBrainsMono Nerd Font"
                             font.pixelSize: 18
-                            color: red
+                            color: lime
                             Layout.alignment: Qt.AlignHCenter
                         }
 
@@ -174,7 +174,7 @@ Item {
                             font.family: "JetBrainsMono Nerd Font"
                             font.pixelSize: 9
                             font.bold: true
-                            color: isActive ? red : silver
+                            color: isActive ? lime : silver
                             textFormat: Text.PlainText
                             Layout.alignment: Qt.AlignHCenter
                         }

@@ -34,7 +34,6 @@ Item {
         id: frame
         zone: "orange"
         header: "Now Playing"
-        badge: "MPD"
         bodyPad: -20
         bodyHeight: content.implicitHeight
 

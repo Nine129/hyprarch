@@ -23,7 +23,7 @@ Rectangle {
     border.color: warn ? Qt.rgba(0xF9/255, 0x36/255, 0x4B/255, 0.20) : Qt.rgba(1, 1, 1, 0.05)
     border.width: 1
 
-    readonly property color accent: warn ? "#F9364B" : "#00e5ff"
+    readonly property color accent: warn ? "#F9364B" : "#F9364B"
     readonly property color surface2: "#1a1a20"
 
     opacity: 1

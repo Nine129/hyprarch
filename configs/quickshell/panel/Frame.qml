@@ -73,35 +73,28 @@ Rectangle {
         }
 
         // Badge
-        Rectangle {
-            anchors { right: parent.right; rightMargin: 16; verticalCenter: parent.verticalCenter }
+        TextMetrics {
+            id: badgeMetrics
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 12
+            font.bold: true
+            text: root.badge
+        }
+
+        Text {
+            id: badgeText
+            anchors { right: parent.right; rightMargin: 0; verticalCenter: parent.verticalCenter; verticalCenterOffset: 8 }
             visible: root.badge !== ""
-            width: badgeMetrics.advanceWidth + 16
-            height: badgeMetrics.height + 4
-            color: Qt.rgba(1, 1, 1, 0.03)
-
-            TextMetrics {
-                id: badgeMetrics
-                font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 10
-                font.bold: true
-                text: root.badge
-            }
-
-            Text {
-                id: badgeText
-                anchors.centerIn: parent
-                text: root.badge
-                font.family: "JetBrainsMono Nerd Font"
-                font.pixelSize: 10
-                font.bold: true
-                color: "#6a6a80"
-                elide: Text.ElideRight
-                maximumLineCount: 1
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-                textFormat: Text.PlainText
-            }
+            text: root.badge
+            font.family: "JetBrainsMono Nerd Font"
+            font.pixelSize: 12
+            font.bold: true
+            color: "#e8e8f0"
+            elide: Text.ElideRight
+            maximumLineCount: 1
+            verticalAlignment: Text.AlignVCenter
+            horizontalAlignment: Text.AlignHCenter
+            textFormat: Text.PlainText
         }
     }
 

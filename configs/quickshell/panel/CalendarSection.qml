@@ -138,7 +138,7 @@ Item {
     Frame {
         id: frame
         zone: "cyan"
-        bodyPad: -20
+        bodyPad: -30
         bodyHeight: content.implicitHeight
 
         ColumnLayout {
