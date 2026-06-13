@@ -100,7 +100,7 @@ window > box {
 
 /* ── Power button ──────────────── */
 #custom-power-button {
-  color: #0a0a0c; font-size: 24px; font-weight: 700; padding: 0 14px;
+  color: #0a0a0c; font-size: 22px; font-weight: 700; padding: 0 12px;
   background: linear-gradient(180deg,#ff2d55,rgba(255,45,85,0.85));
 }
 #custom-power-button:hover { background: #cc2444; }

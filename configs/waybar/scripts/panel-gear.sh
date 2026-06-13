@@ -1,2 +1,2 @@
 #!/bin/bash
-echo '{"text":"","class":"","tooltip":"Toggle control panel"}'
+echo '{"text":"<span font_desc=\"26px\">󰣇</span>","class":"","tooltip":"Toggle control panel"}'
