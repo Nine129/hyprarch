@@ -22,6 +22,7 @@ setopt HIST_REDUCE_BLANKS
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_EXPIRE_DUPS_FIRST
 
+export PAGER=delta
 # ── History ────────────────────────────────────────────
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000

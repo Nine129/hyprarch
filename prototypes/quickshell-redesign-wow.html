@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CGGX Quickshell Redesign - Neon Glass</title>
+<style>
+/* CGGX Quickshell Redesign - Neon Glass v2 */
+:root{
+  --bg:#0a0a0c; --surface:#151518; --surface2:#1a1a20; --border:#2a2a35;
+  --red:#F9364B; --cyan:#00e5ff; --lime:#c8ff00; --orange:#ff6b00;
+  --silver:#e8e8f0; --muted:#6a6a80;
+  --font:'JetBrainsMono Nerd Font','JetBrains Mono','Fira Code',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#050507;color:var(--silver);font-family:var(--font);font-size:13px;overflow:hidden}
+.chrome{position:absolute;top:16px;left:20px;z-index:100;display:flex;gap:10px;align-items:center}
+.chrome h1{font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.stage{width:100vw;height:100vh;display:flex;justify-content:center;align-items:center}
+.screen{width:1920px;height:1080px;position:relative;background:var(--bg);flex-shrink:0;transform-origin:center center;box-shadow:0 0 0 1px var(--border),0 30px 100px rgba(0,0,0,.6);overflow:hidden}
+.wallpaper{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 20% 30%,rgba(249,54,75,.10) 0%,transparent 55%),radial-gradient(ellipse 60% 50% at 80% 20%,rgba(0,229,255,.08) 0%,transparent 50%),radial-gradient(ellipse 50% 70% at 70% 80%,rgba(200,255,0,.07) 0%,transparent 55%),radial-gradient(ellipse 50% 40% at 30% 85%,rgba(255,107,0,.08) 0%,transparent 50%),var(--bg)}
+
+/* WAYBAR */
+.waybar{position:absolute;top:0;left:0;right:0;height:38px;display:flex;align-items:center;padding:0 12px;pointer-events:none;z-index:5;background:var(--bg);border-bottom:1px solid var(--border)}
+.wb-left,.wb-right{display:flex;align-items:center;gap:6px;pointer-events:auto}
+.wb-right{margin-left:auto}
+.wb-pill{display:flex;align-items:center;gap:8px;height:30px;padding:0 14px;background:var(--surface);border:1px solid var(--border);font-size:13px;font-weight:600;color:var(--silver)}
+.wb-pill.cyan{background:var(--cyan);color:var(--bg);border-color:var(--cyan)}
+.wb-pill.orange{background:var(--orange);color:var(--bg);border-color:var(--orange)}
+.wb-pill.lime{background:var(--lime);color:var(--bg);border-color:var(--lime)}
+.wb-pill.red{background:var(--red);color:var(--bg);border-color:var(--red)}
+.wb-pill.workspaces{padding:0}
+.wb-pill.workspaces .ws{width:36px;height:100%;display:flex;align-items:center;justify-content:center;border-right:1px solid rgba(255,255,255,.06);color:var(--muted);font-size:12px;font-weight:700}
+.wb-pill.workspaces .ws.active{color:var(--bg);background:var(--red);box-shadow:0 0 12px var(--red)}
+.wb-pill.mpd{max-width:320px}
+.wb-pill.mpd .mpd-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:240px}
+
+/* SHARED WIDGETS */
+.cover{width:110px;height:110px;flex-shrink:0;overflow:hidden}
+.cover img{width:100%;height:100%;object-fit:cover;display:block}
+.slider{height:5px;background:var(--surface2);position:relative}
+.slider-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--red))}
+.slider-thumb{width:12px;height:12px;background:var(--red);position:absolute;top:50%;transform:translate(-50%,-50%);box-shadow:0 0 10px var(--red)}
+.sec{font-size:9px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+
+/* NEON GLASS PANEL */
+.panel{position:absolute;right:0;top:38px;bottom:0;width:430px;background:rgba(10,10,12,.72);backdrop-filter:blur(24px) saturate(160%);border:2px solid transparent;border-top:none;border-image:linear-gradient(180deg,var(--orange),var(--cyan),var(--lime),var(--red)) 1;box-shadow:-20px 0 60px rgba(0,0,0,.5),inset 0 0 80px rgba(0,229,255,.04);display:flex;flex-direction:column;padding:20px 26px 26px;overflow-y:auto;scrollbar-width:none}
+.panel::-webkit-scrollbar{display:none}
+.panel::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:radial-gradient(circle at 70% 20%,rgba(0,229,255,.10),transparent 40%),radial-gradient(circle at 30% 80%,rgba(249,54,75,.10),transparent 40%);pointer-events:none;animation:glowdrift 12s ease-in-out infinite alternate}
+@keyframes glowdrift{from{transform:translate(0,0)}to{transform:translate(-5%,5%)}}
+
+.a-head{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.a-head h2{font-size:22px;font-weight:800;letter-spacing:3px;color:var(--red)}
+.a-close{width:32px;height:32px;border:1px solid var(--border);background:rgba(255,255,255,.04);color:var(--silver);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+.a-close:hover{border-color:var(--red);color:var(--red);box-shadow:0 0 12px var(--red)}
+
+.card{position:relative;z-index:2;background:rgba(21,21,24,.55);border:1px solid rgba(255,255,255,.08);padding:16px;margin-bottom:14px;box-shadow:0 8px 32px rgba(0,0,0,.25);transition:transform .15s,border-color .15s}
+.card::after{content:'';position:absolute;top:0;left:-100%;width:50%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);transform:skewX(-20deg);pointer-events:none;overflow:hidden}
+.card:hover{border-color:rgba(255,255,255,.16);transform:translateY(-2px)}
+.card:hover::after{animation:shine .8s ease-in-out}
+@keyframes shine{to{left:150%}}
+
+/* NOW PLAYING */
+.card.np{display:flex;gap:16px;align-items:center}
+.np-info{flex:1;min-width:0}
+.np-title{font-size:16px;font-weight:800;color:var(--orange);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px}
+.np-artist{font-size:12px;font-weight:600;color:var(--cyan);margin-bottom:10px}
+.np-bar{height:5px;background:var(--surface2);margin-bottom:6px;position:relative}
+.np-bar-fill{height:100%;width:62%;background:linear-gradient(90deg,var(--orange),var(--red));box-shadow:0 0 8px var(--red)}
+.np-time{display:flex;justify-content:space-between;font-size:10px;color:var(--muted)}
+.np-ctrl{display:flex;gap:18px;margin-top:10px;font-size:16px}
+.np-ctrl span{cursor:pointer;transition:.15s}
+.np-ctrl span:hover{color:var(--lime);text-shadow:0 0 10px var(--lime)}
+
+/* VOLUME */
+.vol-row{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.vol-icon{width:22px;text-align:center;color:var(--orange);font-size:16px}
+.vol-track{flex:1}
+.vol-meta{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:3px}
+.app-vol{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.app-vol:last-child{border:none}
+.app-vol .dot{width:6px;height:6px;background:var(--lime)}
+.app-vol .name{flex:1;font-size:12px;color:var(--silver)}
+.app-vol .pct{font-size:11px;color:var(--muted)}
+
+/* SQUARE POWER SECTION (cyber influence) */
+.power-card{padding:0;overflow:hidden}
+.power-top{display:flex;align-items:stretch;border-bottom:1px solid rgba(255,255,255,.08)}
+.power-ring-square{width:100px;height:100px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:var(--lime);border-right:1px solid rgba(255,255,255,.08);box-shadow:inset 0 0 30px rgba(200,255,0,.08);text-shadow:0 0 12px var(--lime)}
+.power-stats{display:flex;flex-direction:column;flex:1}
+.power-stat{flex:1;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid rgba(255,255,255,.06);font-size:12px}
+.power-stat:last-child{border-bottom:none}
+.power-stat .lab{color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;font-size:9px;font-weight:700}
+.power-stat .num{font-weight:800;color:var(--silver);font-size:14px}
+.power-bottom{padding:12px;display:flex;gap:8px}
+.profile{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);cursor:pointer;transition:.15s}
+.profile:hover{background:rgba(255,255,255,.06)}
+.profile.active{background:rgba(249,54,75,.10);border-color:rgba(249,54,75,.35);box-shadow:0 0 14px rgba(249,54,75,.12)}
+.profile .ico{font-size:18px;color:var(--red)}
+.profile .name{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--silver)}
+.profile.active .name{color:var(--red)}
+
+/* CALENDAR - inherits TimePanel goodness */
+.cal-clock{text-align:center;font-size:42px;font-weight:800;color:var(--silver);margin-bottom:10px;font-variant-numeric:tabular-nums;letter-spacing:1px;text-shadow:0 0 20px rgba(0,229,255,.3)}
+.cal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.cal-month{font-size:15px;font-weight:700;color:var(--cyan);letter-spacing:1px}
+.cal-arrows{display:flex;gap:10px;font-size:14px;color:var(--muted)}
+.cal-arrows span{cursor:pointer;transition:.15s}
+.cal-arrows span:hover{color:var(--cyan);text-shadow:0 0 8px var(--cyan)}
+.tz-container{height:32px;margin-bottom:12px;position:relative;overflow:hidden;width:100%}
+.tz-container::before,.tz-container::after{content:'';position:absolute;top:0;bottom:0;width:50px;z-index:2;pointer-events:none}
+.tz-container::before{left:0;background:linear-gradient(90deg,rgba(21,21,24,.95),transparent)}
+.tz-container::after{right:0;background:linear-gradient(270deg,rgba(21,21,24,.95),transparent)}
+.tz-row{display:flex;transition:transform .35s cubic-bezier(.4,0,.2,1);will-change:transform}
+.tz-slot{flex-shrink:0;text-align:center;font-size:11px;font-weight:700;cursor:pointer;transition:color .15s;display:flex;align-items:center;justify-content:center}
+.tz-slot:hover{color:var(--silver)}
+.tz-slot.active{color:var(--cyan);text-shadow:0 0 8px var(--cyan)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;text-align:center;font-size:11px}
+.cal-grid .hd{color:var(--muted);font-size:9px;font-weight:700;margin-bottom:2px}
+.cal-grid .cell{padding:5px;color:var(--silver);cursor:default;transition:.1s}
+.cal-grid .cell:hover{background:rgba(255,255,255,.05)}
+.cal-grid .cell.off{color:var(--border)}
+.cal-grid .cell.today{background:var(--cyan);color:var(--bg);font-weight:800;box-shadow:0 0 12px var(--cyan)}
+
+/* NOTIFICATIONS */
+.notif{display:flex;gap:12px;padding:12px;background:rgba(255,255,255,.03);margin-bottom:8px;border:1px solid rgba(255,255,255,.05)}
+.notif.warn{border-color:rgba(255,45,85,.2)}
+.notif .icon{width:32px;height:32px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--cyan);font-size:15px;flex-shrink:0}
+.notif.warn .icon{color:var(--red);background:rgba(255,45,85,.10)}
+.notif .app{font-size:9px;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:1px}
+.notif.warn .app{color:var(--red)}
+.notif .title{font-size:11px;font-weight:700;color:var(--silver);margin:2px 0 1px}
+.notif .body{font-size:10px;color:var(--muted);line-height:1.35}
+
+</style>
+</head>
+<body>
+<div class="chrome"><h1>CGGX Quickshell — Neon Glass v2</h1></div>
+
+<div class="stage">
+  <div class="screen" id="screen">
+    <div class="wallpaper"></div>
+
+    <div class="waybar">
+      <div class="wb-left">
+        <div class="wb-pill workspaces"><span class="ws">1</span><span class="ws">2</span><span class="ws active">3</span><span class="ws">4</span><span class="ws">5</span></div>
+        <div class="wb-pill mpd"><span>♫</span><span class="mpd-text">Måneskin — CHOSEN</span></div>
+      </div>
+      <div class="wb-right">
+        <div class="wb-pill cyan"><span>◷</span><span>Sat 13 19:18</span></div>
+        <div class="wb-pill orange"><span>♪</span><span>50%</span></div>
+        <div class="wb-pill lime"><span>⚡</span><span>71%</span></div>
+        <div class="wb-pill red"><span>⏻</span></div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="a-head"><h2>CONTROL</h2><div class="a-close">×</div></div>
+
+      <div class="card np">
+        <div class="cover"><img src="../wallpapers/cggx.webp" alt="album art"></div>
+        <div class="np-info">
+          <div class="np-title">CHOSEN</div>
+          <div class="np-artist">Måneskin</div>
+          <div class="np-bar"><div class="np-bar-fill"></div></div>
+          <div class="np-time"><span>1:40</span><span>2:40</span></div>
+          <div class="np-ctrl"><span>⏮</span><span>⏸</span><span>⏭</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec">Volume</div>
+        <div class="vol-row"><span class="vol-icon">♪</span><div class="vol-track slider"><div class="slider-fill" style="width:72%"></div><div class="slider-thumb" style="left:72%"></div></div></div>
+        <div class="vol-meta"><span>Family 17h/19h HD Audio</span><span>72%</span></div>
+        <div style="margin-top:8px">
+          <div class="app-vol"><span class="dot"></span><span class="name">Vivaldi</span><span class="pct">58%</span></div>
+          <div class="app-vol"><span class="dot"></span><span class="name">kitty</span><span class="pct">30%</span></div>
+        </div>
+      </div>
+
+      <div class="card power-card">
+        <div class="power-top">
+          <div class="power-ring-square">71%</div>
+          <div class="power-stats">
+            <div class="power-stat"><span class="lab">Health</span><span class="num">92%</span></div>
+            <div class="power-stat"><span class="lab">Cycles</span><span class="num">188</span></div>
+            <div class="power-stat"><span class="lab">Charge Limit</span><span class="num">80%</span></div>
+          </div>
+        </div>
+        <div class="power-bottom">
+          <div class="profile"><span class="ico">󰌪</span><span class="name">Saver</span></div>
+          <div class="profile active"><span class="ico">◎</span><span class="name">Balanced</span></div>
+          <div class="profile"><span class="ico">⚡</span><span class="name">Perf</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="cal-clock">19:18:42</div>
+        <div class="tz-container" id="tzContainer">
+          <div class="tz-row" id="tzRow"></div>
+        </div>
+        <div class="cal-head">
+          <div class="cal-month">June 2026</div>
+          <div class="cal-arrows"><span>◂</span><span>▸</span></div>
+        </div>
+        <div class="cal-grid">
+          <span class="hd">Mo</span><span class="hd">Tu</span><span class="hd">We</span><span class="hd">Th</span><span class="hd">Fr</span><span class="hd">Sa</span><span class="hd">Su</span>
+          <span class="cell off">1</span><span class="cell off">2</span><span class="cell off">3</span><span class="cell off">4</span><span class="cell off">5</span><span class="cell off">6</span><span class="cell">7</span>
+          <span class="cell">8</span><span class="cell">9</span><span class="cell">10</span><span class="cell">11</span><span class="cell">12</span><span class="cell today">13</span><span class="cell">14</span>
+          <span class="cell">15</span><span class="cell">16</span><span class="cell">17</span><span class="cell">18</span><span class="cell">19</span><span class="cell">20</span><span class="cell">21</span>
+          <span class="cell">22</span><span class="cell">23</span><span class="cell">24</span><span class="cell">25</span><span class="cell">26</span><span class="cell">27</span><span class="cell">28</span>
+          <span class="cell">29</span><span class="cell">30</span><span class="cell off">1</span><span class="cell off">2</span><span class="cell off">3</span><span class="cell off">4</span><span class="cell off">5</span>
+        </div>
+      </div>
+
+      <div class="sec">Notifications</div>
+      <div class="notif">
+        <div class="icon">D</div>
+        <div><div class="app">Discord</div><div class="title">nine mentioned you</div><div class="body">check out the new rice mockup</div></div>
+      </div>
+      <div class="notif warn">
+        <div class="icon">!</div>
+        <div><div class="app">Power</div><div class="title">Battery low</div><div class="body">Connect charger — 15% remaining</div></div>
+      </div>
+      <div class="notif">
+        <div class="icon">N</div>
+        <div><div class="app">Neovim</div><div class="title">LSP restarted</div><div class="body">rust-analyzer has finished loading workspace</div></div>
+      </div>
+      <div class="notif">
+        <div class="icon">S</div>
+        <div><div class="app">Spotify</div><div class="title">New playlist available</div><div class="body">Your Daily Mix 1 has been updated with fresh tracks</div></div>
+      </div>
+      <div class="notif">
+        <div class="icon">G</div>
+        <div><div class="app">Git</div><div class="title">Push completed</div><div class="body">main → origin/main • 3 commits • 342 lines changed</div></div>
+      </div>
+      <div class="notif">
+        <div class="icon">W</div>
+        <div><div class="app">System</div><div class="title">Updates available</div><div class="body">5 packages ready to upgrade (pacman -Syu)</div></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function fit(){
+  const s=document.getElementById('screen');
+  const sc=Math.min(window.innerWidth/1920, window.innerHeight/1080);
+  s.style.transform='scale('+sc+')';
+}
+window.addEventListener('resize',fit);
+fit();
+// TZ carousel
+const tz=[
+  {name:'HST',off:-10},{name:'AKT',off:-9},{name:'PT',off:-8},{name:'MT',off:-7},
+  {name:'CT',off:-6},{name:'ET',off:-5},{name:'BRT',off:-3},{name:'UTC',off:0},
+  {name:'GMT',off:0},{name:'CET',off:1},{name:'MSK',off:3},{name:'IST',off:5.5},
+  {name:'CST',off:8},{name:'JST',off:9},{name:'AET',off:10},{name:'NZT',off:12}
+];
+const localIdx=tz.findIndex(t=>t.name==='CST')||0;
+let tzIdx=localIdx;
+const N=tz.length;
+const SLOTS=7;
+let slotW=0;
+function buildTZ(){
+  const row=document.getElementById('tzRow');
+  const cont=document.getElementById('tzContainer');
+  slotW=cont.clientWidth/SLOTS;
+  row.innerHTML='';
+  for(let r=0;r<3;r++) for(let j=0;j<N;j++){
+    const s=document.createElement('span');
+    s.className='tz-slot';
+    s.textContent=tz[j].name;
+    s.style.width=slotW+'px';
+    s.addEventListener('click',()=>selectTZ(j));
+    row.appendChild(s);
+  }
+  updateTZRow();
+}
+function selectTZ(idx){
+  if(idx===tzIdx) return;
+  tzIdx=idx;
+  updateTZRow();
+}
+function updateTZRow(){
+  const row=document.getElementById('tzRow');
+  const total=tzIdx+N;
+  const x=-(total*slotW)+slotW*3;
+  row.style.transform='translateX('+x+'px)';
+  const slots=row.querySelectorAll('.tz-slot');
+  slots.forEach((el,i)=>{
+    const dist=Math.abs(i-total);
+    el.classList.remove('active');
+    if(dist===0){el.style.color='var(--cyan)';el.classList.add('active')}
+    else if(dist===1)el.style.color='var(--silver)';
+    else if(dist===2)el.style.color='var(--muted)';
+    else el.style.color='var(--border)';
+  });
+}
+window.addEventListener('resize',()=>{buildTZ();});
+setTimeout(buildTZ,100);
+document.querySelectorAll('.profile').forEach(el=>{
+  el.addEventListener('click',()=>{
+    document.querySelectorAll('.profile').forEach(p=>p.classList.remove('active'));
+    el.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

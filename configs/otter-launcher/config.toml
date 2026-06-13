@@ -88,9 +88,9 @@ place_holder_color = "\u001B[90m"
 # suggestion color in hint mode
 hint_color = "\u001B[30m"
 # move the interface rightward or downward
-move_interface_right = 25
+move_interface_right = 27
 move_interface_down = 0
-
+ 
 
 # overlay is a floating layer that can be printed with stdout and moved around; useful for integrating chafa images; check docs in repo for example usage
 [overlay]
@@ -103,7 +103,6 @@ overlay_height = 0
 # move the overlay layer around for theming
 move_overlay_right = 0
 move_overlay_down = 2
-
 
 # modules are defined as followed
 [[modules]]
