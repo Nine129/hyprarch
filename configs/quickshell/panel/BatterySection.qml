@@ -56,18 +56,6 @@ Item {
                 Layout.preferredHeight: 100
                 color: surface2
 
-                Rectangle {
-                    anchors.fill: parent
-                    color: Qt.rgba(lime.r, lime.g, lime.b, 0.06)
-                }
-
-                Rectangle {
-                    anchors.fill: parent
-                    color: "transparent"
-                    border.color: Qt.rgba(lime.r, lime.g, lime.b, 0.12)
-                    border.width: 1
-                }
-
                 Text {
                     anchors.centerIn: parent
                     text: fmtPct(power.batteryPercent)
@@ -106,7 +94,7 @@ Item {
                             Text {
                                 text: modelData.label
                                 font.family: "JetBrainsMono Nerd Font"
-                                font.pixelSize: 9
+                            font.pixelSize: 14
                                 font.bold: true
                                 color: muted
                                 textFormat: Text.PlainText
@@ -117,7 +105,7 @@ Item {
                             Text {
                                 text: modelData.value
                                 font.family: "JetBrainsMono Nerd Font"
-                                font.pixelSize: 14
+                            font.pixelSize: 16
                                 font.bold: true
                                 color: silver
                             }
@@ -139,6 +127,7 @@ Item {
         RowLayout {
             Layout.fillWidth: true
             Layout.preferredHeight: 56
+            Layout.topMargin: 16
             Layout.bottomMargin: -44
             spacing: 0
 
@@ -149,8 +138,8 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.leftMargin: index > 0 ? -1 : 0
-                    color: isActive ? Qt.rgba(lime.r, lime.g, lime.b, 0.10) : Qt.rgba(1, 1, 1, 0.03)
-                    border.color: isActive ? Qt.rgba(lime.r, lime.g, lime.b, 0.35) : Qt.rgba(1, 1, 1, 0.06)
+                    color: isActive ? lime : Qt.rgba(1, 1, 1, 0.03)
+                    border.color: isActive ? lime : Qt.rgba(1, 1, 1, 0.06)
                     border.width: 1
 
                     required property int index
@@ -164,17 +153,17 @@ Item {
                         Text {
                             text: modelData.icon
                             font.family: "JetBrainsMono Nerd Font"
-                            font.pixelSize: 18
-                            color: lime
+                            font.pixelSize: 16
+                            color: isActive ? "#0a0a0c" : lime
                             Layout.alignment: Qt.AlignHCenter
                         }
 
                         Text {
                             text: modelData.label
                             font.family: "JetBrainsMono Nerd Font"
-                            font.pixelSize: 9
+                            font.pixelSize: 12
                             font.bold: true
-                            color: isActive ? lime : silver
+                            color: isActive ? "#0a0a0c" : silver
                             textFormat: Text.PlainText
                             Layout.alignment: Qt.AlignHCenter
                         }

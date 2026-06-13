@@ -98,6 +98,7 @@ Item {
 
                 // Progress bar
                 Item {
+                    id: progressBar
                     Layout.fillWidth: true
                     Layout.topMargin: 10
                     Layout.preferredHeight: 5
@@ -114,11 +115,17 @@ Item {
                     Rectangle {
                         width: parent.width * parent.frac
                         height: parent.height
+                        clip: true
 
-                        gradient: Gradient {
-                            orientation: Gradient.Horizontal
-                            GradientStop { position: 0.0; color: orange }
-                            GradientStop { position: 1.0; color: red }
+                        Rectangle {
+                            width: progressBar.width
+                            height: progressBar.height
+                            gradient: Gradient {
+                                orientation: Gradient.Horizontal
+                                GradientStop { position: 0.0; color: lime }
+                                GradientStop { position: 0.5; color: cyan }
+                                GradientStop { position: 1.0; color: orange }
+                            }
                         }
                     }
                 }
@@ -150,13 +157,14 @@ Item {
                 // Controls
                 RowLayout {
                     Layout.topMargin: 10
+                    Layout.alignment: Qt.AlignHCenter
                     spacing: 18
 
                     Text {
                         text: "\uf04a" // previous
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: 16
-                        color: prevMouse.containsMouse ? "#ff9040" : orange
+                        color: prevMouse.containsMouse ? "#d4ff40" : lime
 
                         MouseArea {
                             id: prevMouse
@@ -188,7 +196,7 @@ Item {
                         text: "\uf04e" // next
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: 16
-                        color: nextMouse.containsMouse ? "#d4ff40" : lime
+                        color: nextMouse.containsMouse ? "#ff9040" : orange
 
                         MouseArea {
                             id: nextMouse
