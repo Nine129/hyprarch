@@ -26,7 +26,7 @@ PanelWindow {
     screen: Quickshell.screens[0]
     anchors { top: true; right: true; bottom: true }
     margins { top: 2; right: 11; bottom: 100 }
-    implicitWidth: 440
+    implicitWidth: panel._effectiveVisible ? 440 : 0
     color: "transparent"
     visible: true
     exclusiveZone: 0
