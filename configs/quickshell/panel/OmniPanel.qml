@@ -237,9 +237,11 @@ PanelWindow {
             z: 10
             gradient: Gradient {
                 orientation: Gradient.Horizontal
-                GradientStop { position: 0.0; color: orange }
-                GradientStop { position: 0.33; color: cyan }
-                GradientStop { position: 0.66; color: lime }
+                GradientStop { position: 0.0; color: red }
+                GradientStop { position: 0.2; color: orange }
+                GradientStop { position: 0.4; color: cyan }
+                GradientStop { position: 0.6; color: lime }
+                GradientStop { position: 0.8; color: orange }
                 GradientStop { position: 1.0; color: red }
             }
         }
@@ -252,8 +254,10 @@ PanelWindow {
             gradient: Gradient {
                 orientation: Gradient.Vertical
                 GradientStop { position: 0.0; color: red }
-                GradientStop { position: 0.33; color: lime }
-                GradientStop { position: 0.66; color: cyan }
+                GradientStop { position: 0.2; color: orange }
+                GradientStop { position: 0.4; color: lime }
+                GradientStop { position: 0.6; color: cyan }
+                GradientStop { position: 0.8; color: orange }
                 GradientStop { position: 1.0; color: red }
             }
         }
@@ -266,8 +270,10 @@ PanelWindow {
             gradient: Gradient {
                 orientation: Gradient.Vertical
                 GradientStop { position: 0.0; color: red }
-                GradientStop { position: 0.33; color: lime }
-                GradientStop { position: 0.66; color: cyan }
+                GradientStop { position: 0.2; color: orange }
+                GradientStop { position: 0.4; color: lime }
+                GradientStop { position: 0.6; color: cyan }
+                GradientStop { position: 0.8; color: orange }
                 GradientStop { position: 1.0; color: red }
             }
         }
@@ -279,9 +285,11 @@ PanelWindow {
             z: 10
             gradient: Gradient {
                 orientation: Gradient.Horizontal
-                GradientStop { position: 0.0; color: orange }
-                GradientStop { position: 0.33; color: cyan }
-                GradientStop { position: 0.66; color: lime }
+                GradientStop { position: 0.0; color: red }
+                GradientStop { position: 0.2; color: orange }
+                GradientStop { position: 0.4; color: cyan }
+                GradientStop { position: 0.6; color: lime }
+                GradientStop { position: 0.8; color: orange }
                 GradientStop { position: 1.0; color: red }
             }
         }

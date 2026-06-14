@@ -3,7 +3,7 @@
 
   "logo": {
     "source": "/home/nine/hyprarch/configs/fastfetch/xnewlogo.png",
-    "type": "kitty",
+    "type": "kitty-direct",
     "width": 33,
     "preserveAspectRatio": true,
     "padding": { "right": 6 }
@@ -29,7 +29,8 @@
       "color": {
         "green": "#ff6b00",
         "yellow": "#ff6b00",
-        "red": "#ff6b00"
+        "red": "#ff6b00",
+    "maxTerminalWidth": 0
       }
     }
   },

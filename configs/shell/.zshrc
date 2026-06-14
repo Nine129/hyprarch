@@ -22,7 +22,6 @@ setopt HIST_REDUCE_BLANKS
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_EXPIRE_DUPS_FIRST
 
-export PAGER=delta
 # ── History ────────────────────────────────────────────
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
@@ -165,6 +164,8 @@ alias path='echo $PATH | tr ":" "\n"'
 alias reload='source ~/.zshrc'
 alias mkdir='mkdir -p'
 alias lsgrub="grep -oP \"(?<=menuentry ')[^']+\" /boot/grub/grub.cfg"
+alias zathura="zathura --fork"
+
 function z() {
     __zoxide_z "$@" && eza --icons --group-directories-first
 }
@@ -270,3 +271,4 @@ if [[ -d "$HOME/.zsh/plugins/zsh-syntax-highlighting" ]]; then
   ZSH_HIGHLIGHT_STYLES[cursor]="standout"
   ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]="standout"
 fi
+

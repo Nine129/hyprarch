@@ -1,0 +1,60 @@
+# ~/.config/zathura/zathurarc
+
+# --- Behavior ---
+set adjust-open             "width"
+set scroll-step             100
+set scroll-full-overlap     0.1
+set scroll-page-aware       true
+set scroll-wrap             false
+set zoom-step               10
+set zoom-center             true
+set selection-clipboard     clipboard
+set incremental-search      true
+set window-title-basename   true
+set window-title-page       true
+set render-loading          false
+set guioptions              s        # statusbar only, no scrollbar clutter
+
+# --- Recolor (invert PDFs to dark) ---
+set recolor                 true
+set recolor-keephue         true
+set recolor-lightcolor      "#151518"
+set recolor-darkcolor       "#e0e0e0"
+set recolor-reverse-video   true
+
+# --- CGGX theme ---
+set default-bg              "#151518"
+set default-fg              "#e0e0e0"
+
+set statusbar-bg            "#111114"
+set statusbar-fg            "#00e5ff"
+
+set inputbar-bg             "#111114"
+set inputbar-fg             "#e0e0e0"
+
+set highlight-color         "#ff6b00"
+set highlight-active-color  "#ff2d55"
+
+set completion-bg           "#111114"
+set completion-fg           "#e0e0e0"
+set completion-highlight-bg "#ff2d55"
+set completion-highlight-fg "#0a0a0c"
+
+set notification-bg         "#111114"
+set notification-fg         "#c8ff00"
+set notification-error-bg   "#ff2d55"
+set notification-error-fg   "#0a0a0c"
+set notification-warning-bg "#ff6b00"
+set notification-warning-fg "#151518"
+
+set font                    "JetBrainsMono Nerd Font 10"
+
+# --- Keybinds ---
+map [normal] K              zoom in
+map [normal] J              zoom out
+map [normal] <C-r>          recolor
+map [normal] <C-=>          zoom in
+map [normal] <C-->          zoom out
+map [normal] p              print
+map [fullscreen] f          toggle_fullscreen
+map [normal] f              toggle_fullscreen
