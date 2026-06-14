@@ -78,7 +78,6 @@ hl.window_rule({
     float= true,
     center=true,
     size={750,450},
-    opaque=true,
 
    }
  )
@@ -89,7 +88,6 @@ hl.window_rule({
     float= true,
     center=true,
     size={490,290},
-    opaque=true,
 
    }
  )

@@ -30,7 +30,6 @@
     "title-len":       30,
     "artist-len":      20,
     "escape":          true,
-    "interval":        0,
     "on-click-right":  "kitty --single-instance rmpc",
     "on-scroll-up":    "playerctl next",
     "on-scroll-down":  "playerctl previous"

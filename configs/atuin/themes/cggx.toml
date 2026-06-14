@@ -1,0 +1,12 @@
+[theme]
+name = "cggx"
+
+[colors]
+Title     = "#00e5ff"   # cyan  -- headers, section titles
+Important = "#ff2d55"   # red   -- selected item, highlights
+Guidance  = "#c8ff00"   # lime  -- help text, hints
+AlertInfo = "#00e5ff"   # cyan
+AlertWarn = "#c8ff00"   # lime
+AlertError = "#ff2d55"  # red
+Annotation = "#444455"  # muted gray
+Muted      = "#333344"  # near-black gray

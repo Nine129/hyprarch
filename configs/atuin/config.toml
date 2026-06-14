@@ -1,0 +1,60 @@
+search_mode = "fuzzy"
+filter_mode = "global"
+search_mode_shell_up_key_binding = "fuzzy"
+workspaces = true
+style = "compact"
+show_preview = true
+max_preview_height = 4
+show_help = false
+show_tabs = true
+enter_accept = true
+command_chaining = true
+show_numeric_shortcuts = true
+inline_height = 0
+keymap_mode = "vim-normal"
+keymap_cursor = { emacs = "blink-block", vim_insert = "blink-bar", vim_normal = "steady-block" }
+secrets_filter = true
+exit_mode = "return-query"
+auto_sync = false
+update_check = false
+
+history_filter = [
+  "^secret-cmd",
+  "^export\\s+(AWS_|GITHUB_|STRIPE_|OPENAI_|ANTHROPIC_)",
+  "^ssh-add\\s",
+  "password",
+  "token",
+  "^ls(\\s|$)",
+  "^la(\\s|$)",
+  "^ll(\\s|$)",
+  "^pwd$",
+  "^clear$",
+  "^exit$",
+  "^y(\\s|$)",
+]
+
+[theme]
+name = "cggx"
+
+[ui]
+columns = ["duration", "time", "command"]
+
+[preview]
+strategy = "auto"
+
+[keys]
+scroll_exits = true
+"ctrl-j" = "history_list_next"
+"ctrl-k" = "history_list_prev"
+
+[stats]
+common_subcommands = [
+  "cargo", "git", "gh", "docker",
+  "pacman", "yay", "systemctl",
+  "hyprctl", "python3", "kubectl",
+]
+common_prefix = ["sudo"]
+ignored_commands = ["ls", "la", "ll", "clear", "exit", "pwd", "y"]
+
+[sync]
+records = true

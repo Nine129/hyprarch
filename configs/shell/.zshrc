@@ -145,7 +145,8 @@ alias cd="z"
 # FastFetch
 alias ff="fastfetch"
 # xdg-open
-alias open="xdg-open"
+ open() { xdg-open "$@" > /dev/null 2>&1 & disown }
+
 # reload audio
 alias rd="systemctl --user restart pipewire pipewire-pulse wireplumber"
 # Eza
@@ -244,7 +245,7 @@ if [[ -d "$HOME/.zsh/plugins/zsh-syntax-highlighting" ]]; then
 
   # Assignments & expansions
   ZSH_HIGHLIGHT_STYLES[assign]="fg=white"
-  ZSH_HIGHLIGHT_STYLES[globbing]="fg=magenta"
+ ZSH_HIGHLIGHT_STYLES[globbing]="fg=magenta"
   ZSH_HIGHLIGHT_STYLES[history-expansion]="fg=magenta"
   ZSH_HIGHLIGHT_STYLES[process-substitution]="none"
   ZSH_HIGHLIGHT_STYLES[process-substitution-delimiter]="fg=magenta"
