@@ -11,7 +11,8 @@ hl.curve("myBezier", {
 -- Spring curve (bouncy) ───────────
 hl.curve("bouncy", {
   type   = "bezier",
-  points = { { 0.13, 1.56 }, { 0.64, 1.0 } },
+  points = { { 0.22, 1.15 }, { 0.45, 1.0 } },
+
 })
 
 -- Smooth bezier (fade layers) ─────
