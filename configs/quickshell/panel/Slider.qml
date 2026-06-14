@@ -47,16 +47,23 @@ Item {
         id: thumb
         visible: showThumb
         width: 12; height: 12
-        color: thumbColor
+        color: dragArea.containsMouse ? Qt.lighter(thumbColor, 1.3) : thumbColor
         y: showThumb ? 12 : 0
         x: Math.max(0, (parent.width * root.frac) - width / 2)
+        scale: dragArea.pressed ? 0.85 : 1.0
+
+        Behavior on scale {
+            NumberAnimation { duration: 80 }
+        }
     }
 
     MouseArea {
+        id: dragArea
         y: showThumb ? 11 : 0
-        height: showThumb ? 15 : trackHeight
+        height: showThumb ? 26 : trackHeight
         width: parent.width
         cursorShape: Qt.PointingHandCursor
+        hoverEnabled: true
         preventStealing: true
 
         function pctFromX(mx) {

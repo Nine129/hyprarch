@@ -19,8 +19,8 @@ Rectangle {
     width: parent.width
     implicitHeight: layout.implicitHeight + 24
     height: implicitHeight
-    color: Qt.rgba(1, 1, 1, 0.03)
-    border.color: warn ? Qt.rgba(0xF9/255, 0x36/255, 0x4B/255, 0.20) : Qt.rgba(1, 1, 1, 0.05)
+    color: notifMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.06) : Qt.rgba(1, 1, 1, 0.03)
+    border.color: warn ? Qt.rgba(0xF9/255, 0x36/255, 0x4B/255, 0.20) : (notifMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.12) : Qt.rgba(1, 1, 1, 0.05))
     border.width: 1
 
     readonly property color accent: warn ? "#F9364B" : "#F9364B"
@@ -95,8 +95,10 @@ Rectangle {
     }
 
     MouseArea {
+        id: notifMouse
         anchors.fill: parent
         cursorShape: Qt.PointingHandCursor
+        hoverEnabled: true
         onClicked: {
             root.opacity = 0
             dismissTimer.start()

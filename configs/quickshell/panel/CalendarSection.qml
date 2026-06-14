@@ -266,11 +266,16 @@ Item {
                     font.family: "JetBrainsMono Nerd Font"
                     font.pixelSize: 14
                     color: mouseA.containsMouse ? cyan : muted
+                    scale: mouseA.pressed ? 0.88 : 1.0
+
+                    Behavior on scale {
+                        NumberAnimation { duration: 100 }
+                    }
 
                     MouseArea {
                         id: mouseA
                         anchors.fill: parent
-                        anchors.margins: -4
+                        anchors.margins: -13
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
                         onClicked: root.prevMonth()
@@ -293,11 +298,16 @@ Item {
                     font.family: "JetBrainsMono Nerd Font"
                     font.pixelSize: 14
                     color: mouseB.containsMouse ? cyan : muted
+                    scale: mouseB.pressed ? 0.88 : 1.0
+
+                    Behavior on scale {
+                        NumberAnimation { duration: 100 }
+                    }
 
                     MouseArea {
                         id: mouseB
                         anchors.fill: parent
-                        anchors.margins: -4
+                        anchors.margins: -13
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
                         onClicked: root.nextMonth()

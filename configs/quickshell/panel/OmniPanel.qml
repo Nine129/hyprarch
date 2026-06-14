@@ -155,11 +155,16 @@ PanelWindow {
                     Item { Layout.fillWidth: true }
 
                     Rectangle {
-                        Layout.preferredWidth: 32
-                        Layout.preferredHeight: 32
+                        Layout.preferredWidth: 40
+                        Layout.preferredHeight: 40
                         color: Qt.rgba(1, 1, 1, 0.04)
                         border.color: panel.border
                         border.width: 1
+                        scale: closeMouse.pressed ? 0.92 : 1.0
+
+                        Behavior on scale {
+                            NumberAnimation { duration: 100 }
+                        }
 
                         Text {
                             anchors.centerIn: parent

@@ -84,6 +84,7 @@ Item {
                     color: muted
                     Layout.fillWidth: true
                     elide: Text.ElideRight
+                    maximumLineCount: 1
                 }
             }
 
@@ -122,6 +123,7 @@ Item {
                                 color: modelData.muted ? "#F9364B" : silver
                                 Layout.preferredWidth: 90
                                 elide: Text.ElideRight
+                                maximumLineCount: 1
                             }
 
                             Slider {

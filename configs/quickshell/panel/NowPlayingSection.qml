@@ -49,6 +49,8 @@ Item {
                 Layout.preferredWidth: 110
                 Layout.preferredHeight: 110
                 color: surface2
+                border.color: Qt.rgba(1, 1, 1, 0.1)
+                border.width: 1
 
                 Image {
                     anchors.fill: parent
@@ -165,11 +167,16 @@ Item {
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: 16
                         color: prevMouse.containsMouse ? "#d4ff40" : lime
+                        scale: prevMouse.pressed ? 0.88 : 1.0
+
+                        Behavior on scale {
+                            NumberAnimation { duration: 100 }
+                        }
 
                         MouseArea {
                             id: prevMouse
                             anchors.fill: parent
-                            anchors.margins: -6
+                            anchors.margins: -12
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
                             onClicked: mpris.previous()
@@ -181,11 +188,16 @@ Item {
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: 18
                         color: toggleMouse.containsMouse ? "#40f0ff" : cyan
+                        scale: toggleMouse.pressed ? 0.88 : 1.0
+
+                        Behavior on scale {
+                            NumberAnimation { duration: 100 }
+                        }
 
                         MouseArea {
                             id: toggleMouse
                             anchors.fill: parent
-                            anchors.margins: -6
+                            anchors.margins: -11
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
                             onClicked: mpris.togglePlaying()
@@ -197,11 +209,16 @@ Item {
                         font.family: "JetBrainsMono Nerd Font"
                         font.pixelSize: 16
                         color: nextMouse.containsMouse ? "#ff9040" : orange
+                        scale: nextMouse.pressed ? 0.88 : 1.0
+
+                        Behavior on scale {
+                            NumberAnimation { duration: 100 }
+                        }
 
                         MouseArea {
                             id: nextMouse
                             anchors.fill: parent
-                            anchors.margins: -6
+                            anchors.margins: -12
                             cursorShape: Qt.PointingHandCursor
                             hoverEnabled: true
                             onClicked: mpris.next()

@@ -138,9 +138,14 @@ Item {
                     Layout.fillWidth: true
                     Layout.fillHeight: true
                     Layout.leftMargin: index > 0 ? -1 : 0
-                    color: isActive ? lime : Qt.rgba(1, 1, 1, 0.03)
-                    border.color: isActive ? lime : Qt.rgba(1, 1, 1, 0.06)
+                    color: isActive ? lime : (profileMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.06) : Qt.rgba(1, 1, 1, 0.03))
+                    border.color: isActive ? lime : (profileMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.15) : Qt.rgba(1, 1, 1, 0.06))
                     border.width: 1
+                    scale: profileMouse.pressed ? 0.96 : 1.0
+
+                    Behavior on scale {
+                        NumberAnimation { duration: 100 }
+                    }
 
                     required property int index
                     required property var modelData
@@ -170,6 +175,7 @@ Item {
                     }
 
                     MouseArea {
+                        id: profileMouse
                         anchors.fill: parent
                         cursorShape: Qt.PointingHandCursor
                         hoverEnabled: true
