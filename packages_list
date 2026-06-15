@@ -1,6 +1,7 @@
 7zip
 alsa-plugins
 aria2
+atuin
 aur-sync-vote
 base
 base-devel
@@ -18,16 +19,13 @@ cachyos-mirrorlist
 cachyos-v3-mirrorlist
 cachyos-v4-mirrorlist
 calf
-calibre
 cava
 chafa
 cliphist
 cmake
 cmatrix
-colloid-catppuccin-gtk-theme-git
-colloid-dracula-gtk-theme-git
-colloid-gtk-theme-git
 cowsay
+czkawka-cli
 duf
 dust
 easyeffects
@@ -43,6 +41,7 @@ fzf
 git
 git-delta
 github-cli
+go
 google-chrome
 gopreload-git
 grim
@@ -82,11 +81,9 @@ lib32-v4l-utils
 lib32-vulkan-intel
 libreoffice-fresh
 libva-intel-driver
-linux
 linux-cachyos
 linux-cachyos-headers
 linux-firmware
-linux-headers
 linux-lts
 linux-lts-headers
 lsp-plugins
@@ -111,7 +108,6 @@ os-prober
 otf-font-awesome
 otter-launcher
 pacman-contrib
-pandoc-cli
 papirus-icon-theme
 paru
 pavucontrol
@@ -119,7 +115,6 @@ pipewire
 pipewire-alsa
 pipewire-pulse
 playerctl
-polkit-gnome
 power-profiles-daemon
 protonup-qt
 python-pip
@@ -131,7 +126,7 @@ quickshell
 reflector
 ripgrep
 rmpc
-rofi
+rustup
 sddm
 slurp
 starship

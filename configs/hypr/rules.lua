@@ -91,3 +91,15 @@ hl.window_rule({
 
    }
  )
+ hl.window_rule(
+   {
+     match = { class = "imv"},
+     opaque = true,
+   }
+ )
+ hl.window_rule(
+   {
+     match = { class = "mpv"},
+     opaque = true,
+   }
+ )

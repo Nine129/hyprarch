@@ -17,22 +17,22 @@ hl.config({
   decoration = {
     rounding            = 8,
     rounding_power      = 2.0,
-    active_opacity      = 0.92,
-    inactive_opacity    = 0.90,
+    active_opacity      = 0.94,
+    inactive_opacity    = 0.92,
     fullscreen_opacity  = 1.0,
     dim_inactive        = false,
     dim_strength        = 0.15,
     
     blur = {
       enabled            = true,
-      size               = 6,
+      size               = 4,
       passes             = 1,
       vibrancy           = 0.25,
       new_optimizations   = true,
       xray               = false,
       noise              = 0.005,
-      contrast           = 1.0,
-      brightness         = 1.0,
+      contrast           = 1.2,
+      brightness         = 1.2,
     },
 
     shadow = {

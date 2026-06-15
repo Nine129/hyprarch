@@ -2,7 +2,7 @@
 # https://github.com/Nine129/hyprarch
 
 cooldown_seconds: 2
-notifications: summary       # none | summary
+notifications: none          # none | summary
 log_max_entries: 200
 
 categories:

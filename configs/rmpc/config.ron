@@ -179,7 +179,9 @@
                 panes: [
                     (
                         size: "45%",
-                        pane: Pane(AlbumArt)
+                        pane: Pane(AlbumArt),
+                        background_color: Some("#000000"),
+                        borders: "NONE",                   
                     ),
                     (
                         size: "65%",

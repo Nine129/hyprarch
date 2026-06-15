@@ -8,6 +8,12 @@ hl.bind("SUPER + Q",       hl.dsp.exec_cmd("kitty --single-instance"))
 hl.bind("SUPER + W",       hl.dsp.window.close())
 hl.bind("SUPER + CTRL + Q", hl.dsp.exec_cmd("kitty --single-instance --class kitty-float"))
 hl.bind("SUPER + Backspace", hl.dsp.exec_cmd("pkill otter-launcher || kitty --single-instance --class otter-launcher -e otter-launcher"))
+hl.bind("SUPER + D", hl.dsp.exec_cmd("rmpc togglepause"))
+hl.bind("SUPER + period", hl.dsp.exec_cmd("rmpc next"))
+hl.bind("SUPER + comma", hl.dsp.exec_cmd("rmpc prev"))
+
+
+
 -- Launcher ────────────────────────
 hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd("pkill fuzzel || fuzzel"),  { release = true })  
 hl.bind("SUPER + E",     hl.dsp.exec_cmd("kitty --single-instance yazi"))
