@@ -53,6 +53,7 @@ rules = [
 [plugin]
   prepend_preloaders = [
     { mime = "inode/directory", run = "folder" }, 
+
     { mime = "{audio,video,image}/*", run = "mediainfo" },
     { mime = "application/subrip", run = "mediainfo" },
     { mime = "application/postscript", run = "mediainfo" },

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<!--
+  PROTOTYPE — CGGX Waybar Redesign Options
+  Question: "What are 3 more polished, wow-factor waybar designs that still
+             match the CGGX rice aesthetic?"
+
+  Throwaway HTML. Open in any browser and flip between variants with the
+  floating switcher or arrow keys.
+
+  Open:  open prototype-waybar-designs.html
+  Switch: click the bottom pill or press ← / →
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prototype — CGGX Waybar Redesigns</title>
+<style>
+  /* ── CGGX Palette (matches colors/cggx.css) ── */
+  :root {
+    --bg:       #0a0a0c;
+    --surface:  #151518;
+    --surface2: #1a1a20;
+    --border:   #2a2a35;
+    --red:      #ff2d55;
+    --cyan:     #00e5ff;
+    --lime:     #c8ff00;
+    --orange:   #ff6b00;
+    --silver:   #e8e8f0;
+    --muted:    #6a6a80;
+    --bar-h:    38px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background:
+      linear-gradient(rgba(10,10,12,0.55), rgba(10,10,12,0.7)),
+      url('../../wallpapers/cggx.webp');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'JetBrainsMono Nerd Font', 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--silver);
+    min-height: 100vh;
+    user-select: none;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: "PROTOTYPE — throwaway concepts";
+    position: fixed;
+    top: 6px;
+    right: 12px;
+    font-size: 10px;
+    color: var(--red);
+    font-weight: 700;
+    letter-spacing: 1px;
+    opacity: 0.7;
+    z-index: 999;
+  }
+
+  /* ── Shared icon helpers ── */
+  .icon { display: inline-flex; align-items: center; justify-content: center; }
+  .icon svg { width: 1em; height: 1em; fill: currentColor; }
+
+  /* ── Variant containers ── */
+  .variant { display: none; }
+  .variant.active { display: block; }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     VARIANT A — NEON RAIL
+     Same left/right DNA as today, but refined: micro-glow lines,
+     tighter rhythm, animated MPD marquee, and a single continuous rail.
+     ═══════════════════════════════════════════════════════════════════ */
+  .v-a .waybar {
+    height: var(--bar-h);
+    margin: 5px 12px 0 12px;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .v-a .cluster {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    background: rgba(21, 21, 24, 0.92);
+    border-bottom: 2px solid var(--border);
+    position: relative;
+  }
+
+  .v-a .cluster::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: -2px; height: 2px;
+    background: linear-gradient(90deg, var(--orange), var(--cyan), var(--lime), var(--red));
+    opacity: 0.55;
+  }
+
+  .v-a .module {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    background: var(--surface);
+    color: var(--silver);
+    position: relative;
+    transition: background 0.12s ease, color 0.12s ease;
+  }
+
+  .v-a .module:hover { background: var(--surface2); }
+
+  /* Workspaces */
+  .v-a .ws { padding: 0; display: flex; }
+  .v-a .ws button {
+    width: 34px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font: inherit;
+    cursor: default;
+    transition: color 0.15s, background 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .v-a .ws button.active {
+    background: var(--red);
+    color: var(--bg);
+  }
+  .v-a .ws button.urgent { color: var(--orange); animation: blink-orange 1s steps(12) infinite alternate; }
+
+  /* MPD */
+  .v-a .mpd {
+    background: var(--surface);
+    color: var(--orange);
+    border-left: 1px solid var(--border);
+    gap: 8px;
+    min-width: 220px;
+  }
+  .v-a .mpd .art {
+    width: 22px; height: 22px;
+    background: linear-gradient(135deg, var(--orange), var(--red));
+    display: grid; place-items: center;
+    color: var(--bg);
+  }
+  .v-a .mpd .track {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .v-a .mpd .track span {
+    display: inline-block;
+    animation: marquee 8s linear infinite;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    45% { transform: translateX(-40%); }
+    50% { transform: translateX(-40%); }
+    95% { transform: translateX(0); }
+  }
+
+  /* System */
+  .v-a .sys { color: var(--silver); }
+  .v-a .sys.disk { color: var(--lime); }
+  .v-a .sys.mem  { color: var(--orange); }
+  .v-a .sys.temp { color: var(--cyan); }
+
+  /* Personal */
+  .v-a .personal { color: var(--bg); }
+  .v-a .personal.audio   { background: var(--orange); }
+  .v-a .personal.clock   { background: var(--cyan); }
+  .v-a .personal.battery { background: var(--lime); }
+
+  /* Power */
+  .v-a .power {
+    background: var(--red);
+    color: var(--bg);
+    padding: 0 14px;
+    font-size: 16px;
+  }
+
+  /* Tray */
+  .v-a .tray { color: var(--muted); padding: 0 8px; gap: 4px; }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     VARIANT B — HUD CONTROL DECK
+     A wider left "deck" merges workspaces + MPD with album art and
+     playback controls. The right side becomes a compact telemetry strip.
+     ═══════════════════════════════════════════════════════════════════ */
+  .v-b .waybar {
+    height: var(--bar-h);
+    margin: 5px 12px 0 12px;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .v-b .deck {
+    display: flex;
+    align-items: stretch;
+    background: rgba(21, 21, 24, 0.95);
+    border: 1px solid var(--border);
+    border-top: none;
+  }
+
+  .v-b .deck-left {
+    display: flex;
+    align-items: stretch;
+    border-right: 1px solid var(--border);
+  }
+
+  .v-b .ws-stack {
+    display: grid;
+    grid-template-columns: repeat(3, 28px);
+    grid-template-rows: repeat(3, 1fr);
+    padding: 2px;
+    gap: 1px;
+  }
+  .v-b .ws-stack button {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font: inherit;
+    font-size: 10px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: default;
+    transition: background 0.12s, color 0.12s;
+  }
+  .v-b .ws-stack button.active { background: var(--red); color: var(--bg); }
+  .v-b .ws-stack button.urgent { color: var(--orange); }
+
+  .v-b .media-block {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+  }
+  .v-b .media-art {
+    width: 28px; height: 28px;
+    background: linear-gradient(135deg, var(--red), var(--orange));
+    display: grid; place-items: center;
+    color: var(--bg);
+  }
+  .v-b .media-meta { line-height: 1.2; }
+  .v-b .media-title { color: var(--orange); font-size: 12px; }
+  .v-b .media-artist { color: var(--muted); font-size: 10px; font-weight: 500; }
+
+  .v-b .media-controls {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 0 6px;
+    border-left: 1px solid var(--border);
+  }
+  .v-b .media-controls button {
+    width: 24px; height: 24px;
+    background: transparent;
+    border: none;
+    color: var(--silver);
+    display: grid; place-items: center;
+    cursor: default;
+    transition: color 0.12s, background 0.12s;
+  }
+  .v-b .media-controls button:hover { color: var(--orange); background: var(--surface2); }
+  .v-b .media-controls .play { color: var(--orange); }
+
+  .v-b .telemetry {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    background: rgba(21, 21, 24, 0.95);
+    border: 1px solid var(--border);
+    border-top: none;
+  }
+
+  .v-b .mini-gauge {
+    width: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    position: relative;
+  }
+  .v-b .mini-gauge .bar {
+    width: 26px; height: 3px;
+    background: var(--surface2);
+    position: relative;
+  }
+  .v-b .mini-gauge .bar::after {
+    content: "";
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: var(--fill);
+  }
+  .v-b .mini-gauge.disk { color: var(--lime); }
+  .v-b .mini-gauge.disk .bar::after { background: var(--lime); width: 19%; }
+  .v-b .mini-gauge.mem { color: var(--orange); }
+  .v-b .mini-gauge.mem .bar::after { background: var(--orange); width: 40%; }
+  .v-b .mini-gauge.temp { color: var(--cyan); }
+  .v-b .mini-gauge.temp .bar::after { background: var(--cyan); width: 52%; }
+  .v-b .mini-gauge .label { font-size: 9px; color: var(--muted); }
+
+  .v-b .stat-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 12px;
+    color: var(--bg);
+  }
+  .v-b .stat-pill.audio   { background: var(--orange); }
+  .v-b .stat-pill.clock   { background: var(--cyan); }
+  .v-b .stat-pill.battery { background: var(--lime); }
+
+  .v-b .tray { display: flex; align-items: center; gap: 6px; padding: 0 10px; color: var(--muted); }
+  .v-b .power {
+    background: var(--red);
+    color: var(--bg);
+    padding: 0 14px;
+    display: flex; align-items: center;
+  }
+
+  /* ═══════════════════════════════════════════════════════════════════
+     VARIANT C — COMMAND FRAMES
+     Modules float as independent square "frames" inspired by the Omni
+     Control Panel. Each zone has a corner-bracket hover treatment and
+     colored accent borders. The bar feels like a modular command strip.
+     ═══════════════════════════════════════════════════════════════════ */
+  .v-c .waybar {
+    height: var(--bar-h);
+    margin: 5px 14px 0 14px;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  .v-c .frame-group {
+    display: flex;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .v-c .frame {
+    background: rgba(21, 21, 24, 0.92);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    color: var(--silver);
+    position: relative;
+    transition: border-color 0.18s ease, background 0.18s ease;
+  }
+  .v-c .frame::before,
+  .v-c .frame::after {
+    content: "";
+    position: absolute;
+    width: 6px; height: 6px;
+    border-color: transparent;
+    border-style: solid;
+    transition: border-color 0.18s ease;
+    pointer-events: none;
+  }
+  .v-c .frame::before { top: -1px; left: -1px; border-width: 1px 0 0 1px; }
+  .v-c .frame::after  { bottom: -1px; right: -1px; border-width: 0 1px 1px 0; }
+
+  .v-c .frame:hover { background: var(--surface2); }
+
+  .v-c .frame.orange:hover  { border-color: var(--orange); }
+  .v-c .frame.orange:hover::before,
+  .v-c .frame.orange:hover::after  { border-color: var(--orange); }
+
+  .v-c .frame.lime:hover    { border-color: var(--lime); }
+  .v-c .frame.lime:hover::before,
+  .v-c .frame.lime:hover::after    { border-color: var(--lime); }
+
+  .v-c .frame.cyan:hover    { border-color: var(--cyan); }
+  .v-c .frame.cyan:hover::before,
+  .v-c .frame.cyan:hover::after    { border-color: var(--cyan); }
+
+  .v-c .frame.red:hover     { border-color: var(--red); }
+  .v-c .frame.red:hover::before,
+  .v-c .frame.red:hover::after     { border-color: var(--red); }
+
+  /* Workspaces as one compact frame */
+  .v-c .ws-frame { padding: 0 6px; gap: 1px; }
+  .v-c .ws-frame button {
+    width: 28px; height: 28px;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font: inherit;
+    cursor: default;
+    transition: color 0.12s, background 0.12s;
+  }
+  .v-c .ws-frame button.active { background: var(--red); color: var(--bg); }
+  .v-c .ws-frame button.urgent { color: var(--orange); }
+
+  /* MPD */
+  .v-c .mpd { color: var(--orange); }
+  .v-c .mpd .dot {
+    width: 6px; height: 6px;
+    background: var(--orange);
+    box-shadow: 0 0 0 2px rgba(255,107,0,0.15);
+    animation: pulse-dot 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+
+  /* System */
+  .v-c .sys .val { color: var(--silver); }
+  .v-c .sys.disk { color: var(--lime); }
+  .v-c .sys.mem  { color: var(--orange); }
+  .v-c .sys.temp { color: var(--cyan); }
+
+  /* Status */
+  .v-c .status { color: var(--bg); }
+  .v-c .status.audio   { background: var(--orange); border-color: var(--orange); }
+  .v-c .status.clock   { background: var(--cyan); border-color: var(--cyan); }
+  .v-c .status.battery { background: var(--lime); border-color: var(--lime); }
+
+  .v-c .power {
+    background: var(--red);
+    color: var(--bg);
+    border-color: var(--red);
+    padding: 0 14px;
+  }
+
+  .v-c .tray { color: var(--muted); padding: 0 8px; gap: 6px; }
+
+  /* ── Floating variant switcher ── */
+  .switcher {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 8px 14px;
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+  }
+
+  .switcher button {
+    width: 30px; height: 30px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    color: var(--silver);
+    font: inherit;
+    font-size: 16px;
+    display: grid; place-items: center;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s, color 0.12s;
+  }
+  .switcher button:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  .switcher .label {
+    color: var(--silver);
+    font-size: 12px;
+    font-weight: 700;
+    min-width: 170px;
+    text-align: center;
+    letter-spacing: 0.5px;
+  }
+  .switcher .label span { color: var(--muted); font-weight: 500; }
+
+  /* ── Variant intros ── */
+  .intro {
+    margin: 40px auto 0;
+    max-width: 720px;
+    padding: 16px 20px;
+    background: rgba(21, 21, 24, 0.92);
+    border: 1px solid var(--border);
+    color: var(--silver);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  .intro h2 { color: var(--orange); font-size: 14px; margin-bottom: 6px; }
+  .intro p { color: var(--muted); }
+  .intro ul { margin: 8px 0 0 18px; color: var(--muted); }
+  .intro li { margin-bottom: 4px; }
+
+  @keyframes blink-orange {
+    to { color: var(--silver); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     VARIANT A — NEON RAIL
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="variant v-a" id="variant-A">
+  <div class="waybar">
+    <div class="cluster">
+      <div class="ws">
+        <button class="active">1</button>
+        <button class="empty">2</button>
+        <button class="empty">3</button>
+        <button class="empty">4</button>
+        <button class="empty">5</button>
+        <button class="empty">6</button>
+        <button class="empty">7</button>
+        <button class="empty">8</button>
+        <button class="empty">9</button>
+      </div>
+      <div class="module mpd">
+        <span class="art"><svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></span>
+        <span class="track"><span>Polyphia — Playing God</span></span>
+      </div>
+    </div>
+
+    <div class="cluster">
+      <div class="module sys disk"><span class="icon"><svg viewBox="0 0 24 24"><path d="M2 12h2v8h16v-8h2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-8zm2-2h16V8H4v2zm8-8l-5 5h3v4h4V7h3L14 2z"/></svg></span> 81% free</div>
+      <div class="module sys mem"><span class="icon"><svg viewBox="0 0 24 24"><path d="M2 4h20v12H2V4zm2 2v8h16V6H4zm2 2h2v4H6V8zm4 0h2v4h-2V8zm4 0h2v4h-2V8zm4 0h2v4h-2V8z"/></svg></span> 6.4G / 16G</div>
+      <div class="module sys temp"><span class="icon"><svg viewBox="0 0 24 24"><path d="M15 13V5a3 3 0 0 0-6 0v8a5 5 0 1 0 6 0zm-3-9a1 1 0 0 1 1 1v7.17a3.001 3.001 0 1 1-2 0V5a1 1 0 0 1 1-1z"/></svg></span> 52°C</div>
+      <div class="module personal audio"><span class="icon"><svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></span> 42%</div>
+      <div class="module personal clock"><span class="icon"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></span> Mon 11  14:32</div>
+      <div class="module personal battery"><span class="icon"><svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span> 87%</div>
+      <div class="module tray"><span class="icon"><svg viewBox="0 0 24 24"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg></span> tray</div>
+      <div class="module power"><span class="icon"><svg viewBox="0 0 24 24"><path d="M12 2a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V3a1 1 0 0 0-1-1zm0 18a7 7 0 1 1 0-14 1 1 0 1 0 0-2 9 9 0 1 0 0 18 1 1 0 1 0 0-2z"/></svg></span></div>
+    </div>
+  </div>
+
+  <div class="intro">
+    <h2>A — Neon Rail</h2>
+    <p>The current layout, elevated. A single continuous rail with a gradient underglow, square workspace tiles, and an animated MPD marquee. System stats keep colored text on dark; personal modules invert to colored backgrounds. Clean, fast, and unmistakably CGGX.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     VARIANT B — HUD CONTROL DECK
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="variant v-b" id="variant-B">
+  <div class="waybar">
+    <div class="deck">
+      <div class="deck-left">
+        <div class="ws-stack">
+          <button class="active">1</button>
+          <button class="empty">2</button>
+          <button class="empty">3</button>
+          <button class="empty">4</button>
+          <button class="empty">5</button>
+          <button class="empty">6</button>
+          <button class="empty">7</button>
+          <button class="empty">8</button>
+          <button class="empty">9</button>
+        </div>
+        <div class="media-block">
+          <div class="media-art"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></div>
+          <div class="media-meta">
+            <div class="media-title">Playing God</div>
+            <div class="media-artist">Polyphia</div>
+          </div>
+        </div>
+        <div class="media-controls">
+          <button><svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg></button>
+          <button class="play"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M8 5v14l11-7z"/></svg></button>
+          <button><svg viewBox="0 0 24 24" width="14" height="14"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="telemetry">
+      <div class="mini-gauge disk">
+        <span class="icon"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M4 5h16v12H4V5zm2 2v8h12V7H6zm3 2h6v2H9V9z"/></svg></span>
+        <div class="bar"></div>
+        <span class="label">DISK</span>
+      </div>
+      <div class="mini-gauge mem">
+        <span class="icon"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M2 4h20v12H2V4zm2 2v8h16V6H4zm2 2h2v4H6V8zm4 0h2v4h-2V8zm4 0h2v4h-2V8zm4 0h2v4h-2V8z"/></svg></span>
+        <div class="bar"></div>
+        <span class="label">MEM</span>
+      </div>
+      <div class="mini-gauge temp">
+        <span class="icon"><svg viewBox="0 0 24 24" width="12" height="12"><path d="M15 13V5a3 3 0 0 0-6 0v8a5 5 0 1 0 6 0zm-3-9a1 1 0 0 1 1 1v7.17a3.001 3.001 0 1 1-2 0V5a1 1 0 0 1 1-1z"/></svg></span>
+        <div class="bar"></div>
+        <span class="label">TEMP</span>
+      </div>
+      <div class="stat-pill audio"><span class="icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></span> 42%</div>
+      <div class="stat-pill clock"><span class="icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></span> 14:32</div>
+      <div class="stat-pill battery"><span class="icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span> 87%</div>
+      <div class="tray"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg></div>
+      <div class="power"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 2a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V3a1 1 0 0 0-1-1zm0 18a7 7 0 1 1 0-14 1 1 0 1 0 0-2 9 9 0 1 0 0 18 1 1 0 1 0 0-2z"/></svg></div>
+    </div>
+  </div>
+
+  <div class="intro">
+    <h2>B — HUD Control Deck</h2>
+    <p>A denser, heads-up layout. Workspaces collapse into a 3×3 pad; MPD gets a mini deck with album art and playback controls. System stats become tiny bar gauges, and status modules become bold inverted pills. Feels like a cockpit.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     VARIANT C — COMMAND FRAMES
+     ════════════════════════════════════════════════════════════════════ -->
+<section class="variant v-c" id="variant-C">
+  <div class="waybar">
+    <div class="frame-group">
+      <div class="frame ws-frame">
+        <button class="active">1</button>
+        <button class="empty">2</button>
+        <button class="empty">3</button>
+        <button class="empty">4</button>
+        <button class="empty">5</button>
+        <button class="empty">6</button>
+        <button class="empty">7</button>
+        <button class="empty">8</button>
+        <button class="empty">9</button>
+      </div>
+      <div class="frame orange mpd">
+        <span class="dot"></span>
+        <span class="icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg></span>
+        Polyphia — Playing God
+      </div>
+    </div>
+
+    <div class="frame-group">
+      <div class="frame lime sys disk"><span class="icon"><svg viewBox="0 0 24 24" width="13" height="13"><path d="M4 5h16v12H4V5zm2 2v8h12V7H6zm3 2h6v2H9V9z"/></svg></span> <span class="val">81%</span></div>
+      <div class="frame orange sys mem"><span class="icon"><svg viewBox="0 0 24 24" width="13" height="13"><path d="M2 4h20v12H2V4zm2 2v8h16V6H4zm2 2h2v4H6V8zm4 0h2v4h-2V8zm4 0h2v4h-2V8zm4 0h2v4h-2V8z"/></svg></span> <span class="val">6.4G</span></div>
+      <div class="frame cyan sys temp"><span class="icon"><svg viewBox="0 0 24 24" width="13" height="13"><path d="M15 13V5a3 3 0 0 0-6 0v8a5 5 0 1 0 6 0zm-3-9a1 1 0 0 1 1 1v7.17a3.001 3.001 0 1 1-2 0V5a1 1 0 0 1 1-1z"/></svg></span> <span class="val">52°C</span></div>
+      <div class="frame orange status audio"><span class="icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg></span> 42%</div>
+      <div class="frame cyan status clock"><span class="icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></span> 14:32</div>
+      <div class="frame lime status battery"><span class="icon"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg></span> 87%</div>
+      <div class="frame tray"><svg viewBox="0 0 24 24" width="14" height="14"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg></div>
+      <div class="frame red power"><svg viewBox="0 0 24 24" width="16" height="16"><path d="M12 2a1 1 0 0 0-1 1v8a1 1 0 1 0 2 0V3a1 1 0 0 0-1-1zm0 18a7 7 0 1 1 0-14 1 1 0 1 0 0-2 9 9 0 1 0 0 18 1 1 0 1 0 0-2z"/></svg></div>
+    </div>
+  </div>
+
+  <div class="intro">
+    <h2>C — Command Frames</h2>
+    <p>Modules float as independent square frames, each belonging to a color zone. Hover reveals corner brackets in the zone color — the same language as the Omni Control Panel. The MPD frame pulses, status frames are fully inverted, and the whole bar feels modular and tactical.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════════
+     VARIANT SWITCHER
+     ════════════════════════════════════════════════════════════════════ -->
+<div class="switcher" id="switcher">
+  <button id="prev" aria-label="Previous variant">←</button>
+  <div class="label" id="switcher-label">A — Neon Rail</div>
+  <button id="next" aria-label="Next variant">→</button>
+</div>
+
+<script>
+  const VARIANTS = [
+    { key: 'A', name: 'Neon Rail' },
+    { key: 'B', name: 'HUD Control Deck' },
+    { key: 'C', name: 'Command Frames' },
+  ];
+
+  const params = new URLSearchParams(window.location.search);
+  let idx = Math.max(0, VARIANTS.findIndex(v => v.key === params.get('variant')));
+  if (idx < 0) idx = 0;
+
+  const labelEl = document.getElementById('switcher-label');
+
+  function show(i) {
+    idx = ((i % VARIANTS.length) + VARIANTS.length) % VARIANTS.length;
+    VARIANTS.forEach((v, k) => {
+      document.getElementById('variant-' + v.key).classList.toggle('active', k === idx);
+    });
+    const current = VARIANTS[idx];
+    labelEl.innerHTML = current.key + ' — <span>' + current.name + '</span>';
+    const nextParams = new URLSearchParams(window.location.search);
+    nextParams.set('variant', current.key);
+    window.history.replaceState(null, '', '?' + nextParams.toString());
+  }
+
+  document.getElementById('prev').addEventListener('click', () => show(idx - 1));
+  document.getElementById('next').addEventListener('click', () => show(idx + 1));
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'ArrowLeft') show(idx - 1);
+    if (e.key === 'ArrowRight') show(idx + 1);
+  });
+
+  show(idx);
+
+  console.log('%cCGGX Waybar Redesign Prototype', 'font-weight:bold;font-size:14px;color:#ff2d55');
+  console.log('Use ← / → or the bottom switcher to flip between variants.');
+</script>
+
+</body>
+</html>
