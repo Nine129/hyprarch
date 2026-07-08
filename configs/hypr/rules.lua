@@ -55,8 +55,8 @@ hl.window_rule({
  hl.window_rule(
    {
      match = { class = "vesktop"},
-     opaque = true,
      border_color = "rgba(c8ff00ee)",
+     opaque = true
    }
  )
  hl.window_rule(
@@ -103,3 +103,16 @@ hl.window_rule({
      opaque = true,
    }
  )
+ hl.window_rule(
+   {
+     match = { title = "ghgrab"},
+     border_color = "rgba(c8ff00ee)",
+   }
+ )
+ hl.window_rule(
+   {
+     match = { title = "π"},
+     border_color = "rgba(c8ff00ee)",
+   }
+ )
+

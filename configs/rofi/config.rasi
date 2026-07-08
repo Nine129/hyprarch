@@ -59,7 +59,7 @@ window {
   anchor:           center;
   fullscreen:       false;
   transparency:     "background";
-  font:             "JetBrainsMonoNL Nerd Font Mono 13";
+  font:             "MonaspiceNe Nerd Font Mono 13";
   cursor:           "default";
 }
 
@@ -93,7 +93,7 @@ entry {
   cursor-width:        2px;
   hide-cursor-on-empty: false;
   padding:             12px 14px;
-  font:                "JetBrainsMonoNL Nerd Font Mono 13";
+  font:                "MonaspiceNe Nerd Font Mono 13";
 }
 
 /* ── Case indicator ───────────────────── */
@@ -162,7 +162,7 @@ element-text {
   horizontal-align: 0;
   cursor:           "default";
   highlight:        bold;
-  font:             "JetBrainsMonoNL Nerd Font Mono 13";
+  font:             "MonaspiceNe Nerd Font Mono 13";
 }
 
 /* ── Mode switcher (hidden) ───────────── */

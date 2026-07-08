@@ -31,7 +31,7 @@ window {
 }
 .entry {
   padding: 7px 14px;
-  font-family: "JetBrainsMonoNL Nerd Font Mono";
+  font-family: "MonaspiceNe Nerd Font Mono";
   font-size: 13px;
   font-weight: 500;
   background-color: transparent;

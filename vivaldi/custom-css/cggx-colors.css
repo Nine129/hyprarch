@@ -1,0 +1,28 @@
+/* ── CGGX Vivaldi — Color Variables ──────────────── */
+/* Matches the CGGX rice palette.                     */
+/* Imported via @import in vivaldi.css                */
+/* Reference: waybar/colors/cggx.css, kitty/kitty.conf */
+
+:root {
+  /* Core palette */
+  --cggx-bg:             #0a0a0c;
+  --cggx-surface:        #151518;
+  --cggx-surface2:       #1a1a20;
+  --cggx-border:         #2a2a35;
+  --cggx-red:            #ff2d55;
+  --cggx-cyan:           #00e5ff;
+  --cggx-lime:           #c8ff00;
+  --cggx-orange:         #ff6b00;
+  --cggx-silver:         #e8e8f0;
+  --cggx-muted:          #6a6a80;
+  --cggx-purple:         #bd00ff;
+  --cggx-gold:           #ffcc00;
+  --cggx-pink:           #ff007f;
+
+  /* Vivaldi theme overrides */
+  --colorBg:             var(--cggx-bg);
+  --colorFg:             var(--cggx-silver);
+  --colorHighlight:      var(--cggx-border);
+  --colorAccent:         var(--cggx-red);
+  --colorAccentFg:       var(--cggx-bg);
+}

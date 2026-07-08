@@ -303,7 +303,7 @@ hl.bind("SUPER + SHIFT + N", hl.dsp.exec_cmd("swaync-client -t -sw"))  -- Toggle
 
 ```css
 #custom-notification {
-  font-family: "JetBrainsMono Nerd Font";
+  font-family: "MonaspiceNe Nerd Font";
 }
 ```
 

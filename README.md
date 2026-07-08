@@ -98,7 +98,7 @@ hyprarch/
 - **Hyprland Lua** config (0.55+) — split into 5 files, `require()`-based
 - **Systemd user services** for waybar, hyprpaper, hypridle, swaync, cliphist
 - **CGGX palette** — neon cyberpunk colors consistent across every tool
-- **JetBrainsMonoNL Nerd Font Mono** — primary font for waybar, rofi, all UI
+- **MonaspiceNe Nerd Font Mono** — primary font for waybar, rofi, all UI
 - **Colorful, not muted** — every tool gets vibrant category colors (lime docs, hot purple images, cyan archives, amber code)
 
 ## Keybinds

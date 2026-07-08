@@ -4,7 +4,7 @@
   "logo": {
     "source": "/home/nine/hyprarch/configs/fastfetch/xnewlogo.png",
     "type": "kitty",
-    "width": 33,
+    "width": 27,
     "preserveAspectRatio": true,
     "padding": { "right": 6 }
   },

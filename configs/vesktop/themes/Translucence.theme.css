@@ -1,0 +1,142 @@
+/**
+ * @name Translucence
+ * @version 1.0.7
+ * @description A translucent/frosted glass Discord theme
+ * @author CapnKitten
+ *
+ * @website http://github.com/CapnKitten
+ * @source https://github.com/CapnKitten/BetterDiscord/blob/master/Themes/Translucence/css/source.css
+ * @donate https://paypal.me/capnkitten
+ * @invite jzJkA6Z
+ *
+ * CGGX rice overrides — matching the rest of the setup:
+ *   bg0 #0a0a0c | bg1 #151518 | border #2a2a35
+ *   red #ff2d55 | cyan #00e5ff | lime #c8ff00
+ *   orange #ff6b00 | purple #b48cff | silver #e8e8f0 | muted #6a6a80
+ */
+
+@import url(https://capnkitten.github.io/BetterDiscord/Themes/Translucence/css/source.css);
+
+:root {
+	/* APP ELEMENTS — transparent so the desktop wallpaper shows through */
+	--app-bg: transparent;
+	--app-blur: 8px;
+	--app-margin: 16px;
+	--app-radius: 8px;
+
+	/* MAIN SURFACES — CGGX surface #151518, raised opacity */
+	--main-rgb: 21,21,24;
+	--main-content-opacity: 0.50;
+	--sidebar-opacity: 0.65;
+	--main-content-color: rgba(var(--main-rgb), var(--main-content-opacity));
+	--sidebar-color: rgba(var(--main-rgb), var(--sidebar-opacity));
+
+	/* ACCENT — CGGX lime #c8ff00 */
+	--accent-hue: 72;
+	--accent-saturation: 100%;
+	--accent-lightness: 50%;
+	--accent-text-color: hsl(0,0%,0%);
+
+	/* ALERT — CGGX red #ff2d55 */
+	--alert-hue: 349;
+	--alert-saturation: 100%;
+	--alert-lightness: 58%;
+	--alert-action-color: #0a0a0c;
+	--alert-text-color: #e8e8f0;
+
+	/* MENTION — same lime as accent */
+	--mention-hue: var(--accent-hue);
+	--mention-saturation: var(--accent-saturation);
+	--mention-lightness: var(--accent-lightness);
+
+	/* REPLY — CGGX cyan #00e5ff */
+	--reply-hue: 186;
+	--reply-saturation: 100%;
+	--reply-lightness: 50%;
+	--reply-opacity: 1;
+
+	/* MESSAGES — more opaque, CGGX surface */
+	--message-color: rgba(21,21,24,0.55);
+	--message-color-hover: rgba(21,21,24,0.65);
+	--message-color-select: rgba(21,21,24,0.75);
+	--message-radius: var(--app-radius);
+	--message-padding-top: 8px;
+	--message-padding-side: 8px;
+
+	/* TEXTAREA — dark surface, raised opacity, silver text */
+	--textarea-color: 21,21,24;
+	--textarea-alpha: 0.35;
+	--textarea-alpha-focus: 0.50;
+	--textarea-text-color: #e8e8f0;
+	--textarea-placeholder-color: #6a6a80;
+	--textarea-radius: 22px;
+
+	/* CARDS — CGGX surface, raised opacity */
+	--card-color: rgba(21,21,24,0.55);
+	--card-color-hover: rgba(21,21,24,0.65);
+	--card-color-select: rgba(21,21,24,0.75);
+	--card-radius: var(--app-radius);
+
+	/* BUTTONS */
+	--button-height: 32px;
+	--button-padding: 0 16px;
+	--button-action-color: #0a0a0c;
+	--button-radius: 16px;
+
+	/* POPOUTS / TOOLTIPS */
+	--popout-color: rgba(10,10,12,0.85);
+	--popout-blur: 8px;
+	--popout-radius: var(--app-radius);
+
+	--tooltip-color: hsla(var(--accent-hsl), var(--accent-opacity));
+	--tooltip-text-color: #0a0a0c;
+
+	/* SCROLLBAR — CGGX lime */
+	--scrollbar-color: 200,255,0;
+	--scrollbar-color-alt: 21,21,24;
+	--scrollbar-opacity: 0.35;
+	--scrollbar-opacity-hover: 0.55;
+}
+
+@supports (color:color-mix(in lch,red,blue)) {
+    .visual-refresh .theme-dark,
+    .visual-refresh.theme-dark {
+		/* TEXT COLOR SETTINGS — CGGX silver/white/muted */
+		--text-primary: #e8e8f0;
+		--text-secondary: #b0b0c0;
+		--text-default: #e8e8f0;
+		--text-muted: #6a6a80;
+		--text-strong: #ffffff;
+
+		/* CHANNEL / ICON COLORS */
+		--channels-default: #6a6a80;
+		--channel-icon: #6a6a80;
+
+		--icon-primary: #e8e8f0;
+		--icon-secondary: #b0b0c0;
+		--icon-tertiary: #6a6a80;
+
+		/* INTERACTIVE COLORS */
+		--interactive-normal: #b0b0c0;
+		--interactive-hover: #e8e8f0;
+		--interactive-active: #ffffff;
+		--interactive-muted: #6a6a80;
+
+		/* BACKGROUND MODIFIERS */
+		--background-primary: transparent;
+		--background-modifier-hover: rgba(255,255,255,0.075);
+		--background-modifier-active: rgba(255,255,255,0.10);
+		--background-modifier-selected: rgba(255,255,255,0.125);
+		--background-modifier-accent: rgba(255,255,255,0.175);
+
+		/* BRAND / LINK */
+		--text-brand: hsl(var(--accent-hsl));
+		--text-link: #00e5ff;
+
+		/* STATUS DOTS */
+		--status-danger: #ff2d55;
+		--status-warning: #ff6b00;
+		--status-positive: #c8ff00;
+		--status-premium: #b48cff;
+    }
+}

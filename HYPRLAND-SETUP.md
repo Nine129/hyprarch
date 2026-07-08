@@ -461,7 +461,7 @@ yay -S swayosd-git grimblast-git vivaldi bibata-cursor-theme colloid-icon-theme
 |------|-------------|-------|
 | **waybar** | `~/.config/waybar/style.css` + `config.jsonc` | Transparent bar, floating pill modules |
 | **rofi** | `~/.config/rofi/config.rasi` | CGGX theme, red accent, sharp corners |
-| **kitty** | `~/.config/kitty/kitty.conf` | JetBrainsMono Nerd Font, CGGX colors |
+| **kitty** | `~/.config/kitty/kitty.conf` | MonaspiceNe Nerd Font, CGGX colors |
 | **swaync** | `~/.config/swaync/config.json` + `style.css` | Notification daemon + control center panel |
 | **hyprpaper** | `~/.config/hypr/hyprpaper.conf` | Static wallpaper with dim overlay |
 | **hyprlock** | `~/.config/hypr/hyprlock.conf` | Lock screen matching CGGX style |

@@ -249,13 +249,13 @@ sudo pacman -S --needed \
   noto-fonts \
   noto-fonts-emoji \
   noto-fonts-cjk \
-  ttf-jetbrains-mono-nerd \
+  otf-monaspace-nerd \
   ttf-nerd-fonts-symbols-mono \
   ttf-liberation
 ```
 
-> **JetBrainsMonoNL Nerd Font Mono** is the primary font used across Waybar, Rofi,
-> Kitty, Hyprlock, and all rofi-based scripts. It's included in `ttf-jetbrains-mono-nerd`.
+> **MonaspiceNe Nerd Font Mono** is the primary font used across Waybar, Rofi,
+> Kitty, Hyprlock, and all rofi-based scripts. It's included in `otf-monaspace-nerd`.
 > Without it, every app falls back to a default monospace and the aesthetic breaks.
 
 ### 6.2 Cursor & Icons (optional)

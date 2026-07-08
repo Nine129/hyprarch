@@ -59,7 +59,7 @@ Item {
                 Text {
                     anchors.centerIn: parent
                     text: fmtPct(power.batteryPercent)
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: "MonaspiceNe Nerd Font"
                     font.pixelSize: 22
                     font.bold: true
                     color: lime
@@ -93,7 +93,7 @@ Item {
 
                             Text {
                                 text: modelData.label
-                                font.family: "JetBrainsMono Nerd Font"
+                                font.family: "MonaspiceNe Nerd Font"
                             font.pixelSize: 14
                                 font.bold: true
                                 color: muted
@@ -104,7 +104,7 @@ Item {
 
                             Text {
                                 text: modelData.value
-                                font.family: "JetBrainsMono Nerd Font"
+                                font.family: "MonaspiceNe Nerd Font"
                             font.pixelSize: 16
                                 font.bold: true
                                 color: silver
@@ -157,7 +157,7 @@ Item {
 
                         Text {
                             text: modelData.icon
-                            font.family: "JetBrainsMono Nerd Font"
+                            font.family: "MonaspiceNe Nerd Font"
                             font.pixelSize: 16
                             color: isActive ? "#0a0a0c" : lime
                             Layout.alignment: Qt.AlignHCenter
@@ -165,7 +165,7 @@ Item {
 
                         Text {
                             text: modelData.label
-                            font.family: "JetBrainsMono Nerd Font"
+                            font.family: "MonaspiceNe Nerd Font"
                             font.pixelSize: 12
                             font.bold: true
                             color: isActive ? "#0a0a0c" : silver

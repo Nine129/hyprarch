@@ -16,7 +16,7 @@ window {
   border-radius:      0;
   width:              220;
   padding:            0;
-  font:               "JetBrainsMonoNL Nerd Font Mono 13";
+  font:               "MonaspiceNe Nerd Font Mono 13";
   location:           northeast;
   anchor:             northeast;
   y-offset:           50;
@@ -67,7 +67,7 @@ element-text {
   vertical-align:     0.5;
   horizontal-align:   0;
   padding:            0;
-  font:               "JetBrainsMonoNL Nerd Font Mono 13";
+  font:               "MonaspiceNe Nerd Font Mono 13";
 }
 
 inputbar { enabled: false; }

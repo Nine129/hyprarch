@@ -17,7 +17,7 @@
 # (default)    #e8e8f0 (silver)    
 #
 # Requires: rofi, gtk-launch (glib2)
-# Font:     JetBrainsMonoNL Nerd Font Mono
+# Font:     MonaspiceNe Nerd Font Mono
 # Bound:    SUPER + SPACE
 # ──────────────────────────────────────────
 

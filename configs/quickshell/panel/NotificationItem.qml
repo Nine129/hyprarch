@@ -47,7 +47,7 @@ Rectangle {
             Text {
                 anchors.centerIn: parent
                 text: appName.charAt(0).toUpperCase()
-                font.family: "JetBrainsMono Nerd Font"
+                font.family: "MonaspiceNe Nerd Font"
                 font.pixelSize: 15
                 font.bold: true
                 color: accent
@@ -61,7 +61,7 @@ Rectangle {
 
             Text {
                 text: appName
-                font.family: "JetBrainsMono Nerd Font"
+                font.family: "MonaspiceNe Nerd Font"
                 font.pixelSize: 9
                 font.bold: true
                 color: accent
@@ -70,7 +70,7 @@ Rectangle {
 
             Text {
                 text: summaryText
-                font.family: "JetBrainsMono Nerd Font"
+                font.family: "MonaspiceNe Nerd Font"
                 font.pixelSize: 11
                 font.bold: true
                 color: "#e8e8f0"
@@ -82,7 +82,7 @@ Rectangle {
 
             Text {
                 text: bodyText
-                font.family: "JetBrainsMono Nerd Font"
+                font.family: "MonaspiceNe Nerd Font"
                 font.pixelSize: 10
                 color: "#6a6a80"
                 Layout.fillWidth: true

@@ -151,7 +151,7 @@ Item {
             Text {
                 Layout.fillWidth: true
                 text: clockText
-                font.family: "JetBrainsMono Nerd Font"
+                font.family: "MonaspiceNe Nerd Font"
                 font.pixelSize: 42
                 font.bold: true
                 color: silver
@@ -227,7 +227,7 @@ Item {
                             Text {
                                 anchors.centerIn: parent
                                 text: modelData.name
-                                font.family: "JetBrainsMono Nerd Font"
+                                font.family: "MonaspiceNe Nerd Font"
                                 font.pixelSize: 11
                                 font.weight: index === parent.centerOffset ? Font.Bold : Font.Medium
                                 color: {
@@ -263,7 +263,7 @@ Item {
 
                 Text {
                     text: "◂"
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: "MonaspiceNe Nerd Font"
                     font.pixelSize: 14
                     color: mouseA.containsMouse ? cyan : muted
                     scale: mouseA.pressed ? 0.88 : 1.0
@@ -284,7 +284,7 @@ Item {
 
                 Text {
                     text: root.monthNames[root.dispMonth] + " " + root.dispYear
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: "MonaspiceNe Nerd Font"
                     font.pixelSize: 15
                     font.bold: true
                     font.letterSpacing: 1
@@ -295,7 +295,7 @@ Item {
 
                 Text {
                     text: "▸"
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: "MonaspiceNe Nerd Font"
                     font.pixelSize: 14
                     color: mouseB.containsMouse ? cyan : muted
                     scale: mouseB.pressed ? 0.88 : 1.0
@@ -330,7 +330,7 @@ Item {
                         Layout.fillWidth: true
                         horizontalAlignment: Text.AlignHCenter
                         text: modelData
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: "MonaspiceNe Nerd Font"
                         font.pixelSize: 9
                         font.bold: true
                         color: muted
@@ -359,7 +359,7 @@ Item {
                         Text {
                             anchors.centerIn: parent
                             text: modelData.day
-                            font.family: "JetBrainsMono Nerd Font"
+                            font.family: "MonaspiceNe Nerd Font"
                             font.pixelSize: modelData.isToday ? 14 : 11
                             font.weight: modelData.isToday ? Font.Bold : Font.Medium
                             color: {

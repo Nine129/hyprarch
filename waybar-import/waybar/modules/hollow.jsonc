@@ -2,9 +2,9 @@
     "battery": {
         "bat": "BAT0",
         "format": "{icon}<span size='14pt'><b>{capacity}</b></span>",
-        "format-critical": "<span font_family='JetBrainsMono Nerd Font' color='#f38ba8'>{icon}</span><small><b>{capacity}</b></small>",
-        "format-charging": "<span font_family='JetBrainsMono Nerd Font' color='#eed49f'>{icon}</span><small><b>{capacity}</b></small>",
-        "format-good": "<span font_family='JetBrainsMono Nerd Font' color='#a6e3a1'>{icon}</span><b>{capacity}</b>",
+        "format-critical": "<span font_family='MonaspiceNe Nerd Font' color='#f38ba8'>{icon}</span><small><b>{capacity}</b></small>",
+        "format-charging": "<span font_family='MonaspiceNe Nerd Font' color='#eed49f'>{icon}</span><small><b>{capacity}</b></small>",
+        "format-good": "<span font_family='MonaspiceNe Nerd Font' color='#a6e3a1'>{icon}</span><b>{capacity}</b>",
         "format-icons": [
             "󰛞 󱢠 󱢠 󱢠 󱢠 ",
             "󰣐 󱢠 󱢠 󱢠 󱢠 ",
@@ -18,7 +18,7 @@
             "󰣐 󰣐 󰣐 󰣐 󰣐 "
         ],
         "format-time": "{H}hr & {m}min",
-        "format-warning": "<span font_family='JetBrainsMono Nerd Font' color='#f9e2af'>{icon}</span><small><b>{capacity}</b></small>",
+        "format-warning": "<span font_family='MonaspiceNe Nerd Font' color='#f9e2af'>{icon}</span><small><b>{capacity}</b></small>",
         "interval": 60,
         "max-length": 25,
         "states": {

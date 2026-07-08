@@ -63,7 +63,7 @@ Rectangle {
         Text {
             anchors { left: dot.right; leftMargin: 8; verticalCenter: parent.verticalCenter }
             text: root.header
-            font.family: "JetBrainsMono Nerd Font"
+            font.family: "MonaspiceNe Nerd Font"
             font.pixelSize: 9
             font.bold: true
             font.letterSpacing: 1.2
@@ -75,7 +75,7 @@ Rectangle {
         // Badge
         TextMetrics {
             id: badgeMetrics
-            font.family: "JetBrainsMono Nerd Font"
+            font.family: "MonaspiceNe Nerd Font"
             font.pixelSize: 12
             font.bold: true
             text: root.badge
@@ -86,7 +86,7 @@ Rectangle {
             anchors { right: parent.right; rightMargin: 0; verticalCenter: parent.verticalCenter; verticalCenterOffset: 8 }
             visible: root.badge !== ""
             text: root.badge
-            font.family: "JetBrainsMono Nerd Font"
+            font.family: "MonaspiceNe Nerd Font"
             font.pixelSize: 12
             font.bold: true
             color: "#e8e8f0"

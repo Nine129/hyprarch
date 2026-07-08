@@ -1,0 +1,422 @@
+/* ── CGGX Vivaldi — Custom CSS Mod ───────────────── */
+/* CGGX rice aesthetic: square, dark, neon-cyberpunk  */
+/* Enable in vivaldi://experiments → CSS modifications */
+/* Then point Settings > Appearance > Custom UI       */
+/* Modifications to this folder.                       */
+
+@import "cggx-colors.css";
+
+/* ── Global Reset ─────────────────────────────────── */
+* {
+  border-radius: 0 !important;
+}
+
+/* ── Root Theme Vars ──────────────────────────────── */
+/* Override Vivaldi's internal CSS custom properties    */
+:root {
+  --colorBg: var(--cggx-bg);
+  --colorFg: var(--cggx-silver);
+  --colorHighlight: var(--cggx-border);
+  --colorAccent: var(--cggx-red);
+  --colorAccentFg: var(--cggx-bg);
+  --borderRadius: 0;
+  --borderRadiusTab: 0;
+}
+
+/* ── Tab Bar ────────────────────────────────────────*/
+.tab-strip {
+  background: var(--cggx-surface);
+}
+
+.tab {
+  border-radius: 0 !important;
+  border: none;
+  border-right: 1px solid var(--cggx-border);
+  background: var(--cggx-surface);
+  color: var(--cggx-muted);
+}
+
+.tab.active {
+  background: var(--cggx-red);
+  color: var(--cggx-bg);
+}
+
+.tab.active .tab-title {
+  color: var(--cggx-bg);
+}
+
+.tab:hover:not(.active) {
+  background: var(--cggx-surface2);
+  color: var(--cggx-silver);
+}
+
+.tab-group-indicator {
+  background: var(--cggx-red);
+}
+
+/* Tab close button */
+.tab .close {
+  color: var(--cggx-muted);
+}
+
+.tab.active .close {
+  color: var(--cggx-bg);
+}
+
+/* ── Address Bar ────────────────────────────────────*/
+.UrlBar {
+  background: var(--cggx-surface);
+  border-bottom: 1px solid var(--cggx-border);
+}
+
+.UrlBar-AddressField {
+  background: var(--cggx-surface);
+}
+
+.UrlBar-AddressField .field {
+  background: var(--cggx-surface);
+  border: 1px solid var(--cggx-border);
+  color: var(--cggx-silver);
+}
+
+.UrlBar-AddressField .field:focus {
+  border-color: var(--cggx-red);
+}
+
+.UrlBar-AddressField .field .search-text {
+  color: var(--cggx-silver);
+}
+
+/* URL dropdown suggestions */
+.UrlBar-AddressField .url-field-popup {
+  background: var(--cggx-surface);
+  border: 1px solid var(--cggx-border);
+}
+
+.UrlBar-AddressField .url-field-popup .url-field-suggestion-row {
+  color: var(--cggx-silver);
+}
+
+.UrlBar-AddressField .url-field-popup .url-field-suggestion-row.selected {
+  background: var(--cggx-red);
+  color: var(--cggx-bg);
+}
+
+/* ── Navigation Buttons ─────────────────────────────*/
+button.button-toolbar {
+  background: transparent;
+  border-radius: 0 !important;
+  color: var(--cggx-silver);
+}
+
+button.button-toolbar:hover {
+  background: var(--cggx-border);
+}
+
+button.button-toolbar:active,
+button.button-toolbar.pressed {
+  background: var(--cggx-red);
+  color: var(--cggx-bg);
+}
+
+/* ── Panels / Sidebar ───────────────────────────────*/
+#panels-container {
+  background: var(--cggx-bg);
+  border-right: 1px solid var(--cggx-border);
+}
+
+.panel {
+  background: var(--cggx-surface);
+}
+
+.panel-header {
+  background: var(--cggx-surface);
+  border-bottom: 1px solid var(--cggx-border);
+  color: var(--cggx-silver);
+}
+
+/* Panel toggle button */
+.panel-activitybar {
+  background: var(--cggx-bg);
+  border-right: 1px solid var(--cggx-border);
+}
+
+.panel-activitybar button {
+  color: var(--cggx-muted);
+}
+
+.panel-activitybar button.active {
+  background: var(--cggx-red);
+  color: var(--cggx-bg);
+}
+
+/* ── Bookmarks Bar ──────────────────────────────────*/
+.bookmark-bar {
+  background: var(--cggx-surface);
+  border-bottom: 1px solid var(--cggx-border);
+}
+
+.bookmark-bar .bookmark-item {
+  color: var(--cggx-silver);
+}
+
+.bookmark-bar .bookmark-item:hover {
+  background: var(--cggx-border);
+}
+
+/* ── Menus & Context Menus ──────────────────────────*/
+.vivaldi-menu {
+  background: var(--cggx-surface);
+  border: 1px solid var(--cggx-border);
+  border-radius: 0 !important;
+}
+
+.vivaldi-menu .menu-item {
+  color: var(--cggx-silver);
+}
+
+.vivaldi-menu .menu-item.selected,
+.vivaldi-menu .menu-item:hover {
+  background: var(--cggx-red);
+  color: var(--cggx-bg);
+}
+
+.vivaldi-menu .menu-item.disabled {
+  color: var(--cggx-muted);
+}
+
+.vivaldi-menu .menu-item .menu-accel {
+  color: var(--cggx-muted);
+}
+
+/* Menu separator */
+.vivaldi-menu .menu-separator {
+  border-bottom: 1px solid var(--cggx-border);
+}
+
+/* ── Context Menus (right-click) ────────────────────*/
+.context-menu {
+  background: var(--cggx-surface);
+  border: 1px solid var(--cggx-border);
+  border-radius: 0 !important;
+}
+
+.context-menu .menu-item {
+  color: var(--cggx-silver);
+}
+
+.context-menu .menu-item.selected,
+.context-menu .menu-item:hover {
+  background: var(--cggx-red);
+  color: var(--cggx-bg);
+}
+
+/* ── Scrollbars ─────────────────────────────────────*/
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--cggx-surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--cggx-border);
+  border-radius: 0 !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--cggx-muted);
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--cggx-surface);
+}
+
+/* ── Speed Dial / Start Page ────────────────────────*/
+.startpage {
+  background: var(--cggx-bg);
+}
+
+.startpage .dial-container .dial {
+  background: var(--cggx-surface);
+  border: 1px solid var(--cggx-border);
+  border-radius: 0 !important;
+}
+
+.startpage .dial-container .dial .title {
+  color: var(--cggx-silver);
+}
+
+.startpage .dial-container .dial:hover {
+  border-color: var(--cggx-red);
+}
+
+/* Speed dial add button */
+.startpage .dial-container .dial.add {
+  border: 2px dashed var(--cggx-border);
+  color: var(--cggx-muted);
+}
+
+.startpage .dial-container .dial.add:hover {
+  border-color: var(--cggx-red);
+  color: var(--cggx-red);
+}
+
+/* ── Toolbar / Main Toolbar ─────────────────────────*/
+.main-toolbar {
+  background: var(--cggx-surface);
+  border-bottom: 1px solid var(--cggx-border);
+}
+
+.main-toolbar .toolbar-group {
+  border-right: 1px solid var(--cggx-border);
+}
+
+/* ── Status Bar ─────────────────────────────────────*/
+#status-info {
+  background: var(--cggx-surface);
+  border-top: 1px solid var(--cggx-border);
+  color: var(--cggx-muted);
+}
+
+/* ── Info Bar (downloads, SSL warnings) ─────────────*/
+.infobar {
+  background: var(--cggx-surface);
+  border-bottom: 1px solid var(--cggx-border);
+  color: var(--cggx-silver);
+}
+
+.infobar.infobar-warning {
+  border-left: 3px solid var(--cggx-orange);
+}
+
+.infobar.infobar-error {
+  border-left: 3px solid var(--cggx-red);
+}
+
+.infobar.infobar-info {
+  border-left: 3px solid var(--cggx-cyan);
+}
+
+/* ── Find in Page ───────────────────────────────────*/
+.find-in-page {
+  background: var(--cggx-surface);
+  border-top: 1px solid var(--cggx-border);
+}
+
+.find-in-page input {
+  background: var(--cggx-bg);
+  border: 1px solid var(--cggx-border);
+  color: var(--cggx-silver);
+}
+
+.find-in-page input:focus {
+  border-color: var(--cggx-cyan);
+}
+
+/* ── Search Engine Popup ────────────────────────────*/
+.search-popup {
+  background: var(--cggx-surface);
+  border: 1px solid var(--cggx-border);
+}
+
+.search-popup .search-popup-item {
+  color: var(--cggx-silver);
+}
+
+.search-popup .search-popup-item.selected {
+  background: var(--cggx-red);
+  color: var(--cggx-bg);
+}
+
+/* ── Dropdowns (select elements) ────────────────────*/
+.select-dropdown {
+  background: var(--cggx-surface);
+  border: 1px solid var(--cggx-border);
+}
+
+.select-dropdown .dropdown-item {
+  color: var(--cggx-silver);
+}
+
+.select-dropdown .dropdown-item.selected {
+  background: var(--cggx-red);
+  color: var(--cggx-bg);
+}
+
+/* ── Dialog / Modal Overlay ─────────────────────────*/
+.dialog-overlay {
+  background: rgba(10, 10, 12, 0.85);
+}
+
+.dialog {
+  background: var(--cggx-surface);
+  border: 1px solid var(--cggx-border);
+  border-radius: 0 !important;
+}
+
+.dialog .dialog-title {
+  color: var(--cggx-silver);
+}
+
+.dialog button:not(.dialog-close) {
+  background: var(--cggx-red);
+  color: var(--cggx-bg);
+  border: none;
+  border-radius: 0 !important;
+}
+
+.dialog button:not(.dialog-close):hover {
+  background: #cc2444;
+}
+
+/* ── Extension Popup ────────────────────────────────*/
+.extension-popup {
+  border: 1px solid var(--cggx-border);
+  border-radius: 0 !important;
+}
+
+/* ── Notifications / Tooltips ───────────────────────*/
+.bubble,
+.tooltip {
+  background: var(--cggx-surface);
+  border: 1px solid var(--cggx-border);
+  color: var(--cggx-silver);
+  border-radius: 0 !important;
+}
+
+/* ── Download Shelf ─────────────────────────────────*/
+.downloads-shelf {
+  background: var(--cggx-surface);
+  border-top: 1px solid var(--cggx-border);
+}
+
+.download-item {
+  color: var(--cggx-silver);
+  border-bottom: 1px solid var(--cggx-border);
+}
+
+.download-item .download-progress {
+  background: var(--cggx-border);
+}
+
+.download-item .download-progress .progress-bar {
+  background: var(--cggx-cyan);
+}
+
+/* ── Tab bar context menu (tab right-click) ─────────*/
+/* inherits from vivaldi-menu above */
+
+/* ── Window frame (non-client area) ─────────────────*/
+/* Vivaldi's internal window frame on Linux             */
+.window-frame {
+  background: var(--cggx-bg);
+}
+
+/* ── Private Window Indicator ───────────────────────*/
+.private-window-indicator {
+  background: var(--cggx-purple);
+  color: var(--cggx-bg);
+}

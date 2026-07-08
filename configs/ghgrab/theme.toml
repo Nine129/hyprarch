@@ -1,0 +1,8 @@
+bg_color = "#151518"
+fg_color ="#e8e8f0"
+accent_color = "#c8ff00"
+error_color = "#ff2d55"
+folder_color = "#00e5ff" 
+selected_color = "#ff6b00" 
+success_color = "#00e5ff"
+warning_color = "#ff6b00"

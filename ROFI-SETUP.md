@@ -86,7 +86,7 @@ The old GitHub Wiki is **deprecated** — it redirects to the MkDocs site above.
 | Active items | Cyan accent |
 | Window width | 520px — centered on screen |
 | Transparency | `"real"` — requires Wayland compositor (Hyprland) |
-| Font | JetBrainsMonoNL Nerd Font Mono 13 |
+| Font | MonaspiceNe Nerd Font Mono 13 |
 | Icons | Disabled — custom launcher uses Nerd Font glyphs via Pango markup |
 | Search placeholder | "search..." in muted (#6a6a80) |
 | Cursor color | Red (#ff2d55) |

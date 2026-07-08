@@ -145,7 +145,7 @@ PanelWindow {
 
                     Text {
                         text: "CONTROL"
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: "MonaspiceNe Nerd Font"
                         font.pixelSize: 22
                         font.bold: true
                         font.letterSpacing: 3
@@ -169,7 +169,7 @@ PanelWindow {
                         Text {
                             anchors.centerIn: parent
                             text: "\u23FB" // power symbol
-                            font.family: "JetBrainsMono Nerd Font"
+                            font.family: "MonaspiceNe Nerd Font"
                             font.pixelSize: 16
                             color: closeMouse.containsMouse ? panel.red : panel.silver
                         }
@@ -194,7 +194,7 @@ PanelWindow {
                 Text {
                     Layout.fillWidth: true
                     text: "Notifications"
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: "MonaspiceNe Nerd Font"
                     font.pixelSize: 14
                     font.bold: true
                     font.letterSpacing: 2.5

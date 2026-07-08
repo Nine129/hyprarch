@@ -45,7 +45,7 @@ Item {
 
                     Text {
                         text: audio.muted ? "\uf6a9" : "\uf028"
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: "MonaspiceNe Nerd Font"
                         font.pixelSize: 16
                         color: orange
                         horizontalAlignment: Text.AlignHCenter
@@ -79,7 +79,7 @@ Item {
 
                 Text {
                     text: audio.defaultSinkName
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: "MonaspiceNe Nerd Font"
                     font.pixelSize: 11
                     color: muted
                     Layout.fillWidth: true
@@ -117,7 +117,7 @@ Item {
 
                             Text {
                                 text: modelData.name
-                                font.family: "JetBrainsMono Nerd Font"
+                                font.family: "MonaspiceNe Nerd Font"
                                 font.pixelSize: 11
                                 font.bold: true
                                 color: modelData.muted ? "#F9364B" : silver
@@ -140,7 +140,7 @@ Item {
 
                             Text {
                                 text: modelData.muted ? "—" : modelData.volume + "%"
-                                font.family: "JetBrainsMono Nerd Font"
+                                font.family: "MonaspiceNe Nerd Font"
                                 font.pixelSize: 11
                                 color: silver
                                 Layout.preferredWidth: 34
@@ -161,7 +161,7 @@ Item {
                     id: noStreamsText
                     anchors.centerIn: parent
                     text: "No active streams"
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: "MonaspiceNe Nerd Font"
                     font.pixelSize: 10
                     color: muted
                     horizontalAlignment: Text.AlignHCenter

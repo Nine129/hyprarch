@@ -6,7 +6,6 @@ aur-sync-vote
 base
 base-devel
 bat
-betterbird-bin
 bibata-cursor-theme
 blueman
 bluez
@@ -14,6 +13,7 @@ bluez-utils
 brightnessctl
 btop
 btrfs-progs
+bun
 cachyos-keyring
 cachyos-mirrorlist
 cachyos-v3-mirrorlist
@@ -38,6 +38,7 @@ fcitx5-unikey
 fd
 fuzzel
 fzf
+ghgrab-bin
 git
 git-delta
 github-cli
@@ -58,6 +59,7 @@ hyprlock
 hyprpaper
 hyprpicker
 hyprpolkitagent
+hyprshade
 imv
 intel-gpu-tools
 intel-media-driver
@@ -86,6 +88,7 @@ linux-cachyos-headers
 linux-firmware
 linux-lts
 linux-lts-headers
+localsend-bin
 lsp-plugins
 lutris
 mediainfo
@@ -106,6 +109,7 @@ onefetch
 opencode
 os-prober
 otf-font-awesome
+otf-monaspace-nerd
 otter-launcher
 pacman-contrib
 papirus-icon-theme
@@ -139,10 +143,12 @@ tealdeer
 thunar
 timeshift
 timeshift-autosnap
+toofan-bin
 topgrade
 trash-cli
 ttf-jetbrains-mono-nerd
 ttf-liberation
+ttf-monaspace-variable
 ttf-nerd-fonts-symbols-mono
 ttf-sharetech-mono-nerd
 tty-clock
@@ -156,8 +162,10 @@ vulkan-intel
 waybar
 wine-staging
 winetricks
+wiremix
 wireplumber
 wl-clipboard
+wlctl-bin
 wlogout-git
 wtype
 xdg-desktop-portal-gtk

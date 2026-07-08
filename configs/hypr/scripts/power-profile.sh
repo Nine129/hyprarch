@@ -61,7 +61,7 @@ window {
   border: 0;
   border-radius: 0;
   width: 220px;
-  font: "JetBrainsMonoNL Nerd Font Mono 13";
+  font: "MonaspiceNe Nerd Font Mono 13";
   location: northeast;
   x-offset: -60;
   y-offset: 0;

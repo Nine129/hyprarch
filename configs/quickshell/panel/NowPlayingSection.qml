@@ -63,7 +63,7 @@ Item {
                     anchors.centerIn: parent
                     visible: mpris.artUrl === ""
                     text: "\u266B"
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: "MonaspiceNe Nerd Font"
                     font.pixelSize: 40
                     color: muted
                 }
@@ -78,7 +78,7 @@ Item {
                 Text {
                     Layout.fillWidth: true
                     text: hasPlayer ? (mpris.trackTitle || "______") : "______"
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: "MonaspiceNe Nerd Font"
                     font.pixelSize: 16
                     font.bold: true
                     color: orange
@@ -90,7 +90,7 @@ Item {
                     Layout.fillWidth: true
                     Layout.topMargin: 3
                     text: hasPlayer ? (mpris.trackArtist || "______") : "______"
-                    font.family: "JetBrainsMono Nerd Font"
+                    font.family: "MonaspiceNe Nerd Font"
                     font.pixelSize: 12
                     font.bold: true
                     color: cyan
@@ -139,7 +139,7 @@ Item {
 
                     Text {
                         text: fmtSecs(mpris.position)
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: "MonaspiceNe Nerd Font"
                         font.pixelSize: 10
                         font.bold: true
                         color: muted
@@ -149,7 +149,7 @@ Item {
 
                     Text {
                         text: fmtSecs(mpris.length)
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: "MonaspiceNe Nerd Font"
                         font.pixelSize: 10
                         font.bold: true
                         color: muted
@@ -164,7 +164,7 @@ Item {
 
                     Text {
                         text: "\uf04a" // previous
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: "MonaspiceNe Nerd Font"
                         font.pixelSize: 16
                         color: prevMouse.containsMouse ? "#d4ff40" : lime
                         scale: prevMouse.pressed ? 0.88 : 1.0
@@ -185,7 +185,7 @@ Item {
 
                     Text {
                         text: mpris.isPlaying ? "\uf04c" : "\uf04b" // pause/play
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: "MonaspiceNe Nerd Font"
                         font.pixelSize: 18
                         color: toggleMouse.containsMouse ? "#40f0ff" : cyan
                         scale: toggleMouse.pressed ? 0.88 : 1.0
@@ -206,7 +206,7 @@ Item {
 
                     Text {
                         text: "\uf04e" // next
-                        font.family: "JetBrainsMono Nerd Font"
+                        font.family: "MonaspiceNe Nerd Font"
                         font.pixelSize: 16
                         color: nextMouse.containsMouse ? "#ff9040" : orange
                         scale: nextMouse.pressed ? 0.88 : 1.0

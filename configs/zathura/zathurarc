@@ -47,7 +47,7 @@ set notification-error-fg   "#0a0a0c"
 set notification-warning-bg "#ff6b00"
 set notification-warning-fg "#151518"
 
-set font                    "JetBrainsMono Nerd Font 10"
+set font                    "MonaspiceNe Nerd Font 10"
 
 # --- Keybinds ---
 map [normal] K              zoom in

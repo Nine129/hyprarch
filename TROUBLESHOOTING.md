@@ -374,7 +374,7 @@ sudo pacman -S swaync
 yay -S ttf-share-tech-mono
 # Or use a Nerd Font fallback
 # In kitty.conf:
-font_family      JetBrainsMono Nerd Font
+font_family      MonaspiceNe Nerd Font
 ```
 
 ---
