@@ -5,6 +5,7 @@ set adjust-open             "width"
 set scroll-step             100
 set scroll-full-overlap     0.1
 set scroll-page-aware       true
+set pages-per-row           1
 set scroll-wrap             false
 set zoom-step               10
 set zoom-center             true
@@ -13,8 +14,8 @@ set incremental-search      true
 set window-title-basename   true
 set window-title-page       true
 set render-loading          false
-set guioptions              s        # statusbar only, no scrollbar clutter
 
+set guioptions             s,o    # statusbar, first-page-only scrollbar
 # --- Recolor (invert PDFs to dark) ---
 set recolor                 true
 set recolor-keephue         true
@@ -46,13 +47,23 @@ set notification-error-bg   "#ff2d55"
 set notification-error-fg   "#0a0a0c"
 set notification-warning-bg "#ff6b00"
 set notification-warning-fg "#151518"
+set font                    "MonaspiceNe Nerd Font 11"
 
-set font                    "MonaspiceNe Nerd Font 10"
-
+set statusbar              "   Pg %{current_page} / %{total_pages}   %{title}  "
+set selection-style         "solid"
 # --- Keybinds ---
 map [normal] K              zoom in
 map [normal] J              zoom out
 map [normal] <C-r>          recolor
+map [normal] <Tab>          toggle_index
+map [normal] <S-Tab>        toggle_inputbar
+map [normal] <C-j>          scroll downward
+map [normal] <C-k>          scroll upward
+map [normal] <C-d>          scroll halfpage downward
+map [normal] <C-u>          scroll halfpage upward
+map [normal] r              reload
+map [normal] <C-n>          navigate next
+map [normal] <C-p>          navigate previous
 map [normal] <C-=>          zoom in
 map [normal] <C-->          zoom out
 map [normal] p              print

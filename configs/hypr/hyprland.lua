@@ -63,6 +63,7 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("hyprpaper")
   hl.exec_cmd("swaync")
   hl.exec_cmd("hypridle")
+  hl.exec_cmd("hyprpm enable scrolloverview")
   hl.dsp.exec_cmd("wl-paste --type text --watch cliphist store")
   hl.dsp.exec_cmd("wl-paste --type image --watch cliphist store")
 end)
@@ -73,3 +74,25 @@ hl.window_rule({
   match    = { class = "vesktop" }, 
   decorate = false,
 })
+
+-- Plugin
+hl.config({
+    plugin = {
+        scrolloverview = {
+            gesture_distance = 300, -- how far is the "max" for the gesture
+            scale = 0.75, -- preferred overview scale
+            workspace_gap = 0,
+            layout = "vertical", -- vertical or horizontal
+            wallpaper = 0, -- 0: global only, 1: per-workspace only, 2: both
+            blur = false, -- blur only the main overview wallpaper
+
+            shadow = {
+                enabled = false,
+                range = 50,
+                render_power = 3,
+                color = 0xee1a1a1a,
+            },
+        },
+    },
+})
+

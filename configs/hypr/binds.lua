@@ -110,7 +110,6 @@ hl.bind("XF86AudioPrev",         hl.dsp.exec_cmd("swayosd-client --playerctl pre
 hl.bind("XF86AudioPlay",         hl.dsp.exec_cmd("swayosd-client --playerctl play-pause"))
 hl.bind("XF86MonBrightnessUp",   hl.dsp.exec_cmd("swayosd-client --brightness raise"),                  { repeating = true })
 hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("swayosd-client --brightness lower"),                 { repeating = true })
-
--- Notification center ──────────────
-
--- Volume popout ─────────────────────
+hl.bind("SUPER + g", function()
+    hl.plugin.scrolloverview.overview("toggle")
+end)

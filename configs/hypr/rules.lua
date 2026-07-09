@@ -77,7 +77,7 @@ hl.window_rule({
     match={ class = "kitty-float"},
     float= true,
     center=true,
-    size={750,450},
+    size={770,450},
 
    }
  )

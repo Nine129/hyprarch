@@ -274,3 +274,9 @@ if [[ -d "$HOME/.zsh/plugins/zsh-syntax-highlighting" ]]; then
 fi
 
 fastfetch
+
+export NVM_DIR="$HOME/.config/nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
+[[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
+ source <(fzf --zsh)
