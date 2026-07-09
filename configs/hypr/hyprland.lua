@@ -58,7 +58,6 @@ hl.on("hyprland.start", function()
   -- # Launch kitty in background on Hyprland start
   hl.exec_cmd("kitty --daemon")
   -- Quickshell
-  hl.exec_cmd("quickshell -p ~/.config/quickshell")
   hl.exec_cmd("kitty --show-as=hidden")
   hl.exec_cmd("hyprpaper")
   hl.exec_cmd("swaync")

@@ -1,7 +1,7 @@
 # CGGX Ecosystem Setup
 
 > Companion guide covering the smaller ecosystem tools:
-> **Hyprpaper** · **SwayNC** · **Kitty** · **Fastfetch** · **Screenshots** · **Zsh**
+> **Hyprpaper** · **SwayNC** · **Kitty** · **Fastfetch** · **Screenshots** · **SwayOSD** · **Zsh** · **Clipboard** · **Zathura** · **Fontconfig** · **Downloads Sorter**
 
 ---
 
@@ -11,8 +11,13 @@
 - [2. SwayNC](#2-swaync)
 - [3. Kitty](#3-kitty)
 - [4. Fastfetch](#4-fastfetch)
-- [6. Zsh](#6-zsh)
-
+- [5. Screenshots](#5-screenshots)
+- [6. SwayOSD](#6-swayosd)
+- [7. Zsh](#7-zsh)
+- [8. Clipboard](#8-clipboard-cliphist--wl-clipboard)
+- [9. Zathura](#9-zathura)
+- [10. Fontconfig](#10-fontconfig)
+- [11. Downloads Sorter](#11-downloads-sorter)
 ---
 
 ## 1. Hyprpaper
@@ -355,18 +360,21 @@ Kitty is a GPU-accelerated terminal emulator. Config is in `key = value` format.
 ~/.config/kitty/kitty.conf
 ```
 
-### Font
+### Font & Layout
 
 ```conf
-font_family      Share Tech Mono
+font_family      MonaspiceNe Nerd Font
 bold_font         auto
 italic_font       auto
 bold_italic_font  auto
-font_size        10.0
+font_size        9.3
 ```
 
-The `Share Tech Mono` font must be installed from `ttf-share-tech-mono` (available in AUR) or `nerd-fonts` (which bundles it).
+The primary font is **MonaspiceNe Nerd Font** from `otf-monaspace-nerd`. Window dimensions are 980×600, no padding, hidden window decorations. Tab bar is at the bottom with `┊` separators in CGGX colors.
 
+### Cursor Trail (Rainbow)
+
+Kitty is configured with an animated cursor trail via a custom kitten. The `rainbow-trail.conf` include enables cursor trail animation (1ms latency, 1-cell threshold) with a rainbow color cycle that sweeps through the hue wheel. Toggle with `Ctrl+Shift+R`. The kitten communicates via a dedicated socket at `/tmp/kitty-rainbow-trail`.
 ### CGGX 16-color palette
 
 ```
@@ -433,46 +441,37 @@ Fastfetch is a system information tool (like Neofetch). Config is in JSONC forma
 
 ### Logo
 
+Now uses a **custom PNG logo** rendered via Kitty's terminal image protocol (not ASCII art):
+
 ```jsonc
 "logo": {
-  "type": "small",          // "auto", "small", "large", or image path
-  "color": {
-    "1": "red",             // Arch logo top — CGGX red
-    "2": "cyan",            // Arch logo middle — CGGX cyan
-    "3": "lime"             // Arch logo bottom — CGGX lime
-  },
-  "padding": { "right": 2 }
-}
+  "type": "kitty",
+  "source": "/home/nine/hyprarch/configs/fastfetch/xnewlogo.png",
+  "width": 35,
+  "height": 20
+},
+"logoColors": [
+  "#ff2d55", "#ff2d55", "#00e5ff", "#00e5ff",
+  "#c8ff00", "#c8ff00", "#e8e8f0", "#e8e8f0",
+  "#6a6a80"
+]
 ```
 
-Valid named colors: `black`, `red`, `green`, `yellow`, `blue`, `magenta`, `cyan`, `white`, `default`, and prefixed variants (`bright_red`, `light_cyan`, etc.).
+> The logo PNGs are large (~2.8MB each). Three variants exist: `xnewlogo.png` (active), `newlogo.png`, `xnewlog.png`.
+> An ASCII fallback `logo.txt` is also included but not referenced in the config.
 
-### Modules
+### Modules (Current)
 
-The config shows these sections:
+The config displays 4 groups with CGGX-colored module separators:
 
-| Module | Displays |
-|--------|----------|
-| `title` | `user@host` |
-| `os` | OS name and version |
-| `host` | Machine model |
-| `kernel` | Kernel release |
-| `uptime` | System uptime |
-| `packages` | Package count (pacman, flatpak, etc.) |
-| `shell` | Current shell |
-| `wm` | Window manager |
-| `wmtheme` | WM theme |
-| `terminal` | Terminal emulator |
-| `terminalfont` | Terminal font |
-| `cpu` | CPU model and cores |
-| `gpu` | GPU information |
-| `memory` | RAM usage |
-| `disk` | Disk usage |
-| `battery` | Battery status |
-| `localip` | Network IP |
-| `bluetooth` | Bluetooth devices |
-| `colors` | Color palette swatch |
+| Group | Modules |
+|-------|---------|
+| **User/System** | title (user@host), OS, kernel, uptime |
+| **Software** | packages, shell, WM, terminal |
+| **Hardware** | CPU, GPU, RAM, disk, battery |
+| **Breaks** | Visual separators between groups |
 
+Key width: 10 chars. Separator: space. All percentage bars forced to orange (#ff6b00).
 ### Commands
 
 ```bash
@@ -754,24 +753,38 @@ Uses `vcs_info` for git branch display with staged (`●` lime) and unstaged (`�
 | `bindkey -v` | vi-mode | Vi keybindings in shell |
 | `PROMPT_SUBST` | *on* | Allow command substitution in prompt (needed for `$(git_prompt_info)`) |
 
-**Aliases (60+):**
+**Aliases (80+):**
 
 | Group | Examples |
 |-------|----------|
-| **System** | `ll`, `la`, `grep --color`, `df -h` |
+| **System** | `ls` (eza), `ll`, `la`, `lt` (tree), `grep --color`, `df -h` |
 | **Hyprland** | `hrc` (reload), `hw` (workspaces), `hm` (monitors), `hb` (hyprpaper) |
 | **Waybar** | `wbr` (restart waybar) |
-| **Rofi** | `rfl` (drun), `rfw` (window), `rfr` (run) |
+| **Rofi** | `rfl` (drun), `rfw` (window), `rfr` (run) — legacy, fuzzel is primary |
 | **Kitty** | `k`, `kssh` |
 | **Neovim** | `v`, `vi`, `vim` |
 | **Git** | `ga`, `gc`, `gp`, `gl`, `gs`, `gd`, `gb`, `gco`, `gcb`, `gpl`, `gf` |
 | **Screenshot** | `ss` (area), `ss-full`, `ss-window` |
 | **Systemd** | `sc`, `scu`, `jc`, `jcu` |
 | **AUR** | `y` (yay), `ys` (install), `yr` (remove), `yu` (upgrade) |
+| **fzf** | `fzfp` (files), `fzfd` (dirs), `fzfg` (ripgrep) |
+| **eza/dust/duf** | Modern ls, disk usage, disk free replacements |
+| **fd** | Modern find replacement |
+
+**CLI tool integrations:**
+
+| Tool | Role | Integration |
+|------|------|-------------|
+| **Starship** | Prompt | `starship.toml` — CGGX-themed modules, red `❯`, cyan dir, git status |
+| **zoxide** | Smart cd | `z` command replaces cd — frecency-based directory jumping |
+| **fzf** | Fuzzy finder | Sourced from `~/.config/fzf/fzf.zsh`, Ctrl+T/R/C bindings |
+| **atuin** | History search | SQLite-backed, CGGX theme — `eval "$(atuin init zsh)"` |
+| **fastfetch** | System info | Runs on shell start, alias `ff` |
+| **eza** | Modern ls | Aliased to `ls`, icons + colors via Nerd Fonts |
 
 **LS_COLORS** uses a CGGX-aware set: directories in cyan (`38;5;81`), executables in green (`38;5;47`), images in magenta (`38;5;213`), archives in muted gray (`38;5;244`), config files in cyan.
 
-**Clipboard daemon:** The clipboard history daemon now starts from **Hyprland's autostart** (`hyprland.lua`), not from `.zshrc`. See [§8 — Clipboard](#8-clipboard-cliphist--wl-clipboard) below for details.
+**Clipboard daemon:** The clipboard history daemon starts from **Hyprland's autostart** (`hyprland.lua`), not from `.zshrc`. See [§8 — Clipboard](#8-clipboard-cliphist--wl-clipboard) below for details.
 
 ### Making Zsh the default shell
 
@@ -905,3 +918,172 @@ cp configs/cliphist/config ~/.config/cliphist/
 - **`cliphist: command not found`** → install `cliphist`
 - **Picker shows empty** → the daemon may not be running. Check: `ps aux | grep cliphist`. If missing, start manually: `wl-paste --watch cliphist store &`
 - **Copy still dies on app close** → ensure `cliphist` is installed AND the daemon autostart line is present in the autostart section
+
+---
+
+## 9. Zathura
+
+### Overview
+
+Zathura is a lightweight PDF/EPUB/DjVu viewer with vim-like keybindings. Themed with CGGX dark recolor mode.
+
+### Dependencies
+
+```bash
+sudo pacman -S zathura zathura-pdf-mupdf
+```
+
+### File location
+
+```
+~/.config/zathura/zathurarc
+```
+
+### Config highlights
+
+| Setting | Value | Purpose |
+|---------|-------|---------|
+| `recolor` | `true` | Dark mode — inverts PDF colors |
+| `recolor-keephue` | `true` | Preserves original hue when recoloring |
+| `recolor-darkcolor` | `#0a0a0c` | Background in dark mode |
+| `recolor-lightcolor` | `#e8e8f0` | Foreground in dark mode |
+| `font` | `MonaspiceNe Nerd Font 10` | UI font |
+| `statusbar-basename` | `true` | Show filename only in status bar |
+| `window-height` / `window-width` | `800` / `1100` | Launch dimensions |
+
+### Keybinds (vim-style)
+
+| Key | Action |
+|-----|--------|
+| `j/k` | Scroll down/up |
+| `h/l` | Scroll left/right |
+| `gg/G` | Top/bottom of document |
+| `/` | Search |
+| `n/N` | Next/previous search result |
+| `Ctrl+r` | Rotate |
+| `a/s` | Zoom in/out |
+| `=` | Fit to width |
+| `r` | Toggle recolor |
+
+---
+
+## 10. Fontconfig
+
+### Overview
+
+Fontconfig controls font discovery, substitution, anti-aliasing, and fallback ordering for all GUI apps. The rice ships a custom `fonts.conf` that defines the CGGX font stack.
+
+### File location
+
+```
+~/.config/fontconfig/fonts.conf   (symlink to configs/fontconfig/fonts.conf)
+```
+
+### Key settings
+
+| Section | Rules |
+|---------|-------|
+| **Anti-aliasing** | `antialias=true`, `hinting=true`, `hintstyle=hintfull`, `rgba=rgb`, `lcdfilter=lcddefault` |
+| **Monospace** | Prefers `MonaspiceNe Nerd Font` → `MonaspiceNe` → `Noto Sans Mono` |
+| **Sans-serif** | Prefers `Rajdhani` → `Exo 2` → `Noto Sans` |
+| **Serif** | Prefers `Noto Serif` |
+| **Size clamp** | Forces `pixelsize=10` minimum when `MonaspiceNe` is requested at ≤9px |
+| **CJK fallback** | `Noto Sans CJK JP` + `Noto Color Emoji` for both sans and mono |
+| **Bitmap** | `embeddedbitmap=false` — outline rendering only |
+| **Rescan** | 30-second interval for new font detection |
+
+### Required fonts
+
+```bash
+# Official repos
+sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji otf-monaspace-nerd ttf-nerd-fonts-symbols-mono ttf-liberation
+
+# AUR (required by fontconfig aliases)
+yay -S ttf-rajdhani ttf-exo-2
+```
+
+### Deploy
+
+```bash
+mkdir -p ~/.config/fontconfig
+ln -sf ~/hyprarch/configs/fontconfig/fonts.conf ~/.config/fontconfig/fonts.conf
+fc-cache -fv
+```
+
+---
+
+## 11. Downloads Sorter
+
+### Overview
+
+`download-organizer` is an inotify-based auto-categorizer for `~/Downloads`. Files are moved into categorized subfolders within 2 seconds of download completion — real-time sorting via a systemd user service.
+
+### Categories
+
+| Folder | Content | Color |
+|--------|---------|-------|
+| `01_images` | jpg, png, gif, webp, svg, etc. | cyan |
+| `02_videos` | mp4, mkv, mov, webm, etc. | red |
+| `03_audio` | mp3, flac, wav, ogg, etc. | lime |
+| `04_documents` | pdf, docx, xlsx, txt, md, epub, etc. | orange |
+| `05_archives` | zip, rar, 7z, tar, gz, etc. | pink |
+| `06_executables` | exe, msi, deb, AppImage, iso, etc. | red |
+| `07_code` | py, js, html, css, json, yaml, etc. | cyan |
+| `08_fonts` | ttf, otf, woff2 | lime |
+| `09_misc` | Everything else | muted |
+
+### How it works
+
+```
+Browser saves file → IN_CLOSE_WRITE fires
+  → 2s per-file debounce
+  → determine category by extension
+  → resolve name conflicts
+  → move into category folder
+  → log to ~/.cache/download-organizer/moves.log
+  → notify-send summary (if enabled)
+```
+
+Skips: hidden files, symlinks, browser temp files (`.crdownload`, `.part`), directories.
+
+### Dependencies
+
+```bash
+sudo pacman -S python python-pyyaml libnotify
+```
+
+### Install
+
+```bash
+cd ~/hyprarch/downloads-sorter
+chmod +x install.sh
+./install.sh
+```
+
+Or manual:
+```bash
+mkdir -p ~/.local/bin ~/.config/download-organizer ~/.config/systemd/user
+cp download-organizer ~/.local/bin/download-organizer
+chmod +x ~/.local/bin/download-organizer
+cp config.yaml ~/.config/download-organizer/config.yaml
+cp download-organizer.service ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now download-organizer.service
+```
+
+### CLI
+
+| Command | Action |
+|---------|--------|
+| `download-organizer` | Start inotify watcher (systemd runs this) |
+| `download-organizer --run` | One-shot sort all existing files |
+| `download-organizer --dry-run` | Preview without moving |
+| `download-organizer --undo N` | Reverse last N moves |
+
+### Verification
+
+```bash
+systemctl --user status download-organizer
+touch ~/Downloads/test-photo.jpg && sleep 3
+ls ~/Downloads/01_images/test-photo.jpg
+```

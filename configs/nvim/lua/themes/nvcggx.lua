@@ -6,7 +6,9 @@
 --
 -- Syntax: aggressive cyberpunk —
 --   keywords=red bold, functions=cyan, strings=lime,
---   numbers=orange, types=purple, comments=muted italic
+--   numbers=orange, tags=red, attributes=cyan,
+--   operators=red, builtin-vars=orange,
+--   types=purple bold, comments=muted italic
 -- UI: flat minimal (like Waybar) — no rounded corners,
 --   active=red bg, selection=red bg, borders=muted
 
@@ -82,7 +84,7 @@ M.polish_hl = {
     ["@keyword.storage"] = { fg = "#ff2d55", bold = true },
     ["@keyword.directive"] = { fg = "#ff2d55", bold = true },
     ["@keyword.directive.define"] = { fg = "#ff2d55", bold = true },
-    ["@keyword.operator"] = { fg = "#ff6b00" },
+    ["@keyword.operator"] = { fg = "#ff2d55" },
 
     -- Cyan: functions, constructors, builtins
     ["@function"] = { fg = "#00e5ff" },
@@ -107,13 +109,13 @@ M.polish_hl = {
     ["@variable.parameter"] = { fg = "#ff6b00" },
 
     -- Purple: types, classes, enums
-    ["@type"] = { fg = "#b48cff" },
-    ["@type.builtin"] = { fg = "#b48cff" },
+    ["@type"] = { fg = "#b48cff", bold = true },
+    ["@type.builtin"] = { fg = "#b48cff", bold = true },
     ["@type.qualifier"] = { fg = "#b48cff" },
 
-    -- Tag/attribute: orange (HTML/JSX/XML)
-    ["@tag"] = { fg = "#ff6b00" },
-    ["@tag.attribute"] = { fg = "#ff6b00" },
+    -- Tag: red, attribute: cyan (HTML/JSX/XML)
+    ["@tag"] = { fg = "#ff2d55" },
+    ["@tag.attribute"] = { fg = "#00e5ff" },
     ["@tag.delimiter"] = { fg = "#6a6a80" },
 
     -- Punctuation: muted (brackets, dots, semicolons)
@@ -137,7 +139,7 @@ M.polish_hl = {
     ["@diff.delta"] = { fg = "#ff6b00" },
 
     -- Markup
-    ["@markup.heading"] = { fg = "#e8e8f0", bold = true },
+    ["@markup.heading"] = { fg = "#ff2d55", bold = true },
     ["@markup.raw"] = { fg = "#C8FF00" },
     ["@markup.link"] = { fg = "#00e5ff" },
     ["@markup.link.url"] = { fg = "#ff6b00", underline = true },
@@ -152,16 +154,59 @@ M.polish_hl = {
     ["@variable"] = { fg = "#e8e8f0" },
     ["@variable.member"] = { fg = "#e8e8f0" },
     ["@variable.member.key"] = { fg = "#e8e8f0" },
-    ["@variable.builtin"] = { fg = "#00e5ff" },
+    ["@variable.builtin"] = { fg = "#ff6b00" },
     ["@attribute"] = { fg = "#ff6b00" },
     ["@symbol"] = { fg = "#00e5ff" },
-    ["@operator"] = { fg = "#ff6b00" },
+    ["@operator"] = { fg = "#ff2d55" },
     ["@label"] = { fg = "#b48cff" },
     ["@namespace"] = { fg = "#ff6b00" },
     ["@character"] = { fg = "#C8FF00" },
     ["@character.special"] = { fg = "#ff6b00" },
     ["@annotation"] = { fg = "#ff6b00" },
     ["@define"] = { fg = "#b48cff" },
+  },
+  -- Defaults — lime for all selected/active items
+  defaults = {
+    -- Core Neovim
+    Visual = { fg = "#C8FF00" },
+    CurSearch = { fg = "#C8FF00" },
+    CurSearch = { fg = "#C8FF00" },
+    Substitute = { fg = "#C8FF00" },
+
+    -- Popup / Completion menus
+    PmenuSel = { fg = "#C8FF00" },
+    PmenuThumb = { bg = "#C8FF00" },
+    CmpItemMenuSelected = { fg = "#C8FF00" },
+    CmpItemKindSelected = { fg = "#C8FF00" },
+    CmpCursor = { fg = "#C8FF00" },
+
+    -- Telescope
+    TelescopeSelection = { fg = "#C8FF00" },
+    TelescopeSelectionCaret = { fg = "#C8FF00" },
+    TelescopeMultiSelection = { fg = "#C8FF00" },
+
+    -- Snacks picker (fzf-like)
+    SnacksPickerMatch = { fg = "#C8FF00" },
+    SnacksPickerSelected = { fg = "#C8FF00" },
+    SnacksDashboardKey = { fg = "#C8FF00" },
+
+    -- Lazy
+    LazyButtonActive = { fg = "#C8FF00" },
+    LazyH1 = { fg = "#C8FF00" },
+
+    -- Mini.pick
+    MiniPickMatchCurrent = { fg = "#C8FF00" },
+    MiniPickMatchMark = { fg = "#C8FF00" },
+
+    -- Fzf-lua
+    FzfLuaCursor = { fg = "#C8FF00" },
+    FzfLuaMatch = { fg = "#C8FF00" },
+
+    -- WhichKey
+    WhichKeySelected = { fg = "#C8FF00" },
+
+    -- Git signs
+    GitSignsAddLn = { fg = "#C8FF00" },
   },
 }
 

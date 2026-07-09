@@ -21,15 +21,7 @@ hl.window_rule({
 hl.window_rule({ match = { class = "vivaldi" },       workspace = 1 })
 hl.window_rule({ match = { class = "Vivaldi-stable" }, workspace = 1 })
 
--- Force Vivaldi fully opaque — hl.window_rule's `opaque` doesn't work in the Lua API,
--- so we use an event listener to fire setprop when Vivaldi opens.
-hl.on("window.open", function(win)
-  if win.class:match("[Vv]ivaldi") then
-    hl.dispatch(hl.dsp.window.set_prop({ window = win, prop = "opaque", value = 1 }))
-  end
-end)
-hl.workspace_rule({ workspace = "w[tv1]", gaps_out = { top = 3, bottom = 12, left = 12, right = 12 }, gaps_in = 4 })
-hl.workspace_rule({ workspace = "f[1]",   gaps_out = { top = 3, bottom = 12, left = 12, right = 12 }, gaps_in = 4 })
+
 -- Ensure borders show on single-window workspaces
 hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 3 })
 
@@ -68,9 +60,14 @@ hl.window_rule({
  hl.window_rule(
    {
      match = { class = "vivaldi-stable" },
-     
+     opaque = true
    }
  )
+ hl.layer_rule({
+   match = { class = "vivaldi-stable"},
+   blur = true,
+ 
+ })
 
  hl.window_rule(
    {

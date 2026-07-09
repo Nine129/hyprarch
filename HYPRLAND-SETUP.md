@@ -3,14 +3,14 @@
 > A documented, opinionated Hyprland rice based on the CGGX style
 > (red/cyan/lime/orange palette on dark background).
 
-## Related Documents
-
 - **[SETUP-GUIDE.md](./SETUP-GUIDE.md)** — Step-by-step from fresh Arch install to full desktop
 - **[ECOSYSTEM-SETUP.md](./ECOSYSTEM-SETUP.md)** — Hyprpaper, SwayNC, Kitty, Fastfetch, Screenshots, SwayOSD, Zsh, Clipboard
 - **[README.md](./README.md)** — Project overview, quick start, folder structure, keybinds reference
 - **[WAYBAR-SETUP.md](./WAYBAR-SETUP.md)** — Waybar configuration, styling, modules, and resolved decisions
+- **[FUZZEL-SETUP.md](./FUZZEL-SETUP.md)** — Fuzzel launcher theme, glyphs, and power menu integration
 - **[ROFI-SETUP.md](./ROFI-SETUP.md)** — Rofi theming, widget hierarchy, installation, decisions
-- **[ECOSYSTEM-SETUP.md](./ECOSYSTEM-SETUP.md)** — Hyprpaper, SwayNC, Kitty, Fastfetch, Zsh setup guides
+- **[CLI-TOOLS.md](./CLI-TOOLS.md)** — CLI utility tools (btop, fastfetch, yazi, zathura)
+- **[MPD-MUSIC-SETUP.md](./MPD-MUSIC-SETUP.md)** — MPD + rmpc music player daemon setup
 - **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** — Common issues and fixes for all tools
 
 ---
@@ -57,6 +57,8 @@ export __GLX_VENDOR_LIBRARY_NAME=nvidia
 ├── binds.lua             # All keybinds + mouse binds
 ├── rules.lua             # Window rules + workspace rules
 ├── animations.lua        # Curves + animation blocks
+├── hyprlock.conf         # Lock screen (clock, date, red accent bar, blurred bg)
+├── hypridle.conf         # Idle daemon (lock + DPMS off)
 └── env                   # uwsm env file (NOT Lua)
 ~/.config/uwsm/
 └── env                   # Environment variables (GTK, Qt, XDG, cursor)
@@ -209,13 +211,13 @@ hl.config({
 ```lua
 hl.config({
   decoration = {
-    rounding          = 0,     -- no rounded corners (CGGX aesthetic)
+    rounding          = 8,     -- subtle rounded corners
     rounding_power    = 2.0,
-    active_opacity   = 1.0,
-    inactive_opacity = 0.85,
+    active_opacity   = 0.94,
+    inactive_opacity = 0.92,
     fullscreen_opacity = 1.0,
-    dim_inactive     = true,
-    dim_strength     = 0.5,
+    dim_inactive     = false,
+    dim_strength     = 0.15,
   },
 })
 ```
@@ -226,15 +228,15 @@ hl.config({
 hl.config({
   decoration = {
     blur = {
-      enabled     = true,
-      size        = 8,
+      enabled     = false,
+      size        = 1,
       passes      = 2,
-      vibrancy    = 0.18,
+      vibrancy    = 0.25,
       new_optimizations = true,
-      xray        = false,   -- set true if floating windows overhead is high
-      noise       = 0.0117,
-      contrast    = 0.8916,
-      brightness  = 0.8172,
+      xray        = false,
+      noise       = 0.005,
+      contrast    = 1.2,
+      brightness  = 1.0,
     },
   },
 })
@@ -247,9 +249,9 @@ hl.config({
   decoration = {
     shadow = {
       enabled       = true,
-      range         = 12,
-      render_power  = 3,
-      color         = "rgba(ff2d5540)",   -- CGGX red-tinted shadow
+      range         = 14,
+      render_power  = 2,
+      color         = "rgba(00000066)",   -- dark shadow, no tint
       scale         = 1.0,
     },
   },
@@ -260,32 +262,54 @@ hl.config({
 
 ## 8. Animations
 
-Bouncy spring-based animations:
+Bezier-based animations with custom curves:
 
 ```lua
 -- Curves
+hl.curve("myBezier", {
+  type   = "bezier",
+  points = { { 0.05, 0.9 }, { 0.1, 1.05 } },
+})
+
 hl.curve("bouncy", {
-  type = "spring",
-  mass = 1,
-  stiffness = 70,
-  dampening = 10,
+  type   = "bezier",
+  points = { { 0.22, 1.15 }, { 0.45, 1.0 } },
 })
 
 hl.curve("smooth", {
-  type = "bezier",
-  points = { {0.25, 0.1}, {0.25, 1.0} },
+  type   = "bezier",
+  points = { { 0.25, 0.1 }, { 0.25, 1.0 } },
 })
 
--- Animations
-hl.animation({ leaf = "windows",     enabled = true, speed = 8,  curve = "bouncy", style = "popin 80%" })
-hl.animation({ leaf = "windowsIn",   enabled = true, speed = 8,  curve = "bouncy", style = "popin 80%" })
-hl.animation({ leaf = "windowsOut",  enabled = true, speed = 8,  curve = "bouncy", style = "popin 80%" })
-hl.animation({ leaf = "windowsMove", enabled = true, speed = 10, curve = "smooth" })
-hl.animation({ leaf = "fade",        enabled = true, speed = 5 })
-hl.animation({ leaf = "fadeIn",      enabled = true, speed = 5 })
-hl.animation({ leaf = "fadeOut",     enabled = true, speed = 5 })
-hl.animation({ leaf = "workspaces",  enabled = true, speed = 8,  curve = "bouncy", style = "slide" })
-hl.animation({ leaf = "border",      enabled = true, speed = 8 })
+-- Global
+hl.animation({ leaf = "global", enabled = true, speed = 8, bezier = "myBezier" })
+
+-- Workspaces — slide left/right, myBezier snappy ease-out
+hl.animation({ leaf = "workspaces",       enabled = true, speed = 8, bezier = "myBezier", style = "slide" })
+hl.animation({ leaf = "workspacesIn",     enabled = true, speed = 8, bezier = "myBezier", style = "slide" })
+hl.animation({ leaf = "workspacesOut",    enabled = true, speed = 8, bezier = "myBezier", style = "slide" })
+hl.animation({ leaf = "specialWorkspace", enabled = true, speed = 8, bezier = "myBezier", style = "slide" })
+
+-- Windows — popin 80%, bouncy bezier
+hl.animation({ leaf = "windows",    enabled = true, speed = 8,  bezier = "bouncy", style = "popin 80%" })
+hl.animation({ leaf = "windowsIn",  enabled = true, speed = 8,  bezier = "bouncy", style = "popin 80%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 8,  bezier = "bouncy", style = "popin 80%" })
+hl.animation({ leaf = "windowsMove", enabled = true, speed = 10, bezier = "myBezier" })
+
+-- Fade — myBezier snappy ease-out
+hl.animation({ leaf = "fade",        enabled = true, speed = 5, bezier = "myBezier" })
+hl.animation({ leaf = "fadeIn",      enabled = true, speed = 5, bezier = "myBezier" })
+hl.animation({ leaf = "fadeOut",     enabled = true, speed = 5, bezier = "myBezier" })
+hl.animation({ leaf = "fadeSwitch",  enabled = true, speed = 5, bezier = "myBezier" })
+hl.animation({ leaf = "fadeShadow",  enabled = true, speed = 5, bezier = "myBezier" })
+hl.animation({ leaf = "fadeDim",     enabled = true, speed = 5, bezier = "myBezier" })
+hl.animation({ leaf = "fadeLayers",  enabled = false })  -- disabled
+
+-- Layer shell resize
+hl.animation({ leaf = "layers", enabled = true, speed = 1, bezier = "myBezier" })
+
+-- Border
+hl.animation({ leaf = "border", enabled = true, speed = 8, bezier = "myBezier" })
 ```
 
 **Animation tree:**
@@ -300,7 +324,7 @@ global
 │  └─ layersOut
 ├─ fade
 │  ├─ fadeIn / fadeOut / fadeSwitch / fadeShadow / fadeDim
-│  ├─ fadeLayers → fadeLayersIn / fadeLayersOut
+│  ├─ fadeLayers → disabled
 │  ├─ fadePopups → fadePopupsIn / fadePopupsOut
 │  └─ fadeDpms
 ├─ border / borderangle
@@ -326,38 +350,42 @@ global
 | `mpv` | Video player |
 | `firefox` with `Picture-in-Picture` title | PiP windows |
 | `xdg-desktop-portal-*` | File picker dialogs |
+| `otter-launcher` | App launcher — centered 490×290 |
+| `kitty-float` | Floating terminal — centered 770×450 |
+
+### Special window rules
+
+| Class/Title | Rule |
+|-------------|------|
+| `obsidian` | Higher opacity (0.9 override 0.8) |
+| `zen` (zen-browser) | Opaque |
+| `vesktop` | Lime border `rgba(c8ff00ee)`, opaque, no window decorations |
+| `ghgrab` (title) | Lime border `rgba(c8ff00ee)` |
+| `imv` / `mpv` | Opaque (floated, no tint) |
+| `vivaldi` / `vivaldi-stable` | Workspace 1; force opaque via `window.open` event listener (Lua `opaque` rule unreliable) |
 
 ```lua
--- Example rule:
-hl.window_rule({
-  match = { class = "pavucontrol" },
-  float = true,
-  move = { "center" },
-  size = { 800, 600 },
+-- Vivaldi opaque via event listener
+hl.on("window.open", function(win)
+  if win.class:match("[Vv]ivaldi") then
+    hl.dispatch(hl.dsp.window.set_prop({ window = win, prop = "opaque", value = 1 }))
+  end
+end)
+
+-- wlogout blur layer rule
+hl.layer_rule({
+  match = { namespace = "logout_dialog" },
+  blur  = true,
 })
 ```
 
-### Expressions
-
-For move/size rules you can use expressions:
-```
-move = { "cursor_x - window_w * 0.5", "cursor_y - window_h * 0.5" }
-size = { "monitor_w * 0.5", "monitor_h * 0.5" }
-```
-
-Available variables: `monitor_w`, `monitor_h`, `window_x`, `window_y`,
-`window_w`, `window_h`, `cursor_x`, `cursor_y`.
-
-### Smart gaps (no gaps when single window)
+### Smart gaps (nonzero on single-window workspaces)
 
 ```lua
-hl.workspace_rule({ workspace = "w[tv1]",  gaps_out = 0, gaps_in = 0 })
-hl.workspace_rule({ workspace = "f[1]",    gaps_out = 0, gaps_in = 0 })
-hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 0, rounding = 0 })
-hl.window_rule({ match = { float = false, workspace = "f[1]" },   border_size = 0, rounding = 0 })
+hl.workspace_rule({ workspace = "w[tv1]", gaps_out = { top = 3, bottom = 12, left = 12, right = 12 }, gaps_in = 4 })
+hl.workspace_rule({ workspace = "f[1]",   gaps_out = { top = 3, bottom = 12, left = 12, right = 12 }, gaps_in = 4 })
+hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 3 })
 ```
-
----
 
 ## 10. Keybinds
 
@@ -370,15 +398,18 @@ hl.window_rule({ match = { float = false, workspace = "f[1]" },   border_size = 
 | Keys | Action |
 |------|--------|
 | `SUPER + Q` | Open Kitty |
-| `SUPER + Super_L` (release) | Custom Rofi launcher (category-colored, Pango markup) |
+| `SUPER + CTRL + Q` | Open Kitty (floating class: kitty-float) |
+| `SUPER + Backspace` | Toggle otter-launcher |
+| `SUPER + Super_L` (release) | Toggle Fuzzel launcher |
 | `SUPER + A` | Open Vivaldi browser |
 | `SUPER + E` | Open kitty + yazi file manager |
 | `SUPER + W` | Close window (killactive) |
 | `SUPER + F` | Fullscreen toggle |
 | `SUPER + X` | Float toggle |
-| `SUPER + V` | Clipboard history picker |
+| `SUPER + V` | Clipboard history picker (cliphist-fuzzel) |
 | `SUPER + P` | Pseudo-tile toggle |
 | `SUPER + J` | Toggle split direction |
+| `SUPER + G` | Toggle scrolloverview (plugin) |
 | `SUPER + Tab` | Focus last window |
 | `SUPER + arrows` | Move focus |
 | `SUPER + SHIFT + arrows` | Move window |
@@ -391,27 +422,32 @@ hl.window_rule({ match = { float = false, workspace = "f[1]" },   border_size = 
 | `SUPER + SHIFT + S` | Move to special workspace |
 | `SUPER + mouse:272` | Drag window (floating) |
 | `SUPER + mouse:273` | Resize window (floating) |
+| `Print` | Screenshot region → clipboard |
 | `SUPER + Print` | Screenshot region → swappy markup → auto-save |
 | `SUPER + SHIFT + Print` | Screenshot full → clipboard |
-| `SUPER + D` | Screenshot menu (full/region/swappy/clipboard) |
-| `Print` | Screenshot region → clipboard |
+| `CTRL + Print` | Screenshot menu (full/region/swappy/clipboard) |
+| `SUPER + D` | rmpc toggle play/pause |
+| `SUPER + period` | rmpc next track |
+| `SUPER + comma` | rmpc previous track |
+| `SUPER + Z` | Open kitty + rmpc TUI |
 | `SUPER + L` | Lock screen (hyprlock) |
-| `SUPER + SHIFT + Q` | Power menu (wlogout — shutdown/reboot/lock/logout/suspend) |
+| `SUPER + SHIFT + Q` | Power menu (fuzzel power-menu.sh — shutdown/reboot/lock/logout/suspend) |
 | `SUPER + SHIFT + Escape` | Exit Hyprland |
-| `SUPER + C` | Clipboard history picker |
 | `SUPER + SHIFT + C` | Clear clipboard history |
 
 ### Media keys
 
 | Key | Action |
 |-----|--------|
-| `XF86AudioRaiseVolume` | `wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+` |
-| `XF86AudioLowerVolume` | `wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-` |
-| `XF86AudioMute` | `wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle` |
-| `XF86AudioNext/Prev` | `playerctl next/previous` |
-| `XF86AudioPlay/Pause` | `playerctl play-pause` |
-| `XF86MonBrightnessUp/Down` | `brightnessctl s +5%-/5%-` |
-
+| `XF86AudioRaiseVolume` | `swayosd-client --output-volume raise` |
+| `XF86AudioLowerVolume` | `swayosd-client --output-volume lower` |
+| `XF86AudioMute` | `swayosd-client --output-volume mute-toggle` |
+| `XF86AudioMicMute` | `swayosd-client --input-volume mute-toggle` |
+| `XF86AudioNext` | `swayosd-client --playerctl next` |
+| `XF86AudioPrev` | `swayosd-client --playerctl previous` |
+| `XF86AudioPlay` | `swayosd-client --playerctl play-pause` |
+| `XF86MonBrightnessUp` | `swayosd-client --brightness raise` |
+| `XF86MonBrightnessDown` | `swayosd-client --brightness lower` |
 ---
 
 ## 11. Autostart
@@ -421,7 +457,7 @@ Most daemons are managed by **systemd user services** for crash resilience:
 ```lua
 hl.on("hyprland.start", function()
   -- Managed by systemd user services:
-  -- waybar, hyprpaper, hypridle, swaync, cliphist
+  -- waybar
 
   hl.exec_cmd("swayosd-server")                     -- On-screen display (volume/brightness)
   hl.exec_cmd("nm-applet")                          -- NetworkManager tray icon
@@ -429,6 +465,15 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1")
   -- Wallpaper set via IPC (hyprpaper v0.8.4 config preload doesn't work at startup)
   hl.exec_cmd("hyprctl hyprpaper wallpaper eDP-1,/home/nine/.local/share/wallpapers/cggx.webp")
+  hl.exec_cmd("kitty --daemon")                     -- Pre-spawn kitty daemon for instant terminal
+  hl.exec_cmd("quickshell -p ~/.config/quickshell") -- Desktop shell / widget layer
+  hl.exec_cmd("kitty --show-as=hidden")             -- Hidden kitty instance
+  hl.exec_cmd("hyprpaper")                          -- Wallpaper daemon
+  hl.exec_cmd("swaync")                             -- Notification daemon + control center
+  hl.exec_cmd("hypridle")                           -- Idle daemon (lock + DPMS)
+  hl.exec_cmd("hyprpm enable scrolloverview")       -- Enable scrolloverview plugin
+  hl.dsp.exec_cmd("wl-paste --type text --watch cliphist store")   -- Clipboard text history
+  hl.dsp.exec_cmd("wl-paste --type image --watch cliphist store")  -- Clipboard image history
 end)
 ```
 
@@ -537,7 +582,35 @@ The showcase page (`hyprland-rice-showcase.html`) documents the following files:
 
 ---
 
-## 16. Full Ecosystem Deployment
+## 15. Hyprlock (Lock Screen)
+
+CGGX-themed lock screen. Config: `~/.config/hypr/hyprlock.conf`.
+
+- **Background:** Blurred wallpaper (`cggx.webp`) — 3 blur passes, noise, reduced contrast/brightness
+- **Clock:** 72px "Share Tech Mono" font, silver `#e8e8f0`, centered with real-time updates
+- **Accent bar:** Red `#ff2d55` decorative divider (`─── ● ───`) below the clock
+- **Date:** Muted gray `#6a6a80`, 16px MonaspiceNe Nerd Font, long-format date
+- **Input field:** Red-tinted outline (`rgba(255,45,85,0.6)`), dark inner fill, centered below the date
+- **Settings:** 5-second grace period, 200ms fade, cursor hidden
+
+```bash
+# Lock immediately:
+hyprlock
+# Lock via keybind: SUPER + L
+```
+
+## 16. Hypridle (Idle Daemon)
+
+Config: `~/.config/hypr/hypridle.conf`. Started as part of autostart.
+
+| Timeout | Action |
+|---------|--------|
+| 300s (5 min) | Lock screen (`hyprlock`) |
+| 360s (6 min) | DPMS off (`hyprctl dispatch dpms off`) |
+
+On resume: DPMS on. Before sleep: `loginctl lock-session` triggers `hyprlock`.
+
+## 17. Full Ecosystem Deployment
 
 Copy the configs from the `configs/` folder to your home directory:
 
@@ -630,7 +703,7 @@ source ~/.zshrc
 
 ---
 
-## 15. References
+## 18. References
 
 - [Hyprland Wiki — Configuring Start](https://wiki.hypr.land/Configuring/Start)
 - [Hyprland Wiki — Variables](https://wiki.hypr.land/Configuring/Basics/Variables)

@@ -13,7 +13,7 @@ theme[inactive_fg]="#6a6a80"
 
 theme[proc_misc]="#ff6b00"
 
-theme[cpu_box]="#ff2d55"
+theme[cpu_box]="#ff6b00"
 theme[mem_box]="#c8ff00"
 theme[net_box]="#00e5ff"
 theme[proc_box]="#b48cff"

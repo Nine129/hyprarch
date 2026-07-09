@@ -108,7 +108,7 @@
     "exec":        "~/.config/waybar/scripts/panel-gear.sh",
     "return-type": "json",
     "interval":    1,
-    "on-click":    "sh -c 'if [ -f /tmp/qs-control-panel ]; then rm /tmp/qs-control-panel; else touch /tmp/qs-control-panel; fi'",
+    "on-click":    "wlogout --css ~/.config/wlogout/style.css --buttons-per-row 5 -T 410 -B 410 -L 200 -R 200",
     "tooltip":     true
   },
 

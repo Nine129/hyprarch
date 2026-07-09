@@ -207,24 +207,24 @@ These were settled during the grill-me / grill-with-docs sessions.
 
 | Property | Decision |
 |----------|----------|
-| **Look** | Floating pill island — transparent `window#waybar` background, opaque `#1a1a20` pill modules |
+| **Look** | Floating pill island — transparent `window#waybar` background, opaque `#151518` pill modules |
 | **Position** | `top`, full-width |
-| **Height** | 50px |
+| **Height** | 36px |
 | **Border-radius** | **0 everywhere** — zero rounding, consistent with CGGX sharp aesthetic |
-| **Active workspace** | Red `#ff2d55` background pill + inner glow (`box-shadow: 0 0 12px rgba(255,45,85,0.4)`) |
-| **Hover** | TranslateY(-1px) lift on all interactive modules, 0.15s ease transition |
+| **Active workspace** | Red `#ff2d55` background pill, subtle shadow on all workspaces |
+| **Hover** | Margin shift on interactive modules, 0.15s ease transition |
 | **Center section** | Empty (negative space — purposeful asymmetry) |
-
-### 2.2 Visual Richness Decisions
+| **Surface color** | `#151518` (matches kitty background + rmpc bg) |
 
 | Dimension | Decision |
 |-----------|----------|
-| **Icons** | Icon-first layout — every module has a colored Nerd Font icon (16px) before text (13px). Standard set: (disk), (memory), (network), (audio), (clock), ⏻(power) |
-| **Module grouping** | Three groups: [disk+memory+network] \| [pulseaudio+clock+battery] \| [tray+power-button] |
-| **Separators** | Thin 1px `#2a2a35` vertical lines (14px tall, centered at 18px margin) between groups |
-| **Progress bars** | 2px block-character bar rendered inside disk, memory, and battery pills, colored by category accent |
-| **Animations** | Smooth 0.15s ease transitions on all modules; hover lifts pill -1px; `blink-orange` on urgent workspaces |
-| **Power button** | Slightly red-tinted gradient background, 18px font, weight 700, to stand out as the action button |
+| **Icons** | Icon-first layout — every module has a colored Nerd Font icon before text |
+| **Module grouping** | Left: workspaces + mpris; Center: empty; Right: [disk+memory+temperature] group | pulseaudio | clock | battery | [tray | power-button] |
+| **Separators** | Thin 1px `#2a2a35` vertical lines between right-side groups |
+| **Group module** | `group/sysmon` — gapless horizontal group for disk+memory+temperature |
+| **Animations** | Smooth 0.15s ease transitions on all modules; margin-shift hover; `blink-orange` on urgent workspaces |
+| **Power button** | Red gradient background (`#ff2d55` to `rgba(255,45,85,0.85)`), toggles Quickshell control panel |
+| **MPRIS module** | Shows MPD now-playing — Nerd Font icon (/), right-click opens rmpc, scroll controls tracks |
 
 ### 2.3 Architecture
 
@@ -237,49 +237,45 @@ These were settled during the grill-me / grill-with-docs sessions.
 | **Style files** | One `style.css` + one `colors/cggx.css` | No light/dark variant needed — CGGX is a fixed dark palette |
 | **Data modules** | Built-in `disk`, `memory`, `battery` | Simple format strings with icon prefix; no extra scripts needed |
 
-### 2.4 Module Layout
-
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
-│ [1][2][3][4][5][6][7][8][9]  │  81% FREE  6.4Gi  SSID │  42%  Mon│⏻│
+│ [1][2][3][4][5]  ♫ Now Playing │  81%  6.4G  45°C │  42%  Mon│⏻│
 └─────────────────────────────────────────────────────────────────────┘
- LEFT: workspaces (1-9 persistent)   CENTER: empty       RIGHT: three groups
-                                                         sep1     │  sep2
+ LEFT: workspaces (1-5 persistent) + mpris   CENTER: empty   RIGHT: sysmon group + audio + clock + battery + power
 ```
 
 ### 2.5 Module Definitions (`modules/cggx.jsonc`)
 
 | Module ID | Type | Key Properties |
 |-----------|------|----------------|
-| `hyprland/workspaces#number` | Workspaces | 1-9 persistent, red active + glow, orange urgent pulse, muted empty |
-| `disk` | System (built-in) | ` {percentage_free}% FREE`, 30s interval |
-| `memory` | System (built-in) | ` {used}G / {total}G`, 30s interval |
-| `network` | Network | ` {essid}`, click → nmtui, right-click → rfkill toggle |
+| `hyprland/workspaces#number` | Workspaces | 1-5 persistent, number icons, red active, muted empty |
+| `mpris` | Media | MPD now-playing, / icons, right-click→rmpc, scroll→prev/next |
+| `group/sysmon` | Group | Gapless horizontal: disk + memory + temperature |
+| `disk` | System (built-in) | `{percentage_free}%`, 30s interval, lime text, click→btop |
+| `memory` | System (built-in) | `{used}G / {total}G`, 30s interval, orange text, click→btop |
+| `temperature` | System (built-in) | `thermal_zone0 {temp}°C`, 30s interval, cyan text, click→btop |
 | `custom/sep1` | Separator | Empty, styled as 1px `#2a2a35` vertical line |
-| `pulseaudio` | Audio | ` {volume}%`, click → pavucontrol toggle, right-click → mute |
-| `clock` | Time | ` {:%a %d  %H:%M}`, alt-click → date format |
-| `battery` | Power (built-in) | `{icon} {capacity}%`, format-icons for level, charge/warning/critical states |
+| `pulseaudio` | Audio | `{volume}%`, orange bg, right-click→mute toggle |
+| `clock` | Time | `{:%a %d %H:%M}`, 60s interval, cyan bg |
+| `battery` | Power (built-in) | `{icon} {capacity}%`, lime bg, warning 30%, critical 15% |
 | `custom/sep2` | Separator | Empty, styled as 1px `#2a2a35` vertical line |
-| `custom/power-button` | Custom | `⏻`, click → wlogout toggle, red-tinted pill |
+| `custom/power-button` | Custom | `panel-gear.sh` → Quickshell control panel toggle, red gradient bg |
 | `tray` | System | icon-size 14, spacing 10 |
-
-### 2.6 Keybindings (mouse events on modules)
-
 | Module | Click | Right-click | Scroll |
 |--------|-------|-------------|--------|
 | `workspaces` | `workspace {name}` | — | Cycle e+1 / e-1 |
-| `network` | `kitty -e 'nmtui'` | `rfkill toggle wifi` | — |
-| `pulseaudio` | `pavucontrol-toggle.sh` | `pactl set-sink-mute 0 toggle` | Volume up/down |
-| `custom/battery` | `power-profile.sh` | — | — |
-| `custom/power-button` | `wlogout-toggle.sh` | — | — |
-
-### 2.7 Category Colors
+| `mpris` | — | `kitty --single-instance rmpc` | `playerctl -p mpd next/prev` |
+| `disk` | `kitty -e btop` | — | — |
+| `memory` | `kitty -e btop` | — | — |
+| `temperature` | `kitty -e btop` | — | — |
+| `pulseaudio` | `pavucontrol-toggle.sh` | mute toggle | Volume up/down |
+| `custom/power-button` | toggle quickshell panel | — | — |
 
 | Module | Color |
 |--------|-------|
 | disk | `#c8ff00` (lime) |
 | memory | `#ff6b00` (orange) |
-| network | `#00e5ff` (cyan) |
+| temperature | `#00e5ff` (cyan) |
 | pulseaudio | `#ff6b00` (orange) |
 | clock | `#00e5ff` (cyan) |
 | battery | `#c8ff00` (lime) |
@@ -287,6 +283,7 @@ These were settled during the grill-me / grill-with-docs sessions.
 | battery warning | `#ff6b00` (orange) |
 | battery critical | `#ff2d55` (red) bg + `#0a0a0c` text |
 | power | `#ff2d55` (red) |
+| mpris | `#ff2d55` (red) |
 | separator | `#2a2a35` |
 
 ### 2.8 CGGX Color Variables (`colors/cggx.css`)

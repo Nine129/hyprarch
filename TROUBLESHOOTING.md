@@ -647,3 +647,201 @@ If it IS running but copying still breaks, reinstall cliphist:
 ```bash
 sudo pacman -S cliphist
 ```
+
+---
+
+## 11. MPD & rmpc
+
+### "No connection to MPD" / rmpc shows nothing
+
+```bash
+# Check MPD is running
+systemctl --user status mpd
+
+# Check socket
+ls -la ~/.config/mpd/socket
+
+# Restart
+systemctl --user restart mpd
+```
+
+### No audio from MPD
+
+```bash
+# Check PipeWire
+pactl info | grep "Server Name"
+
+# Check MPD outputs
+mpc outputs
+```
+
+### cava / visualizer not showing in rmpc
+
+```bash
+# Check FIFO exists
+ls -la /tmp/mpd.fifo
+
+# Restart MPD to recreate FIFO
+systemctl --user restart mpd
+```
+
+### Waybar mpris shows nothing / "No player found"
+
+```bash
+# Check mpd-mpris is running
+systemctl --user status mpd-mpris
+
+# Verify playerctl can see MPD
+playerctl -l
+playerctl -p mpd status
+
+# Restart bridge
+systemctl --user restart mpd-mpris
+```
+
+### "rmpc: command not found"
+
+```bash
+sudo pacman -S rmpc
+```
+
+---
+
+## 12. Fuzzel
+
+### Fuzzel won't open / "command not found"
+
+```bash
+sudo pacman -S fuzzel
+
+# Launch manually to see errors
+fuzzel
+```
+
+### Icons not showing in launcher
+
+```bash
+sudo pacman -S papirus-icon-theme
+gtk-update-icon-cache -f /usr/share/icons/Papirus-Dark/
+```
+
+### Font rendering issues (tofu/squares)
+
+```bash
+fc-list | grep -i monaspice
+# Install if missing:
+sudo pacman -S otf-monaspace-nerd
+```
+
+### Toggle bind not working (SUPER + Super_L)
+
+The bind uses `pkill fuzzel || fuzzel`. If it gets stuck:
+```bash
+pkill -9 fuzzel
+# Then try the bind again
+```
+
+### How to switch back to Rofi
+
+Edit `binds.lua` and replace the fuzzel toggle bind with:
+```lua
+hl.bind("SUPER + Super_L", hl.dsp.exec_cmd("~/.config/hypr/scripts/rofi-launcher.sh"), { long_press = false })
+```
+
+---
+
+## 13. fzf
+
+### Preview doesn't show images in kitty
+
+```bash
+# Check kitty remote control is enabled
+grep allow_remote_control ~/.config/kitty/kitty.conf
+# Should show: allow_remote_control yes
+
+# Ensure icat kitten is available
+kitty +kitten icat --version
+```
+
+### fzf colors don't match CGGX palette
+
+Check `FZF_DEFAULT_OPTS` is being set:
+```bash
+echo $FZF_DEFAULT_OPTS
+```
+If empty, ensure `source ~/.config/fzf/fzf.zsh` is in `.zshrc`.
+
+### "fd: command not found" when using fzf
+
+```bash
+sudo pacman -S fd
+```
+
+---
+
+## 14. atuin
+
+### atuin history search not working
+
+```bash
+# Check atuin is installed
+atuin --version
+
+# Ensure the shell hook is in .zshrc
+grep "atuin init" ~/.zshrc
+# Should show: eval "$(atuin init zsh)"
+```
+
+### "atuin: command not found"
+
+```bash
+sudo pacman -S atuin
+```
+
+---
+
+## 15. wlogout
+
+### Power menu keybind does nothing
+
+The `SUPER + SHIFT + Q` bind now launches a fuzzel power menu, not wlogout. wlogout is launched via the Quickshell panel power button. To trigger manually:
+```bash
+~/.config/fuzzel/scripts/power-menu.sh
+# or for wlogout directly:
+wlogout -b 5 -c 0 -r 0
+```
+
+### wlogout buttons don't work
+
+```bash
+# Check wlogout is installed
+which wlogout
+
+# Install from AUR if missing
+yay -S wlogout-git
+
+# Verify icons path in style.css
+grep "background-image" ~/.config/wlogout/style.css
+```
+
+---
+
+## 16. Vesktop
+
+### Vesktop theme not applying
+
+```bash
+# Check theme file exists
+ls ~/.config/vesktop/themes/Translucence.theme.css
+
+# In Vesktop settings, ensure the theme is selected:
+# Settings > Vencord > Themes > Translucence
+```
+
+### Vesktop looks opaque (no blur)
+
+Check the Hyprland window rule:
+```bash
+grep vesktop ~/.config/hypr/rules.lua
+```
+Should show `opaque = true` — this is intentional for the frosted glass effect to blend properly.

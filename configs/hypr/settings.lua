@@ -24,15 +24,15 @@ hl.config({
     dim_strength        = 0.15,
     
     blur = {
-      enabled            = true,
-      size               = 4,
-      passes             = 1,
+      enabled            = false,
+      size               = 2,
+      passes             = 6,
       vibrancy           = 0.25,
       new_optimizations   = true,
       xray               = false,
       noise              = 0.005,
       contrast           = 1.2,
-      brightness         = 1.2,
+      brightness         = 1.0,
     },
 
     shadow = {

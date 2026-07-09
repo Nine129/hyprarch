@@ -68,14 +68,14 @@ sudo pacman -S --needed \
 
 ## 3. Core Desktop Packages
 
-Install the window manager, compositor, bar, launcher, yazi (terminal file manager), lock/idle daemons, and core Wayland infrastructure:
+Install the window manager, compositor, bar, launchers, yazi (terminal file manager), lock/idle daemons, and core Wayland infrastructure:
 
 ```bash
 sudo pacman -S --needed \
   hyprland \
   uwsm \
   waybar \
-  rofi-wayland \
+  fuzzel \
   swaync \
   kitty \
   yazi \
@@ -95,7 +95,7 @@ sudo pacman -S --needed \
 |---------|------|
 | `uwsm` | User-defined Wayland session manager — launches Hyprland as a user unit |
 | `waybar` | Status bar |
-| `rofi-wayland` | App launcher / run dialog |
+| `fuzzel` | Wayland-native app launcher / dmenu replacement |
 | `swaync` | Notification daemon + control center |
 | `kitty` | Terminal emulator |
 | `yazi` | Terminal file manager (Rust) |
@@ -120,8 +120,16 @@ sudo pacman -S --needed \
   pipewire-pulse \
   pipewire-alsa \
   pipewire-audio \
-  pavucontrol
+  pavucontrol \
+  mpd \
+  rmpc \
+  cava \
+  mpd-mpris
 ```
+
+> **MPD** is the Music Player Daemon — a headless music server. **rmpc** is a Rust TUI client
+> for MPD with CGGX theming. **cava** is a terminal audio visualizer. **mpd-mpris** bridges MPD
+> to the MPRIS D-Bus interface so media keys and Waybar can control playback.
 
 ### 4.2 Screenshots & Color Picker
 
@@ -169,6 +177,9 @@ sudo pacman -S --needed \
   ripgrep \
   bat \
   tealdeer \
+  zoxide \
+  eza \
+  atuin \
   brightnessctl \
   p7zip \
   unrar \
@@ -176,6 +187,9 @@ sudo pacman -S --needed \
   yt-dlp \
   python-mutagen
 ```
+
+> **zoxide** is a smarter `cd` command (replaces `autojump`). **eza** is a modern `ls` replacement
+> with colors and icons. **atuin** provides magical shell history with sync, search, and CGGX theming.
 
 ### 4.5 Media & Document Viewers
 
@@ -204,6 +218,7 @@ sudo pacman -S --needed \
 ### 4.8 Browser
 
 Vivaldi is in the AUR — installed via `yay` in [Section 5](#5-aur-packages).
+Vesktop (Discord client with Vencord theming) is also in the AUR — installed alongside Vivaldi in [Section 5](#5-aur-packages).
 
 ### 4.9 Theming (Icons & Cursor)
 
@@ -216,7 +231,11 @@ sudo pacman -S --needed \
 > - **Bibata-Modern-Ice** is the cursor theme set via `XCURSOR_THEME` in `.zshenv`
 > - Apply with `nwg-look` or manually via `~/.config/gtk-3.0/settings.ini`
 
-### 4.10 AUR Helper (already installed above)
+### 4.10 Launcher
+
+Fuzzel is the primary Wayland-native app launcher — installed with the core packages in [Section 3](#3-core-desktop-packages).
+
+### 4.11 AUR Helper (already installed above)
 
 ---
 
@@ -226,17 +245,30 @@ sudo pacman -S --needed \
 # Vivaldi browser (AUR)
 yay -S vivaldi vivaldi-ffmpeg-codecs
 
+# Vesktop — Discord client with theming support
+yay -S vesktop-bin
+
 # SwayOSD — on-screen volume/brightness display
 yay -S swayosd-git
 
 # grimblast — grim/slurp wrapper (screenshots)
 yay -S grimblast-git
 
+# GhGrab — GitHub release downloader
+yay -S ghgrab-bin
+
+# Otter Launcher — terminal-based app launcher
+yay -S otter-launcher
+
+# Wlogout — Wayland-native logout/power menu
+yay -S wlogout-git
+
 # Timeshift — system snapshot / rollback
 yay -S timeshift
 ```
 
 > If `grimblast-git` build fails, check community alternatives or use `grim + slurp` directly.
+> `otter-launcher` requires `wl-clipboard` and a terminal emulator (kitty).
 
 ---
 
@@ -250,13 +282,23 @@ sudo pacman -S --needed \
   noto-fonts-emoji \
   noto-fonts-cjk \
   otf-monaspace-nerd \
+  ttf-monaspace-variable \
   ttf-nerd-fonts-symbols-mono \
+  ttf-sharetech-mono-nerd \
   ttf-liberation
 ```
 
+```bash
+# AUR fonts (required by fontconfig)
+yay -S ttf-rajdhani ttf-exo-2
+```
+
 > **MonaspiceNe Nerd Font Mono** is the primary font used across Waybar, Rofi,
-> Kitty, Hyprlock, and all rofi-based scripts. It's included in `otf-monaspace-nerd`.
-> Without it, every app falls back to a default monospace and the aesthetic breaks.
+> Fuzzel, Kitty, Hyprlock, and all app launchers. It's included in `otf-monaspace-nerd`.
+> `ttf-monaspace-variable` provides the variable-width variant for modern terminals.
+> `ttf-sharetech-mono-nerd` is used for Waybar module icons and labels.
+> `ttf-rajdhani` and `ttf-exo-2` are required by the fontconfig (`fonts.conf`) configuration.
+> Without these fonts, every app falls back to a default monospace and the aesthetic breaks.
 
 ### 6.2 Cursor & Icons (optional)
 
@@ -305,12 +347,16 @@ Replace `exec_cmd` daemon spawning with proper systemd user services for crash r
 mkdir -p ~/.config/systemd/user
 cp ~/hyprarch/configs/systemd/user/*.service ~/.config/systemd/user/
 
-# Enable and start all four
-systemctl --user enable --now hyprpaper hypridle swaync cliphist
+# Enable and start all services
+systemctl --user enable --now hyprpaper hypridle swaync cliphist mpd mpd-mpris download-organizer
+
+# Waybar drop-in for restart-on-failure
+mkdir -p ~/.config/systemd/user/waybar.service.d
+cp ~/hyprarch/configs/systemd/user/waybar.service.d/*.conf ~/.config/systemd/user/waybar.service.d/
 
 # Check logs if something isn't working
 journalctl --user -u hyprpaper -f
-journalctl --user -u hypridle -f
+journalctl --user -u mpd -f
 ```
 
 > ⚠️ If you use these services, **remove** the corresponding `hl.exec_cmd()` lines from `hyprland.lua` (hyprpaper, hypridle, swaync, wl-paste). The included `configs/hypr/hyprland.lua` already has them commented out with a note.
@@ -323,13 +369,19 @@ Enable the Bluetooth stack system-wide:
 sudo systemctl enable --now bluetooth
 ```
 
-Then add `blueman-applet` to your Hyprland autostart (already included in `configs/hypr/hyprland.lua`):
+### 7.4 Keyd — Keyboard Remapping Daemon (Optional)
 
-```lua
-hl.exec_cmd("blueman-applet")  -- Bluetooth tray icon
+Keyd remaps keys at the kernel level via `/dev/uinput`. Install and enable for CapsLock→Ctrl,
+Esc→CapsLock, or other keyboard remappings:
+
+```bash
+yay -S keyd
+sudo systemctl enable --now keyd
 ```
 
-### 7.4 Tealdeer (tldr) Cache
+> Default config at `/etc/keyd/default.conf`. The rice does not ship a keyd config — configure to taste.
+
+### 7.5 Tealdeer (tldr) Cache
 
 Populate the offline cheat-sheet cache:
 
@@ -337,12 +389,13 @@ Populate the offline cheat-sheet cache:
 tldr --update
 ```
 
-### 7.5 Default Applications (MIME)
+
+### 7.6 Default Applications (MIME)
 
 Copy the provided `mimeapps.list` to register Vivaldi (browser), Zathura (PDF), imv (images), mpv (media), nvim (text/code), and Yazi (files/archives) as system defaults:
 
 ```bash
-mkdir -p ~/.config/xdg
+### 7.6 Default Applications (MIME)
 ln -sf ~/hyprarch/configs/xdg/mimeapps.list ~/.config/xdg/mimeapps.list
 ```
 
@@ -352,7 +405,7 @@ Reload the MIME database:
 xdg-mime default vivaldi-stable.desktop x-scheme-handler/https
 ```
 
-### 7.6 Timeshift Backups
+### 7.7 Timeshift Backups
 
 Timeshift creates system snapshots for rollback after bad updates or config mistakes. It uses cronie for automatic scheduling.
 
@@ -437,35 +490,96 @@ After copying, verify the layout:
 │   ├── rules.lua
 │   ├── animations.lua
 │   ├── hyprpaper.conf
+│   ├── hyprlock.conf
+│   ├── hypridle.conf
 │   └── scripts/
-│       ├── cliphist-rofi.sh
+│       ├── cliphist-fuzzel.sh
 │       ├── power-menu.sh
-│       ├── power-profile.sh       ← ACPI platform profile switcher
+│       ├── power-profile.sh          ← ACPI platform profile switcher
 │       ├── screenshot-menu.sh
 │       └── screenshot-swappy.sh
 ├── waybar/
 │   ├── config.jsonc
 │   ├── style.css
 │   └── modules/cggx.jsonc
+├── fuzzel/
+│   ├── fuzzel.ini
+│   └── scripts/
+│       └── power-menu.sh
+├── rofi/
+│   ├── config.rasi
+│   └── power-profile.rasi            ← power profile switcher theme
+├── wlogout/
+│   ├── layout
+│   ├── style.css
+│   └── icons/
 ├── swaync/
 │   ├── config.json
 │   └── style.css
 ├── swayosd/
+│   ├── config.toml
 │   └── style.css
 ├── kitty/
-│   └── kitty.conf
-├── rofi/
-│   ├── config.rasi
-│   └── power-profile.rasi        ← power profile switcher theme
+│   ├── kitty.conf
+│   └── rainbow-trail.conf
 ├── fastfetch/
-│   └── config.jsonc
+│   ├── config.jsonc
+│   ├── logo.txt
+│   └── logo PNGs
+├── btop/
+│   ├── btop.conf
+│   └── themes/cggx.theme
+├── yazi/
+│   ├── yazi.toml
+│   ├── theme.toml
+│   ├── keymap.toml
+│   ├── init.lua
+│   └── plugins/
+├── mpd/
+│   └── mpd.conf
+├── rmpc/
+│   ├── config.ron
+│   ├── notify.sh
+│   └── themes/
+├── atuin/
+│   ├── config.toml
+│   └── themes/cggx.toml
+├── fzf/
+│   ├── fzf.zsh
+│   ├── preview.sh
+│   ├── open_file.sh
+│   └── show_image.sh
+├── ghgrab/
+│   └── theme.toml
+├── vesktop/
+│   └── themes/Translucence.theme.css
+├── otter-launcher/
+│   ├── config.toml
+│   └── images/
 ├── cliphist/
 │   └── config
 ├── swappy/
 │   └── config
+├── zathura/
+│   └── zathurarc
 ├── shell/
 │   ├── .zshenv
-│   └── .zshrc
+│   ├── .zshrc
+│   └── .zprofile
+├── fontconfig/
+│   └── fonts.conf
+├── gtk-3.0/
+│   └── settings.ini
+├── starship.toml
+├── systemd/user/                     ← user services
+│   ├── cliphist.service
+│   ├── hypridle.service
+│   ├── hyprpaper.service
+│   ├── swaync.service
+│   ├── mpd.service
+│   ├── mpd-mpris.service
+│   ├── download-organizer.service
+│   └── waybar.service.d/             ← drop-in for waybar
 └── neovim/
     └── init.lua
 ```
@@ -613,19 +727,34 @@ The defaults are sufficient.
 ### 10.2 Autostart
 
 The Hyprland config uses the Lua API (`hl.exec_cmd()`) in `hyprland.lua` to start
-daemons at startup:
+daemons at startup. Some daemons (waybar, hyprpaper, swaync, cliphist) are managed
+by systemd user services instead for crash resilience:
 
 ```lua
-hl.exec_cmd("waybar")
-hl.exec_cmd("swayosd-server")
-hl.exec_cmd("hyprpaper")
-hl.exec_cmd("swaync")
-hl.exec_cmd("nm-applet")
-hl.exec_cmd("/usr/lib/polkit-gnome-authentication-agent-1")
-hl.exec_cmd("wl-paste --watch cliphist store")
+hl.on("hyprland.start", function()
+  -- Managed by systemd user service (auto-restart on crash):
+  -- hl.exec_cmd("waybar")
+  hl.exec_cmd("swayosd-server")                            -- On-screen display (volume/brightness)
+  -- Managed by systemd user services:
+  -- hl.exec_cmd("hyprpaper")
+  -- hl.exec_cmd("swaync")                                  -- Notification daemon + control center
+  hl.exec_cmd("nm-applet")
+  hl.exec_cmd("blueman-applet")                             -- Bluetooth tray icon
+  hl.exec_cmd("/usr/lib/polkit-gnome-authentication-agent-1")
+  -- Managed by systemd:
+  -- hl.exec_cmd("wl-paste --watch cliphist store")         -- Clipboard history daemon
+  -- Set wallpaper via IPC (hyprpaper v0.8.4 config preload doesn't work at startup)
+  hl.exec_cmd("hyprctl hyprpaper wallpaper eDP-1,/home/nine/.local/share/wallpapers/cggx.webp")
+  hl.exec_cmd("kitty --daemon")
+  hl.exec_cmd("quickshell -p ~/.config/quickshell")
+  hl.exec_cmd("hyprpaper")
+  hl.exec_cmd("swaync")
+  hl.exec_cmd("hypridle")
+  hl.exec_cmd("hyprpm enable scrolloverview")
+  hl.dsp.exec_cmd("wl-paste --type text --watch cliphist store")
+  hl.dsp.exec_cmd("wl-paste --type image --watch cliphist store")
+end)
 ```
-
-All daemons start with Hyprland. No need for a display manager (SDDM/GDM).
 
 ### 10.3 Starting Hyprland
 
@@ -673,20 +802,21 @@ uwsm start hyprland
 | Check | Command / What to Look For |
 |-------|---------------------------|
 | Hyprland version | `hyprctl version` → should show 0.55+ |
-| Workspaces | `SUPER+1..9` → switch between 9 workspaces |
-| App launcher | `SUPER+SPACE` → Rofi drun pops up |
-| Terminal | `SUPER+RETURN` → Kitty opens |
-| Bar | Waybar visible at top edge, 9 workspace pills |
+| Workspaces | `SUPER+1..5` → switch between 5 workspaces |
+| App launcher | `SUPER+Super_L` (release) → Fuzzel app search pops up |
+| Terminal launcher | `SUPER+Backspace` → Otter-launcher opens |
+| Terminal | `SUPER+Q` → Kitty opens |
+| Bar | Waybar visible at top edge, 5 workspace pills |
 | Wallpaper | Hyprpaper shows CGGX wallpaper |
 | Volume | Volume keys → SwayOSD popup with ♫ icon |
 | Screenshots | `Print` → select region → clipboard; `SUPER+PRINT` → swappy editor |
+| Music | `SUPER+D` → rmpc toggle play/pause; media keys work |
 | Notification | Run `notify-send "test"` → SwayNC popup top-right |
-| Clipboard | `SUPER+C` → Rofi clipboard picker with history |
-| Power menu | `SUPER+SHIFT+Q` → Rofi power menu (lock/logout/reboot/shutdown) |
-| Power profile | Click battery in Waybar → Rofi profile picker (low-power/balanced/performance) |
+| Clipboard | `SUPER+V` → Fuzzel clipboard picker with history |
+| Power menu | `SUPER+SHIFT+Q` → Fuzzel power menu (lock/logout/reboot/shutdown) |
+| Screenshot menu | `CTRL+Print` → Fuzzel screenshot menu (full/region/swappy/clipboard) |
 | Bluetooth | `blueman-manager` from terminal |
 | Network | nm-applet icon visible in Waybar tray |
-
 ### 11.3 Troubleshooting
 
 If something doesn't work:
@@ -696,7 +826,7 @@ If something doesn't work:
 - **Waybar**: Run `waybar` from terminal to see error output
 - **SwayNC**: `swaync-client --reload-config` after config change
 - **SwayOSD**: `swayosd-client --output-volume 50` to test
-- **Rofi**: `rofi -show drun` from terminal to debug
+- **Fuzzel**: `fuzzel --log-level=debug` from terminal to debug
 
 See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for detailed fixes.
 
@@ -706,39 +836,45 @@ See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for detailed fixes.
 
 | Binding | Action |
 |---------|--------|
-| `SUPER + Q` | Launch Kitty |
-| `SUPER + Super_L` (release) | Custom Rofi launcher (category-colored, Pango markup) |
+| `SUPER + Q` | Open kitty terminal |
+| `SUPER + SHIFT + Q` | Float kitty terminal |
+| `SUPER + Super_L` (release) | Fuzzel launcher (app search) |
+| `SUPER + Backspace` | Otter-launcher (terminal launcher) |
 | `SUPER + A` | Open Vivaldi browser |
-| `SUPER + E` | File manager (kitty -e yazi) |
-| `SUPER + C` | Clipboard picker (cliphist-rofi.sh) |
-| `SUPER + SHIFT + C` | Clear clipboard history |
-| `SUPER + W` | Close focused window |
-| `SUPER + F` | Fullscreen toggle |
-| `SUPER + X` | Toggle float |
-| `SUPER + V` | Clipboard history picker |
-| `SUPER + P` | Toggle pseudo-tiling |
-| `SUPER + J` | Toggle split direction |
-| `SUPER + Tab` | Focus last window |
-| `SUPER + 1..9` | Switch to workspace |
-| `SUPER + SHIFT + 1..9` | Move window to workspace |
+| `SUPER + E` | Open kitty + yazi file manager |
+| `SUPER + D` | rmpc toggle pause (music) |
+| `SUPER + SHIFT + D` | rmpc next track |
+| `SUPER + CTRL + D` | rmpc previous track |
+| `SUPER + 1-5` | Switch workspace |
+| `SUPER + SHIFT + 1-5` | Move window to workspace |
 | `SUPER + arrow` | Focus window in direction |
 | `SUPER + SHIFT + arrow` | Move window in direction |
 | `SUPER + CTRL + arrow` | Swap window in direction |
 | `SUPER + SHIFT + CTRL + arrow` | Resize window |
-| `SUPER + L` | Lock screen (hyprlock) |
+| `SUPER + Tab` | Focus last window |
+| `SUPER + W` | Close focused window |
+| `SUPER + F` | Fullscreen toggle |
+| `SUPER + X` | Toggle float |
+| `SUPER + V` | Clipboard history picker (fuzzel) |
+| `SUPER + SHIFT + C` | Clear clipboard history |
 | `SUPER + S` | Toggle scratchpad |
-| `SUPER + SHIFT + S` | Move to scratchpad |
-| `SUPER + SHIFT + Q` | Power menu (wlogout — shutdown/reboot/lock/logout/suspend) |
+| `SUPER + P` | Toggle pseudo-tiling |
+| `SUPER + J` | Toggle split direction |
+| `SUPER + G` | Scroll overview (hyprpm plugin) |
+| `Print` | Region screenshot → clipboard (grimblast) |
+| `SUPER + Print` | Region screenshot → swappy markup → auto-save |
+| `SUPER + SHIFT + Print` | Full screenshot → clipboard |
+| `CTRL + Print` | Screenshot menu (fuzzel dmenu) |
+| `SUPER + L` | Lock screen (hyprlock) |
+| `SUPER + SHIFT + Q` | Power menu (fuzzel dmenu) |
 | `SUPER + SHIFT + Escape` | Exit Hyprland |
-| `Click battery` in Waybar | Power profile switcher (rofi) |
-| `Print` | Screenshot region → clipboard (grimblast) |
-| `SUPER + Print` | Screenshot region → swappy editor |
-| `SUPER + SHIFT + Print` | Screenshot full screen → clipboard |
-| `SUPER + D` | Screenshot menu (rofi — full/region/swappy/clipboard) |
-| Volume keys | Volume up/down/mute (SwayOSD) |
-| Brightness keys | Brightness up/down (SwayOSD) |
-| Media keys | Next/prev/play-pause (SwayOSD/playerctl) |
-
+| `XF86AudioRaiseVolume` | Volume up (swayosd OSD) |
+| `XF86AudioLowerVolume` | Volume down (swayosd OSD) |
+| `XF86AudioMute` | Mute/unmute (swayosd OSD) |
+| `XF86AudioMicMute` | Mic mute (swayosd OSD) |
+| `XF86AudioNext/Prev/Play` | Media controls (swayosd/playerctl) |
+| `XF86MonBrightnessUp` | Brightness up (swayosd OSD) |
+| `XF86MonBrightnessDown` | Brightness down (swayosd OSD) |
 ---
 
 ## Full Package Checklist
@@ -748,22 +884,28 @@ Copy-paste this to install **everything at once**:
 ```bash
 # Official repos
 sudo pacman -S --needed \
-  hyprland uwsm waybar rofi-wayland swaync kitty yazi \
+  hyprland uwsm waybar fuzzel swaync kitty yazi \
   hyprlock hypridle polkit-gnome \
   polkit-kde-agent xdg-desktop-portal-hyprland xdg-desktop-portal-gtk qt5-wayland qt6-wayland \
   pipewire wireplumber pipewire-pulse pipewire-alsa pipewire-audio pavucontrol \
+  mpd rmpc cava mpd-mpris \
   grim slurp swappy hyprpicker wl-clipboard cliphist \
   zsh starship btop fastfetch neovim lesspipe hyprpaper \
   networkmanager nm-connection-editor network-manager-applet \
   bluez bluez-utils blueman playerctl \
   mpv imv zathura zathura-pdf-mupdf \
-  fd ripgrep bat tealdeer easyeffects brightnessctl p7zip unrar xdg-utils cronie \
+  fd ripgrep bat tealdeer zoxide eza atuin easyeffects brightnessctl p7zip unrar xdg-utils cronie \
   yt-dlp python-mutagen \
   papirus-icon-theme \
-  noto-fonts noto-fonts-emoji noto-fonts-cjk ttf-jetbrains-mono-nerd ttf-nerd-fonts-symbols-mono ttf-liberation
+  noto-fonts noto-fonts-emoji noto-fonts-cjk \
+  otf-monaspace-nerd ttf-monaspace-variable ttf-nerd-fonts-symbols-mono \
+  ttf-sharetech-mono-nerd ttf-liberation
 
 # AUR
-yay -S vivaldi vivaldi-ffmpeg-codecs swayosd-git grimblast-git bibata-cursor-theme timeshift colloid-icon-theme
+yay -S vivaldi vivaldi-ffmpeg-codecs vesktop-bin swayosd-git grimblast-git \
+  ghgrab-bin otter-launcher wlogout-git \
+  ttf-rajdhani ttf-exo-2 \
+  bibata-cursor-theme timeshift colloid-icon-theme keyd
 ```
 
 Then:
@@ -789,7 +931,7 @@ echo 'nine ALL=(root) NOPASSWD: /usr/bin/tee /sys/firmware/acpi/platform_profile
 
 # Services
 systemctl --user enable --now pipewire wireplumber
-sudo systemctl enable --now bluetooth NetworkManager
+sudo systemctl enable --now bluetooth NetworkManager keyd
 
 # Shell
 chsh -s /usr/bin/zsh
