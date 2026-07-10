@@ -20,14 +20,13 @@
 :root {
 	/* APP ELEMENTS — transparent so the desktop wallpaper shows through */
 	--app-bg: transparent;
-	--app-blur: 8px;
 	--app-margin: 16px;
-	--app-radius: 8px;
+	--app-radius: 0px;
 
-	/* MAIN SURFACES — CGGX surface #151518, raised opacity */
+	/* MAIN SURFACES — semi-transparent, CGGX surface #151518 */
 	--main-rgb: 21,21,24;
-	--main-content-opacity: 0.50;
-	--sidebar-opacity: 0.65;
+	--main-content-opacity: 0.75;
+	--sidebar-opacity: 0.8;
 	--main-content-color: rgba(var(--main-rgb), var(--main-content-opacity));
 	--sidebar-color: rgba(var(--main-rgb), var(--sidebar-opacity));
 
@@ -55,47 +54,60 @@
 	--reply-lightness: 50%;
 	--reply-opacity: 1;
 
-	/* MESSAGES — more opaque, CGGX surface */
+	/* MESSAGES — semi-transparent, CGGX surface */
 	--message-color: rgba(21,21,24,0.55);
 	--message-color-hover: rgba(21,21,24,0.65);
 	--message-color-select: rgba(21,21,24,0.75);
-	--message-radius: var(--app-radius);
+	--message-radius: 0px;
 	--message-padding-top: 8px;
 	--message-padding-side: 8px;
 
-	/* TEXTAREA — dark surface, raised opacity, silver text */
+	/* TEXTAREA — transparent, no blur */
 	--textarea-color: 21,21,24;
 	--textarea-alpha: 0.35;
 	--textarea-alpha-focus: 0.50;
 	--textarea-text-color: #e8e8f0;
 	--textarea-placeholder-color: #6a6a80;
-	--textarea-radius: 22px;
+	--textarea-radius: 0px;
 
-	/* CARDS — CGGX surface, raised opacity */
+	/* INPUTS — flat */
+	--input-height: 36px;
+	--input-radius: 0px;
+
+	/* CARDS */
 	--card-color: rgba(21,21,24,0.55);
 	--card-color-hover: rgba(21,21,24,0.65);
 	--card-color-select: rgba(21,21,24,0.75);
-	--card-radius: var(--app-radius);
+	--card-radius: 0px;
+	--card-header-shadow: none;
 
-	/* BUTTONS */
+	/* BUTTONS — flat */
 	--button-height: 32px;
 	--button-padding: 0 16px;
 	--button-action-color: #0a0a0c;
-	--button-radius: 16px;
+	--button-radius: 0px;
 
-	/* POPOUTS / TOOLTIPS */
+	/* LIST ITEMS — flat */
+	--list-item-radius: 0px;
+
+	/* POPOUTS / TOOLTIPS — transparent, no blur, no glow */
 	--popout-color: rgba(10,10,12,0.85);
-	--popout-blur: 8px;
-	--popout-radius: var(--app-radius);
+	--popout-radius: 0px;
+	--popout-shadow-border: none;
+	--popout-shadow: none;
+	--popout-header-shadow: none;
 
-	--tooltip-color: hsla(var(--accent-hsl), var(--accent-opacity));
-	--tooltip-text-color: #0a0a0c;
+	/* TOOLTIPS — flat */
+	--tooltip-radius: 0px;
+
+	/* GLASS REFLECTION — kill the inner glow entirely */
+	--liquid-glass-shadow: none;
 
 	/* SCROLLBAR — CGGX lime */
 	--scrollbar-color: 200,255,0;
 	--scrollbar-color-alt: 21,21,24;
-	--scrollbar-opacity: 0.35;
 	--scrollbar-opacity-hover: 0.55;
+	--server-folder-color: rgba(255,45,85,0.08); /* subtle red tint */
 }
 
 @supports (color:color-mix(in lch,red,blue)) {
@@ -139,4 +151,43 @@
 		--status-positive: #c8ff00;
 		--status-premium: #b48cff;
     }
+}
+/* ── CGGX element color accents ───────────────────── */
+
+/* Active channel — red left bar indicator */
+[class*="modeSelected"] {
+	border-left: 2px solid #ff2d55 !important;
+}
+
+/* Active voice channel — red tint */
+[class*="voiceUser"] [class*="selected"] {
+	background-color: rgba(255,45,85,0.12) !important;
+}
+
+/* Server unread mention badge — red */
+[class*="mentionBadge"] {
+	background-color: #ff2d55 !important;
+}
+
+/* Code blocks — subtle purple tint */
+[class*="markup"] code,
+[class*="codeBlock"] {
+	background-color: rgba(180,140,255,0.08) !important;
+	border: none !important;
+}
+
+/* Embeds — cyan left accent */
+[class*="embedFull"] {
+	border-left: 4px solid #00e5ff !important;
+}
+
+/* Reactions you've used — lime tint */
+[class*="reaction"][class*="reactionMe"] {
+	background-color: rgba(200,255,0,0.12) !important;
+	border-color: rgba(200,255,0,0.25) !important;
+}
+
+/* Typing indicator — cyan */
+[class*="typing"] {
+	color: #00e5ff !important;
 }

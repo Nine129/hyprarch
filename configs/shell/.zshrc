@@ -185,6 +185,9 @@ bat() {
 
 
 
+# Local bin overrides (fzf wrapper for Yazi etc.)
+export PATH="$HOME/.local/bin:$PATH"
+
 # Pi
 export PATH="/home/nine/.local/share/pi-node/node-v22.22.3-linux-x64/bin:$PATH"
 

@@ -168,11 +168,12 @@ M.polish_hl = {
   -- Defaults — lime for all selected/active items
   defaults = {
     -- Core Neovim
-    Visual = { fg = "#C8FF00" },
-    CurSearch = { fg = "#C8FF00" },
-    CurSearch = { fg = "#C8FF00" },
-    Substitute = { fg = "#C8FF00" },
-
+    Visual = { bg = "#2a2a35" },
+    CurSearch = { bg = "#2a2a35" },
+    CurSearch = { bg = "#2a2a35" },
+    Substitute = { bg = "#2a2a35" },
+    LineNr = { fg = "#4a4a5a" },
+    CursorLineNr = { fg = "#6a6a80" },
     -- Popup / Completion menus
     PmenuSel = { fg = "#C8FF00" },
     PmenuThumb = { bg = "#C8FF00" },
@@ -189,6 +190,8 @@ M.polish_hl = {
     SnacksPickerMatch = { fg = "#C8FF00" },
     SnacksPickerSelected = { fg = "#C8FF00" },
     SnacksDashboardKey = { fg = "#C8FF00" },
+    SnacksPickerListCursorLine = { fg = "#C8FF00" },
+    SnacksPickerPreviewCursorLine = { fg = "#C8FF00" },
 
     -- Lazy
     LazyButtonActive = { fg = "#C8FF00" },

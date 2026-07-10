@@ -10,6 +10,7 @@ bibata-cursor-theme
 blueman
 bluez
 bluez-utils
+bookokrat-bin
 brightnessctl
 btop
 btrfs-progs
@@ -36,6 +37,7 @@ fcitx5
 fcitx5-configtool
 fcitx5-unikey
 fd
+ffmpegthumbnailer
 fuzzel
 fzf
 ghgrab-bin
@@ -152,6 +154,7 @@ ttf-monaspace-variable
 ttf-nerd-fonts-symbols-mono
 ttf-sharetech-mono-nerd
 tty-clock
+ueberzug
 unrar
 uwsm
 ventoy-bin

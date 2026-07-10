@@ -128,12 +128,6 @@ return {
             { section = "keys", gap = 1, padding = 1 },
             { pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = { 1, 1 }, limit = 5 },
             { pane = 2, icon = "󰉓 ", title = "Projects", section = "projects", indent = 2, padding = { 1, 1 }, limit = 4 },
-            {
-               pane = 2, icon = " ", title = "Git Status", section = "terminal",
-               enabled = function() return Snacks.git.get_root() ~= nil end,
-               cmd = "echo '' && git status --short --branch --renames",
-               height = 6, padding = { 1, 1 }, ttl = 5 * 60, indent = 3,
-            },
          },
       },
       git = { enabled = true },
@@ -196,6 +190,37 @@ return {
       vim.api.nvim_set_hl(0, "SnacksDashboardSpecial", { fg = c.purple })
       vim.api.nvim_set_hl(0, "SnacksDashboardTitle",   { fg = c.red, bold = true })
       vim.api.nvim_set_hl(0, "desc",           { fg = c.fg })
+      -- Lime for ALL selected/active items
+      -- Deferred to run AFTER base46 cache loads (init.lua line 29: dofile after lazy.setup)
+      vim.defer_fn(function()
+         vim.api.nvim_set_hl(0, "Visual",                       { bg = "#2a2a35" })
+         vim.api.nvim_set_hl(0, "CurSearch",                    { bg = "#2a2a35" })
+         vim.api.nvim_set_hl(0, "Substitute",                   { bg = "#2a2a35" })
+         vim.api.nvim_set_hl(0, "PmenuSel",                     { bg = "#2a2a35" })
+         vim.api.nvim_set_hl(0, "LineNr",                       { fg = "#4a4a5a" })
+         vim.api.nvim_set_hl(0, "CursorLineNr",                 { fg = "#6a6a80" })
+         vim.api.nvim_set_hl(0, "PmenuThumb",                   { bg = c.lime })
+         vim.api.nvim_set_hl(0, "CmpItemMenuSelected",          { fg = c.lime })
+         vim.api.nvim_set_hl(0, "CmpItemKindSelected",          { fg = c.lime })
+         vim.api.nvim_set_hl(0, "CmpCursor",                    { fg = c.lime })
+         vim.api.nvim_set_hl(0, "TelescopeSelection",           { fg = c.lime })
+         vim.api.nvim_set_hl(0, "TelescopeSelectionCaret",      { fg = c.lime })
+         vim.api.nvim_set_hl(0, "TelescopeMultiSelection",      { fg = c.lime })
+         vim.api.nvim_set_hl(0, "SnacksPickerMatch",            { fg = c.lime })
+         vim.api.nvim_set_hl(0, "SnacksPickerSelected",         { fg = c.lime })
+         vim.api.nvim_set_hl(0, "SnacksDashboardKey",           { fg = c.lime })
+         vim.api.nvim_set_hl(0, "LazyButtonActive",             { fg = c.lime })
+         vim.api.nvim_set_hl(0, "LazyH1",                       { fg = c.lime })
+         vim.api.nvim_set_hl(0, "MiniPickMatchCurrent",         { fg = c.lime })
+         vim.api.nvim_set_hl(0, "MiniPickMatchMark",            { fg = c.lime })
+         vim.api.nvim_set_hl(0, "FzfLuaCursor",                 { fg = c.lime })
+         vim.api.nvim_set_hl(0, "FzfLuaMatch",                  { fg = c.lime })
+         vim.api.nvim_set_hl(0, "WhichKeySelected",             { fg = c.lime })
+         vim.api.nvim_set_hl(0, "GitSignsAddLn",                { fg = c.lime })
+         vim.api.nvim_set_hl(0, "CursorLine",                   { fg = c.lime })
+         vim.api.nvim_set_hl(0, "SnacksPickerListCursorLine",   { fg = c.lime })
+         vim.api.nvim_set_hl(0, "SnacksPickerPreviewCursorLine",{ fg = c.lime })
+      end, 100)
 
       vim.api.nvim_create_autocmd("User", {
          pattern = "VeryLazy",
