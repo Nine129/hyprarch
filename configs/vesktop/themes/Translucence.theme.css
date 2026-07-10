@@ -25,8 +25,8 @@
 
 	/* MAIN SURFACES — semi-transparent, CGGX surface #151518 */
 	--main-rgb: 21,21,24;
-	--main-content-opacity: 0.75;
-	--sidebar-opacity: 0.8;
+	--main-content-opacity: 0.85;
+	--sidebar-opacity: 0.85;
 	--main-content-color: rgba(var(--main-rgb), var(--main-content-opacity));
 	--sidebar-color: rgba(var(--main-rgb), var(--sidebar-opacity));
 
@@ -54,10 +54,10 @@
 	--reply-lightness: 50%;
 	--reply-opacity: 1;
 
-	/* MESSAGES — semi-transparent, CGGX surface */
-	--message-color: rgba(21,21,24,0.55);
-	--message-color-hover: rgba(21,21,24,0.65);
-	--message-color-select: rgba(21,21,24,0.75);
+	/* MESSAGES — transparent */
+	--message-color: transparent;
+	--message-color-hover: transparent;
+	--message-color-select: transparent;
 	--message-radius: 0px;
 	--message-padding-top: 8px;
 	--message-padding-side: 8px;
@@ -103,8 +103,8 @@
 	/* GLASS REFLECTION — kill the inner glow entirely */
 	--liquid-glass-shadow: none;
 
-	/* SCROLLBAR — CGGX lime */
-	--scrollbar-color: 200,255,0;
+	/* SCROLLBAR — CGGX red */
+	--scrollbar-color: 255,45,85;
 	--scrollbar-color-alt: 21,21,24;
 	--scrollbar-opacity-hover: 0.55;
 	--server-folder-color: rgba(255,45,85,0.08); /* subtle red tint */
@@ -191,3 +191,449 @@
 [class*="typing"] {
 	color: #00e5ff !important;
 }
+
+/* ── CGGX Global Font ──────────────────────────────── */
+* {
+	font-family: "Plus Jakarta Sans" !important;
+	border-radius: 6px !important;
+}
+
+/* Member panel — keep sharp */
+[class*="membersWrap"],
+[class*="membersGroup"],
+[class*="memberInner"],
+[class*="member"],
+[class*="member"] > *,
+[class*="members"] [class*="container"] {
+	border-radius: 0 !important;
+}
+
+
+/* ── Member List ─────────────────────────────────── */
+[class*="membersWrap"],
+[class*="membersGroup"] {
+	background: transparent !important;
+}
+
+[class*="memberInner"] {
+	background: transparent !important;
+}
+
+[class*="memberInner"]:hover {
+	background: rgba(255,255,255,0.075) !important;
+}
+
+
+/* Member activity text — muted */
+[class*="memberInner"] [class*="activity"] {
+	color: #6a6a80 !important;
+}
+
+/* ── User Popouts ────────────────────────────────── */
+[class*="userPopout"] {
+	background: rgba(21,21,24,0.95) !important;
+	border: 1px solid #2a2a35 !important;
+	box-shadow: 0 8px 32px rgba(0,0,0,0.6) !important;
+}
+
+/* Popout header — user banner / name area */
+[class*="userPopout"] [class*="header"] {
+	background: transparent !important;
+}
+
+/* Popout username — silver */
+[class*="userPopout"] [class*="name"] {
+	color: #e8e8f0 !important;
+}
+
+/* Popout discriminator — muted */
+[class*="userPopout"] [class*="discriminator"] {
+	color: #6a6a80 !important;
+}
+
+/* Popout role badges — subtle */
+[class*="userPopout"] [class*="role"] {
+	border-color: #2a2a35 !important;
+	background: rgba(21,21,24,0.5) !important;
+}
+
+/* Nitro badge in popout — purple */
+[class*="userPopout"] [class*="premiumIcon"] {
+	color: #b48cff !important;
+}
+
+/* Popout action buttons — flat */
+[class*="userPopout"] [class*="actionButton"] {
+	background: rgba(21,21,24,0.6) !important;
+	border: 1px solid #2a2a35 !important;
+	border-radius: 0 !important;
+}
+
+[class*="userPopout"] [class*="actionButton"]:hover {
+	background: rgba(255,45,85,0.2) !important;
+	border-color: #ff2d55 !important;
+}
+
+/* ── Context Menus ───────────────────────────────── */
+[class*="menu"] {
+	background: rgba(10,10,12,0.95) !important;
+	border: 1px solid #2a2a35 !important;
+}
+
+[class*="menu"] [class*="item"] {
+	color: #e8e8f0 !important;
+	border-radius: 0 !important;
+}
+
+[class*="menu"] [class*="item"]:hover {
+	background: rgba(255,45,85,0.15) !important;
+	color: #ffffff !important;
+}
+
+[class*="menu"] [class*="item"][class*="danger"]:hover {
+	background: rgba(255,45,85,0.25) !important;
+	color: #ff2d55 !important;
+}
+
+/* Menu item icons — muted */
+[class*="menu"] [class*="icon"] {
+	color: #6a6a80 !important;
+}
+
+[class*="menu"] [class*="item"]:hover [class*="icon"] {
+	color: #e8e8f0 !important;
+}
+
+/* ── Quick Switcher (Ctrl+K) ───────────────────────── */
+[class*="quickswitcher"] {
+	background: rgba(10,10,12,0.95) !important;
+	border: 1px solid #2a2a35 !important;
+}
+
+[class*="quickswitcher"] [class*="input"] {
+	background: rgba(21,21,24,0.6) !important;
+	border: 1px solid #2a2a35 !important;
+	color: #e8e8f0 !important;
+}
+
+[class*="quickswitcher"] [class*="row"] {
+	color: #b0b0c0 !important;
+}
+
+[class*="quickswitcher"] [class*="selected"] {
+	background: rgba(255,45,85,0.12) !important;
+}
+
+/* ── Search ──────────────────────────────────────── */
+[class*="search"] [class*="searchBar"] {
+	background: rgba(21,21,24,0.4) !important;
+	border: 1px solid transparent !important;
+}
+
+[class*="search"] [class*="searchBar"]:focus-within {
+	border-color: #00e5ff !important;
+}
+
+[class*="searchResults"] {
+	background: rgba(10,10,12,0.9) !important;
+	border-left: 1px solid #2a2a35 !important;
+}
+
+[class*="searchResult"] {
+	border: 1px solid #2a2a35 !important;
+	background: rgba(21,21,24,0.5) !important;
+}
+
+/* Search highlight — cyan */
+[class*="searchHit"] {
+	background: rgba(0,229,255,0.12) !important;
+}
+
+/* Kill wrapper container around hover buttons */
+[class*="buttons"] {
+	background: transparent !important;
+	border: none !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+}
+[class*="buttons"] > div {
+	background: transparent !important;
+	border: none !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+}
+[class*="buttons"] [class*="wrapper"] {
+	background: transparent !important;
+	border: none !important;
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+}
+
+/* ── Message Hover Actions ────────────────────────── */
+[class*="hoverButton"],
+[class*="buttons"] [class*="button"] {
+	background: transparent !important;
+	border: none !important;
+	border-radius: 0 !important;
+	color: #ff6b00 !important;
+}
+
+[class*="hoverButton"]:hover,
+[class*="buttons"] [class*="button"]:hover {
+	background: rgba(255,107,0,0.15) !important;
+	color: #ff6b00 !important;
+}
+
+/* ── Threads ──────────────────────────────────────── */
+[class*="threadSidebar"] {
+	background: rgba(10,10,12,0.9) !important;
+	border-left: 1px solid #2a2a35 !important;
+}
+
+[class*="thread"] [class*="chat"] {
+	background: transparent !important;
+}
+
+[class*="thread"] [class*="message"] {
+	background: transparent !important;
+}
+
+/* ── Forums ───────────────────────────────────────── */
+[class*="forum"] [class*="container"] {
+	background: transparent !important;
+}
+
+[class*="forum"] [class*="card"] {
+	background: rgba(21,21,24,0.55) !important;
+	border: 1px solid #2a2a35 !important;
+	border-radius: 0 !important;
+}
+
+[class*="forum"] [class*="card"]:hover {
+	background: rgba(21,21,24,0.70) !important;
+}
+
+/* ── Voice Panel ──────────────────────────────────── */
+[class*="voiceState"] {
+	background: transparent !important;
+}
+/* Speaking user — lime glow */
+[class*="voiceUser"] [class*="speaking"] {
+	box-shadow: inset 0 0 0 2px #c8ff00 !important;
+}
+
+/* Muted user — orange */
+[class*="voiceUser"] [class*="muted"] [class*="name"],
+[class*="voiceUser"] [class*="muted"] {
+	color: #ff6b00 !important;
+}
+
+/* Deafened user — stronger orange */
+[class*="voiceUser"] [class*="deafened"] {
+	color: #ff6b00 !important;
+	opacity: 0.6 !important;
+}
+
+/* Voice controls — flat */
+[class*="voicePanel"] [class*="button"],
+[class*="voiceControl"] {
+	background: rgba(21,21,24,0.5) !important;
+	border-radius: 0 !important;
+}
+
+[class*="voicePanel"] [class*="button"]:hover {
+	background: rgba(255,45,85,0.2) !important;
+}
+
+/* ── Friends List ─────────────────────────────────── */
+[class*="peopleColumn"] {
+	background: transparent !important;
+}
+
+[class*="peopleColumn"] [class*="row"] {
+	background: rgba(21,21,24,0.4) !important;
+	border-bottom: 1px solid #2a2a35 !important;
+	border-radius: 0 !important;
+}
+
+[class*="peopleColumn"] [class*="row"]:hover {
+	background: rgba(21,21,24,0.6) !important;
+}
+
+/* ── New Messages Separator ─────────────────────────── */
+[class*="divider"] [class*="content"] {
+	background: rgba(10,10,12,0.8) !important;
+	color: #00e5ff !important;
+}
+
+[class*="divider"] [class*="line"] {
+	border-color: #00e5ff !important;
+}
+
+/* ── Connection / Reconnecting Banners ──────────────── */
+[class*="banner"] {
+	background: rgba(10,10,12,0.9) !important;
+}
+
+[class*="reconnecting"] {
+	background: rgba(255,107,0,0.15) !important;
+	color: #ff6b00 !important;
+}
+
+[class*="disconnected"] {
+	background: rgba(255,45,85,0.15) !important;
+	color: #ff2d55 !important;
+}
+
+/* ── Loading Screen ──────────────────────────────── */
+[class*="loading"] {
+	background: #0a0a0c !important;
+}
+
+[class*="loading"] [class*="text"] {
+	color: #6a6a80 !important;
+}
+
+/* ── Settings Panels ──────────────────────────────── */
+[class*="settings"] {
+	background: transparent !important;
+}
+
+[class*="settings"] [class*="sidebar"] {
+	background: rgba(10,10,12,0.5) !important;
+}
+
+[class*="settings"] [class*="content"] {
+	background: transparent !important;
+}
+
+[class*="settings"] [class*="card"] {
+	background: rgba(21,21,24,0.5) !important;
+	border: 1px solid #2a2a35 !important;
+	border-radius: 0 !important;
+}
+
+/* Settings header — red */
+[class*="settings"] [class*="header"] {
+	color: #ff2d55 !important;
+}
+
+/* Settings description — muted */
+[class*="settings"] [class*="description"] {
+	color: #6a6a80 !important;
+}
+
+/* ── Nitro / Premium ───────────────────────────────── */
+[class*="premium"] [class*="card"],
+[class*="gift"] [class*="card"] {
+	border-color: #b48cff !important;
+}
+
+[class*="premium"] [class*="header"] {
+	color: #b48cff !important;
+}
+
+[class*="premium"] [class*="icon"] {
+	color: #b48cff !important;
+}
+
+/* ── Autocomplete / Slash Commands ──────────────────── */
+[class*="autocomplete"] {
+	background: rgba(10,10,12,0.95) !important;
+	border: 1px solid #2a2a35 !important;
+}
+
+[class*="autocomplete"] [class*="row"] {
+	color: #b0b0c0 !important;
+}
+
+[class*="autocomplete"] [class*="selected"] {
+	background: rgba(255,45,85,0.10) !important;
+}
+
+/* ── Channel Text Area ───────────────────────────── */
+[class*="channelTextArea"] {
+	background: transparent !important;
+}
+
+/* Attach button — orange */
+[class*="attachButton"] {
+	color: #ff6b00 !important;
+}
+
+[class*="attachButton"]:hover {
+	color: #cc5500 !important;
+}
+
+/* ── Upload Modal ────────────────────────────────── */
+[class*="uploadModal"] {
+	background: rgba(10,10,12,0.95) !important;
+	border: 1px solid #2a2a35 !important;
+}
+
+[class*="uploadModal"] [class*="inner"] {
+	background: rgba(21,21,24,0.5) !important;
+	border: 2px dashed #2a2a35 !important;
+}
+
+[class*="uploadModal"] [class*="inner"]:hover {
+	border-color: #00e5ff !important;
+}
+
+/* ── Activity Panel / Now Playing ───────────────────── */
+[class*="activity"] [class*="card"] {
+	background: rgba(21,21,24,0.5) !important;
+	border: 1px solid #2a2a35 !important;
+	border-radius: 0 !important;
+}
+
+[class*="activity"] [class*="name"] {
+	color: #e8e8f0 !important;
+}
+
+[class*="activity"] [class*="details"] {
+	color: #6a6a80 !important;
+}
+
+/* ── Server Discovery / Explore ─────────────────────── */
+[class*="discovery"] {
+	background: #0a0a0c !important;
+}
+
+[class*="discovery"] [class*="card"] {
+	background: rgba(21,21,24,0.6) !important;
+	border: 1px solid #2a2a35 !important;
+	border-radius: 0 !important;
+}
+
+[class*="discovery"] [class*="card"]:hover {
+	border-color: #ff2d55 !important;
+}
+
+/* ── Inbox / Recent Mentions ────────────────────────── */
+[class*="inbox"] {
+	background: rgba(10,10,12,0.95) !important;
+}
+
+[class*="inbox"] [class*="row"] {
+	background: rgba(21,21,24,0.4) !important;
+	border: 1px solid #2a2a35 !important;
+	border-radius: 0 !important;
+}
+
+[class*="inbox"] [class*="row"]:hover {
+	border-color: #ff2d55 !important;
+}
+
+/* ── Keyboard Shortcuts Modal ───────────────────────── */
+[class*="keyboardShortcuts"] {
+	background: rgba(10,10,12,0.95) !important;
+}
+
+[class*="keyboardShortcuts"] [class*="group"] {
+	color: #e8e8f0 !important;
+}
+

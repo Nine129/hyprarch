@@ -119,7 +119,7 @@ alias ys='yay -S'
 alias yr='yay -Rns'
 alias yq='yay -Q'
 alias yu='yay -Syu'
-
+alias rg='rg --smart-case'
 # Gparted
 alias gparted='sudo -E gparted'
 # ── Autostart (first shell only) ──────────────────────
@@ -283,3 +283,36 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # This loads nvm bash_completion
 [[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
  source <(fzf --zsh)
+
+ qr() {
+    local result
+    result=$(grim -g "$(slurp)" - | zbarimg --raw -q -)
+    if [ -n "$result" ]; then
+        notify-send "QR Scanned" "$result"
+        xdg-open "$result"
+    else
+        notify-send "QR Scan" "No QR code found"
+    fi
+}
+function pacs {
+  local repo_cmd="pacman -Sl | awk '{print \$2 (\$4==\"\" ? \"\" : \" *\")}'"
+  local aur_cmd="yay -Sl aur | awk '{print \$2 (\$4==\"\" ? \"\" : \" *\")}'"
+  local inst_cmd="yay -Qq | awk '{print \$1 \" *\"}'"
+  local cmd
+  cmd=$(pacman -Sl | awk '{print $2 ($4=="" ? "" : " *")}' | fzf \
+    --border-label ' Packages ' \
+    --prompt 'repo> ' \
+    --header 'Install packages. CTRL+(Repo/AUR/Installed)' \
+    --bind "ctrl-p:change-prompt(repo> )+reload($repo_cmd)" \
+    --bind "ctrl-a:change-prompt(aur> )+reload($aur_cmd)" \
+    --bind "ctrl-i:change-prompt(inst> )+reload($inst_cmd)" \
+    --multi \
+    --preview 'yay -Qil {1} | bat -fpl yml 2>/dev/null'
+  )
+
+  [[ -z "$cmd" ]] && return
+
+  cmd=$(echo "$cmd" | awk '{print $1}' | tr '\n' ' ')
+
+  print -z "yay -S $cmd"
+}
