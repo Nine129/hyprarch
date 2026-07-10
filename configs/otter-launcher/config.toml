@@ -23,7 +23,7 @@
 # module to run when no prefix is matched
 default_module = "gg"
 # run with an empty prompt
-empty_module = "app"
+empty_module = ""
 # exec command of your shell, eg. "zsh -c" for zsh; accept wm commands like "hyprctl dispatch exec"
 exec_cmd = "sh -c"
 # set true to use vi keybinds, false emacs keybinds
@@ -48,7 +48,6 @@ callback = ""
 [interface]
 # use three quotes to write longer codes
 header = """
-
 
 
  \u001B[34;1m  \u001B[0m\u001B[38;2;255;107;0m$USER@$(printf $HOSTNAME)\u001B[0m$(printf '\u001B[999C\u001B[14D')\u001B[31m\u001B[0m $(mpstat | awk 'FNR ==4 {print $4}') \u001B[33m󰍛\u001B[0m $(free -h | awk 'FNR == 2 {print $3}' | sed 's/i//')
@@ -95,13 +94,13 @@ move_interface_down = 0
 # overlay is a floating layer that can be printed with stdout and moved around; useful for integrating chafa images; check docs in repo for example usage
 [overlay]
 # run a command and print stdout on the overlay layer
-overlay_cmd = "chafa -s x14 $HOME/.config/otter-launcher/images/logo.png"
+overlay_cmd = "prev=$(cat /tmp/otter-last-image 2>/dev/null); img=$(find $HOME/.config/otter-launcher/images/ -type f | shuf -n1); [ -n \"$prev\" ] && [ \"$img\" = \"$prev\" ] && img=$(find $HOME/.config/otter-launcher/images/ -type f ! -name \"$(basename \"$prev\")\" | shuf -n1); [ -z \"$img\" ] && img=$prev; echo \"$img\" > /tmp/otter-last-image; chafa -s x20 \"$img\""
 # remove trailing lines from overlay_cmd output
 overlay_trimmed_lines = 0
 # set overlay size; 0 to be auto; 1 is one line, 2 two lines, etc; kitty & sixel image size can be determined automatically; others should be set mannually; try modify this whenever you meet issues releated to image height
-overlay_height = 0
+overlay_height = 2
 # move the overlay layer around for theming
-move_overlay_right = 0
+move_overlay_right = 4
 move_overlay_down = 2
 
 # modules are defined as followed
@@ -116,49 +115,21 @@ url_encode = true
 # run cmd in a forked shell as opposed to as a child process (simply by prepending setsid -f to the configured cmd); useful for launching gui programs; taken as false if not explicitly set
 unbind_proc = true
 
-# fzf is needed to run below functions
-[[modules]]
-description = "desktop programs"
-prefix = "\u001B[38;2;255;107;0mapp\u001B[0m"
-cmd = """
-desktop_file() {
-find /usr/share/applications -name "*.desktop" 2>/dev/null
-find /usr/local/share/applications -name "*.desktop" 2>/dev/null
-find "$HOME/.local/share/applications" -name "*.desktop" 2>/dev/null
-find /var/lib/flatpak/exports/share/applications -name "*.desktop" 2>/dev/null
-find "$HOME/.local/share/flatpak/exports/share/applications" -name "*.desktop" 2>/dev/null
-}
-selected="$(desktop_file | awk -F/ '{name=$NF; sub(/\\.desktop$/, "", name); print name}' | sort -k1,1 | cut -f2- | fzf --info-command 'echo -e " desktop apps ($FZF_POS/$FZF_TOTAL_COUNT)"' --cycle --gutter " " --pointer " ▌" --color "bg+:-1,pointer:1,info:8,separator:8,scrollbar:0" --prompt '  ' -m -d / --with-nth -1 )"
-[ -z "$selected" ] && exit 0
-while IFS= read -r line; do
-  [ -n "$line" ] && setsid -f gtk-launch "$(basename "$line")"
-done <<< "$selected"
-pkill otter-launcher
-"""
 
-[[modules]]
-description = "power menu (fzf)"
-prefix = "\u001B[91mpo\u001B[0m"
-cmd = """
-function power {
-if [[ -n $1 ]]; then
-case $1 in
-"logout") session=`loginctl session-status | head -n 1 | awk '{print $1}'`; loginctl terminate-session $session ;;
-"suspend") systemctl suspend ;;
-"hibernate") systemctl hibernate ;;
-"reboot") systemctl reboot ;;
-"shutdown") systemctl poweroff ;;
-esac fi }
-power $(echo -e 'reboot\nshutdown\nlogout\nsuspend\nhibernate' | fzf --info-command 'printf " power menu ($FZF_POS/$FZF_TOTAL_COUNT)"' --cycle --gutter " " --pointer " ▌" --color "bg+:-1,pointer:1,info:8,separator:8,scrollbar:0" --prompt '  ' | tail -1)
-"""
 
 [[modules]]
 description = "run commands"
 prefix = "\u001B[92msh\u001B[0m"
-cmd = """
-$(printf $TERM | sed 's/xterm-//g') -e sh -c "{}"
-"""
+cmd = "kitty sh -c \"{}; exec sh\""
 with_argument = true
+unbind_proc = true
+
+[[modules]]
+description = "search youtube"
+prefix = "\u001B[91myt\u001B[0m"
+cmd = "xdg-open https://www.youtube.com/results?search_query='{}'"
+with_argument = true
+url_encode = true
 unbind_proc = true
 
 [[modules]]
@@ -193,19 +164,7 @@ with_argument = true
 url_encode = true
 unbind_proc = true
 
-[[modules]]
-description = "open files (fzf)"
-prefix = "\u001B[92mfo\u001B[0m"
-cmd = """
-find $HOME -type f -not -path '*/.cache/*' 2>/dev/null | fzf --info-command 'printf " files ($FZF_POS/$FZF_TOTAL_COUNT)"' --cycle --gutter ' ' --pointer ' ▌' --color 'bg+:-1,pointer:1,info:8,separator:8,scrollbar:0' --prompt '  ' | setsid -f xargs -r -I [] xdg-open '[]'
-"""
 
-[[modules]]
-description = "open dirs (yazi)"
-prefix = "\u001B[91myz\u001B[0m"
-cmd = """
-find $HOME -type d -not -path '*/.cache/*' 2>/dev/null | fzf --info-command 'printf " directories ($FZF_POS/$FZF_TOTAL_COUNT)"' --cycle --gutter ' ' --pointer ' ▌' --color 'bg+:-1,pointer:1,info:8,separator:8,scrollbar:0' --prompt '  ' | xargs -r -I [] setsid -f "$(echo $TERM | sed 's/xterm-//g')" -e yazi '[]'
-"""
 
 [[modules]]
 description = "color picker"

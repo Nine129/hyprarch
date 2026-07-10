@@ -94,7 +94,7 @@ hl.bind("SUPER + SHIFT + C",   hl.dsp.exec_cmd("cliphist wipe && notify-send 'Cl
 
 -- Lock & exit ─────────────────────
 hl.bind("SUPER + L",           hl.dsp.exec_cmd("hyprlock"))
-hl.bind("SUPER + SHIFT + Q",   hl.dsp.exec_cmd("pkill fuzzel || /home/nine/hyprarch/configs/fuzzel/scripts/power-menu.sh"))
+hl.bind("SUPER + SHIFT + Q",   hl.dsp.exec_cmd("pkill wlogout || wlogout --css ~/.config/wlogout/style.css --buttons-per-row 5 -T 410 -B 410 -L 200 -R 200"))
 hl.bind("SUPER + SHIFT + Escape",  hl.dsp.exec_cmd("hyprctl dispatch exit"))
 
 -- Screenshot menu ─────────────────────

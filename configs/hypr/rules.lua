@@ -84,9 +84,10 @@ hl.window_rule({
     match={ class = "otter-launcher"},
     float= true,
     center=true,
-    size={490,290},
-
-   }
+    size={500,370},
+    border_color = "rgba(ff6b00ff)",
+    opaque = true,
+  }
  )
  hl.window_rule(
    {

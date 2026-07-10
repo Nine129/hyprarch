@@ -296,6 +296,27 @@ desc = { fg = "#6a6a80" }
 separator = " → "
 separator_style = { fg = "#6a6a80" }
 
+
+# ── Picker (zoxide, find, etc.) ─────────────────────────
+[picker]
+border = { fg = "#c8ff00" }
+title = { fg = "#e8e8f0" }
+
+[picker.list]
+fg = "#e8e8f0"
+bg = "#151518"
+
+[picker.highlight]
+fg = "#0a0a0c"
+bg = "#ff2d55"
+
+[picker.header]
+fg = "#c8ff00"
+bg = "#0a0a0c"
+
+[picker.input]
+fg = "#e8e8f0"
+bg = "#151518"
 # ── Confirm dialog ─────────────────────────────────────
 [confirm]
 border = { fg = "#ff2d55" }
