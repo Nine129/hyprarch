@@ -32,9 +32,6 @@ _FZF_BASE_OPTS="
   --pointer='❯'
   --marker='◆'
 
-  --header='  ↵ open   ALT-I images   ALT-M videos   ALT-A all   CTRL-/ preview   CTRL-Y copy path   SPC select   ESC quit  '
-  --header-first
-
   --bind='enter:execute(~/.config/fzf/open_file.sh {+})'
   --bind='ctrl-/:toggle-preview'
   --bind='ctrl-u:preview-half-page-up'
@@ -48,7 +45,6 @@ _FZF_BASE_OPTS="
 
   --bind='tab:toggle+down'
   --bind='btab:toggle+up'
-  --bind='space:toggle'
   --bind='ctrl-a:select-all'
   --bind='ctrl-x:deselect-all'
   --bind='shift-up:preview-up'
@@ -70,8 +66,11 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="
   --border-label=' ⟡  FILES  ⟡ '
   --border-label-pos=center
+  --header='  ↵ open   ALT-I images   ALT-M videos   ALT-A all   CTRL-/ preview   CTRL-Y copy path   SPC select   ESC quit  '
+  --header-first
   --preview='~/.config/fzf/preview.sh {}'
   --preview-window=right:58%:wrap:border-left
+  --bind='space:toggle'
 "
 
 export FZF_CTRL_R_OPTS="
@@ -80,9 +79,10 @@ export FZF_CTRL_R_OPTS="
   --border-label-pos=center
   --preview='echo {}'
   --preview-window=down:4:wrap:border-top
+  --header='  CTRL-Y copy  |  ESC quit  '
+  --header-first
   --bind='enter:accept'
   --bind='ctrl-y:execute-silent(echo -n {2..} | wl-copy)+abort'
-  --header='  CTRL-Y copy  |  CTRL-R toggle sort  '
 "
 
 export FZF_ALT_C_OPTS="
@@ -92,6 +92,7 @@ export FZF_ALT_C_OPTS="
   --preview-window=right:58%:wrap:border-left
 "
 
+export _ZO_FZF_OPTS="${_FZF_BASE_OPTS} ${_CGGX_COLORS} --header='  CTRL-Y copy path  |  ESC quit  ' --header-first --bind='enter:accept' --bind='ctrl-y:execute-silent(printf \"%s\\n\" {2} | wl-copy)' --preview-window=right:35%:wrap:border-left:nohidden --preview='eza --tree --level=2 --color=always --icons {2}'"
 fzf_with_preview() {
   fzf "$@"
   if [[ -n "${KITTY_WINDOW_ID:-}" || "${TERM:-}" == "xterm-kitty" ]]; then

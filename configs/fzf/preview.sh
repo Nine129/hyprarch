@@ -142,7 +142,7 @@ case "$mime" in
 
   application/json)
     if command -v bat >/dev/null 2>&1; then
-      bat --color=always --style=numbers "$FILE" 2>/dev/null
+      bat --color=always --style=numbers --theme=NvCGGX "$FILE" 2>/dev/null
     else
       cat "$FILE"
     fi
@@ -152,7 +152,7 @@ case "$mime" in
     if [[ "${FILE##*.}" == "md" ]] && command -v glow >/dev/null 2>&1; then
       glow --width $((FZF_PREVIEW_COLUMNS - 1)) "$FILE" 2>/dev/null
     elif command -v bat >/dev/null 2>&1; then
-      bat --color=always --style=numbers,changes --line-range :200 "$FILE" 2>/dev/null
+      bat --color=always --style=numbers,changes --theme=NvCGGX --line-range :200 "$FILE" 2>/dev/null
     else
       head -200 "$FILE"
     fi
@@ -161,7 +161,7 @@ case "$mime" in
   *)
     # Try bat first for unknown types
     if command -v bat >/dev/null 2>&1; then
-      bat --color=always --style=numbers,changes --line-range :200 "$FILE" 2>/dev/null || generic_preview "$FILE"
+      bat --color=always --style=numbers,changes --theme=NvCGGX --line-range :200 "$FILE" 2>/dev/null || generic_preview "$FILE"
     else
       generic_preview "$FILE"
     fi

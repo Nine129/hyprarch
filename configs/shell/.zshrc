@@ -316,3 +316,60 @@ function pacs {
 
   print -z "yay -S $cmd"
 }
+
+extract() {
+    [[ $# -eq 0 ]] && { echo "usage: extract <file> [file2 ...]"; return 1; }
+
+    local status=0
+    for f in "$@"; do
+        if [[ ! -f "$f" ]]; then
+            echo "✗ not a file: $f"
+            status=1
+            continue
+        fi
+
+        local lower
+        lower=$(printf '%s' "$f" | tr '[:upper:]' '[:lower:]')
+        local tool=""
+        local pkg=""
+        local cmd=()
+
+        case "$lower" in
+            *.tar.zst)        tool=unzstd;  pkg=zstd;    cmd=(tar --use-compress-program=unzstd -xf "$f") ;;
+            *.zst)            tool=zstd;    pkg=zstd;    cmd=(zstd -d "$f") ;;
+            *.tar.gz|*.tgz)   tool=tar;     pkg=tar;     cmd=(tar xzf "$f") ;;
+            *.tar.bz2|*.tbz2) tool=tar;     pkg=tar;     cmd=(tar xjf "$f") ;;
+            *.tar.xz|*.txz)   tool=tar;     pkg=tar;     cmd=(tar xJf "$f") ;;
+            *.tar.lz4)        tool=lz4;     pkg=lz4;     cmd=(tar --use-compress-program=lz4 -xf "$f") ;;
+            *.tar)            tool=tar;     pkg=tar;     cmd=(tar xf "$f") ;;
+            *.zip)            tool=unzip;   pkg=unzip;   cmd=(unzip -o "$f") ;;
+            *.rar)            tool=unrar;   pkg=unrar;   cmd=(unrar x -o+ "$f") ;;
+            *.7z)             tool=7z;      pkg=p7zip;   cmd=(7z x -y "$f") ;;
+            *.gz)             tool=gunzip;  pkg=gzip;    cmd=(gunzip -k "$f") ;;
+            *.bz2)            tool=bunzip2; pkg=bzip2;   cmd=(bunzip2 -k "$f") ;;
+            *.xz)             tool=unxz;    pkg=xz;      cmd=(unxz -k "$f") ;;
+            *.lz4)            tool=lz4;     pkg=lz4;     cmd=(lz4 -d "$f") ;;
+            *) echo "✗ unsupported: $f"; status=1; continue ;;
+        esac
+
+        if ! command -v "$tool" &>/dev/null; then
+            echo "✗ missing binary '$tool' for: $f (install it: pacman -S $pkg)"
+            status=1
+            continue
+        fi
+
+        if [[ "$lower" == *.tar.* || "$lower" == *.tar ]] && ! tar tf "$f" &>/dev/null; then
+            echo "✗ archive appears corrupted or unreadable: $f"
+            status=1
+            continue
+        fi
+
+        if "${cmd[@]}"; then
+            echo "✓ extracted: $f"
+        else
+            echo "✗ extraction FAILED: $f (corrupted archive or disk full — check exit code)"
+            status=1
+        fi
+    done
+    return $status
+}

@@ -61,6 +61,7 @@ for f in "$@"; do
     video) videos+=("$f") ;;
     audio) audios+=("$f") ;;
     svg)   svgs+=("$f") ;;
+    text)  texts+=("$f") ;;
   esac
 done
 
