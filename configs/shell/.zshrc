@@ -296,9 +296,10 @@ function pacs {
   local inst_cmd="yay -Qq | awk '{print \$1 \" *\"}'"
   local cmd
   cmd=$(pacman -Sl | awk '{print $2 ($4=="" ? "" : " *")}' | fzf \
+    --bind 'enter:accept' \
     --border-label ' Packages ' \
     --prompt 'repo> ' \
-    --header 'Install packages. CTRL+(Repo/AUR/Installed)' \
+    --header 'Install/Uninstall packages. CTRL+(Repo/AUR/Installed)' \
     --bind "ctrl-p:change-prompt(repo> )+reload($repo_cmd)" \
     --bind "ctrl-a:change-prompt(aur> )+reload($aur_cmd)" \
     --bind "ctrl-i:change-prompt(inst> )+reload($inst_cmd)" \
@@ -308,9 +309,17 @@ function pacs {
 
   [[ -z "$cmd" ]] && return
 
-  cmd=$(echo "$cmd" | awk '{print $1}' | tr '\n' ' ')
+  local install_list remove_list
+  install_list=$(echo "$cmd" | awk 'NF==1 {print $1}' | tr '\n' ' ')
+  remove_list=$(echo "$cmd" | awk 'NF==2 {print $1}' | tr '\n' ' ')
 
-  print -z "yay -S $cmd"
+  if [[ -n "$install_list" && -n "$remove_list" ]]; then
+    print -z "yay -S $install_list && yay -Rns $remove_list"
+  elif [[ -n "$remove_list" ]]; then
+    print -z "yay -Rns $remove_list"
+  else
+    print -z "yay -S $install_list"
+  fi
 }
 
 extract() {

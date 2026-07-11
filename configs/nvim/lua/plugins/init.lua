@@ -99,6 +99,7 @@ return {
         },
       })
       require("telescope").load_extension("media_files")
+      require("telescope.builtin").find_files({ hidden = true })
     end,
   },
 

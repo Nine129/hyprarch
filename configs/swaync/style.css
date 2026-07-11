@@ -273,7 +273,7 @@
 .floating-notifications .notification.critical .summary { color: @red; }
 /* Normal → red accent */
 .floating-notifications .notification .summary {
-  font-size: 15px;
+  font-size: 13pt;
   font-weight: 700;
   color: @accent;
 }
@@ -296,6 +296,7 @@
   margin-right: 14px;
   border-radius: 50%;
 }
+
 .floating-notifications .close-button {
   background: @close_bg;
   border-radius: 6px;

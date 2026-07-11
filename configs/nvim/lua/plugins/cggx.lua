@@ -20,11 +20,14 @@ return {
          pane_gap = 10,
          preset = {
             pick = function(cmd, opts)
-               local fzf = require("fzf-lua")
                opts = opts or {}
-               if cmd == "files" then fzf.files(opts)
-               elseif cmd == "live_grep" then fzf.live_grep(opts)
-               elseif cmd == "oldfiles" then fzf.oldfiles(opts) end
+               if cmd == "files" then
+                  require("telescope.builtin").find_files(vim.tbl_deep_extend("force", { hidden = true }, opts))
+               elseif cmd == "live_grep" then
+                  require("telescope.builtin").live_grep(opts)
+               elseif cmd == "oldfiles" then
+                  require("telescope.builtin").oldfiles(opts)
+               end
             end,
             keys = {
                { icon = "󰝒 ", key = "f", icon_hl = "CGGXKeyR", key_hl = "CGGXKeyR", desc_hl = "CGGXKeyR", desc = "Find File",  action = ":lua Snacks.dashboard.pick('files')" },
@@ -193,33 +196,38 @@ return {
       -- Lime for ALL selected/active items
       -- Deferred to run AFTER base46 cache loads (init.lua line 29: dofile after lazy.setup)
       vim.defer_fn(function()
-         vim.api.nvim_set_hl(0, "Visual",                       { bg = "#2a2a35" })
-         vim.api.nvim_set_hl(0, "CurSearch",                    { bg = "#2a2a35" })
-         vim.api.nvim_set_hl(0, "Substitute",                   { bg = "#2a2a35" })
-         vim.api.nvim_set_hl(0, "PmenuSel",                     { bg = "#2a2a35" })
-         vim.api.nvim_set_hl(0, "LineNr",                       { fg = "#4a4a5a" })
-         vim.api.nvim_set_hl(0, "CursorLineNr",                 { fg = "#6a6a80" })
-         vim.api.nvim_set_hl(0, "PmenuThumb",                   { bg = c.lime })
-         vim.api.nvim_set_hl(0, "CmpItemMenuSelected",          { fg = c.lime })
-         vim.api.nvim_set_hl(0, "CmpItemKindSelected",          { fg = c.lime })
-         vim.api.nvim_set_hl(0, "CmpCursor",                    { fg = c.lime })
-         vim.api.nvim_set_hl(0, "TelescopeSelection",           { fg = c.lime })
-         vim.api.nvim_set_hl(0, "TelescopeSelectionCaret",      { fg = c.lime })
-         vim.api.nvim_set_hl(0, "TelescopeMultiSelection",      { fg = c.lime })
-         vim.api.nvim_set_hl(0, "SnacksPickerMatch",            { fg = c.lime })
-         vim.api.nvim_set_hl(0, "SnacksPickerSelected",         { fg = c.lime })
-         vim.api.nvim_set_hl(0, "SnacksDashboardKey",           { fg = c.lime })
-         vim.api.nvim_set_hl(0, "LazyButtonActive",             { fg = c.lime })
-         vim.api.nvim_set_hl(0, "LazyH1",                       { fg = c.lime })
-         vim.api.nvim_set_hl(0, "MiniPickMatchCurrent",         { fg = c.lime })
-         vim.api.nvim_set_hl(0, "MiniPickMatchMark",            { fg = c.lime })
-         vim.api.nvim_set_hl(0, "FzfLuaCursor",                 { fg = c.lime })
-         vim.api.nvim_set_hl(0, "FzfLuaMatch",                  { fg = c.lime })
-         vim.api.nvim_set_hl(0, "WhichKeySelected",             { fg = c.lime })
-         vim.api.nvim_set_hl(0, "GitSignsAddLn",                { fg = c.lime })
-         vim.api.nvim_set_hl(0, "CursorLine",                   { fg = c.lime })
-         vim.api.nvim_set_hl(0, "SnacksPickerListCursorLine",   { fg = c.lime })
-         vim.api.nvim_set_hl(0, "SnacksPickerPreviewCursorLine",{ fg = c.lime })
+         local hl = vim.api.nvim_set_hl
+         local red = c.red     -- #ff2d55
+         local lime = c.lime   -- #C8FF00
+         local grey = "#2a2a35"
+         -- Text/highlight selection: red bg, black text (matches chadrc hl_override)
+         hl(0, "Visual",       { bg = red, fg = "#000000" })
+         hl(0, "CurSearch",    { bg = red, fg = "#000000" })
+         hl(0, "Substitute",   { bg = red, fg = "#000000" })
+         hl(0, "PmenuSel",     { bg = red, fg = "#000000" })
+         -- Picker item focus: lime fg, subtle grey bg (matches chadrc)
+         hl(0, "TelescopeSelection",         { bg = grey, fg = lime })
+         hl(0, "TelescopeSelectionCaret",    { bg = grey, fg = lime })
+         hl(0, "TelescopeMultiSelection",    { bg = grey, fg = lime })
+         hl(0, "SnacksPickerMatch",          { bg = grey, fg = lime })
+         hl(0, "SnacksPickerSelected",       { bg = grey, fg = lime })
+         hl(0, "SnacksPickerListCursorLine", { bg = grey, fg = lime })
+         hl(0, "SnacksPickerPreviewCursorLine", { bg = grey, fg = lime })
+         hl(0, "MiniPickMatchCurrent",       { bg = grey, fg = lime })
+         hl(0, "MiniPickMatchMark",          { bg = grey, fg = lime })
+         hl(0, "FzfLuaCursor",              { bg = grey, fg = lime })
+         hl(0, "FzfLuaMatch",               { bg = grey, fg = lime })
+         hl(0, "WhichKeySelected",          { bg = grey, fg = lime })
+         hl(0, "LazyButtonActive",          { bg = grey, fg = lime })
+         hl(0, "LazyH1",                    { bg = grey, fg = lime })
+         hl(0, "CmpItemMenuSelected",       { bg = grey, fg = lime })
+         hl(0, "CmpItemKindSelected",       { bg = grey, fg = lime })
+         hl(0, "CmpCursor",                 { bg = grey, fg = lime })
+         -- Non-selection accent
+         hl(0, "PmenuThumb",                { bg = lime })
+         hl(0, "SnacksDashboardKey",        { fg = lime })
+         hl(0, "GitSignsAddLn",             { fg = lime })
+         hl(0, "CursorLine",                { fg = lime })
       end, 100)
 
       vim.api.nvim_create_autocmd("User", {

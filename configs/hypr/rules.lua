@@ -113,4 +113,7 @@ hl.window_rule({
      border_color = "rgba(c8ff00ee)",
    }
  )
-
+hl.layer_rule({
+  match = { title = "fuzzel" },
+  no_anim = true,
+})   

@@ -25,9 +25,11 @@ require("lazy").setup({
   { import = "plugins" },
 }, lazy_config)
 
--- load theme
-dofile(vim.g.base46_cache .. "defaults")
-dofile(vim.g.base46_cache .. "statusline")
+-- Load/recompile base46 cache from current chadrc.lua (so hl_override/hl_add persist)
+for _, m in ipairs({ "chadrc", "nvconfig", "base46" }) do
+  package.loaded[m] = nil
+end
+require("base46").load_all_highlights()
 
 require "options"
 require "autocmds"
