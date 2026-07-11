@@ -56,6 +56,7 @@ hl.config({
   misc = {
     vrr                  = 1,
     disable_hyprland_logo = true,
+    animate_manual_resizes = false,  
   },
 })
 

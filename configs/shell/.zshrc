@@ -17,16 +17,12 @@ setopt SHARE_HISTORY
 setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
 setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
-setopt HIST_SAVE_NO_DUPS
-setopt HIST_EXPIRE_DUPS_FIRST
 
 # ── History ────────────────────────────────────────────
 HISTFILE="$HOME/.zsh_history"
 HISTSIZE=50000
 SAVEHIST=50000
-HISTDUP=erase
 
 # ── Completion ─────────────────────────────────────────
 autoload -Uz compinit && compinit

@@ -101,4 +101,19 @@ return {
       require("telescope").load_extension("media_files")
     end,
   },
+
+  -- NvimTree: Yazi-like icon colors and git on filenames
+  {
+    "nvim-tree/nvim-tree.lua",
+    opts = function()
+      local config = require "nvchad.configs.nvimtree"
+      config.renderer.highlight_git = "name"
+      config.renderer.icons = config.renderer.icons or {}
+      config.renderer.icons.web_devicons = {
+        file = { enable = true, color = true },
+        folder = { enable = true, color = true },
+      }
+      return config
+    end,
+  },
 }
