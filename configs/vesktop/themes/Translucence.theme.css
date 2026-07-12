@@ -637,3 +637,9 @@
 	color: #e8e8f0 !important;
 }
 
+/* ── Jump to Present — center button text ─── */
+[class*="jumpToPresentBar"] [class*="button_a22cb0"] {
+    display: flex !important;
+    justify-content: center !important;
+    padding: 0 16px !important;
+}

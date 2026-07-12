@@ -65,6 +65,7 @@ hyprshade
 imv
 intel-gpu-tools
 intel-media-driver
+intel-media-sdk
 intel-ucode
 keyd
 kitty
@@ -85,6 +86,7 @@ lib32-v4l-utils
 lib32-vulkan-intel
 libreoffice-fresh
 libva-intel-driver
+libva-utils
 linux-cachyos
 linux-cachyos-headers
 linux-firmware
@@ -107,6 +109,7 @@ noto-fonts-cjk
 noto-fonts-emoji
 ntfsprogs
 nwg-look
+obs-studio
 onefetch
 opencode
 os-prober
@@ -137,6 +140,7 @@ sddm
 slurp
 starship
 steam
+streamlink
 sudo
 swappy
 swaync
@@ -162,6 +166,7 @@ ventoy-bin
 vesktop-bin
 vivaldi
 vivaldi-ffmpeg-codecs
+vpl-gpu-rt
 vulkan-intel
 waybar
 wf-recorder

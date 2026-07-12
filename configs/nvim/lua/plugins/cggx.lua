@@ -22,7 +22,7 @@ return {
             pick = function(cmd, opts)
                opts = opts or {}
                if cmd == "files" then
-                  require("telescope.builtin").find_files(vim.tbl_deep_extend("force", { hidden = true }, opts))
+                  require("telescope.builtin").find_files(opts)
                elseif cmd == "live_grep" then
                   require("telescope.builtin").live_grep(opts)
                elseif cmd == "oldfiles" then

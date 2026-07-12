@@ -13,7 +13,7 @@ map("n", "<leader>cm", function()
   require("telescope.builtin").git_commits({ cwd = vim.fn.expand("%:p:h") })
 end, { desc = "telescope git commits (from file dir)" })
 
--- Include hidden files in Telescope find files
-map("n", "<leader>ff", function()
-  require("telescope.builtin").find_files({ hidden = true })
-end, { desc = "telescope find files" })
+map("n", "<leader>fW", function()
+  require("telescope.builtin").live_grep({ hidden = true })
+end, { desc = "live grep (incl. hidden)" })
+

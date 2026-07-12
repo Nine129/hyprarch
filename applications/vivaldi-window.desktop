@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Name=Vivaldi (New Window)
+Exec=/usr/local/bin/vivaldi-new-window %U
+MimeType=x-scheme-handler/http;x-scheme-handler/https;
+NoDisplay=true

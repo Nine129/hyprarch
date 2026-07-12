@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Yazi
+Comment=Terminal file manager
+Exec=kitty --hold env YAZI_NO_SESSION=1 yazi %f
+Icon=utilities-terminal
+Terminal=false
+Type=Application
+MimeType=inode/directory;
+Categories=System;FileManager;
+EOF

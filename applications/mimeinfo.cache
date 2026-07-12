@@ -1,0 +1,5 @@
+[MIME Cache]
+x-scheme-handler/http=vivaldi-window.desktop;
+x-scheme-handler/https=vivaldi-window.desktop;
+x-scheme-handler/steam=steam.desktop;
+x-scheme-handler/steamlink=steam.desktop;

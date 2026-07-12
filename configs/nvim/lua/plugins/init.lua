@@ -1,4 +1,9 @@
 return {
+  -- Snappier which-key popup on leader press
+  {
+    "folke/which-key.nvim",
+    opts = { delay = 200 },
+  },
   -- Quick navigation — jump to any visible character in 2 keystrokes
   {
     "folke/flash.nvim",
@@ -90,16 +95,15 @@ return {
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
       require("telescope").setup({
-        extensions = {
-          media_files = {
-            filetypes = { "png", "webp", "jpg", "jpeg", "gif", "pdf", "mp4", "webm" },
-            find_cmd = "rg",
-            previewer = "kitty",
-          },
-        },
+         extensions = {
+            media_files = {
+               filetypes = { "png", "webp", "jpg", "jpeg", "gif", "pdf", "mp4", "webm" },
+               find_cmd = "rg",
+               previewer = "kitty",
+            },
+         },
       })
       require("telescope").load_extension("media_files")
-      require("telescope.builtin").find_files({ hidden = true })
     end,
   },
 
