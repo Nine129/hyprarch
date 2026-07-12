@@ -286,6 +286,8 @@ zsh-defer -c '
 export NVM_DIR="$HOME/.config/nvm"
 zsh-defer '. "$NVM_DIR/nvm.sh"'
 zsh-defer '. "$NVM_DIR/bash_completion"'
+[[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
+
 source <(fzf --zsh)
 
  qr() {
@@ -386,3 +388,4 @@ extract() {
     done
     return $status
 }
+fastfetch
