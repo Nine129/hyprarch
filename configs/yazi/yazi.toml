@@ -91,3 +91,5 @@ group = "git"
 url   = "*/"
 run   = "git"
 group = "git"
+[input]
+cd_title = " Jump: "
