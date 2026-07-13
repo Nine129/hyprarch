@@ -89,7 +89,7 @@ hl.animation({ leaf = "layersOut", enabled = true, speed = 2.4, bezier = "menu_a
 -- Workspaces ──────────────────────────
 --  Direction: slide (left/right)
 --  Curve:     myBezier — snappy ease-out, no overshoot
-hl.animation({ leaf = "workspaces", enabled = true, speed = 6, bezier = "myBezier", style = "slide" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 4, bezier = "emphasizedDecel", style = "slide" })
 
 -- Special workspace ────────────────────
 --  Direction: slidevert (up/down)

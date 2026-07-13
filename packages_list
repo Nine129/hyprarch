@@ -67,6 +67,7 @@ intel-gpu-tools
 intel-media-driver
 intel-media-sdk
 intel-ucode
+inxi
 keyd
 kitty
 kvantum
@@ -147,7 +148,6 @@ swaync
 swayosd-git
 sysbench
 tealdeer
-thunar
 timeshift
 timeshift-autosnap
 toofan-bin
@@ -180,6 +180,7 @@ wlogout-git
 wtype
 xdg-desktop-portal-gtk
 xdg-desktop-portal-hyprland
+xdg-desktop-portal-termfilechooser-boydaihungst-git
 xdg-utils
 yay-bin
 yay-bin-debug

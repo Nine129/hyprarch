@@ -12,14 +12,10 @@ hl.window_rule({ match = { class = "xdg-desktop-portal" },   float = true })
 
 -- Browser PiP
 hl.window_rule({
-  match  = { class = "firefox", title = "Picture-in-Picture" },
+  match  = { class = "vivaldi-stable", title = "Picture-in-Picture" },
   float  = true,
   size   = { 400, 300 },
 })
-
--- Fixed workspace assignments ─────
-hl.window_rule({ match = { class = "vivaldi" },       workspace = 1 })
-hl.window_rule({ match = { class = "Vivaldi-stable" }, workspace = 1 })
 
 
 -- Ensure borders show on single-window workspaces
@@ -27,14 +23,13 @@ hl.window_rule({ match = { float = false, workspace = "w[tv1]" }, border_size = 
 
 -- Enable blur on wlogout layer surface for acrylic glass effect
 hl.layer_rule({
-  match = { namespace = "logout_dialog" },
+  match = { title = "logout_dialog" },
   blur  = true,
 })
 -- Obsidian higher opacity
 hl.window_rule({ 
     match = { class = "obsidian" }, 
     opacity = "0.9 override 0.8 override",
-    
 })
  -- Zen opaque
  hl.window_rule(
@@ -107,13 +102,16 @@ hl.window_rule({
      border_color = "rgba(c8ff00ee)",
    }
  )
- hl.window_rule(
-   {
-     match = { title = "π"},
-     border_color = "rgba(c8ff00ee)",
-   }
- )
 hl.layer_rule({
   match = { title = "fuzzel" },
   no_anim = true,
 })   
+ hl.window_rule(
+   {
+    match={ class = "filepicker"},
+    float= true,
+    center=true,
+    size={800,650},
+    opaque = true,
+   }
+ )

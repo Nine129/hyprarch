@@ -79,12 +79,7 @@ alias hd='hyprctl dispatch'
 alias hb='hyprctl hyprpaper'
 
 # Waybar
-alias wbr='killall waybar && waybar &> /dev/null &'
-
-# Rofi
-alias rfl='rofi -show drun'
-alias rfw='rofi -show window'
-alias rfr='rofi -show run'
+alias wbr='killall waybar && waybar &> /dev/null &disown'
 
 # Kitty
 alias k='kitty'
@@ -389,3 +384,4 @@ extract() {
     return $status
 }
 fastfetch
+alias inxia='inxi -xxxez -dfiJlmoput'
