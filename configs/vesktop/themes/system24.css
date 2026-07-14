@@ -1,0 +1,539 @@
+/**
+ * @name system24 (catppuccin macchiato)
+ * @description a tui-style discord theme. based on catppuccin macchiato theme (https://catppuccin.com).
+ * @author refact0r
+ * @version 2.0.0
+ * @invite nz87hXyvcy
+ * @website https://github.com/refact0r/system24
+ * @source https://github.com/refact0r/system24/blob/master/theme/system24-catppuccin-macchiato.theme.css
+ * @authorId 508863359777505290
+ * @authorLink https://www.refact0r.dev
+*/
+
+/* import theme modules */
+@import url('https://refact0r.github.io/system24/build/system24.css');
+
+body {
+    /* font, change to '' for default discord font */
+    --font: 'Plus Jarkata San'; /* change to '' for default discord font */
+    --code-font: 'MonaspiceNe Nerd Font'; /* change to '' for default discord font */
+    font-weight: 500; /* text font weight. 300 is light, 400 is normal. DOES NOT AFFECT BOLD TEXT */
+    letter-spacing: -0.05ch; /* decreases letter spacing for better readability. recommended on monospace fonts.*/
+    /* sizes */
+    --gap: 6px; /* spacing between panels */
+    --divider-thickness: 4px; /* thickness of unread messages divider and highlighted message borders */
+    --border-thickness: 2px; /* thickness of borders around main panels. DOES NOT AFFECT OTHER BORDERS */
+    --border-hover-transition: 0.2s ease; /* transition for borders when hovered */
+
+    /* animation/transition options */
+    --animations: on; /* off: disable animations/transitions, on: enable animations/transitions */
+    --list-item-transition: 0.2s ease; /* transition for list items */
+    --dms-icon-svg-transition: 0.4s ease; /* transition for the dms icon */
+
+    /* top bar options */
+    --top-bar-height: var(--gap); /* height of the top bar (discord default is 36px, old discord style is 24px, var(--gap) recommended if button position is set to titlebar) */
+    --top-bar-button-position: titlebar; /* off: default position, hide: hide buttons completely, serverlist: move inbox button to server list, titlebar: move inbox button to channel titlebar (will hide title) */
+    --top-bar-title-position: off; /* off: default centered position, hide: hide title completely, left: left align title (like old discord) */
+    --subtle-top-bar-title: off; /* off: default, on: hide the icon and use subtle text color (like old discord) */
+
+    /* window controls */
+    --custom-window-controls: off; /* off: default window controls, on: custom window controls */
+    --window-control-size: 14px; /* size of custom window controls */
+
+    /* dms button options */
+    --custom-dms-icon: hide; /* off: use default discord icon, hide: remove icon entirely, custom: use custom icon */
+    --dms-icon-svg-url: url(''); /* icon svg url. MUST BE A SVG. */
+    --dms-icon-svg-size: 90%; /* size of the svg (css mask-size property) */
+    --dms-icon-color-before: var(--icon-subtle); /* normal icon color */
+    --dms-icon-color-after: var(--white); /* icon color when button is hovered/selected */
+    --custom-dms-background: image; /* off to disable, image to use a background image (must set url variable below), color to use a custom color/gradient */
+    --dms-background-image-url: url('https://raw.githubusercontent.com/catppuccin/catppuccin/refs/heads/main/assets/logos/exports/macchiato_square.png'); /* url of the background image */
+    --dms-background-image-size: cover; /* size of the background image (css background-size property) */
+    --dms-background-color: linear-gradient(70deg, var(--blue-2), var(--purple-2), var(--red-2)); /* fixed color/gradient (css background property) */
+
+    /* background image options */
+    --background-image: off; /* off: no background image, on: enable background image (must set url variable below) */
+    --background-image-url: url(''); /* url of the background image */
+
+    /* transparency/blur options */
+    /* NOTE: TO USE TRANSPARENCY/BLUR, YOU MUST HAVE TRANSPARENT BG COLORS. FOR EXAMPLE: --bg-4: hsla(220, 15%, 10%, 0.7); */
+    --transparency-tweaks: on; /* off: no changes, on: remove some elements for better transparency */
+    --remove-bg-layer: off; /* off: no changes, on: remove the base --bg-3 layer for use with window transparency (WILL OVERRIDE BACKGROUND IMAGE) */
+    --panel-blur: off; /* off: no changes, on: blur the background of panels */
+    --blur-amount: 12px; /* amount of blur */
+    --bg-floating: var(--bg-3); /* set this to a more opaque color if floating panels look too transparent. only applies if panel blur is on  */
+    --background-base-lower: var(--bg-4); /* panel background (midnight.css uses this) */
+
+    /* other options */
+    --small-user-panel: on; /* off: default user panel, on: smaller user panel like in old discord */
+
+    /* unrounding options */
+    --unrounding: off; /* off: default, on: remove rounded corners from panels */
+
+    /* slight rounding */
+    --radius-xs: 4px;
+    --radius-sm: 4px;
+    --radius-md: 4px;
+    --radius-lg: 4px;
+    --radius-xl: 4px;
+    --radius-xxl: 4px;
+    --radius-round: 9999px; /* keep circles/pills fully round */
+
+    /* styling options */
+    --custom-spotify-bar: on; /* off: default, on: custom text-like spotify progress bar */
+    --ascii-titles: on; /* off: default, on: use ascii font for titles at the start of a channel */
+    --ascii-loader: system24; /* off: default, system24: use system24 ascii loader, cats: use cats loader */
+
+    /* panel labels */
+    --panel-labels: on; /* off: default, on: add labels to panels */
+    --label-color: var(--text-muted); /* color of labels */
+    --label-font-weight: 500; /* font weight of labels */
+}
+/* color options */
+:root {
+    --colors: on; /* off: discord default colors, on: midnight custom colors */
+
+    /* text colors — CGGX silver/muted palette */
+    --text-0: #0a0a0c; /* text on colored elements (opaque — was var(--bg-4)) */
+    --text-1: #e8e8f0; /* bright text on colored elements — CGGX silver */
+    --text-2: #e8e8f0; /* headings and important text — CGGX silver */
+    --text-3: #b0b0c0; /* normal text — CGGX secondary */
+    --text-4: #6a6a80; /* icon buttons and channels — CGGX muted */
+    --text-5: #606078; /* muted channels/chats and timestamps */
+
+    /* background and dark colors — CGGX bg0/bg1/border */
+    --bg-1: rgba(42, 42, 53, 0.90); /* dark buttons when clicked — CGGX border */
+    --bg-2: rgba(31, 31, 42, 0.82); /* dark buttons */
+    --bg-3: rgba(21, 21, 24, 0.70); /* spacing, secondary elements — CGGX bg1 */
+    --bg-4: rgba(10, 10, 12, 0.55); /* main background color — CGGX bg0 */
+    --hover: hsla(240, 9%, 46%, 0.1); /* channels and buttons when hovered */
+    --active: hsla(240, 9%, 46%, 0.2); /* channels and buttons when clicked or selected */
+    --active-2: hsla(240, 9%, 46%, 0.3); /* extra state for transparent buttons */
+    --message-hover: hsla(0, 0%, 0%, 0.1); /* messages when hovered */
+
+    /* accent colors — CGGX lime primary */
+    --accent-1: hsl(73, 100%, 73%); /* links and other accent text */
+    --accent-2: hsl(73, 100%, 63%); /* small accent elements */
+    --accent-3: #C8FF00; /* accent buttons */
+    --accent-4: hsl(73, 100%, 45%); /* accent buttons when hovered */
+    --accent-5: hsl(73, 100%, 40%); /* accent buttons when clicked */
+    --accent-new: var(--accent-2); /* stuff that's normally red like mute/deafen buttons */
+    --mention: linear-gradient(to right, color-mix(in hsl, var(--accent-2), transparent 90%) 40%, transparent); /* background of messages that mention you */
+    --mention-hover: linear-gradient(to right, color-mix(in hsl, var(--accent-2), transparent 95%) 40%, transparent); /* background of messages that mention you when hovered */
+    --reply: linear-gradient(to right, color-mix(in hsl, #00e5ff, transparent 90%) 40%, transparent); /* background of messages that reply to you — CGGX cyan */
+    --reply-hover: linear-gradient(to right, color-mix(in hsl, #00e5ff, transparent 95%) 40%, transparent); /* background of messages that reply to you when hovered */
+
+    /* status indicator colors — CGGX palette */
+    --online: #C8FF00; /* CGGX lime */
+    --dnd: #ff2d55; /* CGGX red */
+    --idle: #ff6b00; /* CGGX orange */
+    --streaming: #b48cff; /* CGGX purple */
+    --offline: var(--text-4); /* CGGX muted */
+
+    /* border colors */
+    --border-subtle: hsla(240, 9%, 46%, 0.2); /* midnight.css uses this for panel borders */
+    --border-light: hsla(261, 45%, 65%, 0.25); /* purple tint — subtle/faint borders */
+    --border: #2a2a35; /* gray — main structural panel borders (CGGX border) */
+    --border-hover: hsla(240, 9%, 46%, 0.3); /* panels glow subtle on hover (neutralized — per-panel colors below) */
+    --button-border: hsla(349, 85%, 55%, 0.2); /* red tint — subtle red button borders */
+
+    /* base colors — CGGX accent families */
+    --red-1: hsl(349, 82%, 78%);
+    --red-2: hsl(349, 82%, 73%);
+    --red-3: hsl(349, 82%, 73%);
+    --red-4: hsl(349, 82%, 68%);
+    --red-5: hsl(349, 82%, 63%);
+
+    --green-1: hsl(73, 100%, 78%);
+    --green-2: hsl(73, 100%, 73%);
+    --green-3: hsl(73, 100%, 73%);
+    --green-4: hsl(73, 100%, 68%);
+    --green-5: hsl(73, 100%, 63%);
+
+    --blue-1: hsl(186, 100%, 78%);
+    --blue-2: hsl(186, 100%, 73%);
+    --blue-3: hsl(186, 100%, 73%);
+    --blue-4: hsl(186, 100%, 68%);
+    --blue-5: hsl(186, 100%, 63%);
+
+    --yellow-1: hsl(25, 100%, 78%);
+    --yellow-2: hsl(25, 100%, 73%);
+    --yellow-3: hsl(25, 100%, 73%);
+    --yellow-4: hsl(25, 100%, 68%);
+    --yellow-5: hsl(25, 100%, 63%);
+
+    --purple-1: hsl(261, 45%, 78%);
+    --purple-2: hsl(261, 45%, 73%);
+    --purple-3: hsl(261, 45%, 73%);
+    --purple-4: hsl(261, 45%, 68%);
+    --purple-5: hsl(261, 45%, 63%);
+}
+
+/* ════════════════════════════════════════════════════════════
+   CGGX rice — multi-color element accents
+   mapped from nvcggx.lua color philosophy
+   ════════════════════════════════════════════════════════════
+   red     #ff2d55  keywords/statements, headings, alerts, errors
+   cyan    #00e5ff  functions, info, references, links
+   lime    #C8FF00  selection/active/cursor (like nvim TelescopeSelection,
+                    PmenuSel, CursorLine, WhichKeySelected)
+   orange  #ff6b00  values, numbers, warnings
+   purple  #b48cff  types, definitions, premium
+   silver  #e8e8f0  normal text
+   muted   #6a6a80  comments, secondary chrome
+   ════════════════════════════════════════════════════════════ */
+/* ── Panel borders — each pane gets its own CGGX color ── */
+/* Server list — lime (nav) */
+[class*="guilds"] {
+	width: 74px !important;
+	min-width: 74px !important;
+	border: var(--border-thickness) solid #C8FF00 !important;
+}
+
+
+/* hide guild unread pills (short ones only, not the active indicator) */
+[class*="item__58105"][style*="height: 8px"] {
+	display: none !important;
+}
+
+/* Channel list — cyan (channels) */
+[class*="sidebarList"] {
+	border: var(--border-thickness) solid #00e5ff !important;
+}
+/* User panel — red (user) */
+[class*="panels"] {
+	border: var(--border-thickness) solid #ff2d55 !important;
+}
+/* Chat titlebar — red (channel) */
+[class*="subtitleContainer"] {
+	border: var(--border-thickness) solid #ff2d55 !important;
+}
+/* Chat content — orange (chat) */
+[class*="chatContent"] {
+	border: var(--border-thickness) solid #ff6b00 !important;
+	border-radius: var(--radius-md) !important;
+}
+/* Member list — purple (people/type) */
+[class*="membersWrap"] {
+	border: var(--border-thickness) solid #b48cff !important;
+	border-radius: var(--radius-md) !important;
+}
+[class*="membersWrap"] div[class*="members"] {
+	border-radius: var(--radius-md) !important;
+}
+/* Message input — orange top border only, combines with chat border */
+[class*="channelTextArea"] {
+	border: none !important;
+	border-top: var(--border-thickness) solid #ff6b00 !important;
+}
+/* Input panel button icons — CGGX multi-color like nvim dashboard.
+   Discord uses <div role="button"> with generic classes; only sticker has a
+   distinctive class. Rely on aria-label (English Discord) + class fallback. */
+[class*="channelTextArea"] [role="button"][aria-label*="Upload"],
+[class*="channelTextArea"] [role="button"][aria-label*="Attach"] {
+	color: #ff2d55 !important; /* red */
+}
+[class*="channelTextArea"] [class*="emojiButton"],
+[class*="channelTextArea"] [role="button"][aria-label*="emoji" i],
+[class*="channelTextArea"] [role="button"][aria-label*="Emoji"] {
+	color: #ff6b00 !important; /* orange */
+}
+[class*="channelTextArea"] [class*="emojiButton"] svg,
+[class*="channelTextArea"] [class*="emojiButton"] path {
+	fill: #ff6b00 !important;
+}
+[class*="channelTextArea"] [role="button"][aria-label*="GIF"] {
+	color: #C8FF00 !important; /* lime */
+}
+[class*="channelTextArea"] [class*="stickerButton"],
+[class*="channelTextArea"] [role="button"][aria-label*="sticker" i] {
+	color: #00e5ff !important; /* cyan */
+}
+[class*="channelTextArea"] [role="button"][aria-label*="gift" i] {
+	color: #b48cff !important; /* purple */
+}
+[class*="channelTextArea"] [role="button"][aria-label*="Apps"] {
+	color: #ff2d55 !important; /* red */
+}
+/* ensure SVG icons inherit the color */
+[class*="channelTextArea"] [role="button"] svg,
+[class*="channelTextArea"] [role="button"] path {
+	fill: currentColor !important;
+}
+
+/* ── Panel labels — solid labels matching each border ── */
+[class*="guilds"]::after {
+	color: #C8FF00 !important;
+}
+[class*="sidebarList"]::after {
+	color: #00e5ff !important;
+}
+[class*="panels"]::after {
+	color: #ff2d55 !important;
+}
+[class*="subtitleContainer"]::after {
+	color: #ff2d55 !important;
+}
+[class*="messagesWrapper"]::after {
+	color: #ff6b00 !important;
+}
+[class*="membersWrap"]::after,
+[class*="c8ffbb"]::after {
+	color: #b48cff !important;
+}
+[class*="channelTextArea"]::after {
+	color: #ff6b00 !important;
+}
+
+/* ── Channel list ──────────────────────────────────── */
+/* Active channel — lime (like nvim CursorLine / TelescopeSelection) */
+[class*="modeSelected"] {
+	border-left: 2px solid #C8FF00 !important;
+}
+
+/* Server unread mention badge — red (alert/keyword) */
+[class*="mentionBadge"] {
+	background-color: #ff2d55 !important;
+}
+
+/* ── Messages ──────────────────────────────────────── */
+/* Embeds — cyan left accent (info/reference = cyan) */
+[class*="embedFull"] {
+	border-left: 4px solid #00e5ff !important;
+}
+
+/* Reactions you've used — lime (active content = lime) */
+[class*="reaction"][class*="reactionMe"] {
+	background: hsla(73, 90%, 55%, 0.15) !important;
+	border-color: hsla(73, 90%, 55%, 0.3) !important;
+}
+
+/* Code blocks — purple tint (structure/type = purple) */
+[class*="markup"] code,
+[class*="codeBlock"] {
+	background: hsla(261, 45%, 60%, 0.12) !important;
+}
+
+/* Typing indicator — cyan (info = cyan) */
+[class*="typing"] {
+	color: #00e5ff !important;
+}
+
+/* New messages divider — cyan (info = cyan) */
+[class*="divider"] [class*="content"] {
+	color: #00e5ff !important;
+}
+[class*="divider"] [class*="line"] {
+	border-color: #00e5ff !important;
+}
+
+/* ── Voice panel ──────────────────────────────────── */
+/* Speaking user — lime (active state = lime) */
+[class*="voiceUser"] [class*="speaking"] {
+	box-shadow: inset 0 0 0 2px hsla(73, 90%, 55%, 0.7) !important;
+}
+
+/* Muted user — orange (warning = orange) */
+[class*="voiceUser"] [class*="muted"] [class*="name"],
+[class*="voiceUser"] [class*="muted"] {
+	color: #ff6b00 !important;
+}
+
+/* Active voice user — lime (selection = lime, like nvim TelescopeSelection) */
+[class*="voiceUser"] [class*="selected"] {
+	background-color: hsla(73, 90%, 55%, 0.12) !important;
+}
+
+/* ── Search ────────────────────────────────────────── */
+/* Search bar focus — cyan (reference/info = cyan) */
+[class*="search"] [class*="searchBar"]:focus-within {
+	border-color: #00e5ff !important;
+}
+/* Search highlight — cyan (reference = cyan) */
+[class*="searchHit"] {
+	background: hsla(186, 90%, 55%, 0.12) !important;
+}
+
+/* ── Quick Switcher (Ctrl+K) — selection = lime ─────── */
+[class*="quickswitcher"] [class*="selected"] {
+	background: hsla(73, 90%, 55%, 0.12) !important;
+}
+[class*="quickswitcher"] [class*="row"] {
+	color: hsl(240, 11%, 72%) !important; /* like nvim normal text */
+}
+
+/* ── Autocomplete / Slash Commands — selection = lime ── */
+[class*="autocomplete"] [class*="selected"] {
+	background: hsla(73, 90%, 55%, 0.10) !important;
+}
+[class*="autocomplete"] [class*="row"] {
+	color: hsl(240, 11%, 72%) !important;
+}
+
+/* ── Channel Text Area ───────────────────────────── */
+/* Attach button — red (action/keyword = red) */
+[class*="attachButton"] {
+	color: #ff2d55 !important;
+}
+[class*="attachButton"]:hover {
+	color: hsl(349, 85%, 65%) !important;
+}
+
+/* ── Settings ──────────────────────────────────────── */
+/* Settings header — red (heading = red, like nvim @keyword) */
+[class*="settings"] [class*="header"] {
+	color: #ff2d55 !important;
+}
+[class*="settings"] [class*="description"] {
+	color: #6a6a80 !important; /* muted */
+}
+[class*="settings"] [class*="card"] {
+	border-color: hsla(240, 9%, 46%, 0.3) !important;
+}
+
+/* ── Premium / Nitro — purple (type/premium = purple) ── */
+[class*="premium"] [class*="card"],
+[class*="gift"] [class*="card"] {
+	border-color: #b48cff !important;
+}
+[class*="premium"] [class*="header"] {
+	color: #b48cff !important;
+}
+[class*="premium"] [class*="icon"] {
+	color: #b48cff !important;
+}
+
+/* ── Inbox / Recent Mentions — orange (warning/new = orange) ── */
+[class*="inbox"] [class*="row"]:hover {
+	border-color: #ff6b00 !important;
+}
+
+/* ── Server Discovery / Explore — cyan (info = cyan) ──── */
+[class*="discovery"] [class*="card"]:hover {
+	border-color: #00e5ff !important;
+}
+
+/* ── Upload Modal ────────────────────────────────── */
+[class*="uploadModal"] [class*="inner"]:hover {
+	border-color: hsla(73, 90%, 55%, 0.5) !important; /* lime, active state */
+}
+
+/* ── Scrollbar — red (primary accent) ────────────────── */
+:root {
+	--scrollbar-auto-thumb: #ff2d55 !important;
+	--scrollbar-auto-track: #151518 !important;
+	--scrollbar-thin-thumb: #ff2d55 !important;
+}
+
+/* ── Hide unread dots ─────────────────────────────── */
+[class*="unreadImportant"],
+[class*="unread"][class*="2ea32"] {
+	display: none !important;
+}
+
+/* ── Chat font size ──────────────────────────────── */
+[class*="markup"] {
+	font-size: 18px !important;
+}
+
+/* ── Channels panel font size ─────────────────────── */
+[class*="sidebarList"] {
+	font-size: 18px !important;
+}
+[class*="sidebarList"] [class*="channelName"],
+[class*="sidebarList"] [class*="title"],
+[class*="sidebarList"] [class*="name"] {
+	font-size: 18px !important;
+}
+
+/* ── Members panel font size ──────────────────────── */
+[class*="membersWrap"] {
+	font-size: 18px !important;
+}
+[class*="membersWrap"] [class*="name"],
+[class*="membersWrap"] [class*="title"] {
+	font-size: 18px !important;
+}
+
+/* ── User panel elements ───────────────────────────── */
+[aria-label="Deafen"],
+[aria-label="Deafen"] svg,
+[aria-label="Deafen"] path,
+[aria-label="Output Options"],
+[aria-label="Output Options"] svg,
+[aria-label="Output Options"] path {
+	color: #ff6b00 !important;
+	fill: #ff6b00 !important; /* orange */
+}
+[aria-label="User Settings"],
+[aria-label="User Settings"] svg,
+[aria-label="User Settings"] path {
+	color: #00e5ff !important;
+	fill: #00e5ff !important; /* cyan */
+}
+
+/* ── User panel font size ─────────────────────────── */
+[class*="panels"],
+[class*="panels"] * {
+	font-size: 16px !important;
+}
+/* ── Chat titlebar toolbar icons ──────────────────── */
+[role="button"][aria-label="Threads"],
+[role="button"][aria-label="Threads"] svg,
+[role="button"][aria-label="Threads"] path {
+	color: #00e5ff !important;
+	fill: #00e5ff !important; /* cyan */
+}
+[role="button"][aria-label="Notification Settings"],
+[role="button"][aria-label="Notification Settings"] svg,
+[role="button"][aria-label="Notification Settings"] path {
+	color: #ff6b00 !important;
+	fill: #ff6b00 !important; /* orange */
+}
+[role="button"][aria-label="Pinned Messages"],
+[role="button"][aria-label="Pinned Messages"] svg,
+[role="button"][aria-label="Pinned Messages"] path {
+	color: #ff2d55 !important;
+	fill: #ff2d55 !important; /* red */
+}
+[role="button"][aria-label="Hide Member List"],
+[role="button"][aria-label="Hide Member List"] svg,
+[role="button"][aria-label="Hide Member List"] path,
+[role="button"][aria-label="Show Member List"],
+[role="button"][aria-label="Show Member List"] svg,
+[role="button"][aria-label="Show Member List"] path {
+	color: #b48cff !important;
+	fill: #b48cff !important; /* purple */
+}
+
+/* ── Hide window controls and inbox button ────────── */
+/* push remaining toolbar icons to the right (brute force) */
+section[class*="title_f75fb0"] [class*="upperContainer__9293f"] {
+	justify-content: flex-start !important;
+}
+section[class*="title_f75fb0"] [class*="upperContainer__9293f"] > [class*="toolbar__9293f"] {
+	margin-left: auto !important;
+	flex: 1 1 auto !important;
+	display: flex !important;
+	justify-content: flex-end !important;
+	align-items: center !important;
+	gap: 8px !important;
+	padding-right: 0 !important;
+}
+
+/* collapse window buttons container so siblings reflow right */
+[class*="winButtons"] {
+	width: 0 !important;
+	min-width: 0 !important;
+	padding: 0 !important;
+	overflow: hidden !important;
+	flex: 0 0 0px !important;
+	opacity: 0 !important;
+	pointer-events: none !important;
+}
+[aria-label="Close"],
+[aria-label="Maximise"],
+[aria-label="Minimise"],
+[aria-label="Inbox"] {
+	display: none !important;
+}

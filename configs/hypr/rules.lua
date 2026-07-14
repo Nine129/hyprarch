@@ -31,19 +31,14 @@ hl.window_rule({
     match = { class = "obsidian" }, 
     opacity = "0.9 override 0.8 override",
 })
- -- Zen opaque
- hl.window_rule(
-   {
-     match = { class = "zen" },
-     opaque = true,
-   }
- )
+
  -- blah blah
  hl.window_rule(
    {
      match = { class = "vesktop"},
      border_color = "rgba(c8ff00ee)",
-     opaque = true
+     opaque = true,
+     no_shadow= true  
    }
  )
  hl.window_rule(
@@ -58,11 +53,7 @@ hl.window_rule({
      opaque = true
    }
  )
- hl.layer_rule({
-   match = { class = "vivaldi-stable"},
-   blur = true,
- 
- })
+
 
  hl.window_rule(
    {
@@ -94,6 +85,7 @@ hl.window_rule({
    {
      match = { class = "mpv"},
      opaque = true,
+     size = {1280,720}
    }
  )
  hl.window_rule(

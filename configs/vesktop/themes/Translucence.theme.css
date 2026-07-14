@@ -17,6 +17,7 @@
 
 @import url(https://capnkitten.github.io/BetterDiscord/Themes/Translucence/css/source.css);
 
+
 :root {
 	/* APP ELEMENTS — transparent so the desktop wallpaper shows through */
 	--app-bg: transparent;
@@ -150,7 +151,10 @@
 		--status-warning: #ff6b00;
 		--status-positive: #c8ff00;
 		--status-premium: #b48cff;
-    }
+
+
+  
+  }
 }
 /* ── CGGX element color accents ───────────────────── */
 
@@ -195,7 +199,7 @@
 /* ── CGGX Global Font ──────────────────────────────── */
 * {
 	font-family: "Plus Jakarta Sans" !important;
-	border-radius: 6px !important;
+	border-radius: 0px !important;
 }
 
 /* Member panel — keep sharp */
@@ -643,3 +647,4 @@
     justify-content: center !important;
     padding: 0 16px !important;
 }
+
