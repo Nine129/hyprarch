@@ -6,7 +6,7 @@
 
 # NOTE: format MUST come before palette/module sections
 # or starship silently falls back to defaults.
-format = "$os[](fg:red bg:border)$directory[](fg:border bg:orange)$git_branch $git_status [](fg:orange bg:muted)$cmd_duration\n$character"
+format = "$os[](fg:red bg:border)$directory[](fg:border bg:orange)$git_branch $git_status [](fg:orange bg:muted)$cmd_duration $fill$hostname $time  \n$character"
 
 # ── Palette ────────────────────────────────────────────
 palette = "cggx"
@@ -101,3 +101,16 @@ format   = '[   $version  ]($style)'
 disabled = true
 style    = "bg:cyan fg:bg0"
 format   = '[   $version  ]($style)'
+
+# ── Hostname (right side) ──────────────────────────────
+[hostname]
+ssh_only = false
+style    = "bg:lime fg:bg0 bold"
+format   = '[  󰒋 $hostname  ]($style)'
+
+# ── Time (right side) ──────────────────────────────────
+[time]
+disabled   = false
+time_format = "%T"
+style      = "bg:cyan fg:bg0 bold"
+format     = '[  󰥔 $time  ]($style)'

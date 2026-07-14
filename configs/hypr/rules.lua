@@ -125,3 +125,7 @@ hl.layer_rule({
   }
  )
 
+hl.layer_rule({
+  match = { title = "waybar" },
+  blur  = false,
+})
