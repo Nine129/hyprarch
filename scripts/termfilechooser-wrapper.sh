@@ -44,9 +44,31 @@ cleanup() {
 trap cleanup EXIT HUP INT QUIT ABRT TERM
 
 if [ "$save" = "1" ]; then
+  # ── Save As workflow ──────────────────────
   tmpfile=$(/usr/bin/mktemp)
 
-  # Save/download file
+  # If the app provided a suggested filename, create placeholder with that name
+  # in ~/Downloads. Otherwise fall back to .untitled (hidden → organizer ignores).
+  if [ -n "$path" ] && [ ! -d "$path" ]; then
+    suggested_name=$(/usr/bin/basename "$path")
+    base="${XDG_DOWNLOAD_DIR:-$HOME/Downloads}/${suggested_name}"
+    path="$base"
+    i=1
+    while [ -e "$path" ]; do
+      path="${base}${i}"
+      i=$((i + 1))
+    done
+  else
+    base="${XDG_DOWNLOAD_DIR:-$HOME/Downloads}/.untitled"
+    path="$base"
+    i=1
+    while [ -e "$path" ]; do
+      path="${base}${i}"
+      i=$((i + 1))
+    done
+  fi
+
+  # Create the placeholder file
   /usr/bin/printf '%s' 'xdg-desktop-portal-termfilechooser saving files tutorial
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -56,38 +78,39 @@ if [ "$save" = "1" ]; then
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 Instructions:
-1) Move this file wherever you want.
-2) Rename the file if needed.
-3) Confirm your selection by opening the file, for
-   example by pressing <Enter>.
+1) Press Enter to save with the suggested name, or rename first (r key).
+2) Navigate to a different directory if needed (tab key).
+3) Press Enter on the file to confirm.
 
 Notes:
 1) This file is provided for your convenience. You can
-	 only choose this placeholder file otherwise the save operation aborted.
+   only choose this placeholder file otherwise the save operation aborted.
 2) If you quit yazi without opening a file, this file
    will be removed and the save operation aborted.
 ' >"$path"
-  kitty --class filepicker -e yazi --chooser-file="$tmpfile" "$path"
+
+  YAZI_NO_SESSION=1 kitty --class filepicker -e yazi --chooser-file="$tmpfile" "${XDG_DOWNLOAD_DIR:-$HOME/Downloads}"
+
 elif [ "$directory" = "1" ]; then
-  # upload files from a directory
-  # Use this if you want to select folder by 'quit' function in yazi.
-  kitty --class filepicker -e yazi --cwd-file="$out" "$path"
-  # NOTE: Use this if you want to select folder by enter a.k.a yazi keybind for 'open' funtion ('run = "open") .
-  # kitty --class filepicker -e yazi --chooser-file="$out" "$path"
+  # ── Directory picker ──────────────────────
+  YAZI_NO_SESSION=1 kitty --class filepicker -e yazi --cwd-file="$out" "$path"
+
 elif [ "$multiple" = "1" ]; then
-  # upload multiple files
-  kitty --class filepicker -e yazi --chooser-file="$out" "$path"
+  # ── Multi-file open ───────────────────────
+  YAZI_NO_SESSION=1 kitty --class filepicker -e yazi --chooser-file="$out" "$path"
+
 else
-  # upload only 1 file
-  kitty --class filepicker -e yazi --chooser-file="$out" "$path"
+  # ── Single-file open ──────────────────────
+  YAZI_NO_SESSION=1 kitty --class filepicker -e yazi --chooser-file="$out" "$path"
 fi
 
-# case save file
+# Write the selected path back to the portal
 if [ "$save" = "1" ] && [ -s "$tmpfile" ]; then
   selected_file=$(/usr/bin/head -n 1 "$tmpfile")
-  # Check if selected file is placeholder file
-  if [ -f "$selected_file" ] && /usr/bin/grep -qi "^xdg-desktop-portal-termfilechooser saving files tutorial" "$selected_file"; then
+  if [ -n "$selected_file" ]; then
     /usr/bin/echo "$selected_file" >"$out"
-    path="$selected_file"
   fi
 fi
+
+
+

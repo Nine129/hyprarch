@@ -385,3 +385,5 @@ extract() {
 }
 fastfetch
 alias inxia='inxi -xxxez -dfiJlmoput'
+
+. "$HOME/.local/share/../bin/env"

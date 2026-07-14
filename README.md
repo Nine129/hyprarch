@@ -3,17 +3,12 @@
 > A documented, drop-in-ready Hyprland desktop rice in the CGGX style
 > (red `#ff2d55` · cyan `#00e5ff` · lime `#c8ff00` · orange `#ff6b00` on dark `#0a0a0c`).
 
-```
-╭─ user@arch ~/hyprarch
-╰─ $ ls
-```
-
 ## Quick Start
 
-**New to this rice? Start with [`SETUP-GUIDE.md`](./SETUP-GUIDE.md)** — it walks you
+**New to this rice?** Start with [`docs/SETUP-GUIDE.md`](./docs/SETUP-GUIDE.md) — it walks you
 from a fresh Arch install to a fully functional CGGX desktop with every tool configured.
 
-If you already have Arch and Hyprland installed, here's the tl;dr copy-paste:
+If you already have Arch and Hyprland installed, here's the tl;dr:
 
 ```bash
 # 1. Copy all configs
@@ -30,7 +25,7 @@ cp wallpapers/cggx.webp ~/.local/share/wallpapers/
 ln -sf ~/.config/shell/.zshenv ~/.zshenv
 ln -sf ~/.config/shell/.zshrc ~/.zshrc
 
-# 5. Install packages (see SETUP-GUIDE.md §3-5 for full list)
+# 5. Install packages (see SETUP-GUIDE.md for full list)
 
 # 6. Launch (after login)
 uwsm start hyprland
@@ -41,17 +36,20 @@ uwsm start hyprland
 ```
 hyprarch/
 ├── README.md                         ← You are here
-├── hyprland-rice-showcase.html       ← Visual showcase (open in browser)
+├── CONTEXT.md                        ← Domain glossary (colors, design terms)
+├── packages_list                     ← Full package manifest
 │
-├── SETUP-GUIDE.md                    ← Step-by-step from fresh Arch install to full desktop
-├── HYPRLAND-SETUP.md                 ← Hyprland architecture, decisions, Lua config
-├── WAYBAR-SETUP.md                   ← Waybar research, modules, styling
-├── ROFI-SETUP.md                     ← Rofi theming, widget hierarchy
-├── FUZZEL-SETUP.md                   ← Fuzzel launcher, dmenu scripts, replacement for Rofi drun
-├── ECOSYSTEM-SETUP.md                ← Hyprpaper, SwayNC, Kitty, Fastfetch, Screenshots, SwayOSD, Zsh, Clipboard, Zathura
-├── MPD-MUSIC-SETUP.md                ← MPD daemon, rmpc TUI, cava visualizer, mpd-mpris bridge
-├── CLI-TOOLS.md                      ← fzf, atuin, ghgrab, zoxide, eza, tealdeer
-├── TROUBLESHOOTING.md                ← Common issues & fixes
+├── docs/                             ← Full documentation
+│   ├── SETUP-GUIDE.md                ← Step-by-step from fresh Arch install to full desktop
+│   ├── HYPRLAND-SETUP.md             ← Hyprland architecture, decisions, Lua config
+│   ├── WAYBAR-SETUP.md               ← Waybar research, modules, styling
+│   ├── ROFI-SETUP.md                 ← Rofi theming, widget hierarchy
+│   ├── FUZZEL-SETUP.md               ← Fuzzel launcher, dmenu scripts
+│   ├── ECOSYSTEM-SETUP.md            ← All ecosystem tools (20+ applications)
+│   ├── MPD-MUSIC-SETUP.md            ← MPD daemon, rmpc TUI, cava visualizer
+│   ├── CLI-TOOLS.md                  ← fzf, atuin, ghgrab, zoxide, eza, tealdeer, bat
+│   ├── TROUBLESHOOTING.md            ← Common issues & fixes
+│   └── starship-research.md          ← Starship presets research (reference)
 │
 ├── configs/
 │   ├── hypr/          hyprland.lua, settings.lua, binds.lua, rules.lua,
@@ -64,70 +62,113 @@ hyprarch/
 │   ├── swaync/        style.css, config.json
 │   ├── wlogout/       layout, style.css, icons/
 │   ├── kitty/         kitty.conf, rainbow-trail.conf
-│   ├── fastfetch/     config.jsonc, logo.txt, logo PNGs
-│   ├── neovim/        init.lua, lua/
+│   ├── fastfetch/     config.jsonc, logo.txt, logo PNGs (xnewlogo.png)
+│   ├── neovim/        init.lua, lua/ (NvChad-based, CGGX theme)
 │   ├── btop/          btop.conf, themes/cggx.theme
-│   ├── yazi/          yazi.toml, theme.toml, keymap.toml, init.lua, plugins/
+│   ├── yazi/          yazi.toml, theme.toml, keymap.toml, init.lua, plugins/ (7 plugins)
 │   ├── mpd/           mpd.conf
-│   ├── rmpc/          config.ron, notify.sh, themes/
+│   ├── rmpc/          config.ron, notify.sh, themes/ (cggx.ron)
 │   ├── atuin/         config.toml, themes/cggx.toml
-│   ├── fzf/           fzf.zsh, preview.sh, open_file.sh, show_image.sh
+│   ├── fzf/           fzf.zsh, fzf-opts.sh, preview.sh, open_file.sh, show_image.sh
 │   ├── ghgrab/        theme.toml
-│   ├── vesktop/       themes/Translucence.theme.css
+│   ├── bat/           config, themes/NvCGGX.tmTheme
+│   ├── easyeffects/   db/ (compressor, equalizer, limiter, loudness, graph)
+│   ├── pipewire/      pipewire.conf.d/ (99-quality.conf, 99-resample.conf)
+│   ├── fcitx5/        config, profile, conf/ (Unikey Vietnamese IME)
+│   ├── vesktop/       themes/Translucence.theme.css, settings/quickCss.css, settings/settings.json
 │   ├── otter-launcher/  config.toml, images/
 │   ├── cliphist/      config
 │   ├── swappy/        config
 │   ├── zathura/       zathurarc
 │   ├── shell/         .zshenv, .zshrc, .zprofile
-│   ├── gtk-3.0/       settings.ini
+│   ├── autostart/     com.github.wwmm.easyeffects.desktop (EasyEffects tray service)
+│   ├── gtk-3.0/       settings.ini, bookmarks
 │   ├── gtk/gtk-4.0/   gtk.css
 │   ├── fontconfig/    fonts.conf
 │   ├── starship.toml
-│   ├── systemd/user/  cliphist, hypridle, hyprpaper, swaync, download-organizer, mpd-mpris
-│   └── xdg/           mimeapps.list
+│   ├── systemd/user/  cliphist, hypridle, hyprpaper, swaync, waybar, mpd, mpd-mpris, download-organizer
+│   ├── xdg/           mimeapps.list
+│   └── xdg-desktop-portal/ hyprland-portals.conf (termfilechooser preferred)
+│
+├── applications/
+│   ├── yazi.desktop              ← Terminal file manager desktop entry
+│   ├── steam.desktop             ← Steam with CGGX env vars
+│   ├── vivaldi-window.desktop    ← Vivaldi windowed mode entry
+│   └── mimeinfo.cache            ← MIME type associations
+│
+├── scripts/
+│   ├── osd-notify.sh             ← Volume/brightness OSD notification script
+│   ├── termfilechooser-wrapper.sh ← Terminal file chooser wrapper
+│   └── sync-packages-list        ← Sync package manifest
+│
+├── vivaldi/                      ← Vivaldi customization
+│   ├── custom-css/cggx.css       ← CGGX-themed Vivaldi styles
+│   ├── theme/ (cggx-dark.zip)    ← Vivaldi theme files
+│   ├── README.md, DESIGN.md, RESEARCH.md
+│   └── baseline                  ← Vivaldi baseline binary
+│
+├── downloads-sorter/             ← ~/Downloads auto-categorizer
+│   ├── install.sh, config.yaml, download-organizer.service
+│   └── README.md
 │
 ├── wallpapers/
-│   └── cggx.webp                     ← CGGX gradient wallpaper
+│   └── cggx.webp                 ← CGGX gradient wallpaper
+│   └── gengar.jpg                ← Alternate wallpaper
 │
-└── waybar-import/                    ← Community Waybar presets (reference)
+└── hooks/                        ← Pacman hooks
+    └── packages-list-sync.hook
 ```
 
 ## Documentation Map
 
 | Document | Covers |
 |----------|--------|
-| [`SETUP-GUIDE.md`](./SETUP-GUIDE.md) | Full install walkthrough — post-install prep, all packages, configs, services, Zsh, first-boot verification |
-| [`HYPRLAND-SETUP.md`](./HYPRLAND-SETUP.md) | Arch install, Lua API, monitors, input, workspaces, Dwindle, decoration, blur, shadows, animations, window rules, keybinds, deployment, lock/idle |
-| [`WAYBAR-SETUP.md`](./WAYBAR-SETUP.md) | Waybar research, 15+ community presets, decisions, 4-file config skeletons, deployment checklist |
-| [`ROFI-SETUP.md`](./ROFI-SETUP.md) | Rofi documentation research, theme decisions, widget hierarchy, color formats, drun/run/window modes, installation |
-| [`FUZZEL-SETUP.md`](./FUZZEL-SETUP.md) | Fuzzel Wayland-native launcher, dmenu scripts, keybinds, migration from Rofi |
-| [`ECOSYSTEM-SETUP.md`](./ECOSYSTEM-SETUP.md) | Hyprpaper, SwayNC, Kitty, Fastfetch, Screenshots, SwayOSD, Zsh, Clipboard, Zathura, Downloads Sorter, Fontconfig |
-| [`MPD-MUSIC-SETUP.md`](./MPD-MUSIC-SETUP.md) | MPD daemon, rmpc TUI, cava visualizer, mpd-mpris bridge, Waybar integration |
-| [`CLI-TOOLS.md`](./CLI-TOOLS.md) | fzf, atuin, ghgrab, zoxide, eza, tealdeer — terminal productivity layer |
-| [`TROUBLESHOOTING.md`](./TROUBLESHOOTING.md) | FAQs, common errors, fixes for all tools |
+| [`docs/SETUP-GUIDE.md`](./docs/SETUP-GUIDE.md) | Full install walkthrough — post-install prep, all packages, configs, services, Zsh, verification |
+| [`docs/HYPRLAND-SETUP.md`](./docs/HYPRLAND-SETUP.md) | Arch install, Lua API, monitors, input, workspaces, Dwindle, decoration, blur, shadows, animations, window rules, keybinds, deployment, lock/idle |
+| [`docs/WAYBAR-SETUP.md`](./docs/WAYBAR-SETUP.md) | Waybar research, decisions, 4-file config skeleton, styling reference |
+| [`docs/ROFI-SETUP.md`](./docs/ROFI-SETUP.md) | Rofi documentation research, theme decisions, widget hierarchy, color formats, drun/run/window modes |
+| [`docs/FUZZEL-SETUP.md`](./docs/FUZZEL-SETUP.md) | Fuzzel Wayland-native launcher, dmenu scripts, keybinds, migration from Rofi |
+| [`docs/ECOSYSTEM-SETUP.md`](./docs/ECOSYSTEM-SETUP.md) | 20+ tools: Hyprpaper, SwayNC, Kitty, Fastfetch, Screenshots, SwayOSD, Zsh, Clipboard, Zathura, Fontconfig, Downloads Sorter, Bat, EasyEffects, PipeWire, Fcitx5, Vesktop, Portal Filechooser |
+| [`docs/MPD-MUSIC-SETUP.md`](./docs/MPD-MUSIC-SETUP.md) | MPD daemon, rmpc TUI, cava visualizer, mpd-mpris bridge, Waybar integration |
+| [`docs/CLI-TOOLS.md`](./docs/CLI-TOOLS.md) | fzf, atuin, ghgrab, zoxide, eza, tealdeer, bat — terminal productivity layer |
+| [`docs/TROUBLESHOOTING.md`](./docs/TROUBLESHOOTING.md) | FAQs, common errors, fixes for all 20+ tools |
+
+## Features
+
 - **Floating pill modules** in Waybar — transparent bar, opaque `#151518` islands
-- **Sharp aesthetic** — minimal border-radius (8px windows, 12px launcher)
+- **Sharp aesthetic** — minimal border-radius (8px windows, 0px internal UI)
 - **5 persistent workspaces** in Waybar — 1→browser, 2→kitty dev, 3→kitty nvim
 - **Hyprland Lua** config (0.55+) — split into 5 files, `require()`-based
 - **Systemd user services** — waybar, hyprpaper, hypridle, swaync, cliphist, mpd, mpd-mpris, download-organizer
-- **Fuzzel** replaces Rofi as primary launcher — Wayland-native, faster startup
-- **CGGX palette** — neon cyberpunk colors consistent across every tool (20+ tools themed)
+- **Fuzzel** primary launcher — Wayland-native, fast startup, replaces Rofi for app launch
+- **Custom OSD** — `osd-notify.sh` replaces swayosd-client for volume/brightness with `notify-send` popups
+- **CGGX palette** — neon cyberpunk colors consistent across 20+ tools
 - **MonaspiceNe Nerd Font** — primary font for waybar, fuzzel, rofi, kitty, all UI
 - **Music stack** — MPD daemon + rmpc TUI + cava visualizer + mpd-mpris bridge
+- **PipeWire high-quality audio** — 96kHz sample rate, max quality resampling
+- **EasyEffects audio chain** — compressor, equalizer, limiter, loudness, crossfeed
+- **Fcitx5 input method** — Unikey Vietnamese IME with keyboard hotkeys
+- **Vesktop (Discord) full theme** — Translucence CSS theme + frameless QuickCss
+- **Bat cat replacement** — NvCGGX theme for syntax highlighting
+- **XDG portals** — terminal file chooser preferred for GTK file dialogs
+- **Custom `.desktop` entries** — Yazi, Steam, Vivaldi window mode
 - **Colorful, not muted** — every tool gets vibrant category colors (lime docs, orange music, cyan archives, amber code)
+
 ## Keybinds
 
 | Keys | Action |
 |------|--------|
 | `SUPER + Q` | Open kitty terminal |
-| `SUPER + SHIFT + Q` | Float kitty terminal |
+| `SUPER + SHIFT + Q` | Power menu (wlogout) |
+| `SUPER + CTRL + Q` | Float kitty terminal |
 | `SUPER + Super_L` (release) | Fuzzel launcher (app search) |
 | `SUPER + Backspace` | Otter-launcher (terminal launcher) |
 | `SUPER + A` | Open Vivaldi browser |
 | `SUPER + E` | Open kitty + yazi file manager |
-| `SUPER + D` | rmpc toggle pause (music) |
-| `SUPER + SHIFT + D` | rmpc next track |
-| `SUPER + CTRL + D` | rmpc previous track |
+| `SUPER + R` | Open kitty + nvim |
+| `SUPER + D` / `SUPER + Z` | rmpc toggle pause / open rmpc |
+| `SUPER + period` | rmpc next track |
+| `SUPER + comma` | rmpc previous track |
 | `SUPER + 1-9` | Switch workspace |
 | `SUPER + SHIFT + 1-9` | Move window to workspace |
 | `SUPER + arrow` | Focus window in direction |
@@ -149,31 +190,35 @@ hyprarch/
 | `SUPER + SHIFT + Print` | Full screenshot → clipboard |
 | `CTRL + Print` | Screenshot menu (fuzzel dmenu) |
 | `SUPER + L` | Lock screen (hyprlock) |
-| `SUPER + SHIFT + Q` | Power menu (fuzzel dmenu) |
-| `SUPER + SHIFT + Escape` | Exit Hyprland |
-| `XF86AudioRaiseVolume` | Volume up (swayosd OSD) |
-| `XF86AudioLowerVolume` | Volume down (swayosd OSD) |
-| `XF86AudioMute` | Mute/unmute (swayosd OSD) |
-| `XF86AudioMicMute` | Mic mute (swayosd OSD) |
-| `XF86AudioNext/Prev/Play` | Media controls (swayosd/playerctl) |
-| `XF86MonBrightnessUp` | Brightness up (swayosd OSD) |
-| `XF86MonBrightnessDown` | Brightness down (swayosd OSD) |
+| `XF86AudioRaiseVolume` | Volume up (osd-notify) |
+| `XF86AudioLowerVolume` | Volume down (osd-notify) |
+| `XF86AudioMute` | Mute/unmute (osd-notify) |
+| `XF86AudioMicMute` | Mic mute (osd-notify) |
+| `XF86AudioNext/Prev/Play` | Media controls (swayosd-client/playerctl) |
+| `XF86MonBrightnessUp/Down` | Brightness up/down (osd-notify) |
+
 ## Palette Reference
 
 ```
   Base       #0a0a0c  ██████  Backgrounds
-  Surface    #1a1a20  ██████  Panels, cards, pills
+  Surface    #151518  ██████  Panels, cards, pills
+  Surface2   #1a1a20  ██████  Alt surfaces
+  Border     #2a2a35  ██████  Subtle borders, separators
   Red        #ff2d55  ██████  Primary accent, active, critical
   Cyan       #00e5ff  ██████  Secondary accent, links, info
   Lime       #c8ff00  ██████  Git staged, success
   Orange     #ff6b00  ██████  Urgent, warnings
-  Purple     #bd00ff  ██████  Dev entries (Rofi launcher)
-  Pink       #ff007f  ██████  Game entries (Rofi launcher)
-  Gold       #ffcc00  ██████  Office entries (Rofi launcher)
+  Purple     #bd00ff  ██████  Developer tooling
+  Pink       #ff007f  ██████  Game entries
+  Gold       #ffcc00  ██████  Office entries
   Silver     #e8e8f0  ██████  Foreground text
   Muted      #6a6a80  ██████  Secondary text, inactive
-  Border     #2a2a35  ██████  Subtle borders
 ```
+
+## Related Projects
+
+- [Vivaldi CGGX Theme](./vivaldi/) — Full CGGX theme for Vivaldi browser with custom CSS and theme files
+- [downloads-sorter](./downloads-sorter/) — Inotify-based auto-categorizer for `~/Downloads`
 
 ---
 

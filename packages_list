@@ -43,7 +43,6 @@ git
 git-delta
 github-cli
 go
-google-chrome
 gopreload-git
 grim
 grimblast-git
@@ -83,6 +82,7 @@ lib32-pipewire-jack
 lib32-sdl2-compat
 lib32-v4l-utils
 lib32-vulkan-intel
+libnotify
 libreoffice-fresh
 libva-intel-driver
 libva-utils

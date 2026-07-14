@@ -115,3 +115,13 @@ hl.layer_rule({
     opaque = true,
    }
  )
+ hl.window_rule(
+   {
+     match = { title = "ilgwg_desktop_gremlins.py"},
+     border_color = "rgba(00000000) rgba(00000000)",
+     opacity = "1.0 override",
+    border_size = 0,
+    no_shadow = true,  
+  }
+ )
+

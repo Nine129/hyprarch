@@ -207,9 +207,17 @@ def sort_file(file: Path, ext_map: dict[str, str], dry_run: bool = False) -> dic
     if file.is_symlink():
         return None
     # Skip files being actively written (browser temp patterns)
+    # Skip termfilechooser placeholder files
+    if file.is_file():
+        try:
+            header = file.read_bytes()[:80]
+            if b"xdg-desktop-portal-termfilechooser saving files tutorial" in header:
+                return None
+        except (OSError, IOError):
+            pass
+    # Skip files being actively written (browser temp patterns)
     if file.suffix.lower() in (".crdownload", ".part", ".tmp", ".~"):
         return None
-
     cat = determine_category(file, ext_map)
     target_dir = DOWNLOADS / cat
     target_dir.mkdir(exist_ok=True)
