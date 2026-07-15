@@ -12,6 +12,7 @@ forceBreezeTheme=false
 
 [Window]
 autostartOnLogin=true
-height=503
+height=1018
+visiblePage=inputPage
 visiblePresetSheetPage=communityPage
-width=462
+width=939

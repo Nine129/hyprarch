@@ -44,6 +44,7 @@ zstyle ':completion:*' cache-path "$HOME/.cache/zsh"
 
 # ── Keybindings ───────────────────────────────────────
 bindkey -v  # vi mode
+export KEYTIMEOUT=1
 bindkey '^R' history-incremental-search-backward
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
@@ -121,9 +122,8 @@ alias rg='rg --smart-case'
 # Gparted
 alias gparted='sudo -E gparted'
 # ── Autostart (first shell only) ──────────────────────
-if [[ -z "$ZSH_SESSION" ]]; then
-  export ZSH_SESSION="started"
-fi
+# SHLVL=1 means this is the top-level shell in a new terminal session
+[[ "$SHLVL" -eq 1 ]] && fastfetch
 
 # pnpm
 export PNPM_HOME="/home/nine/.local/share/pnpm"
@@ -134,10 +134,22 @@ esac
 # pnpm end
 
 # ── Starship prompt ───────────────────────────────────
-eval "$(starship init zsh)"
+# Cache init script so we don't run `starship` on every shell start
+local _starship_cache="$HOME/.cache/starship-init.zsh"
+if [[ ! -f "$_starship_cache" ]] || [[ "$(command -v starship)" -nt "$_starship_cache" ]]; then
+  starship init zsh >| "$_starship_cache"
+fi
+source "$_starship_cache"
+unset _starship_cache
 
 # ── Zoxide (smart cd) ───────────────────────────────
-eval "$(zoxide init zsh)"
+# Cache init script so we don't run `zoxide` on every shell start
+local _zoxide_cache="$HOME/.cache/zoxide-init.zsh"
+if [[ ! -f "$_zoxide_cache" ]] || [[ "$(command -v zoxide)" -nt "$_zoxide_cache" ]]; then
+  zoxide init zsh >| "$_zoxide_cache"
+fi
+source "$_zoxide_cache"
+unset _zoxide_cache
 alias cd="z"
 
 # FastFetch
@@ -198,9 +210,40 @@ esac
 zsh-defer -c '
   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9a9ab0"
 
+  # fzf environment/config; keybindings are sourced synchronously above
+  [[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
+
+  # Autosuggestions wraps every ZLE widget by default. Only widgets that can
+  # change the command buffer actually need wrapping; ignore everything else.
+  local -a _as_keep_widgets=(
+    self-insert self-insert-unmeta quoted-insert vi-quoted-insert
+    backward-delete-char delete-char
+    kill-line kill-whole-line backward-kill-word backward-kill-line
+    kill-word kill-region
+    accept-line accept-and-hold accept-and-infer-next-history
+    accept-line-and-down-history
+    forward-char backward-char forward-word backward-word
+    vi-forward-char vi-backward-char vi-forward-word vi-backward-word
+    vi-forward-word-end vi-backward-word-end
+    vi-forward-blank-word vi-backward-blank-word
+    vi-backward-delete-char vi-delete-char vi-delete
+    vi-change vi-change-eol vi-change-whole-line vi-substitute
+    vi-replace vi-replace-chars vi-put-after vi-put-before
+    clear-screen magic-space
+  )
+  local _w
+  ZSH_AUTOSUGGEST_IGNORE_WIDGETS=()
+  for _w in ${(k)widgets}; do
+    (( $_as_keep_widgets[(Ie)$_w] )) || ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=($_w)
+  done
+  unset _as_keep_widgets _w
+
   if [[ -d "$HOME/.zsh/plugins/zsh-autosuggestions" ]]; then
     source "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
   fi
+
+  # Skip highlighting for very long lines (performance guard)
+  ZSH_HIGHLIGHT_MAXLENGTH=512
 
   if [[ -d "$HOME/.zsh/plugins/zsh-syntax-highlighting" ]]; then
     source "$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
@@ -283,7 +326,13 @@ zsh-defer '. "$NVM_DIR/nvm.sh"'
 zsh-defer '. "$NVM_DIR/bash_completion"'
 [[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
 
-source <(fzf --zsh)
+# Cache fzf keybindings so we don't run `fzf` on every shell start
+local _fzf_cache="$HOME/.cache/fzf-keybindings.zsh"
+if [[ ! -f "$_fzf_cache" ]] || [[ "$(command -v fzf)" -nt "$_fzf_cache" ]]; then
+  fzf --zsh >| "$_fzf_cache"
+fi
+source "$_fzf_cache"
+unset _fzf_cache
 
  qr() {
     local result
@@ -383,7 +432,11 @@ extract() {
     done
     return $status
 }
-fastfetch
 alias inxia='inxi -xxxez -dfiJlmoput'
 
 . "$HOME/.local/share/../bin/env"
+
+# Compile .zshrc to bytecode for faster next startup
+if [[ ! -f "$HOME/.zshrc.zwc" ]] || [[ "$HOME/.zshrc" -nt "$HOME/.zshrc.zwc" ]]; then
+  zcompile "$HOME/.zshrc"
+fi

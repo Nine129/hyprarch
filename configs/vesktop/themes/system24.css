@@ -1,5 +1,5 @@
 /**
- * @name system24 (catppuccin macchiato)
+ * @name system24 (CGGX modded)
  * @description a tui-style discord theme. based on catppuccin macchiato theme (https://catppuccin.com).
  * @author refact0r
  * @version 2.0.0
@@ -12,17 +12,20 @@
 
 /* import theme modules */
 @import url('https://refact0r.github.io/system24/build/system24.css');
-
+@import url("https://unpkg.com/plusplusjakartasans/plusjakartasans.css");
+html {
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
 body {
     /* font, change to '' for default discord font */
-    --font: 'Plus Jarkata San'; /* change to '' for default discord font */
+    --font: 'Plus Jakarta Sans'; /* change to '' for default discord font */
     --code-font: 'MonaspiceNe Nerd Font'; /* change to '' for default discord font */
     font-weight: 500; /* text font weight. 300 is light, 400 is normal. DOES NOT AFFECT BOLD TEXT */
-    letter-spacing: -0.05ch; /* decreases letter spacing for better readability. recommended on monospace fonts.*/
+    letter-spacing: 0.0ch; /* decreases letter spacing for better readability. recommended on monospace fonts.*/
     /* sizes */
     --gap: 6px; /* spacing between panels */
     --divider-thickness: 4px; /* thickness of unread messages divider and highlighted message borders */
-    --border-thickness: 2px; /* thickness of borders around main panels. DOES NOT AFFECT OTHER BORDERS */
+    --border-thickness: 3px; /* thickness of borders around main panels. DOES NOT AFFECT OTHER BORDERS */
     --border-hover-transition: 0.2s ease; /* transition for borders when hovered */
 
     /* animation/transition options */
@@ -68,7 +71,7 @@ body {
     --small-user-panel: on; /* off: default user panel, on: smaller user panel like in old discord */
 
     /* unrounding options */
-    --unrounding: off; /* off: default, on: remove rounded corners from panels */
+    --unrounding: on; /* off: default, on: remove rounded corners from panels */
 
     /* slight rounding */
     --radius-xs: 4px;

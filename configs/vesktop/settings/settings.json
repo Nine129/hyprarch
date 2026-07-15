@@ -34,7 +34,7 @@
             "enabled": false
         },
         "MessageEventsAPI": {
-            "enabled": false
+            "enabled": true
         },
         "MessagePopoverAPI": {
             "enabled": false
@@ -106,7 +106,7 @@
             "enabled": false
         },
         "ClearURLs": {
-            "enabled": false
+            "enabled": true
         },
         "ClientTheme": {
             "enabled": false
@@ -244,7 +244,10 @@
             "enabled": false
         },
         "MemberCount": {
-            "enabled": false
+            "enabled": true,
+            "memberList": true,
+            "toolTip": true,
+            "voiceActivity": true
         },
         "MentionAvatars": {
             "enabled": false
@@ -567,6 +570,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1784055229602
+        "settingsSyncVersion": 1784105211111
     }
 }
