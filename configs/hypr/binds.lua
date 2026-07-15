@@ -17,14 +17,14 @@ hl.bind("SUPER + comma", hl.dsp.exec_cmd("rmpc prev"))
 
 -- Launcher ────────────────────────
 hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd("pkill fuzzel || fuzzel"),  { release = true })  
-hl.bind("SUPER + E",     hl.dsp.exec_cmd("kitty --single-instance yazi"))
+hl.bind("SUPER + E",     hl.dsp.exec_cmd("kitty --single-instance --class yazi -e yazi"))
 hl.bind("SUPER + A", hl.dsp.exec_cmd("vivaldi --new-window vivaldi://startpage/"))
 -- Layout ──────────────────────────
 hl.bind("SUPER + F",       hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 hl.bind("SUPER + X",       hl.dsp.window.float({ action = "toggle" }))
 hl.bind("SUPER + P",       hl.dsp.window.pseudo({ action = "toggle" }))
 hl.bind("SUPER + J",       hl.dsp.layout("togglesplit"))
-hl.bind("SUPER + V", hl.dsp.exec_cmd("bash -c 'WAYLAND_DISPLAY=wayland-1 bash ~/hyprarch/configs/hypr/scripts/cliphist-fuzzel.sh'"))
+hl.bind("SUPER + V", hl.dsp.exec_cmd("pkill fuzzel ||bash -c 'WAYLAND_DISPLAY=wayland-1 bash ~/hyprarch/configs/hypr/scripts/cliphist-fuzzel.sh'"))
 -- Focus movement ──────────────────
 hl.bind("SUPER + left",    hl.dsp.focus({ direction = "l" }))
 hl.bind("SUPER + right",   hl.dsp.focus({ direction = "r" }))

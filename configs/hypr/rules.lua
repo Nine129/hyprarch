@@ -121,3 +121,10 @@ hl.layer_rule({
   match = { title = "waybar" },
   blur  = false,
 })
+ hl.window_rule(
+   {
+     match = { class = "yazi"},
+     opaque = false,
+
+   }
+ )

@@ -33,7 +33,7 @@ return {
                { icon = "󰝒 ", key = "f", icon_hl = "CGGXKeyR", key_hl = "CGGXKeyR", desc_hl = "CGGXKeyR", desc = "Find File",  action = ":lua Snacks.dashboard.pick('files')" },
                { icon = "󰝒 ", key = "n", icon_hl = "CGGXKeyO", key_hl = "CGGXKeyO", desc_hl = "CGGXKeyO", desc = "New File",   action = ":ene | startinsert" },
                { icon = " ", key = "g", icon_hl = "CGGXKeyL", key_hl = "CGGXKeyL", desc_hl = "CGGXKeyL", desc = "Find Text",  action = ":lua Snacks.dashboard.pick('live_grep')" },
-               { icon = " ", key = "r", icon_hl = "CGGXKeyC", key_hl = "CGGXKeyC", desc_hl = "CGGXKeyC", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+               { icon = " ", key = "r", icon_hl = "CGGXKeyC", key_hl = "CGGXKeyC", desc_hl = "CGGXKeyC", desc = "File History", action = ":lua Snacks.dashboard.pick('oldfiles')" },
                { icon = " ", key = "c", icon_hl = "CGGXKeyP", key_hl = "CGGXKeyP", desc_hl = "CGGXKeyP", desc = "Config",     action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
                { icon = " ", key = "s", icon_hl = "CGGXKeyR", key_hl = "CGGXKeyR", desc_hl = "CGGXKeyR", desc = "Restore Session", section = "session" },
                { icon = "󰒲 ", key = "l", icon_hl = "CGGXKeyO", key_hl = "CGGXKeyO", desc_hl = "CGGXKeyO", desc = "Lazy",       action = ":Lazy", enabled = package.loaded.lazy ~= nil },

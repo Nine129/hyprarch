@@ -114,3 +114,7 @@ disabled   = false
 time_format = "%T"
 style      = "bg:cyan fg:bg0 bold"
 format     = '[  󰥔 $time  ]($style)'
+
+# ── Fill (spacer, no dots) ──────────────────────────────
+[fill]
+symbol = " "
