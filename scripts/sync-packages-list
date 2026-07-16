@@ -1,10 +1,12 @@
 #!/bin/bash
+# Sync installed package list to repo
 set -euo pipefail
 
-PKG_LIST=/home/nine/hyprarch/packages_list
+REPO_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+PKG_LIST="$REPO_DIR/packages_list"
 
-new=$(sudo -u nine pacman -Qqe | sort) || exit 1
+new=$(pacman -Qqe | sort) || exit 1
 
 if ! printf '%s\n' "$new" | cmp -s - "$PKG_LIST"; then
-    printf '%s\n' "$new" | sudo -u nine tee "$PKG_LIST" >/dev/null
+    printf '%s\n' "$new" | tee "$PKG_LIST" >/dev/null
 fi

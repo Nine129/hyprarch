@@ -13,6 +13,7 @@ hl.bind("SUPER + D", hl.dsp.exec_cmd("rmpc togglepause"))
 hl.bind("SUPER + period", hl.dsp.exec_cmd("rmpc next"))
 hl.bind("SUPER + comma", hl.dsp.exec_cmd("rmpc prev"))
 
+hl.bind("SUPER + C", hl.dsp.exec_cmd("kitty --single-instance --class kitty-float -d ~/Assistant -e omp"))
 
 
 -- Launcher ────────────────────────

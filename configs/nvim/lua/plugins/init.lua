@@ -89,23 +89,7 @@ return {
       },
     },
   },
-  -- Telescope media preview (images, PDFs, video, etc.)
-  {
-    "nvim-telescope/telescope-media-files.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
-    config = function()
-      require("telescope").setup({
-         extensions = {
-            media_files = {
-               filetypes = { "png", "webp", "jpg", "jpeg", "gif", "pdf", "mp4", "webm" },
-               find_cmd = "rg",
-               previewer = "kitty",
-            },
-         },
-      })
-      require("telescope").load_extension("media_files")
-    end,
-  },
+  -- telescope image preview patched in cggx.lua (buffer_previewer_maker override)
 
   -- NvimTree: Yazi-like icon colors and git on filenames
   {
@@ -121,4 +105,6 @@ return {
       return config
     end,
   },
+
 }
+

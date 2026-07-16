@@ -26,4 +26,9 @@ desc = "Copy contents of file",
 
 # Z → zoxide via fzf (styled through wrapper)
 { on = ["Z"], run = "shell --block ~/.config/yazi/scripts/zoxide-fzf.sh", desc = "Zoxide via fzf" },
+{ on   = "f", run  = "plugin smart-filter", desc = "Smart filter"},
+{on   = "Enter",
+run  = "plugin smart-enter",
+desc = "Enter the child directory, or open the file"},
 ]
+

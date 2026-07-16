@@ -140,6 +140,14 @@ return {
       quickfile = { enabled = true },
       statuscolumn = { enabled = false },
       words = { enabled = true },
+      image = {
+        enabled = true,
+        doc = {
+          enabled = true,
+          inline = true,
+          float = true,
+        },
+      },
       styles = { notification = { wo = { wrap = true } } },
    },
 
@@ -147,6 +155,7 @@ return {
       { "<leader>.",  function() Snacks.scratch() end,              desc = "Toggle Scratch Buffer" },
       { "<leader>S",  function() Snacks.scratch.select() end,       desc = "Select Scratch Buffer" },
       { "<leader>n",  function() Snacks.notifier.show_history() end, desc = "Notification History" },
+      { "<leader>i",  function() Snacks.image.hover() end,            desc = "Image Hover — show image at cursor" },
       { "<leader>bd", function() Snacks.bufdelete() end,            desc = "Delete Buffer" },
       { "<leader>gg", function() Snacks.lazygit() end,              desc = "Lazygit" },
       { "<leader>gb", function() Snacks.git.blame_line() end,       desc = "Git Blame Line" },
@@ -247,6 +256,31 @@ return {
             Snacks.toggle.treesitter():map("<leader>uT")
             Snacks.toggle.option("background", { off = "light", on = "dark", name = "Dark Background" }):map("<leader>ub")
             Snacks.toggle.inlay_hints():map("<leader>uh")
+
+            -- Telescope image preview via snacks.nvim (Kitty Graphics Protocol)
+            local ok_tel, telescope = pcall(require, "telescope")
+            if ok_tel then
+              local default_maker = require("telescope.previewers").buffer_previewer_maker
+              telescope.setup({
+                defaults = {
+                  buffer_previewer_maker = function(filepath, bufnr, opts)
+                    if not filepath or vim.fn.isdirectory(filepath) == 1 then
+                      return default_maker(filepath, bufnr, opts)
+                    end
+                    if Snacks.image.supports(filepath) then
+                      local ok_name, _ = pcall(vim.api.nvim_buf_set_name, bufnr, filepath)
+                      if ok_name then
+                        vim.bo[bufnr].filetype = "image"
+                        vim.bo[bufnr].modifiable = false
+                        Snacks.image.buf.attach(bufnr, { src = filepath })
+                        return
+                      end
+                    end
+                    default_maker(filepath, bufnr, opts)
+                  end,
+                },
+              })
+            end
          end,
       })
    end,
