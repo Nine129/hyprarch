@@ -1176,20 +1176,34 @@ end
 --===============--
 -- Configuration --
 
---- Configure separators if it is need to be added to the components.
---- Connects them with each component.
---- @param section_components [Line, boolean][] Array of components in one of the sections.
---- @param component_type ComponentType Which section component will be in [ a | b | c ].
---- Adds padding around each component without fragile powerline separators.
---- @param section_components table Components to add padding to.
+--- Adds padding and separators to components.
+--- INNER separators (between components in same section) use component effective styles.
+--- OUTER separators (between sections) use component effective fg + stable base style bg.
+--- @param section_components table Components to process.
 --- @param component_type ComponentType Type of the current section (A, B, or C).
 --- @param in_side Side Left or right side of the line.
---- @return Line[] padded_components Components with padding applied.
-local function config_components_separators(section_components, component_type, in_side)
+--- @param next_style_bg string? Base bg of the next section (from Yatline.config.style_*), or nil.
+--- @return Line[] Processed components with padding and separators.
+local function config_components_separators(section_components, component_type, in_side, next_style_bg)
 	local result = {}
-	for _, component in ipairs(section_components) do
+	local num = #section_components
+	for i, component in ipairs(section_components) do
 		if component[2] == true then
-			result[#result + 1] = connect_padding(component[1], component_type, in_side, component[3])
+			local eff = component[3] or {}
+			component[1] = connect_padding(component[1], component_type, in_side, component[3])
+
+			if i ~= num then
+				-- INNER: between components in same section
+				local sep = { fg = eff.fg, bg = eff.bg }
+				result[#result + 1] = connect_separator(component[1], in_side, SeparatorType.INNER, sep)
+			elseif next_style_bg and in_side ~= Side.RIGHT then
+				-- LEFT-side OUTER: arrow to next section (fg=component bg, bg=next section base bg)
+				local sep = { fg = eff.bg, bg = next_style_bg }
+				result[#result + 1] = connect_separator(component[1], in_side, SeparatorType.OUTER, sep)
+			else
+				-- Edge or RIGHT side: no OUTER separator
+				result[#result + 1] = component[1]
+			end
 		else
 			result[#result + 1] = component[1]
 		end
@@ -1247,42 +1261,44 @@ local function config_section(section, component_type)
 	return section_components
 end
 
---- Automatically creates and configures either header-line or status-line.
---- @param side SideConfig Configuration of either left or right side.
---- @param in_side Side Which side components will be.
---- @return Line left_line Consist of components that are in left side of the line.
---- @return Line right_line Consist of components that are in right side of the line.
---- @see config_section To know how components are gotten from sections' config.
---- @see config_components_separators To know how padding is applied.
+--- Configures the line (left or right) for either header or status line.
+--- @param side SideConfig Configuration of the side.
+--- @param in_side Side Left or right side of the line.
+--- @return Line line Configured line with sections combined.
 local function config_line(side, in_side)
-	-- Configures components of sections.
-	local section_a_components = config_section(side.section_a, ComponentType.A)
-	local section_b_components = config_section(side.section_b, ComponentType.B)
-	local section_c_components = config_section(side.section_c, ComponentType.C)
+	local a_comps = config_section(side.section_a, ComponentType.A)
+	local b_comps = config_section(side.section_b, ComponentType.B)
+	local c_comps = config_section(side.section_c, ComponentType.C)
 
-	-- Add padding to each section's components (no fragile powerline separators).
-	local section_a_line_components = config_components_separators(
-		section_a_components, ComponentType.A, in_side)
-	local section_b_line_components = config_components_separators(
-		section_b_components, ComponentType.B, in_side)
-	local section_c_line_components = config_components_separators(
-		section_c_components, ComponentType.C, in_side)
-
-	if in_side == Side.RIGHT then
-		section_a_line_components = reverse_order(section_a_line_components)
-		section_b_line_components = reverse_order(section_b_line_components)
-		section_c_line_components = reverse_order(section_c_line_components)
+	-- Compute next section's BASE style bg for OUTER separators.
+	-- Uses stable Yatline.config.style_*.bg values, skips empty sections.
+	local a_next, b_next, c_next
+	if in_side == Side.LEFT then
+		a_next = (#b_comps > 0 and Yatline.config.style_b.bg) or (#c_comps > 0 and Yatline.config.style_c.bg)
+		b_next = #c_comps > 0 and Yatline.config.style_c.bg
+	else
+		c_next = (#b_comps > 0 and Yatline.config.style_b.bg) or (#a_comps > 0 and Yatline.config.style_a.bg)
+		b_next = #a_comps > 0 and Yatline.config.style_a.bg
 	end
 
-	-- Combines components of section into single components.
-	local section_a_line = ui.Line(section_a_line_components)
-	local section_b_line = ui.Line(section_b_line_components)
-	local section_c_line = ui.Line(section_c_line_components)
+	local a_line_comps = config_components_separators(a_comps, ComponentType.A, in_side, a_next)
+	local b_line_comps = config_components_separators(b_comps, ComponentType.B, in_side, b_next)
+	local c_line_comps = config_components_separators(c_comps, ComponentType.C, in_side, c_next)
+
+	if in_side == Side.RIGHT then
+		a_line_comps = reverse_order(a_line_comps)
+		b_line_comps = reverse_order(b_line_comps)
+		c_line_comps = reverse_order(c_line_comps)
+	end
+
+	local a_line = ui.Line(a_line_comps)
+	local b_line = ui.Line(b_line_comps)
+	local c_line = ui.Line(c_line_comps)
 
 	if in_side == Side.LEFT then
-		return ui.Line({ section_a_line, section_b_line, section_c_line })
+		return ui.Line({ a_line, b_line, c_line })
 	else
-		return ui.Line({ section_c_line, section_b_line, section_a_line })
+		return ui.Line({ c_line, b_line, a_line })
 	end
 end
 

@@ -1,6 +1,7 @@
 if os.getenv("YAZI_NO_SESSION") ~= "1" then
     require("autosession"):setup()
 end
+
 require("full-border"):setup()
 require("git"):setup {
 	-- Order of status signs showing in the linemode
@@ -10,6 +11,7 @@ require("copy-file-contents"):setup({
 	append_char = "\n",
 	notification = true,
 })
+
 require("yatline"):setup({
 	section_separator = { open = "", close = "" },
 	part_separator = { open = "", close = "" },
@@ -43,7 +45,6 @@ require("yatline"):setup({
 	files = { icon = "", fg = "blue" },
 	filtereds = { icon = "", fg = "magenta" },
 
-	total = { icon = "󰮍", fg = "yellow" },
 	success = { icon = "", fg = "green" },
 	failed = { icon = "", fg = "red" },
 
@@ -61,14 +62,13 @@ require("yatline"):setup({
 			},
 			section_b = {},
 			section_c = {},
-		
-    },
+		},
 		right = {
 			section_a = {
-				{ type = "string", name = "date", params = { "%A, %d %B %Y" }, style = { bg = "#ff6b00", fg = "#0a0a0c" } },
+				-- { type = "string", name = "date", params = { "%A, %d %B %Y" }, style = { bg = "#ff6b00", fg = "#0a0a0c" } },
 			},
 			section_b = {
-				{ type = "string", name = "date", params = { "%X" } },
+				-- { type = "string", name = "date", params = { "%X" } },
 			},
 			section_c = {},
 		},
@@ -84,7 +84,7 @@ require("yatline"):setup({
 			},
 			section_c = {
 				{ type = "string", name = "hovered_path" },
-        {type = "coloreds", custom = false, name = "count", params = { true }},
+				{type = "coloreds", custom = false, name = "count", params = { true }},
 			},
 		},
 		right = {

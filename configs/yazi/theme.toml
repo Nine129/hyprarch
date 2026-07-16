@@ -54,7 +54,7 @@ rules = [
   { url = "*.swift",  name = " ", fg = "#b48cff" },
 
   # Directories — silver
-  { url = "*/",       name = " ", fg = "#00e5ff" },
+  { url = "*/",       name = " ", fg = "#e8e8f0" },
 
   # Images — hot purple (MIME)
   { mime = "image/*", name = " ", fg = "#bd00ff" },
@@ -66,17 +66,17 @@ rules = [
   { mime = "audio/*", name = " ", fg = "#ff2d55" },
 
   # Archives / compressed — cyan (url)
-  { url = "*.zip",    name = " ", fg = "#ff2d55" },
-  { url = "*.tar",    name = " ", fg = "#ff2d55" },
-  { url = "*.gz",     name = " ", fg = "#ff2d55" },
-  { url = "*.xz",     name = " ", fg = "#ff2d55" },
-  { url = "*.bz2",    name = " ", fg = "#ff2d55" },
-  { url = "*.7z",     name = " ", fg = "#ff2d55" },
-  { url = "*.rar",    name = " ", fg = "#ff2d55" },
-  { url = "*.zst",    name = " ", fg = "#ff2d55" },
-  { url = "*.iso",    name = " ", fg = "#ff2d55" },
-  { url = "*.deb",    name = " ", fg = "#ff2d55" },
-  { url = "*.rpm",    name = " ", fg = "#ff2d55" },
+  { url = "*.zip",    name = " ", fg = "#00e5ff" },
+  { url = "*.tar",    name = " ", fg = "#00e5ff" },
+  { url = "*.gz",     name = " ", fg = "#00e5ff" },
+  { url = "*.xz",     name = " ", fg = "#00e5ff" },
+  { url = "*.bz2",    name = " ", fg = "#00e5ff" },
+  { url = "*.7z",     name = " ", fg = "#00e5ff" },
+  { url = "*.rar",    name = " ", fg = "#00e5ff" },
+  { url = "*.zst",    name = " ", fg = "#00e5ff" },
+  { url = "*.iso",    name = " ", fg = "#00e5ff" },
+  { url = "*.deb",    name = " ", fg = "#00e5ff" },
+  { url = "*.rpm",    name = " ", fg = "#00e5ff" },
 
   # Documents — lime
   { url = "*.md",     name = " ", fg = "#c8ff00" },

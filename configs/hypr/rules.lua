@@ -125,6 +125,6 @@ hl.layer_rule({
    {
      match = { class = "yazi"},
      opaque = false,
-
+     -- border_color = "rgba(00e5ffee)"
    }
  )
