@@ -89,6 +89,7 @@ hl.bind("SUPER + mouse:273",  hl.dsp.window.resize(), { mouse = true })
 hl.bind("Print",               hl.dsp.exec_cmd("grimblast copy area"))                              -- Region → clipboard
 hl.bind("SUPER + Print",       hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot-swappy.sh"))      -- Region → swappy → save
 hl.bind("SUPER + SHIFT + Print",  hl.dsp.exec_cmd("grimblast copy output"))                         -- Full → clipboard
+hl.bind("SUPER + ALT + Print", hl.dsp.exec_cmd("~/.config/hypr/scripts/lens-search.sh"))     -- Region → Google Lens search
 
 -- Clipboard manager and rmpc i guess ─────────────────
 hl.bind("SUPER + Z",           hl.dsp.exec_cmd("kitty --single-instance rmpc"))

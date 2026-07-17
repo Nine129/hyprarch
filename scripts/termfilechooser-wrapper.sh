@@ -31,6 +31,43 @@ save="$3"
 path="$4"
 out="$5"
 
+# URL-decode the suggested filename and strip query/fragment noise.
+# Some apps (e.g. Twitter/X image downloads) hand the portal a URL-encoded
+# basename like "HNWP9FowwAAlVd5.jpg%3Alarge". If the placeholder keeps the
+# raw "%3A" the browser may save elsewhere or silently fail.
+url_decode() {
+	local s="$1"
+	local decoded=""
+	local i=0
+	local len=${#s}
+	while (( i < len )); do
+		local c="${s:i:1}"
+		if [[ "$c" == "%" && $((i + 2)) -lt $len ]]; then
+			local hex="${s:i+1:2}"
+			if [[ "$hex" =~ ^[0-9A-Fa-f]{2}$ ]]; then
+				decoded+="$(printf "\\x$hex")"
+				((i += 3))
+				continue
+			fi
+		fi
+		decoded+="$c"
+		((i++))
+	done
+	echo "$decoded"
+}
+
+sanitize_filename() {
+	local s="$1"
+	s="${s%%#*}"   # strip fragment
+	s="${s%%\?*}"  # strip query string
+	s="$(url_decode "$s")"
+	# Strip X/Twitter image size suffixes (:large, :small, :medium, :orig)
+	s="${s%:large}"
+	s="${s%:small}"
+	s="${s%:medium}"
+	s="${s%:orig}"
+	echo "$s"
+}
 
 cleanup() {
   if [ -f "$tmpfile" ]; then
@@ -51,6 +88,10 @@ if [ "$save" = "1" ]; then
   # in ~/Downloads. Otherwise fall back to .untitled (hidden → organizer ignores).
   if [ -n "$path" ] && [ ! -d "$path" ]; then
     suggested_name=$(/usr/bin/basename "$path")
+    suggested_name=$(sanitize_filename "$suggested_name")
+    if [ -z "$suggested_name" ]; then
+      suggested_name=".untitled"
+    fi
     base="${XDG_DOWNLOAD_DIR:-$HOME/Downloads}/${suggested_name}"
     path="$base"
     i=1
