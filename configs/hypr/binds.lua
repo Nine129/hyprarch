@@ -116,3 +116,5 @@ hl.bind("XF86MonBrightnessDown", hl.dsp.exec_cmd("~/hyprarch/scripts/osd-notify.
 hl.bind("SUPER + g", function()
     hl.plugin.scrolloverview.overview("toggle")
 end)
+
+

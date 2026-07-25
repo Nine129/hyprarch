@@ -30,5 +30,9 @@ desc = "Copy contents of file",
 {on   = "Enter",
 run  = "plugin smart-enter",
 desc = "Enter the child directory, or open the file"},
-]
 
+
+{ on = [ ";" ],
+  run = 'plugin custom-shell zsh --block=false', 
+  desc = "custom-shell as default"},
+]

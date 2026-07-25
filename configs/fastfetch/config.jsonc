@@ -56,7 +56,7 @@
     { "type": "cpu",     "key": "󰻠  CPU",   "keyColor": "bold_#00e5ff" },
     { "type": "gpu",     "key": "󰢮  GPU",   "keyColor": "bold_#00e5ff" },
     { "type": "memory",  "key": "󰍛  RAM",   "keyColor": "bold_#00e5ff" },
-    { "type": "disk",    "key": "󰋊  SSD",   "keyColor": "bold_#00e5ff" },
+    { "type": "disk",    "key": "󰋊  SSD",   "keyColor": "bold_#00e5ff", "hideFolders": "/mnt/storage:/boot" },
     { "type": "battery", "key": "󰂄  BAT",   "keyColor": "bold_#00e5ff" },
 
     "break",

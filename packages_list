@@ -40,10 +40,12 @@ ffmpegthumbnailer
 fuzzel
 fzf
 ghgrab-bin
+gimp
 git
 git-delta
 github-cli
 go
+google-chrome
 gopreload-git
 grim
 grimblast-git
@@ -65,10 +67,12 @@ intel-gpu-tools
 intel-media-driver
 intel-media-sdk
 intel-ucode
+inter-font
 inxi
 keyd
 kitty
 kvantum
+latuicon
 lesspipe
 lib32-alsa-plugins
 lib32-gtk3

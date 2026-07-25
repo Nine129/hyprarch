@@ -128,3 +128,9 @@ hl.layer_rule({
      -- border_color = "rgba(00e5ffee)"
    }
  )
+ hl.window_rule(
+   {
+     match = { class = "google-chrome"},
+     opaque = true,
+   }
+ )

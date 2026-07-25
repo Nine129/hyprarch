@@ -73,13 +73,59 @@ echo "  User: ${USER:-$HOME}"
 echo "══════════════════════════════════════════════════"
 echo ""
 
-# ── Ensure pacman databases are synced ─────────────────
+# ── Ensure pacman databases are synced and system is up to date ─────────────────
 if [ "$DRY_RUN" = false ]; then
-  info "Syncing pacman databases ..."
-  sudo pacman -Sy --noconfirm
-  ok "Databases synced"
+  info "Syncing pacman databases and updating system ..."
+  sudo pacman -Syu --noconfirm
+  ok "System updated"
 else
-  muted "  [DRY-RUN] Would run: sudo pacman -Sy --noconfirm"
+  muted "  [DRY-RUN] Would run: sudo pacman -Syu --noconfirm"
+fi
+
+# ── Pre-classification: distro/repo specific packages ─────────────────
+info "Checking repository compatibility ..."
+
+# Packages that only exist in the CachyOS repositories.
+CACHYOS_ONLY_PKGS=(
+  cachyos-keyring
+  cachyos-mirrorlist
+  cachyos-v3-mirrorlist
+  cachyos-v4-mirrorlist
+  linux-cachyos
+  linux-cachyos-headers
+)
+
+CACHYOS_REPOS_ENABLED=false
+if grep -qE '^\s*\[cachyos' /etc/pacman.conf 2>/dev/null; then
+  CACHYOS_REPOS_ENABLED=true
+fi
+
+if [ "$CACHYOS_REPOS_ENABLED" = false ]; then
+  warn "CachyOS repositories not detected in /etc/pacman.conf"
+  muted "  Skipping CachyOS-only kernel/keyring/mirrorlist packages."
+  muted "  To use the CachyOS kernel, add the CachyOS repos first:"
+  muted "    https://wiki.cachyos.org/cachyos_basic/installation/"
+fi
+
+# 32-bit libraries need [multilib].  Enable it if any lib32-* package is
+# requested and the repo is currently disabled.
+MULTILIB_ENABLED=false
+if grep -qE '^[[:space:]]*\[multilib\]' /etc/pacman.conf 2>/dev/null; then
+  MULTILIB_ENABLED=true
+fi
+
+if [ "$MULTILIB_ENABLED" = false ] && grep -qE '^[[:space:]]*#[[:space:]]*\[multilib\]' /etc/pacman.conf 2>/dev/null; then
+  if grep -qE '^lib32-' "$PKG_LIST"; then
+    warn "[multilib] is disabled but lib32-* packages are requested."
+    if [ "$DRY_RUN" = false ]; then
+      info "Enabling [multilib] in /etc/pacman.conf ..."
+      sudo sed -i '/^[[:space:]]*#[[:space:]]*\[multilib\]/,/^[[:space:]]*#[[:space:]]*Include/ s/^#//' /etc/pacman.conf
+      sudo pacman -Syu --noconfirm
+      ok "[multilib] enabled"
+    else
+      muted "  [DRY-RUN] Would enable [multilib] and re-sync"
+    fi
+  fi
 fi
 
 # ── Classify packages ──────────────────────────────────
@@ -99,6 +145,21 @@ aur_pkgs=()
 
 while IFS= read -r pkg || [ -n "$pkg" ]; do
   [ -z "$pkg" ] && continue
+
+  # Skip CachyOS-only packages if the CachyOS repos are not configured.
+  if [ "$CACHYOS_REPOS_ENABLED" = false ]; then
+    skip=false
+    for cachy_pkg in "${CACHYOS_ONLY_PKGS[@]}"; do
+      if [ "$pkg" = "$cachy_pkg" ]; then
+        skip=true
+        break
+      fi
+    done
+    if [ "$skip" = true ]; then
+      muted "  Skipping $pkg (CachyOS repo not enabled)"
+      continue
+    fi
+  fi
 
   if [ -s "$official_list" ]; then
     # Fast path: check against pre-built official list

@@ -10,6 +10,7 @@ setopt NUMERIC_GLOB_SORT
 setopt MENU_COMPLETE
 setopt COMPLETE_IN_WORD
 setopt ALWAYS_TO_END
+setopt INTERACTIVE_COMMENTS
 setopt CORRECT
 setopt CORRECT_ALL
 setopt HIST_VERIFY
@@ -301,7 +302,7 @@ zsh-defer -c '
     ZSH_HIGHLIGHT_STYLES[command-substitution-delimiter]="fg=magenta"
 
     # Misc
-    ZSH_HIGHLIGHT_STYLES[comment]="fg=white"
+    ZSH_HIGHLIGHT_STYLES[comment]="fg=#6a6a80"
     ZSH_HIGHLIGHT_STYLES[unknown-token]="fg=red,bold"
     ZSH_HIGHLIGHT_STYLES[autodirectory]="fg=green,underline"
     ZSH_HIGHLIGHT_STYLES[named-fd]="fg=cyan"

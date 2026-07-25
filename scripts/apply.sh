@@ -214,6 +214,24 @@ if [ "$DRY_RUN" = false ]; then
     | while IFS= read -r f; do
       sed -i "s|/home/nine/|$HOME/|g" "$f"
     done || true
+
+  # ~/hyprarch/configs/ → ~/.config/ (config files were just copied there)
+  grep -rl --binary-files=without-match "~/hyprarch/configs/" "$HOME/.config/" 2>/dev/null \
+    | while IFS= read -r f; do
+      sed -i "s|~/hyprarch/configs/|$HOME/.config/|g" "$f"
+    done || true
+
+  # ~/hyprarch/scripts/ → ~/.local/bin/ (helper scripts are deployed there)
+  grep -rl --binary-files=without-match "~/hyprarch/scripts/" "$HOME/.config/" 2>/dev/null \
+    | while IFS= read -r f; do
+      sed -i "s|~/hyprarch/scripts/|$HOME/.local/bin/|g" "$f"
+    done || true
+
+  # Any remaining ~/hyprarch/ references (wallpapers, etc.) → actual repo path.
+  grep -rl --binary-files=without-match "~/hyprarch/" "$HOME/.config/" 2>/dev/null \
+    | while IFS= read -r f; do
+      sed -i "s|~/hyprarch/|$REPO_DIR/|g" "$f"
+    done || true
 fi
 ok "Paths fixed"
 # ───────────────────────────────────────────────────────
@@ -232,7 +250,11 @@ if [ "$DRY_RUN" = false ]; then
   for f in "$CONFIG_SRC/shell/.zshenv" "$CONFIG_SRC/shell/.zshrc"; do
     [ -f "$f" ] || continue
     sed -i "s|/home/nine/hyprarch/configs/|$HOME/.config/|g" "$f"
+    sed -i "s|/home/nine/hyprarch/scripts/|$HOME/.local/bin/|g" "$f"
     sed -i "s|/home/nine/|$HOME/|g" "$f"
+    sed -i "s|~/hyprarch/configs/|$HOME/.config/|g" "$f"
+    sed -i "s|~/hyprarch/scripts/|$HOME/.local/bin/|g" "$f"
+    sed -i "s|~/hyprarch/|$REPO_DIR/|g" "$f"
   done
 fi
 
@@ -243,6 +265,50 @@ muted "(.zprofile skipped — SDDM handles session start)"
 muted "  To enable TTY auto-start, run:"
 muted "    ln -sf $CONFIG_SRC/shell/.zprofile \$HOME/.zprofile"
 ok "Shell symlinks created"
+
+# ── Zsh plugins ────────────────────────────────────────
+# The .zshrc expects zsh-defer at ~/zsh-defer and the two popular zsh
+# plugins at ~/.zsh/plugins/*.  Neither is in the official Arch repos, so
+# clone them here if missing.
+echo ""
+echo "── Phase 2b: Zsh Plugins ────────────────────────"
+
+install_zsh_plugin() {
+  local url="$1" dir="$2" name="$3"
+  if [ -d "$dir/.git" ] || [ -f "$dir/${name}.plugin.zsh" ] || [ -f "$dir/${name}.zsh" ]; then
+    muted "  $name already present"
+    return 0
+  fi
+  if command -v git &>/dev/null; then
+    info "Cloning $name ..."
+    run mkdir -p "$(dirname "$dir")"
+    run git clone --quiet --depth=1 "$url" "$dir" || warn "Failed to clone $name"
+  else
+    warn "git not found — cannot clone $name"
+  fi
+}
+
+install_zsh_plugin "https://github.com/romkatv/zsh-defer" \
+  "$HOME/zsh-defer" "zsh-defer"
+install_zsh_plugin "https://github.com/zsh-users/zsh-autosuggestions" \
+  "$HOME/.zsh/plugins/zsh-autosuggestions" "zsh-autosuggestions"
+install_zsh_plugin "https://github.com/zsh-users/zsh-syntax-highlighting" \
+  "$HOME/.zsh/plugins/zsh-syntax-highlighting" "zsh-syntax-highlighting"
+
+# Guard the zsh-defer source and the optional env file so a missing plugin
+# does not break the first interactive shell.
+if [ "$DRY_RUN" = false ]; then
+  for f in "$CONFIG_SRC/shell/.zshrc" "$CONFIG_SRC/shell/.zshenv"; do
+    [ -f "$f" ] || continue
+    # Guard zsh-defer source
+    if grep -q "^source ~/zsh-defer/zsh-defer.plugin.zsh" "$f" 2>/dev/null; then
+      sed -i 's|^source ~/zsh-defer/zsh-defer.plugin.zsh$|if [[ -f ~/zsh-defer/zsh-defer.plugin.zsh ]]; then source ~/zsh-defer/zsh-defer.plugin.zsh; fi|' "$f"
+    fi
+    # Guard optional uv/pipx/conda env file at the bottom of .zshrc
+    sed -i 's|^\. "\$HOME/\.local/share/\.\./bin/env"$|[[ -f "$HOME/.local/share/../bin/env" ]] \&\& . "$HOME/.local/share/../bin/env"|' "$f"
+  done
+fi
+ok "Zsh plugins ready"
 
 # ───────────────────────────────────────────────────────
 #  Phase 3: XDG Assets
@@ -283,6 +349,22 @@ if [ ! -f "$HOME/.config/xdg-desktop-portal-termfilechooser/config" ]; then
   run cp "$CONFIG_SRC/xdg-desktop-portal-termfilechooser/config" \
        "$HOME/.config/xdg-desktop-portal-termfilechooser/config"
 fi
+
+# The config points to ~/.local/bin/termfilechooser-wrapper.sh; keep it there
+# so the portal works even if the rice repo is moved later.
+if [ -f "$SCRIPTS_SRC/termfilechooser-wrapper.sh" ]; then
+  run mkdir -p "$HOME/.local/bin"
+  run cp "$SCRIPTS_SRC/termfilechooser-wrapper.sh" "$HOME/.local/bin/termfilechooser-wrapper.sh"
+  run chmod +x "$HOME/.local/bin/termfilechooser-wrapper.sh"
+fi
+
+# osd-notify.sh is referenced by binds.lua for volume/brightness OSD.
+# Copy it to ~/.local/bin so keybinds keep working if the repo is moved.
+if [ -f "$SCRIPTS_SRC/osd-notify.sh" ]; then
+  run mkdir -p "$HOME/.local/bin"
+  run cp "$SCRIPTS_SRC/osd-notify.sh" "$HOME/.local/bin/osd-notify.sh"
+  run chmod +x "$HOME/.local/bin/osd-notify.sh"
+fi
 ok "Portal config in place"
 
 # Download-organizer
@@ -296,6 +378,19 @@ run mkdir -p "$HOME/.config/systemd/user"
 run cp "$DOWNLOADS_SORTER_SRC/download-organizer.service" \
      "$HOME/.config/systemd/user/download-organizer.service"
 ok "Download-organizer deployed"
+
+# Wlogout CSS references suspend.png / suspend-hover.png, but the icon files
+# are named sleep.png / sleep-hover.png.  Create symlinks so the power menu
+# renders every button.
+info "Fixing wlogout suspend icon references ..."
+WLOGOUT_ICON_DIR="$HOME/.config/wlogout/icons"
+if [ -d "$WLOGOUT_ICON_DIR" ]; then
+  [ -f "$WLOGOUT_ICON_DIR/sleep.png" ] && \
+    run ln -sf "sleep.png" "$WLOGOUT_ICON_DIR/suspend.png"
+  [ -f "$WLOGOUT_ICON_DIR/sleep-hover.png" ] && \
+    run ln -sf "sleep-hover.png" "$WLOGOUT_ICON_DIR/suspend-hover.png"
+fi
+ok "Wlogout icons fixed"
 
 # Ensure scripts in hypr configs are executable
 info "Setting executable bits on hypr scripts ..."
@@ -357,15 +452,16 @@ else
     hyprpaper.service
     mpd.service
     mpd-mpris.service
+    pipewire.service
+    pipewire-pulse.service
     swaync.service
     waybar.service
+    wireplumber.service
     ydotool.service
   )
 
-  # These services are NOT managed by enable/disable — they
-  # start via socket activation (pipewire, wireplumber) or
-  # hyprland.lua (hypridle).
-  # Not touched: pipewire pipewire-pulse wireplumber hypridle
+  # hypridle is started by hyprland.lua, not as a systemd unit.
+  # Not touched: hypridle
 
   # Reload systemd to pick up new/changed service files
   info "Reloading systemd user daemon ..."
@@ -384,19 +480,43 @@ fi
 
 
 # Guard: some commands need an interactive terminal for sudo/chsh prompts
+PENDING_MANUAL=()
+
 require_tty() {
   [ -t 0 ] && return 0
   local cmd="$1"
   shift
   warn "$cmd needs an interactive terminal — skipping. Run manually: $*"
+  PENDING_MANUAL+=("$*")
   return 1
 }
 
 # ───────────────────────────────────────────────────────
-#  Phase 6: System-Level Changes
+#  Phase 6: Hyprland Plugins
 # ───────────────────────────────────────────────────────
 echo ""
-echo "── Phase 6: System-Level Changes ────────────────"
+echo "── Phase 6: Hyprland Plugins ────────────────────"
+
+if command -v hyprpm &>/dev/null; then
+  if [ -n "${HYPRLAND_INSTANCE_SIGNATURE:-}" ]; then
+    info "Installing/enabling scrolloverview Hyprland plugin ..."
+    run hyprpm add scrolloverview 2>/dev/null || true
+    run hyprpm enable scrolloverview 2>/dev/null || true
+    ok "Hyprland plugin setup attempted"
+  else
+    warn "Not running inside Hyprland — cannot install scrolloverview via hyprpm now."
+    muted "  After first login, run:"
+    muted "    hyprpm add scrolloverview && hyprpm enable scrolloverview"
+  fi
+else
+  warn "hyprpm not found — scrolloverview plugin not installed"
+fi
+
+# ───────────────────────────────────────────────────────
+#  Phase 7: System-Level Changes
+# ───────────────────────────────────────────────────────
+echo ""
+echo "── Phase 7: System-Level Changes ────────────────"
 
 if [ "$NO_SYSTEM" = true ]; then
   muted "  --no-system set, skipping"
@@ -467,8 +587,14 @@ else
   echo "    1. Reboot or start Hyprland:  uwsm start hyprland"
   echo "    2. If fonts aren't rendering, log out and back in"
   echo "    3. Run 'bat cache --build' if bat themes don't show"
+  if [ "${#PENDING_MANUAL[@]}" -gt 0 ]; then
+    echo "    4. Run these steps skipped due to non-interactive terminal:"
+    for step in "${PENDING_MANUAL[@]}"; do
+      echo "       $step"
+    done
+  fi
   if [ "$DO_BACKUP" = true ]; then
-    echo "    4. Backup saved to: $BACKUP_DIR"
+    echo "    Backup saved to: $BACKUP_DIR"
   fi
 fi
 echo "══════════════════════════════════════════════════"
