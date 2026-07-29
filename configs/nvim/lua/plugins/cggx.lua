@@ -129,6 +129,7 @@ return {
             { section = "header", align = "center" },
             { pane = 2, text = " ", padding = 1 },
             { section = "keys", gap = 1, padding = 1 },
+            { text = " ", enabled = function() return vim.o.columns < 130 end },
             { pane = 2, icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = { 1, 1 }, limit = 5 },
             { pane = 2, icon = "󰉓 ", title = "Projects", section = "projects", indent = 2, padding = { 1, 1 }, limit = 4 },
          },

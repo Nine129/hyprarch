@@ -13,12 +13,16 @@ hl.bind("SUPER + D", hl.dsp.exec_cmd("rmpc togglepause"))
 hl.bind("SUPER + period", hl.dsp.exec_cmd("rmpc next"))
 hl.bind("SUPER + comma", hl.dsp.exec_cmd("rmpc prev"))
 
+hl.bind("SUPER + T", hl.dsp.exec_cmd("pkill wiremix || kitty --single-instance --class wiremix-float -e wiremix"))
+hl.bind("SUPER + I", hl.dsp.exec_cmd("pkill wlctl || kitty --single-instance --class wlctl-float -e wlctl"))
 hl.bind("SUPER + C", hl.dsp.exec_cmd("kitty --single-instance --class kitty-float -d ~/Assistant -e omp"))
 
+hl.bind("SUPER + SHIFT +E",     hl.dsp.exec_cmd("pkill -c filepicker || kitty --single-instance --class filepicker -e yazi"))
 
 -- Launcher ────────────────────────
 hl.bind("SUPER + SUPER_L", hl.dsp.exec_cmd("pkill fuzzel || fuzzel"),  { release = true })  
 hl.bind("SUPER + E",     hl.dsp.exec_cmd("kitty --single-instance --class yazi -e yazi"))
+hl.bind("SUPER + SPACE", hl.dsp.exec_cmd("pkill latuicon || ~/.config/hypr/scripts/emoji-picker.sh"))
 hl.bind("SUPER + A", hl.dsp.exec_cmd("vivaldi --new-window vivaldi://startpage/"))
 -- Layout ──────────────────────────
 hl.bind("SUPER + F",       hl.dsp.window.fullscreen({ mode = "fullscreen" }))

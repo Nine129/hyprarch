@@ -388,7 +388,8 @@
             "enabled": false
         },
         "Summaries": {
-            "enabled": true
+            "enabled": false,
+            "summaryExpiryThresholdDays": 3
         },
         "SendTimestamps": {
             "enabled": false
@@ -427,7 +428,9 @@
             "enabled": false
         },
         "SilentTyping": {
-            "enabled": true
+            "enabled": true,
+            "isEnabled": true,
+            "showIcon": false
         },
         "SortFriendRequests": {
             "enabled": false
@@ -576,6 +579,6 @@
         "authenticated": false,
         "url": "https://api.vencord.dev/",
         "settingsSync": false,
-        "settingsSyncVersion": 1784230454994
+        "settingsSyncVersion": 1784978151440
     }
 }

@@ -1,5 +1,6 @@
 -- ── CGGX Rice — Settings ─────────────────
 -- Sourced via require("settings")
+hl.env("GTK_USE_PORTAL", "1")
 
 hl.config({
   general = {

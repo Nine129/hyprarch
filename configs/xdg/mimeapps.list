@@ -58,7 +58,7 @@ audio/webm=mpv.desktop
 audio/x-flac=mpv.desktop
 
 # ── Text / Code ────────────────────────────────────────
-text/plain=nvim-term.desktop
+text/plain=nvim.desktop
 text/x-log=nvim.desktop
 text/css=nvim.desktop
 text/javascript=nvim.desktop

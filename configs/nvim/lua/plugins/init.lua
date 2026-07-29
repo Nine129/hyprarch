@@ -2,6 +2,7 @@ return {
   -- Snappier which-key popup on leader press
   {
     "folke/which-key.nvim",
+    keys = { "<leader>", "<c-w>", '"', "'", "`", "c", "v", "V", "g" },
     opts = { delay = 200 },
   },
   -- Quick navigation — jump to any visible character in 2 keystrokes

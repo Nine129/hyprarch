@@ -165,6 +165,7 @@ hyprarch/
 | `SUPER + Backspace` | Otter-launcher (terminal launcher) |
 | `SUPER + A` | Open Vivaldi browser |
 | `SUPER + E` | Open kitty + yazi file manager |
+| `SUPER + SHIFT + E` | Emoji/icon picker (latuicon) |
 | `SUPER + R` | Open kitty + nvim |
 | `SUPER + D` / `SUPER + Z` | rmpc toggle pause / open rmpc |
 | `SUPER + period` | rmpc next track |

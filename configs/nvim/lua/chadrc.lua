@@ -25,7 +25,7 @@ M.base46 = {
 		-- Picker item focus: lime fg, subtle grey bg
 		TelescopeSelection = { bg = "#2a2a35", fg = "#C8FF00" },
 		LazyH1 = { bg = "#2a2a35", fg = "#C8FF00" },
-		LineNr = { fg = "#8a8a9a" },
+		LineNr = { fg = "#6a6a80" },
 		CursorLineNr = { fg = "#C8FF00" },
 		PmenuThumb = { bg = "#C8FF00" },
 	},

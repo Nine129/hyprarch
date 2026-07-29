@@ -1,6 +1,7 @@
 7zip
 alsa-plugins
 alsa-utils
+android-tools
 aria2
 base
 base-devel
@@ -143,6 +144,7 @@ ripgrep
 rmpc
 rustup
 sddm
+shell-color-scripts-git
 slurp
 starship
 steam

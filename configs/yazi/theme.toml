@@ -53,30 +53,59 @@ rules = [
   { url = "*.cs",     name = " ", fg = "#b48cff" },
   { url = "*.swift",  name = " ", fg = "#b48cff" },
 
-  # Directories — silver
-  { url = "*/",       name = " ", fg = "#e8e8f0" },
+  # Directories — cyan
+  { url = "*/",       name = " ", fg = "#00e5ff" },
 
-  # Images — hot purple (MIME)
+  # Images — hot purple (URL first, MIME fallback)
+  { url = "*.png",     name = " ", fg = "#bd00ff" },
+  { url = "*.jpg",     name = " ", fg = "#bd00ff" },
+  { url = "*.jpeg",    name = " ", fg = "#bd00ff" },
+  { url = "*.gif",     name = " ", fg = "#bd00ff" },
+  { url = "*.svg",     name = " ", fg = "#bd00ff" },
+  { url = "*.webp",    name = " ", fg = "#bd00ff" },
+  { url = "*.bmp",     name = " ", fg = "#bd00ff" },
+  { url = "*.ico",     name = " ", fg = "#bd00ff" },
+  { url = "*.tiff",    name = " ", fg = "#bd00ff" },
   { mime = "image/*", name = " ", fg = "#bd00ff" },
 
-  # Video — hot purple (MIME)
+  # Video — hot purple (URL first, MIME fallback)
+  { url = "*.mp4",     name = " ", fg = "#bd00ff" },
+  { url = "*.mkv",     name = " ", fg = "#bd00ff" },
+  { url = "*.avi",     name = " ", fg = "#bd00ff" },
+  { url = "*.mov",     name = " ", fg = "#bd00ff" },
+  { url = "*.webm",    name = " ", fg = "#bd00ff" },
+  { url = "*.flv",     name = " ", fg = "#bd00ff" },
+  { url = "*.m4v",     name = " ", fg = "#bd00ff" },
+  { url = "*.mpg",     name = " ", fg = "#bd00ff" },
+  { url = "*.mpeg",    name = " ", fg = "#bd00ff" },
   { mime = "video/*", name = " ", fg = "#bd00ff" },
 
-  # Audio — red (MIME)
+  # Audio — red (URL first, MIME fallback)
+  { url = "*.mp3",     name = " ", fg = "#ff2d55" },
+  { url = "*.flac",    name = " ", fg = "#ff2d55" },
+  { url = "*.wav",     name = " ", fg = "#ff2d55" },
+  { url = "*.ogg",     name = " ", fg = "#ff2d55" },
+  { url = "*.m4a",     name = " ", fg = "#ff2d55" },
+  { url = "*.aac",     name = " ", fg = "#ff2d55" },
+  { url = "*.wma",     name = " ", fg = "#ff2d55" },
+  { url = "*.opus",    name = " ", fg = "#ff2d55" },
+  { url = "*.ape",     name = " ", fg = "#ff2d55" },
+  { url = "*.mid",     name = " ", fg = "#ff2d55" },
+  { url = "*.midi",    name = " ", fg = "#ff2d55" },
   { mime = "audio/*", name = " ", fg = "#ff2d55" },
 
-  # Archives / compressed — cyan (url)
-  { url = "*.zip",    name = " ", fg = "#00e5ff" },
-  { url = "*.tar",    name = " ", fg = "#00e5ff" },
-  { url = "*.gz",     name = " ", fg = "#00e5ff" },
-  { url = "*.xz",     name = " ", fg = "#00e5ff" },
-  { url = "*.bz2",    name = " ", fg = "#00e5ff" },
-  { url = "*.7z",     name = " ", fg = "#00e5ff" },
-  { url = "*.rar",    name = " ", fg = "#00e5ff" },
-  { url = "*.zst",    name = " ", fg = "#00e5ff" },
-  { url = "*.iso",    name = " ", fg = "#00e5ff" },
-  { url = "*.deb",    name = " ", fg = "#00e5ff" },
-  { url = "*.rpm",    name = " ", fg = "#00e5ff" },
+  # Archives / compressed — silver
+  { url = "*.zip",    name = " ", fg = "#e8e8f0" },
+  { url = "*.tar",    name = " ", fg = "#e8e8f0" },
+  { url = "*.gz",     name = " ", fg = "#e8e8f0" },
+  { url = "*.xz",     name = " ", fg = "#e8e8f0" },
+  { url = "*.bz2",    name = " ", fg = "#e8e8f0" },
+  { url = "*.7z",     name = " ", fg = "#e8e8f0" },
+  { url = "*.rar",    name = " ", fg = "#e8e8f0" },
+  { url = "*.zst",    name = " ", fg = "#e8e8f0" },
+  { url = "*.iso",    name = " ", fg = "#e8e8f0" },
+  { url = "*.deb",    name = " ", fg = "#e8e8f0" },
+  { url = "*.rpm",    name = " ", fg = "#e8e8f0" },
 
   # Documents — lime
   { url = "*.md",     name = " ", fg = "#c8ff00" },
@@ -100,8 +129,8 @@ rules = [
   { url = "*.sqlite", name = " ", fg = "#6a6a80" },
   { url = "*.lock",   name = " ", fg = "#6a6a80" },
 
-  # Executables — cyan
-  { url = "*", is = "exec", name = " ", fg = "#00e5ff" },
+  # Executables — red
+  { url = "*", is = "exec", name = " ", fg = "#ff2d55" },
 
   # Symlinks — red
   { url = "*", is = "orphan", name = " ", fg = "#ff2d55" },
@@ -120,13 +149,42 @@ rules = [
   # Directories
   { url = "*/", name = " " },
 
-  # Images
+  # Images (URL first, MIME fallback)
+  { url = "*.png",  name = " " },
+  { url = "*.jpg",  name = " " },
+  { url = "*.jpeg", name = " " },
+  { url = "*.gif",  name = " " },
+  { url = "*.svg",  name = " " },
+  { url = "*.webp", name = " " },
+  { url = "*.bmp",  name = " " },
+  { url = "*.ico",  name = " " },
+  { url = "*.tiff", name = " " },
   { mime = "image/*", name = " " },
 
-  # Video
+  # Video (URL first, MIME fallback)
+  { url = "*.mp4",  name = "󰕼 " },
+  { url = "*.mkv",  name = "󰕼 " },
+  { url = "*.avi",  name = "󰕼 " },
+  { url = "*.mov",  name = "󰕼 " },
+  { url = "*.webm", name = "󰕼 " },
+  { url = "*.flv",  name = "󰕼 " },
+  { url = "*.m4v",  name = "󰕼 " },
+  { url = "*.mpg",  name = "󰕼 " },
+  { url = "*.mpeg", name = "󰕼 " },
   { mime = "video/*", name = "󰕼 " },
 
-  # Audio
+  # Audio (URL first, MIME fallback)
+  { url = "*.mp3",  name = " " },
+  { url = "*.flac", name = " " },
+  { url = "*.wav",  name = " " },
+  { url = "*.ogg",  name = " " },
+  { url = "*.m4a",  name = " " },
+  { url = "*.aac",  name = " " },
+  { url = "*.wma",  name = " " },
+  { url = "*.opus", name = " " },
+  { url = "*.ape",  name = " " },
+  { url = "*.mid",  name = " " },
+  { url = "*.midi", name = " " },
   { mime = "audio/*", name = " " },
 
   # Archives
@@ -195,7 +253,7 @@ rules = [
 [mgr]
 syntect_theme = ""
 border_symbol = "│"
-border_style = { fg = "#2a2a35" }
+border_style = { fg = "#4a4a60" }
 
 [mgr.cwd]
 fg = "#e8e8f0"
@@ -235,14 +293,14 @@ selected = { fg = "#e8e8f0", bg = "#1a1a20" }
 
 # ── Indicator bars ─────────────────────────────────────
 [indicator]
-parent = { fg = "#6a6a80" }
-current = { fg = "#ff2d55" }
+parent = { fg = "#000000", bg = "#ff6b00" }
+current = { fg = "#000000", bg = "#c8ff00", bold = true }
 preview = { fg = "#2a2a35" }
-padding = { open = "▌", close = "▐" }
+padding = { open = " ", close = " " }
 
 # ── Tabs ───────────────────────────────────────────────
 [tabs]
-active = { fg = "#e8e8f0", bg = "#1a1a20" }
+active = { fg = "#000000", bg = "#ff6b00" }
 inactive = { fg = "#6a6a80", bg = "#0a0a0c" }
 sep_inner = { open = "", close = "" }
 sep_outer = { open = "", close = "" }
@@ -339,7 +397,7 @@ tbl_cell = { fg = "#e8e8f0" }
 success = { fg = "#c8ff00" }
 error = { fg = "#ff2d55" }
 warn = { fg = "#ff6b00" }
-info = { fg = "#00e5ff" }
+info = { fg = "#e8e8f0" }
 
 # ── Git status signs ───────────────────────────────────
 [git]
@@ -347,7 +405,7 @@ modified_sign  = "M"
 modified       = { fg = "#c8ff00" }
 
 added_sign     = "+"
-added          = { fg = "#00e5ff" }
+added          = { fg = "#c8ff00" }
 
 deleted_sign   = "✗"
 deleted        = { fg = "#ff2d55", bold = true }

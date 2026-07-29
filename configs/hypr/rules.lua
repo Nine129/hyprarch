@@ -103,8 +103,8 @@ hl.layer_rule({
     match={ class = "filepicker"},
     float= true,
     center=true,
-    size={800,650},
-    opaque = true,
+    size={900,650},
+    opaque = false,
    }
  )
  hl.window_rule(
@@ -132,5 +132,48 @@ hl.layer_rule({
    {
      match = { class = "google-chrome"},
      opaque = true,
+   }
+ )
+ hl.window_rule(
+   {
+     match = { class = "mkxp-z"},
+     opaque = true,
+   }
+ )
+ hl.window_rule(
+   {
+    match={ class = "wlctl-float"},
+    float= true,
+    center=true,
+    size={800,650},
+    opaque = true,
+    border_color = "rgba(c8ff00ee)"
+  }
+ )
+
+hl.window_rule(
+  {
+    match = { class = "kitty-float-latuicon" },
+    float = true,
+    center = true,
+    size = { 700, 600 },
+    opaque = true,
+    border_color = "rgba(b48cffff)"  
+  }
+)
+ hl.window_rule(
+   {
+    match={ class = "wiremix-float"},
+    float= true,
+    center=true,
+    size={800,450},
+    opaque = true,
+    border_color = "rgba(00e5ffff)"  
+  }
+ )
+ hl.window_rule(
+   {
+     match = { class = "com.obsproject.Studio" },
+     opaque = true
    }
  )
