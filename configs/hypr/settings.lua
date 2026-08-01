@@ -5,7 +5,7 @@ hl.env("GTK_USE_PORTAL", "1")
 hl.config({
   general = {
     gaps_in              = 3,
-    gaps_out             = { top = 3, bottom = 12, left = 6, right = 6 },
+    gaps_out             = { top = 3, bottom = 12, left = 4, right = 4 },
     border_size          =3,
     col = {
            active_border = "rgba(ff2d55ff)",

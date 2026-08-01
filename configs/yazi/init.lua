@@ -2,6 +2,8 @@ if os.getenv("YAZI_NO_SESSION") ~= "1" then
     require("autosession"):setup()
 end
 
+require("folder-count"):setup { order = 1600 }
+
 require("full-border"):setup()
 require("git"):setup {
 	-- Order of status signs showing in the linemode
@@ -74,31 +76,31 @@ require("yatline"):setup({
 		},
 	},
 
-	status_line = {
-		left = {
-			section_a = {
-				{ type = "string", name = "tab_mode" },
-			},
-			section_b = {
-				{ type = "string", name = "hovered_size" },
-			},
-			section_c = {
-				{ type = "string", name = "hovered_path" },
-				{type = "coloreds", custom = false, name = "count", params = { true }},
-			},
-		},
-		right = {
-			section_a = {
-				{ type = "string", name = "cursor_position", style = { bg = "#C8FF00", fg = "#0a0a0c" } },
-			},
-			section_b = {
-				{ type = "string", name = "cursor_percentage" },
-			},
-			section_c = {
-				{ type = "coloreds", name = "permissions" },
-			},
-		},
-	},
+    status_line = {
+        left = {
+            section_a = {
+                { type = "string", name = "tab_mode" },
+            },
+            section_b = {
+                { type = "string", name = "hovered_size" },
+            },
+            section_c = {
+                { type = "string", name = "hovered_path" },
+                { type = "coloreds", custom = false, name = "count", params = { true } },
+            },
+        },
+        right = {
+            section_a = {
+                { type = "string", name = "cursor_position", style = { bg = "#C8FF00", fg = "#0a0a0c" } },
+            },
+            section_b = {
+                { type = "string", name = "cursor_percentage" },
+            },
+            section_c = {
+                { type = "coloreds", name = "permissions" },
+            },
+        },
+    },
 })
 require("custom-shell"):setup({
     history_path = "default",

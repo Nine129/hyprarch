@@ -17,3 +17,7 @@ map("n", "<leader>fW", function()
   require("telescope.builtin").live_grep({ hidden = true })
 end, { desc = "live grep (incl. hidden)" })
 
+
+map("n", "<leader>cp", function()
+  vim.fn.setreg("+", vim.fn.expand("%:p"))
+end, { desc = "Copy full file path" })

@@ -43,7 +43,6 @@ local _restore_session = ya.sync(function(state)
       ya.emit("tab_create", { tab.cwd })
     end
     ya.emit("sort", tab.sort)
-    ya.emit("linemode", { tab.linemode })
     ya.emit("hidden", { tab.show_hidden })
   end
 

@@ -50,6 +50,11 @@ bindkey '^R' history-incremental-search-backward
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
 bindkey '^W' backward-kill-word
+bindkey '^H' backward-kill-word
+bindkey '^Z' undo
+bindkey '^X^Z' suspend
+bindkey -M viins '^[[1;5D' backward-word
+bindkey -M viins '^[[1;5C' forward-word
 bindkey '^U' kill-whole-line
 bindkey '^L' clear-screen
 
@@ -208,15 +213,16 @@ case ":$PATH:" in
   *) export PATH="/home/nine/.local/share/pi-node/node-v22.22.3-linux-x64/bin:$PATH" ;;
 esac
 # ── Zsh plugins (deferred — runs after first prompt) ──
-zsh-defer -c '
+_cggx_deferred_plugins() {
   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9a9ab0"
+  # fzf completion menu should not render a stale history suggestion.
+  ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(fzf-completion)
 
   # fzf environment/config; keybindings are sourced synchronously above
   [[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
 
-  # Autosuggestions wraps every ZLE widget by default. Only widgets that can
-  # change the command buffer actually need wrapping; ignore everything else.
   local -a _as_keep_widgets=(
+    fzf-completion
     self-insert self-insert-unmeta quoted-insert vi-quoted-insert
     backward-delete-char delete-char
     kill-line kill-whole-line backward-kill-word backward-kill-line
@@ -321,10 +327,11 @@ zsh-defer -c '
     ZSH_HIGHLIGHT_STYLES[cursor]="standout"
     ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]="standout"
   fi
-'
+}
+zsh-defer _cggx_deferred_plugins
 export NVM_DIR="$HOME/.config/nvm"
-zsh-defer '. "$NVM_DIR/nvm.sh"'
-zsh-defer '. "$NVM_DIR/bash_completion"'
+zsh-defer source "$NVM_DIR/nvm.sh"
+zsh-defer source "$NVM_DIR/bash_completion"
 [[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
 
 # Cache fzf keybindings so we don't run `fzf` on every shell start

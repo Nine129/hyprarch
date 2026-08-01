@@ -16,7 +16,7 @@ window#waybar {
 
 window > box {
   background: transparent;
-  padding: 0; margin: 0 6px;
+  padding: 0; margin: 0 4px;
 }
 
 
@@ -68,6 +68,8 @@ window > box {
   margin: 0; background: @purple; color: @bg;
 }
 
+#memory { font-size: 14px; }
+
 /* ── Tray + Power: gapless ── */
 #tray, #custom-power-button {
   margin: 0;
@@ -77,6 +79,11 @@ window > box {
 
 /* ── Personal: colored bg, black text ── */
 #pulseaudio { background: @orange; color: #0a0a0c; font-size: 14px; }
+
+/* ── Volume / clock separation ── */
+#pulseaudio {
+  box-shadow: 2px 0 3px rgba(0, 0, 0, 0.45);
+}
 #clock { background: @cyan; color: #0a0a0c; font-size: 14px; }
 #battery, #battery.charging, #battery.warning, #battery.critical { font-size: 14px; }
 #battery { background: @lime; color: #0a0a0c; }

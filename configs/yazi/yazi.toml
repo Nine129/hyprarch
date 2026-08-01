@@ -1,7 +1,7 @@
 [mgr]
 show_hidden = false
 show_ignored = false
-linemode = "size"
+linemode = "folder_count"
 sort_by = "natural"
 sort_dir_first = true
 sort_reverse = false
@@ -77,6 +77,11 @@ rules = [
     { mime = "application/eps", run = "mediainfo" },
     { url = "*.{ai,eps,ait}", run = "mediainfo" },
   ]
+
+[[plugin.prepend_fetchers]]
+url = "*/"
+run = "folder-count"
+group = "folder-count"
 
 [tasks]
   image_alloc = 1073741824
