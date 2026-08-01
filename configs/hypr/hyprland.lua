@@ -96,4 +96,4 @@ hl.config({
     },
 })
 
-hl.permission("/usr//hyprpm", "plugin", "allow")
+hl.permission("/usr/bin/hyprpm", "plugin", "allow")

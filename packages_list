@@ -9,6 +9,7 @@ base-devel
 bat
 bibata-cursor-theme
 blueman
+bluetui
 bluez
 bluez-utils
 bookokrat-bin
@@ -27,7 +28,6 @@ cliphist
 cmake
 cmatrix
 cowsay
-czkawka-cli
 duf
 dust
 easyeffects
