@@ -38,15 +38,10 @@
   /* ── Group 1: System (gapless) ── */
   "group/sysmon": {
     "orientation": "horizontal",
-    "modules": ["disk", "memory", "temperature"],
+    "modules": ["memory", "temperature"],
     "spacing": 0
   },
 
-  "disk": {
-    "interval": 30,
-    "format":   "/ {percentage_free}% FREE",
-    "on-click": "kitty --single-instance btop"
-  },
 
   "memory": {
     "interval": 30,

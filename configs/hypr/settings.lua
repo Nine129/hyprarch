@@ -5,11 +5,11 @@ hl.env("GTK_USE_PORTAL", "1")
 hl.config({
   general = {
     gaps_in              = 3,
-    gaps_out             = { top = 3, bottom = 12, left = 12, right = 13 },
+    gaps_out             = { top = 3, bottom = 12, left = 6, right = 6 },
     border_size          =3,
     col = {
            active_border = "rgba(ff2d55ff)",
-	   inactive_border = "rgba(2a2a3580)",
+	   inactive_border = "rgba(151518ff)",
    },
     layout               = "dwindle",
     resize_on_border     = true,

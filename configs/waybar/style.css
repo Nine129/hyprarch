@@ -16,9 +16,10 @@ window#waybar {
 
 window > box {
   background: transparent;
-  padding: 0;
-  margin: 5px 12px 0 12px;
+  padding: 0; margin: 0 6px;
 }
+
+
 
 /* ── Workspace numbers 1-9 ────── */
 #workspaces button {
@@ -56,20 +57,23 @@ window > box {
 }
 
 /* ── Pill modules ──────────────── */
-#disk, #memory, #temperature, #pulseaudio, #clock, #battery, #tray, #custom-power-button {
+#memory, #temperature, #pulseaudio, #clock, #battery, #tray, #custom-power-button {
   border: none; border-radius: 0;
-  padding: 4px 14px; margin: 0 0.25px;
-  box-shadow: 1px 0 3px rgba(0,0,0,0.4);
+  padding: 4px 14px; margin: 0 1px;
 }
-#disk, #memory, #temperature, #tray, #custom-power-button { background: #151518; }
+#tray, #custom-power-button { background: #151518; }
 
-/* ── System group (gapless) ────── */
-#disk, #memory, #temperature {
-  margin: 0; box-shadow: none;
+/* ── System group: purple bg, black text ── */
+#memory, #temperature {
+  margin: 0; background: @purple; color: @bg;
 }
 
-/* ── System: colored text ── */
-#disk { color: @lime; } #memory { color: @orange; } #temperature { color: @cyan; font-size: 14px; }
+/* ── Tray + Power: gapless ── */
+#tray, #custom-power-button {
+  margin: 0;
+}
+
+#temperature { font-size: 14px; }
 
 /* ── Personal: colored bg, black text ── */
 #pulseaudio { background: @orange; color: #0a0a0c; font-size: 14px; }
@@ -91,13 +95,14 @@ window > box {
   margin-top: 1px; margin-bottom: -1px;
 }
 
+
+
+
 /* ── Separators ────────────────── */
 #custom-sep1, #custom-sep2 {
-  background: @border; min-width: 1px; min-height: 14px;
-  margin: 5px 6px; padding: 0; border: none; border-radius: 0;
+  background: transparent; min-width: 1px; min-height: 14px;
+  margin: 5px 0; padding: 0; border: none; border-radius: 0;
 }
-
-
 /* ── Power button ──────────────── */
 #custom-power-button {
   color: #0a0a0c; font-size: 22px; font-weight: 700; padding: 0 12px;
