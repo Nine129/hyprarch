@@ -13,6 +13,7 @@ hl.config({
    },
     layout               = "dwindle",
     resize_on_border     = true,
+    
   },
 
   decoration = {

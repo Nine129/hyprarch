@@ -6,7 +6,7 @@ local vivaldi_launching = false
 -- Terminal ─────────────────────────
 hl.bind("SUPER + Q",       hl.dsp.exec_cmd("kitty --single-instance"))
 hl.bind("SUPER + W",       hl.dsp.window.close())
-hl.bind("SUPER + CTRL + Q", hl.dsp.exec_cmd("kitty --single-instance --class kitty-float"))
+hl.bind("SUPER + SHIFT + Q", hl.dsp.exec_cmd("kitty --single-instance --class kitty-float"))
 hl.bind("SUPER + Backspace", hl.dsp.exec_cmd("pkill otter-launcher || kitty --single-instance --class otter-launcher -e otter-launcher"))
 hl.bind("SUPER + R", hl.dsp.exec_cmd("kitty --single-instance -e nvim"))
 hl.bind("SUPER + D", hl.dsp.exec_cmd("rmpc togglepause"))
@@ -101,7 +101,7 @@ hl.bind("SUPER + SHIFT + C",   hl.dsp.exec_cmd("cliphist wipe && notify-send 'Cl
 
 -- Lock & exit ─────────────────────
 hl.bind("SUPER + L",           hl.dsp.exec_cmd("hyprlock"))
-hl.bind("SUPER + SHIFT + Q",   hl.dsp.exec_cmd("pkill wlogout || wlogout --css ~/.config/wlogout/style.css --buttons-per-row 5 -T 410 -B 410 -L 200 -R 200"))
+hl.bind("SUPER + CTRL + Q",   hl.dsp.exec_cmd("pkill wlogout || wlogout --css ~/.config/wlogout/style.css --buttons-per-row 5 -T 410 -B 410 -L 200 -R 200"))
 hl.bind("SUPER + SHIFT + Escape",  hl.dsp.exec_cmd("hyprctl dispatch exit"))
 
 -- Screenshot menu ─────────────────────

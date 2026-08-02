@@ -249,6 +249,14 @@ _cggx_deferred_plugins() {
     source "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
   fi
 
+  if [[ -d "$HOME/.zsh/plugins/zsh-history-substring-search" ]]; then
+    source "$HOME/.zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh"
+    # ↑/↓ page history matching the typed substring (insert mode only —
+    # normal-mode arrows keep their default behavior)
+    bindkey -M viins '^[[A' history-substring-search-up
+    bindkey -M viins '^[[B' history-substring-search-down
+  fi
+
   # Skip highlighting for very long lines (performance guard)
   ZSH_HIGHLIGHT_MAXLENGTH=512
 

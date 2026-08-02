@@ -216,10 +216,12 @@ body {
 	border: var(--border-thickness) solid #ff6b00 !important;
 	border-radius: var(--radius-md) !important;
 }
-/* Member list — purple (people/type) */
+/* Member list — purple (people/type), compensate base 8px inset */
 [class*="membersWrap"] {
 	border: var(--border-thickness) solid #b48cff !important;
 	border-radius: var(--radius-md) !important;
+	margin: -3px -4px -4px -4px !important;
+	height: 100% !important;
 }
 [class*="membersWrap"] div[class*="members"] {
 	border-radius: var(--radius-md) !important;
@@ -228,6 +230,22 @@ body {
 [class*="channelTextArea"] {
 	border: none !important;
 	border-top: var(--border-thickness) solid #ff6b00 !important;
+}
+/* Friends tab — each pane gets its own CGGX color, mirrors chat view */
+/* Friends page header — red (channel = red, like subtitleContainer) */
+[class*="container__133bf"] > [class*="container__9293f"] {
+	border: var(--border-thickness) solid #ff2d55 !important;
+	border-radius: var(--radius-md) !important;
+}
+/* Friend/DM list column — orange (list = chat = orange) */
+[class*="peopleColumn"] {
+	border: var(--border-thickness) solid #ff6b00 !important;
+	border-radius: var(--radius-md) !important;
+}
+/* Now playing / active column — purple (activity = members = purple) */
+[class*="nowPlayingColumn"] {
+	border: var(--border-thickness) solid #b48cff !important;
+	border-radius: var(--radius-md) !important;
 }
 /* Input panel button icons — CGGX multi-color like nvim dashboard.
    Discord uses <div role="button"> with generic classes; only sticker has a
@@ -283,6 +301,15 @@ body {
 [class*="membersWrap"]::after,
 [class*="c8ffbb"]::after {
 	color: #b48cff !important;
+}
+[class*="container__133bf"] > [class*="container__9293f"]::after {
+	color: #ff2d55 !important; /* friends header — red */
+}
+[class*="peopleColumn"]::after {
+	color: #ff6b00 !important; /* list — orange */
+}
+[class*="nowPlayingColumn"]::after {
+	color: #b48cff !important; /* activity — purple */
 }
 [class*="channelTextArea"]::after {
 	color: #ff6b00 !important;
@@ -521,7 +548,13 @@ section[class*="title_f75fb0"] [class*="upperContainer__9293f"] > [class*="toolb
 	justify-content: flex-end !important;
 	align-items: center !important;
 	gap: 8px !important;
-	padding-right: 0 !important;
+	padding: 0 !important;
+}
+
+/* Remove Discord's large titlebar inset in every toolbar context */
+[class*="upperContainer__9293f"],
+[class*="toolbar__9293f"] {
+	padding: 0 !important;
 }
 
 /* collapse window buttons container so siblings reflow right */
@@ -538,5 +571,31 @@ section[class*="title_f75fb0"] [class*="upperContainer__9293f"] > [class*="toolb
 [aria-label="Maximise"],
 [aria-label="Minimise"],
 [aria-label="Inbox"] {
+	display: none !important;
+}
+
+/* ── Mentions — black text for readability on lime bg ── */
+/* jump-to-mentions bar at the bottom of the chat */
+[class*="mentionsBar"],
+[class*="mentionsBar"] * {
+	color: var(--text-0) !important; /* near-black, text-on-colored-elements */
+}
+/* inline @user / @channel / @role pills in messages */
+[class*="mention"]:not([class*="mentionBadge"]):not([class*="mentionsBar"]) {
+	color: var(--text-0) !important;
+}
+
+/* ── Force window border — compositor border not rendering ── */
+/* uncomment to draw the Hyprland-style lime frame on Discord's root element */
+/* #app-mount {
+	border: var(--border-thickness) solid #C8FF00 !important;
+	box-sizing: border-box !important;
+} */
+/* Hide Discord icon wrapper */
+[class*="iconWrapper__468db"] {
+	display: none !important;
+}
+/* Hide New Group DM button */
+[class*="iconWrapper__9293f"][aria-label="New Group DM"] {
 	display: none !important;
 }

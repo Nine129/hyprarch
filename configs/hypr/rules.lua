@@ -103,7 +103,7 @@ hl.layer_rule({
     match={ class = "filepicker"},
     float= true,
     center=true,
-    size={900,650},
+    size={1020,650},
     opaque = false,
    }
  )
