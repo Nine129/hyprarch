@@ -36,9 +36,9 @@ hl.window_rule({
  hl.window_rule(
    {
      match = { class = "vesktop"},
-     border_color = "rgba(c8ff00ee)",
      opaque = true,
-     no_shadow= true  
+     no_shadow= true , 
+     decorate = false
    }
  )
  hl.window_rule(

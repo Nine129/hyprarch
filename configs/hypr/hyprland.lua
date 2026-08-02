@@ -68,12 +68,6 @@ hl.on("hyprland.start", function()
   hl.exec_cmd("amixer -c0 sset 'Capture' 37 && amixer -c0 sset 'Internal Mic Boost' 0 && amixer -c0 sset 'Mic Boost' 53")
 end)
 
--- Window Rules ───────────────────────────
--- Window Rules chuẩn chỉ theo Hyprland Wiki v0.55.2 Lua API
-hl.window_rule({ 
-  match    = { class = "vesktop" }, 
-  decorate = false,
-})
 
 -- Plugin
 hl.config({

@@ -67,10 +67,10 @@ require("yatline"):setup({
 		},
 		right = {
 			section_a = {
-				-- { type = "string", name = "date", params = { "%A, %d %B %Y" }, style = { bg = "#ff6b00", fg = "#0a0a0c" } },
-			},
+			{ type = "string", custom = false, name = "tab_path", style ={ bg = "#00e5ff", fg = "#0a0a0c" } },
+      },
+
 			section_b = {
-				-- { type = "string", name = "date", params = { "%X" } },
 			},
 			section_c = {},
 		},
@@ -85,7 +85,7 @@ require("yatline"):setup({
                 { type = "string", name = "hovered_size" },
             },
             section_c = {
-                { type = "string", name = "hovered_path" },
+                { type = "string", name = "hovered_name" },
                 { type = "coloreds", custom = false, name = "count", params = { true } },
             },
         },

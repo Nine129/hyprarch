@@ -250,11 +250,30 @@ _cggx_deferred_plugins() {
   fi
 
   if [[ -d "$HOME/.zsh/plugins/zsh-history-substring-search" ]]; then
+    # Rolling highlight: orange → lime → cyan → purple (no red), black text
+    _cggx_history_colors=( '#ff6b00' '#c8ff00' '#00e5ff' '#b48cff' )
+    _cggx_history_color_idx=0
     source "$HOME/.zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh"
+
+    # Rotate the highlight bg on each ↑/↓ press, then run the real search
+    _cggx_history_rotate() {
+      (( _cggx_history_color_idx = _cggx_history_color_idx % ${#_cggx_history_colors} + 1 ))
+      local _c="${_cggx_history_colors[_cggx_history_color_idx]}"
+      HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_FOUND="fg=#000000,bg=${_c},bold"
+      HISTORY_SUBSTRING_SEARCH_HIGHLIGHT_NOT_FOUND="fg=#000000,bg=${_c},bold"
+    }
+    function _cggx-history-substring-search-up() {
+      _cggx_history_rotate; zle history-substring-search-up
+    }
+    function _cggx-history-substring-search-down() {
+      _cggx_history_rotate; zle history-substring-search-down
+    }
+    zle -N _cggx-history-substring-search-up
+    zle -N _cggx-history-substring-search-down
     # ↑/↓ page history matching the typed substring (insert mode only —
     # normal-mode arrows keep their default behavior)
-    bindkey -M viins '^[[A' history-substring-search-up
-    bindkey -M viins '^[[B' history-substring-search-down
+    bindkey -M viins '^[[A' _cggx-history-substring-search-up
+    bindkey -M viins '^[[B' _cggx-history-substring-search-down
   fi
 
   # Skip highlighting for very long lines (performance guard)
