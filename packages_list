@@ -182,6 +182,7 @@ wine-staging
 winetricks
 wiremix
 wireplumber
+wl-clip-persist
 wl-clipboard
 wlctl-bin
 wlogout-git

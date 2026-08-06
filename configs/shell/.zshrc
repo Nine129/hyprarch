@@ -13,6 +13,8 @@ setopt ALWAYS_TO_END
 setopt INTERACTIVE_COMMENTS
 setopt CORRECT
 setopt CORRECT_ALL
+# Let ^Q reach zle (else the TTY eats it as XON flow control)
+setopt NO_FLOW_CONTROL
 setopt HIST_VERIFY
 setopt SHARE_HISTORY
 setopt APPEND_HISTORY
@@ -28,6 +30,7 @@ HISTSIZE=50000
 SAVEHIST=50000
 
 # ── Completion ─────────────────────────────────────────
+zmodload zsh/complist
 autoload -Uz compinit
 if [[ ! -f "${ZDOTDIR:-$HOME}/.zcompdump" ]]; then
   compinit
@@ -37,11 +40,39 @@ fi
 autoload -Uz bashcompinit && bashcompinit
 
 zstyle ':completion:*' menu select
-zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}"
+zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}" 'ma=01;30;48;5;190'
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 zstyle ':completion:*' rehash true
 zstyle ':completion:*' use-cache true
 zstyle ':completion:*' cache-path "$HOME/.cache/zsh"
+# ── CGGX completion styling: per-tag match colors, no headers ──
+# group-name must be empty for tag-specific list-colors to apply (zshcompsys)
+zstyle ':completion:*' group-name ''
+# CGGX roles via kitty ANSI palette:
+#   36 cyan #00e5ff = info/action (commands)   32 lime #c8ff00 = active (functions, pkgs)
+#   33 orange #ff6b00 = attention (options)    35 purple #b48cff = premium (users, hosts)
+#   31 red #ff2d55 = danger (signals, jobs)    37 silver #e8e8f0 = neutral (values)
+# Files/dirs stay on LS_COLORS above.
+zstyle ':completion:*:commands' list-colors '=*=32' 'ma=01;30;48;5;190'
+zstyle ':completion:*:builtins' list-colors '=*=32' 'ma=01;30;48;5;190'
+zstyle ':completion:*:functions' list-colors '=*=36' 'ma=01;30;48;5;190'
+zstyle ':completion:*:aliases' list-colors '=*=178' 'ma=01;30;48;5;190'
+zstyle ':completion:*:options' list-colors '=*=01;33' 'ma=01;30;48;5;190'
+zstyle ':completion:*:users' list-colors '=*=35' 'ma=01;30;48;5;190'
+zstyle ':completion:*:hosts' list-colors '=*=35' 'ma=01;30;48;5;190'
+zstyle ':completion:*:keys' list-colors '=*=35' 'ma=01;30;48;5;190'
+zstyle ':completion:*:signals' list-colors '=*=31' 'ma=01;30;48;5;190'
+zstyle ':completion:*:jobs' list-colors '=*=31' 'ma=01;30;48;5;190'
+zstyle ':completion:*:pids' list-colors '=*=31' 'ma=01;30;48;5;190'
+zstyle ':completion:*:parameters' list-colors '=*=36' 'ma=01;30;48;5;190'
+zstyle ':completion:*:environments' list-colors '=*=36' 'ma=01;30;48;5;190'
+zstyle ':completion:*:variables' list-colors '=*=37' 'ma=01;30;48;5;190'
+zstyle ':completion:*:values' list-colors '=*=37' 'ma=01;30;48;5;190'
+zstyle ':completion:*:arguments' list-colors '=*=37' 'ma=01;30;48;5;190'
+zstyle ':completion:*:packages' list-colors '=*=36' 'ma=01;30;48;5;190'
+zstyle ':completion:*:services' list-colors '=*=33' 'ma=01;30;48;5;190'
+zstyle ':completion:*:mounts' list-colors '=*=32' 'ma=01;30;48;5;190'
+zstyle ':completion:*:devices' list-colors '=*=32' 'ma=01;30;48;5;190'
 
 # ── Keybindings ───────────────────────────────────────
 bindkey -v  # vi mode
@@ -49,13 +80,29 @@ export KEYTIMEOUT=1
 bindkey '^R' history-incremental-search-backward
 bindkey '^A' beginning-of-line
 bindkey '^E' end-of-line
-bindkey '^W' backward-kill-word
+bindkey '^W' kill-whole-line
 bindkey '^H' backward-kill-word
 bindkey '^Z' undo
 bindkey '^X^Z' suspend
 bindkey -M viins '^[[1;5D' backward-word
 bindkey -M viins '^[[1;5C' forward-word
+# ── Edit command line in $EDITOR (Esc then v) ──────
+if [[ -o interactive ]]; then
+  if [[ -z ${widgets[edit-command-line]} ]]; then
+    edit-command-line() {
+      local tmp="${TMPPREFIX:-/tmp/zsh}ecmd.$$"
+      print -r -- "$BUFFER" > "$tmp"
+      ${VISUAL:-${EDITOR:-vi}} "$tmp" < /dev/tty
+      BUFFER="$(<"$tmp")"
+      CURSOR=$#BUFFER
+      rm -f "$tmp"
+    }
+    zle -N edit-command-line
+  fi
+  bindkey -M vicmd v edit-command-line
+fi
 bindkey '^U' kill-whole-line
+bindkey '^Q' clear-screen
 bindkey '^L' clear-screen
 
 # ── Dir colors ────────────────────────────────────────
@@ -244,6 +291,22 @@ _cggx_deferred_plugins() {
     (( $_as_keep_widgets[(Ie)$_w] )) || ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=($_w)
   done
   unset _as_keep_widgets _w
+
+  # zsh-bd (Tarrasch) — sourced with aliases off so its internal `cd`
+  # doesn't expand to the `cd`→`z` alias; wrapped to list after a jump
+  if [[ -d "$HOME/.zsh/plugins/zsh-bd" ]]; then
+    () {
+      setopt localoptions no_aliases
+      source "$HOME/.zsh/plugins/zsh-bd/bd.zsh"
+      functions[bd_plugin]=$functions[bd]
+      unfunction bd
+      bd() {
+        local before="$PWD"
+        bd_plugin "$@" || return $?
+        [[ "$PWD" != "$before" ]] && command eza --icons --group-directories-first "$PWD"
+      }
+    }
+  fi
 
   if [[ -d "$HOME/.zsh/plugins/zsh-autosuggestions" ]]; then
     source "$HOME/.zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"

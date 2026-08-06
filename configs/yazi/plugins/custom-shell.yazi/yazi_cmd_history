@@ -2,3 +2,5 @@ zsh -ic 'open 256x256.png;exit' zsh %s
 zsh -ic 'cd Audio;exit' zsh %s
 zsh -ic 'open Audio;exit' zsh %s
 zsh -ic '2;exit' zsh %s
+zsh -ic 'q;exit' zsh %s
+zsh -ic 'exit;exit' zsh %s

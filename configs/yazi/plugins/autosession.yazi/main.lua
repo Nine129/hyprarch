@@ -28,7 +28,11 @@ end)
 -- _save_and_quit
 local _save_and_quit = ya.sync(function(state)
   local session = _get_current_session()
-  ps.pub_to(0, state.event, session)
+  -- state.event is nil when setup() was never called (e.g. YAZI_NO_SESSION=1
+  -- in nvim file-manager sessions): skip publishing, still quit cleanly.
+  if state.event then
+    ps.pub_to(0, state.event, session)
+  end
   ya.emit("quit", {})
 end)
 
@@ -61,6 +65,14 @@ return {
         state.session = body
         _restore_session()
       end
+    end)
+
+    -- Save the session on key-triggered quit (q). A ps.sub handler is NOT a
+    -- scheduler task, so re-emitting quit from here avoids yazi's "unfinished
+    -- tasks, quit anyway?" popup that appeared when the plugin command task
+    -- emitted quit while still running.
+    ps.sub("key-quit", function()
+      _save_and_quit()
     end)
   end,
 

@@ -10,8 +10,6 @@ M.base46 = {
 	hl_override = {
 		-- Panels: slightly darker than editor
 		NormalFloat = { bg = "#151518" },
-		NvimTreeNormal = { bg = "#151518" },
-		NvimTreeNormalNC = { bg = "#151518" },
 		TelescopeNormal = { bg = "#151518" },
 		TelescopeBorder = { bg = "#151518", fg = "#C8FF00" },
 		TelescopePromptBorder = { bg = "#151518", fg = "#ff2d55" },
@@ -30,10 +28,6 @@ M.base46 = {
 		PmenuThumb = { bg = "#C8FF00" },
 	},
 	hl_add = {
-		-- NvimTree filetype colors (matching Yazi)
-		NvimTreeImageFile = { fg = "#ff6b00" },
-		NvimTreeExecFile = { fg = "#C8FF00" },
-		NvimTreeSpecialFile = { fg = "#b48cff" },
 		-- Telescope borders not in any base46 integration
 		TelescopeResultsBorder = { bg = "#151518", fg = "#C8FF00" },
 		TelescopePreviewBorder = { bg = "#151518", fg = "#ff6b00" },
@@ -56,6 +50,8 @@ M.base46 = {
 		FzfLuaCursor = { bg = "#2a2a35", fg = "#C8FF00" },
 		FzfLuaMatch = { bg = "#2a2a35", fg = "#C8FF00" },
 		WhichKeySelected = { bg = "#2a2a35", fg = "#C8FF00" },
+		-- Yazi floating window border
+		YaziFloatBorder = { fg = "#ff2d55" },
 		GitSignsAddLn = { fg = "#C8FF00" },
 		SnacksPickerListCursorLine = { bg = "#2a2a35", fg = "#C8FF00" },
 		SnacksPickerPreviewCursorLine = { bg = "#2a2a35", fg = "#C8FF00" },

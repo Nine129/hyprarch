@@ -21,7 +21,6 @@ on = "<Y>",
 run = ["plugin copy-file-contents"],
 desc = "Copy contents of file",
 },
-{ on = [ "q" ], run = "plugin autosession -- save-and-quit", desc = "Save session and quit" },
 { on = [ "Q" ], run = "close", desc = "Close current tab" },
 
 # Z → zoxide via fzf (styled through wrapper)
