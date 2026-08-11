@@ -41,6 +41,7 @@ fd
 ffmpegthumbnailer
 fuzzel
 fzf
+gexiv2-common
 ghgrab-bin
 gimp
 git
@@ -133,6 +134,7 @@ pipewire-alsa
 pipewire-pulse
 playerctl
 power-profiles-daemon
+procs
 protonup-qt
 python-pip
 python-pipx

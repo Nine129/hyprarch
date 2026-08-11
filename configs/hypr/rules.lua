@@ -26,6 +26,7 @@ hl.layer_rule({
   match = { title = "logout_dialog" },
   blur  = true,
 })
+
 -- Obsidian higher opacity
 hl.window_rule({ 
     match = { class = "obsidian" }, 
