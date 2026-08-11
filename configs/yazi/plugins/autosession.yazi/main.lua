@@ -27,11 +27,23 @@ end)
 
 -- _save_and_quit
 local _save_and_quit = ya.sync(function(state)
+  -- Mark that we're saving: `pub_to(0, ...)` broadcasts back to this same
+  -- instance, and without this guard the restore handler would recreate
+  -- every tab (duplicating the session) while the quit is still pending.
+  state.saving = true
+
   local session = _get_current_session()
   -- state.event is nil when setup() was never called (e.g. YAZI_NO_SESSION=1
   -- in nvim file-manager sessions): skip publishing, still quit cleanly.
   if state.event then
     ps.pub_to(0, state.event, session)
+    -- `ps.pub_to` queues the event and returns immediately; the DDS client
+    -- flushes it to the daemon on a tokio worker. If we emit `quit` right
+    -- away, the main thread drains the state file before the worker runs,
+    -- and the session is silently lost (this used to be masked by the
+    -- "unfinished tasks" popup delaying the quit). Block briefly so the
+    -- worker can record the event in STATE before we quit.
+    os.execute("sleep 0.1")
   end
   ya.emit("quit", {})
 end)
@@ -61,7 +73,7 @@ return {
     state.event = "@autosession-event"
 
     ps.sub_remote(state.event, function(body)
-      if not state.restored then
+      if not state.restored and not state.saving then
         state.session = body
         _restore_session()
       end

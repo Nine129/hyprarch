@@ -1,5 +1,9 @@
 [mgr]
 prepend_keymap = [
+  # Shift+Up/Down → page scroll (same as PageUp/PageDown)
+  { on = "<S-Up>", run = "arrow -100%", desc = "Move cursor up by a page" },
+  { on = "<S-Down>", run = "arrow 100%", desc = "Move cursor down by a page" },
+
   # Shift+Enter → show "open with" picker
   { on = "<S-Enter>", run = "open --interactive", desc = "Open with picker" },
 

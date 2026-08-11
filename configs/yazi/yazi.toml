@@ -85,6 +85,9 @@ group = "folder-count"
 
 [tasks]
   image_alloc = 1073741824
+  # Don't count preload tasks (e.g. "Run preloader 'folder'") as ongoing at
+  # quit, otherwise `q` shows the "quit with unfinished tasks?" popup.
+  suppress_preload = true
 
 # git.yazi
 [[plugin.prepend_fetchers]]
