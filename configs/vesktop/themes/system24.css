@@ -100,15 +100,15 @@ body {
     --text-0: #0a0a0c; /* text on colored elements (opaque — was var(--bg-4)) */
     --text-1: #e8e8f0; /* bright text on colored elements — CGGX silver */
     --text-2: #e8e8f0; /* headings and important text — CGGX silver */
-    --text-3: #b0b0c0; /* normal text — CGGX secondary */
-    --text-4: #6a6a80; /* icon buttons and channels — CGGX muted */
-    --text-5: #606078; /* muted channels/chats and timestamps */
+    --text-3: #e8e8f0; /* normal text — kitty foreground */
+    --text-4: #9999ad; /* icon buttons and channels — CGGX muted, brightened */
+    --text-5: #8b8ba2; /* muted channels/chats and timestamps, brightened */
 
     /* background and dark colors — CGGX bg0/bg1/border */
     --bg-1: rgba(42, 42, 53, 0.90); /* dark buttons when clicked — CGGX border */
     --bg-2: rgba(31, 31, 42, 0.82); /* dark buttons */
     --bg-3: rgba(21, 21, 24, 0.70); /* spacing, secondary elements — CGGX bg1 */
-    --bg-4: rgba(10, 10, 12, 0.55); /* main background color — CGGX bg0 */
+    --bg-4: rgba(10, 10, 12, 0.52); /* main background color — CGGX bg0 */
     --hover: hsla(240, 9%, 46%, 0.1); /* channels and buttons when hovered */
     --active: hsla(240, 9%, 46%, 0.2); /* channels and buttons when clicked or selected */
     --active-2: hsla(240, 9%, 46%, 0.3); /* extra state for transparent buttons */
@@ -183,7 +183,7 @@ body {
    orange  #ff6b00  values, numbers, warnings
    purple  #b48cff  types, definitions, premium
    silver  #e8e8f0  normal text
-   muted   #6a6a80  comments, secondary chrome
+   muted   #9999ad  comments, secondary chrome
    ════════════════════════════════════════════════════════════ */
 /* ── Panel borders — each pane gets its own CGGX color ── */
 /* Server list — lime (nav) */
@@ -389,7 +389,7 @@ body {
 	background: hsla(73, 90%, 55%, 0.12) !important;
 }
 [class*="quickswitcher"] [class*="row"] {
-	color: hsl(240, 11%, 72%) !important; /* like nvim normal text */
+	color: var(--text-3) !important; /* like nvim normal text */
 }
 
 /* ── Autocomplete / Slash Commands — selection = lime ── */
@@ -397,7 +397,7 @@ body {
 	background: hsla(73, 90%, 55%, 0.10) !important;
 }
 [class*="autocomplete"] [class*="row"] {
-	color: hsl(240, 11%, 72%) !important;
+	color: var(--text-3) !important;
 }
 
 /* ── Channel Text Area ───────────────────────────── */
@@ -415,7 +415,7 @@ body {
 	color: #ff2d55 !important;
 }
 [class*="settings"] [class*="description"] {
-	color: #6a6a80 !important; /* muted */
+	color: #9999ad !important; /* muted, brightened */
 }
 [class*="settings"] [class*="card"] {
 	border-color: hsla(240, 9%, 46%, 0.3) !important;

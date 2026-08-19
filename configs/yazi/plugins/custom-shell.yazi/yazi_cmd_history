@@ -6,3 +6,4 @@ zsh -ic 'q;exit' zsh %s
 zsh -ic 'exit;exit' zsh %s
 zsh -ic 'mdterm SETUP-GUIDE.md;exit' zsh %s
 zsh -ic 'trash-empty;exit' zsh %s
+zsh -ic 'nvim cggx.json;exit' zsh %s

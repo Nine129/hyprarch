@@ -1,5 +1,7 @@
 [mgr]
 prepend_keymap = [
+  # Quick locations
+  { on = [ "g", "v" ], run = "cd ~/vault", desc = "Go to vault" },
   # Shift+Up/Down → page scroll (same as PageUp/PageDown)
   { on = "<S-Up>", run = "arrow -100%", desc = "Move cursor up by a page" },
   { on = "<S-Down>", run = "arrow 100%", desc = "Move cursor down by a page" },
@@ -7,14 +9,11 @@ prepend_keymap = [
   # Shift+Enter → show "open with" picker
   { on = "<S-Enter>", run = "open --interactive", desc = "Open with picker" },
 
-  # e → open in editor (nvim)
-  { on = ["e"], run = "open --find=edit", desc = "Open in editor" },
+  # e → "open with" picker (edit, reveal, ...)
+  { on = ["e"], run = "open --interactive", desc = "Open with picker" },
 
   # o → open in browser/xdg
-  { on = ["o"], run = "open --find=open", desc = "Open with default app" },
-
-  # x → extract archive
-  { on = ["x"], run = "open --find=extract", desc = "Extract archive" },
+  { on = ["o"], run = "open", desc = "Open with default app" },
 
   # C → compress selected files with ouch
   { on = ["C"], run = "plugin ouch", desc = "Compress with ouch" },

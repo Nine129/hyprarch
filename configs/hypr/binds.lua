@@ -5,6 +5,8 @@ local vivaldi_launching = false
 
 -- Terminal ─────────────────────────
 hl.bind("SUPER + Q",       hl.dsp.exec_cmd("kitty --single-instance"))
+hl.bind("SUPER + B",       hl.dsp.exec_cmd("kitty --single-instance -e btop"))
+
 hl.bind("SUPER + W",       hl.dsp.window.close())
 hl.bind("SUPER + SHIFT + Q", hl.dsp.exec_cmd("bash ~/hyprarch/configs/hypr/scripts/kitty-float.sh"))
 hl.bind("SUPER + Backspace", hl.dsp.exec_cmd("pkill otter-launcher || bash ~/hyprarch/configs/hypr/scripts/kitty-float.sh --class otter-launcher -- otter-launcher"))
@@ -27,7 +29,7 @@ hl.bind("SUPER + A", hl.dsp.exec_cmd("vivaldi --new-window vivaldi://startpage/"
 -- Layout ──────────────────────────
 hl.bind("SUPER + F",       hl.dsp.window.fullscreen({ mode = "fullscreen" }))
 hl.bind("SUPER + X",       hl.dsp.window.float({ action = "toggle" }))
-hl.bind("SUPER + P",       hl.dsp.window.pseudo({ action = "toggle" }))
+hl.bind("SUPER + P",       hl.dsp.exec_cmd("killall -SIGUSR1 waybar"))
 hl.bind("SUPER + J",       hl.dsp.layout("togglesplit"))
 hl.bind("SUPER + V", hl.dsp.exec_cmd("pkill fuzzel ||bash -c 'WAYLAND_DISPLAY=wayland-1 bash ~/hyprarch/configs/hypr/scripts/cliphist-fuzzel.sh'"))
 -- Focus movement ──────────────────
@@ -91,7 +93,7 @@ hl.bind("SUPER + mouse:273",  hl.dsp.window.resize(), { mouse = true })
 
 -- Screenshots ─────────────────────
 hl.bind("Print",               hl.dsp.exec_cmd("grimblast copy area"))                              -- Region → clipboard
-hl.bind("SUPER + Print",       hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot-swappy.sh"))      -- Region → swappy → save
+hl.bind("SUPER + Print",       hl.dsp.exec_cmd("~/.config/hypr/scripts/screenshot-menu.sh"))         -- Region → screenshot menu
 hl.bind("SUPER + SHIFT + Print",  hl.dsp.exec_cmd("grimblast copy output"))                         -- Full → clipboard
 hl.bind("SUPER + ALT + Print", hl.dsp.exec_cmd("~/.config/hypr/scripts/lens-search.sh"))     -- Region → Google Lens search
 

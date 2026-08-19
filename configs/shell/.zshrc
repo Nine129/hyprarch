@@ -538,3 +538,6 @@ alias inxia='inxi -xxxez -dfiJlmoput'
 if [[ ! -f "$HOME/.zshrc.zwc" ]] || [[ "$HOME/.zshrc" -nt "$HOME/.zshrc.zwc" ]]; then
   zcompile "$HOME/.zshrc"
 fi
+eval "$(direnv hook zsh)"
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"

@@ -1,6 +1,5 @@
 [mgr]
 show_hidden = false
-show_ignored = false
 linemode = "folder_count"
 sort_by = "natural"
 sort_dir_first = true
@@ -13,28 +12,28 @@ cache_dir = "~/.cache/yazi"
 
 [opener]
 edit = [
-  { run = 'nvim "$@"', block = true },
+  { run = 'nvim %s', block = true },
 ]
 browse = [
-  { run = 'xdg-open "$@"', orphan = true },
+  { run = 'xdg-open %s', orphan = true },
 ]
 open = [
-  { run = 'xdg-open "$@"', orphan = true },
+  { run = 'xdg-open %s', orphan = true },
 ]
 pdf = [
-  { run = 'zathura "$@"', block = true },
+  { run = 'zathura %s', block = true },
 ]
 video = [
-  { run = 'mpv "$@"', orphan = true },
+  { run = 'mpv %s', orphan = true },
 ]
 image = [
-  { run = 'imv "$@"', orphan = true },
+  { run = 'imv %s', orphan = true },
 ]
 audio = [
-  { run = 'mpv "$@"', orphan = true },
+  { run = 'mpv %s', orphan = true },
 ]
 extract = [
-  { run = 'ouch d -y "$@"', desc = "Extract here with ouch" },
+  { run = 'ouch d -y %s', desc = "Extract here with ouch" },
 ]
 
 [open]
@@ -57,7 +56,6 @@ rules = [
     { mime = "{audio,video,image}/*", run = "mediainfo" },
     { mime = "application/subrip", run = "mediainfo" },
     { mime = "application/postscript", run = "mediainfo" },
-    { mime = "application/illustrator", run = "mediainfo" },
     { mime = "application/vnd.adobe.illustrator", run = "mediainfo" },
     { mime = "image/x-eps", run = "mediainfo" },
     { mime = "application/eps", run = "mediainfo" },

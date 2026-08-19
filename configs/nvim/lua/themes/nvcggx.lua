@@ -211,6 +211,16 @@ M.polish_hl = {
     -- Git signs
     GitSignsAddLn = { fg = "#C8FF00" },
   },
+
+  -- Tabline: match the terminal bg (#151518) instead of black2 (#0f0f14),
+  -- so the tab bar doesn't read as a dark band over the 0.78-opacity kitty.
+  tbline = {
+    Tabline = { bg = "#151518" },
+    TbFill = { bg = "#151518" },
+    TbBufOff = { bg = "#151518" },
+    TbBufOffModified = { bg = "#151518" },
+    TbBufOffClose = { bg = "#151518" },
+  },
 }
 
 M.type = "dark"

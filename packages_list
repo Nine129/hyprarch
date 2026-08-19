@@ -1,4 +1,5 @@
 7zip
+acpi
 alsa-plugins
 alsa-utils
 android-tools
@@ -28,6 +29,7 @@ cliphist
 cmake
 cmatrix
 cowsay
+direnv
 duf
 dust
 easyeffects
@@ -157,6 +159,8 @@ swaync
 swayosd-git
 sysbench
 tealdeer
+tesseract-data-eng
+tesseract-data-vie
 timeshift
 timeshift-autosnap
 toofan-bin
@@ -194,7 +198,6 @@ xdg-desktop-portal-termfilechooser-boydaihungst-git
 xdg-utils
 yay-bin
 yay-bin-debug
-yazi
 ydotool
 yt-dlp
 zathura

@@ -30,7 +30,11 @@ directory="$2"
 save="$3"
 path="$4"
 out="$5"
-cmd="/usr/bin/yazi"
+# Prefer brew yazi (newer); fall back to PATH (pacman) or a bare name
+# (kitty will report a clear launch error if neither exists).
+cmd="/home/linuxbrew/.linuxbrew/bin/yazi"
+[ -x "$cmd" ] || cmd="$(command -v yazi 2>/dev/null || true)"
+[ -n "$cmd" ] || cmd="yazi"
 # "wezterm start --always-new-process" if you use wezterm
 if [ "$save" = "1" ]; then
   TITLE="Save File:"

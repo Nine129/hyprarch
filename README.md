@@ -187,9 +187,10 @@ hyprarch/
 | `SUPER + J` | Toggle split direction |
 | `SUPER + G` | Scroll overview (hyprpm plugin) |
 | `Print` | Region screenshot → clipboard (grimblast) |
-| `SUPER + Print` | Region screenshot → swappy markup → auto-save |
+| `SUPER + Print` | Screenshot menu (OCR / translate / lens / save / swappy / QR) |
 | `SUPER + SHIFT + Print` | Full screenshot → clipboard |
-| `CTRL + Print` | Screenshot menu (fuzzel dmenu) |
+| `SUPER + ALT + Print` | Region → Google Lens search |
+| `CTRL + Print` | Screenshot menu (alias of SUPER + Print) |
 | `SUPER + L` | Lock screen (hyprlock) |
 | `XF86AudioRaiseVolume` | Volume up (osd-notify) |
 | `XF86AudioLowerVolume` | Volume down (osd-notify) |

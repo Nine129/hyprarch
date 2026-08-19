@@ -10,10 +10,18 @@ set -euo pipefail
 
 export WAYLAND_DISPLAY="${WAYLAND_DISPLAY:-wayland-1}"
 
+# Hyprland-spawned processes don't inherit the interactive shell's PATH;
+# make brew-installed binaries (e.g. yazi) resolvable inside the float.
+# Guarded on dir existence so a pacman-only yazi setup works untouched.
+case ":$PATH:" in
+  *:/home/linuxbrew/.linuxbrew/bin:*) ;;
+  *) [ -d /home/linuxbrew/.linuxbrew/bin ] && export PATH="/home/linuxbrew/.linuxbrew/bin:$PATH" ;;
+esac
+
 # env -u SHLVL: the float's kitty env has SHLVL=0; bash bumps it to 1 and
 # exec'd zsh to 2, which breaks .zshrc's "[[ $SHLVL -eq 1 ]] && fastfetch".
 # Stripping it makes the float's shell identical to a normal terminal window.
-OPACITY_SET='kitty @ set-background-opacity --match id:-1 0.94 >/dev/null 2>&1 || true; exec env -u SHLVL "${1:-$SHELL}" "${@:2}"'
+OPACITY_SET='kitty @ set-background-opacity --match id:-1 1.0 >/dev/null 2>&1 || true; exec env -u SHLVL "${1:-$SHELL}" "${@:2}"'
 
 opts=()
 prog=()
