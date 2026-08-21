@@ -146,7 +146,7 @@ menu() {
       --lines 8 \
       --width 27 \
       --hide-prompt \
-      --background-color=151518ff \
+      --background-color=1d1d20ff \
       --text-color=e8e8f0ff \
       --match-color=b48cffff \
       --selection-color=b48cffff \

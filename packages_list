@@ -135,6 +135,7 @@ pipewire-alsa
 pipewire-pulse
 playerctl
 power-profiles-daemon
+powertop
 procs
 protonup-qt
 python-pip
@@ -175,6 +176,7 @@ tty-clock
 ueberzug
 unrar
 uwsm
+veet
 ventoy-bin
 vesktop-bin
 vivaldi

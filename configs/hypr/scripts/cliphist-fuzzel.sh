@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 selected=$(cliphist list | fuzzel --dmenu \
-  --background-color=151518ff \
+  --background-color=1d1d20ff \
   --text-color=e8e8f0ff \
   --match-color=00E5FFff \
   --selection-color=00E5FFff \

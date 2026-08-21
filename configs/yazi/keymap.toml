@@ -12,11 +12,13 @@ prepend_keymap = [
   # e → "open with" picker (edit, reveal, ...)
   { on = ["e"], run = "open --interactive", desc = "Open with picker" },
 
-  # o → open in browser/xdg
-  { on = ["o"], run = "open", desc = "Open with default app" },
+  # o → open file / enter dir (dirs must never hit open/chooser-quit)
+  { on = ["o"], run = "plugin smart-enter", desc = "Open file or enter dir" },
 
   # C → compress selected files with ouch
   { on = ["C"], run = "plugin ouch", desc = "Compress with ouch" },
+  # X → extract here with ouch (selected or hovered, mirrors C)
+  { on = ["X"], run = "shell --block 'set -- %s; [ -z \"$1\" ] && set -- \"%h\"; for f in \"$@\"; do [ -f \"$f\" ] && ouch d -y -- \"$f\"; done'", desc = "Extract here with ouch" },
 
 # copy file contet
 {

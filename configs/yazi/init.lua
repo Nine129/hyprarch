@@ -4,7 +4,7 @@ end
 
 require("folder-count"):setup { order = 1600 }
 
-require("full-border"):setup()
+require("full-border"):setup { type = ui.Border.THICK }
 require("git"):setup {
 	-- Order of status signs showing in the linemode
 	order = 1500,
@@ -13,6 +13,8 @@ require("copy-file-contents"):setup({
 	append_char = "\n",
 	notification = true,
 })
+require("drag-pretty"):setup()
+
 
 require("yatline"):setup({
 	section_separator = { open = "", close = "" },
@@ -106,3 +108,4 @@ require("custom-shell"):setup({
     history_path = "default",
     save_history = true,
 })
+require("adaptive-select"):setup()

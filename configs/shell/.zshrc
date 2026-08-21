@@ -422,7 +422,6 @@ zsh-defer _cggx_deferred_plugins
 export NVM_DIR="$HOME/.config/nvm"
 zsh-defer source "$NVM_DIR/nvm.sh"
 zsh-defer source "$NVM_DIR/bash_completion"
-[[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
 
 # Cache fzf keybindings so we don't run `fzf` on every shell start
 local _fzf_cache="$HOME/.cache/fzf-keybindings.zsh"
@@ -539,5 +538,26 @@ if [[ ! -f "$HOME/.zshrc.zwc" ]] || [[ "$HOME/.zshrc" -nt "$HOME/.zshrc.zwc" ]];
   zcompile "$HOME/.zshrc"
 fi
 eval "$(direnv hook zsh)"
+# silence + fast-path: only run direnv if .envrc/.env in parent chain (DIRENV_LOG_FORMAT ignored in 2.37)
+# still runs when leaving a direnv dir (DIRENV_DIR set) to allow unload
+_direnv_hook() {
+  if [[ -z "$DIRENV_DIR" ]]; then
+    local d="$PWD"
+    while true; do
+      [[ -e "$d/.envrc" || -e "$d/.env" ]] && break
+      [[ "$d" == "/" ]] && return
+      d="${d:h}"
+    done
+  fi
+  trap -- '' SIGINT
+  eval "$("/usr/bin/direnv" export zsh 2>/dev/null)"
+  trap - SIGINT
+}
 
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv zsh)"
+# Cache brew shellenv like starship/zoxide (was ~15-30ms every start)
+local _brew_cache="$HOME/.cache/brew-init.zsh"
+if [[ ! -f "$_brew_cache" ]] || [[ "/home/linuxbrew/.linuxbrew/bin/brew" -nt "$_brew_cache" ]]; then
+  /home/linuxbrew/.linuxbrew/bin/brew shellenv zsh >| "$_brew_cache"
+fi
+source "$_brew_cache"
+unset _brew_cache

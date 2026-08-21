@@ -253,7 +253,7 @@ rules = [
 [mgr]
 syntect_theme = ""
 border_symbol = "│"
-border_style = { fg = "#4a4a60" }
+border_style = { fg = "#703b3a" }
 
 [mgr.cwd]
 fg = "#e8e8f0"
