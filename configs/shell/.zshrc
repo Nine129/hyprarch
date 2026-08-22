@@ -1,6 +1,69 @@
 # ── CGGX Zsh ──────────────────────────────────────────
 # Place at ~/.zshrc
 source ~/zsh-defer/zsh-defer.plugin.zsh
+
+# ── Plugin loader (houssamouhra) ───────────────────────
+export ZSH_PLUGIN_DIR="$HOME/.zsh/plugins"
+export ZSH_PATINA_PATH="$ZSH_PLUGIN_DIR/zsh-patina/target/release/zsh-patina"
+# zsh-patina loader (Rust highlighter, 10x faster than zsh-syntax-highlighting, same CGGX styles)
+# also handles AUR install at /usr/bin/zsh-patina (zsh-patina-bin / zsh-patina-git)
+_zsh_patina_bin() {
+  if [[ -x "$ZSH_PATINA_PATH" ]]; then print -r -- "$ZSH_PATINA_PATH"; return 0; fi
+  if [[ -x "/usr/bin/zsh-patina" ]]; then print -r -- "/usr/bin/zsh-patina"; return 0; fi
+  if (( $+commands[zsh-patina] )); then print -r -- "${commands[zsh-patina]}"; return 0; fi
+  return 1
+}
+load-zsh-patina() {
+  emulate -L zsh
+  local bin; bin="$(_zsh_patina_bin 2>/dev/null)" || bin=""
+  if [[ -n "$bin" && -x "$bin" ]]; then
+    ZSH_PATINA_PATH="$bin"
+    if ! typeset -f _zsh_patina_activate >/dev/null 2>&1; then
+      _zsh_patina_activate() { unfunction _zsh_patina_activate; add-zsh-hook -d precmd _zsh_patina_activate; eval "$("$ZSH_PATINA_PATH" activate)"; }
+      add-zsh-hook precmd _zsh_patina_activate
+    fi
+    return 0
+  fi
+  local dir="$ZSH_PLUGIN_DIR/zsh-patina"
+  if [[ ! -d "$dir" ]]; then
+    print -u2 -P "==> Installing %F{cyan}zsh-patina%f..."
+    if ! git clone --depth=1 --quiet https://github.com/michel-kraemer/zsh-patina.git "$dir"; then rm -rf "$dir"; print -u2 -P "%F{red}✗ Failed zsh-patina%f"; return 1; fi
+    print -u2 -P "%F{green}✓ Cloned zsh-patina%f"
+  fi
+  if [[ ! -x $ZSH_PATINA_PATH ]]; then
+    if ! (( $+commands[cargo] )); then print -u2 -P "%F{red}zsh-patina needs cargo%f (rustup)"; return 1; fi
+    print -u2 -P "==> Building %F{cyan}zsh-patina%f..."
+    if ! (cd "$dir" && cargo build --release --quiet); then print -u2 -P "%F{red}✗ Build failed%f"; return 1; fi
+    print -u2 -P "%F{green}✓ Built zsh-patina%f"
+  fi
+  if [[ ! -x $ZSH_PATINA_PATH ]]; then print -u2 -P "%F{red}not found $ZSH_PATINA_PATH%f"; return 1; fi
+  if ! typeset -f _zsh_patina_activate >/dev/null 2>&1; then
+    _zsh_patina_activate() { unfunction _zsh_patina_activate; add-zsh-hook -d precmd _zsh_patina_activate; eval "$("$ZSH_PATINA_PATH" activate)"; }
+    add-zsh-hook precmd _zsh_patina_activate
+  fi
+}
+plugin-path() {
+  emulate -L zsh
+  (($# >= 2)) || { print -u2 -P "%F{red}usage: plugin-path <owner> <repo> %f"; return 1; }
+  local owner=$1
+  local repo=$2
+  local dir="$ZSH_PLUGIN_DIR/$repo"
+  if [[ ! -d "$dir" ]]; then
+    mkdir -p "$ZSH_PLUGIN_DIR" || return 1
+    print -u2 -P "==> Installing %F{cyan}$repo%f..."
+    if ! git clone --depth=1 --quiet "https://github.com/$owner/$repo" "$dir"; then
+      rm -rf "$dir"; print -u2 -P "%F{red}✗ Failed $repo%f"; return 1
+    fi
+    print -u2 -P "%F{green}✓ Installed $repo%f"
+  fi
+  local entry
+  for entry in "$dir/$repo.plugin.zsh" "$dir"/*.plugin.zsh(N) "$dir/$repo.zsh"; do
+    [[ -r $entry ]] && { print -r -- $entry; return 0; }
+  done
+  local -a candidates=("$dir"/*.zsh(N))
+  if (( $#candidates == 1 )) && [[ -r $candidates[1] ]]; then print -r -- $candidates[1]; return 0; fi
+  print -u2 -P "%F{red}Missing entry:%f $dir"; return 1
+}
 # ── Options ───────────────────────────────────────────
 setopt AUTO_CD
 setopt AUTO_PUSHD
@@ -19,25 +82,32 @@ setopt HIST_VERIFY
 setopt SHARE_HISTORY
 setopt APPEND_HISTORY
 setopt INC_APPEND_HISTORY
-setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_FIND_NO_DUPS
 setopt HIST_REDUCE_BLANKS
+setopt HIST_IGNORE_SPACE
 # Deduplicate PATH (keep first occurrence) — guards against add-ons re-exporting
 typeset -U path cdpath fpath
 
 # ── History ────────────────────────────────────────────
 HISTFILE="$HOME/.zsh_history"
-HISTSIZE=50000
-SAVEHIST=50000
+HISTSIZE=100000
+SAVEHIST=$HISTSIZE
 
 # ── Completion ─────────────────────────────────────────
 zmodload zsh/complist
-autoload -Uz compinit
-if [[ ! -f "${ZDOTDIR:-$HOME}/.zcompdump" ]]; then
-  compinit
-else
-  compinit -C
-fi
 autoload -Uz bashcompinit && bashcompinit
+# ensure completion plugins are present (auto-clone on first use)
+plugin-path mattmc3 ez-compinit >/dev/null
+plugin-path zsh-users zsh-completions >/dev/null
+if [[ -r "$ZSH_PLUGIN_DIR/ez-compinit/ez-compinit.plugin.zsh" ]]; then
+  source "$ZSH_PLUGIN_DIR/ez-compinit/ez-compinit.plugin.zsh"
+else
+  autoload -Uz compinit
+  if [[ ! -f "${ZDOTDIR:-$HOME}/.zcompdump" ]]; then compinit; else compinit -C; fi
+fi
 
 zstyle ':completion:*' menu select
 zstyle ':completion:*' list-colors "${(@s.:.)LS_COLORS}" 'ma=01;30;48;5;190'
@@ -262,12 +332,14 @@ esac
 # ── Zsh plugins (deferred — runs after first prompt) ──
 _cggx_deferred_plugins() {
   ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#9a9ab0"
-  # fzf completion menu should not render a stale history suggestion.
-  ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(fzf-completion)
+  # clear suggestion on accept + fzf to prevent ghost text (time → time zsh...)
+  ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(fzf-completion accept-line accept-and-hold accept-and-infer-next-history complete-word expand-or-complete menu-complete accept-and-menu-complete)
 
   # fzf environment/config; keybindings are sourced synchronously above
   [[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
 
+  # perf: ignore all widgets except those that must trigger autosuggest
+  # keep accept-line etc. so `time` → enter clears `postdisplay`
   local -a _as_keep_widgets=(
     fzf-completion
     self-insert self-insert-unmeta quoted-insert vi-quoted-insert
@@ -284,6 +356,8 @@ _cggx_deferred_plugins() {
     vi-change vi-change-eol vi-change-whole-line vi-substitute
     vi-replace vi-replace-chars vi-put-after vi-put-before
     clear-screen magic-space
+    complete-word expand-or-complete menu-complete accept-and-menu-complete
+    menu-expand complete-word-expand
   )
   local _w
   ZSH_AUTOSUGGEST_IGNORE_WIDGETS=()
@@ -291,6 +365,8 @@ _cggx_deferred_plugins() {
     (( $_as_keep_widgets[(Ie)$_w] )) || ZSH_AUTOSUGGEST_IGNORE_WIDGETS+=($_w)
   done
   unset _as_keep_widgets _w
+  # safety: ensure accept-line always clears if widget list was incomplete
+  (( ${ZSH_AUTOSUGGEST_CLEAR_WIDGETS[(Ie)accept-line]} )) || ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(accept-line)
 
   # zsh-bd (Tarrasch) — sourced with aliases off so its internal `cd`
   # doesn't expand to the `cd`→`z` alias; wrapped to list after a jump
@@ -342,7 +418,14 @@ _cggx_deferred_plugins() {
   # Skip highlighting for very long lines (performance guard)
   ZSH_HIGHLIGHT_MAXLENGTH=512
 
-  if [[ -d "$HOME/.zsh/plugins/zsh-syntax-highlighting" ]]; then
+  # Prefer zsh-patina (Rust, ~10x faster) if built / AUR, else fallback to zsh-syntax-highlighting — same CGGX styles
+  local _patina_bin; _patina_bin="$(_zsh_patina_bin 2>/dev/null)" || _patina_bin=""
+  if [[ -n "$_patina_bin" && -x "$_patina_bin" ]]; then
+    ZSH_PATINA_PATH="$_patina_bin"
+    load-zsh-patina
+    unset _patina_bin
+  elif [[ -d "$HOME/.zsh/plugins/zsh-syntax-highlighting" ]]; then
+    unset _patina_bin
     source "$HOME/.zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
 
     # ── CGGX syntax highlighting ─────────────────────────
@@ -417,19 +500,30 @@ _cggx_deferred_plugins() {
     ZSH_HIGHLIGHT_STYLES[cursor]="standout"
     ZSH_HIGHLIGHT_STYLES[cursor-matchingbracket]="standout"
   fi
-}
-zsh-defer _cggx_deferred_plugins
-export NVM_DIR="$HOME/.config/nvm"
-zsh-defer source "$NVM_DIR/nvm.sh"
-zsh-defer source "$NVM_DIR/bash_completion"
 
-# Cache fzf keybindings so we don't run `fzf` on every shell start
-local _fzf_cache="$HOME/.cache/fzf-keybindings.zsh"
-if [[ ! -f "$_fzf_cache" ]] || [[ "$(command -v fzf)" -nt "$_fzf_cache" ]]; then
-  fzf --zsh >| "$_fzf_cache"
-fi
-source "$_fzf_cache"
-unset _fzf_cache
+  # ── Extra completions + colored man (houssamouhra, no UX change) ──
+  [[ -r "$ZSH_PLUGIN_DIR/zsh-completions/zsh-completions.plugin.zsh" ]] && source "$ZSH_PLUGIN_DIR/zsh-completions/zsh-completions.plugin.zsh"
+  plugin-path houssamouhra colored-man-pages >/dev/null
+  [[ -r "$ZSH_PLUGIN_DIR/colored-man-pages/colored-man-pages.plugin.zsh" ]] && source "$ZSH_PLUGIN_DIR/colored-man-pages/colored-man-pages.plugin.zsh"
+}
+# batch non-critical defers (single schedule)
+zsh-defer _cggx_deferred_plugins
+
+# ── Lazy fzf — only init on first Ctrl+R/T or Alt+C (houssamouhra)
+# keeps same CGGX FZF_DEFAULT_OPTS from ~/.config/fzf/fzf.zsh, but defers `fzf --zsh` widget creation
+_fzf_init() {
+  emulate -L zsh
+  (( $+commands[fzf] )) || return
+  local init; init="$(fzf --zsh)" || return
+  eval "$init" || return
+  unfunction _fzf_init
+}
+_fzf_history_lazy() { _fzf_init; zle fzf-history-widget; }
+_fzf_file_lazy() { _fzf_init; zle fzf-file-widget; }
+_fzf_cd_lazy() { _fzf_init; zle fzf-cd-widget; }
+zle -N _fzf_history_lazy; bindkey '^R' _fzf_history_lazy
+zle -N _fzf_file_lazy; bindkey '^T' _fzf_file_lazy
+zle -N _fzf_cd_lazy; bindkey '^[c' _fzf_cd_lazy
 
  qr() {
     local result

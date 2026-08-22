@@ -180,3 +180,11 @@ hl.window_rule(
      opaque = true
    }
  )
+ -- hl.window_rule(
+ --   {
+ --     match = { title = "OpenCode" },
+ --     opacity = "0.94 override 0.94 override 1.0 override"
+ --
+ --   }
+ --
+ -- )

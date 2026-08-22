@@ -19,8 +19,8 @@ hl.config({
            active_border = "rgba(ff2d55ff)",
 	   inactive_border = { colors = { "rgba(00000040)", "rgba(00000000)" }, angle = 45 },
    },
-    layout               = "dwindle",
-    resize_on_border     = true,
+     layout               = "dwindle", -- "scrolling" to enable globally (see scrolling={} below)
+     resize_on_border     = true,
     
   },
 
@@ -60,6 +60,22 @@ hl.config({
     smart_resizing               = true,
     default_split_ratio          = 1.0,
     use_active_for_splits        = true,
+  },
+
+  -- ── Scrolling layout (Hyprland 0.54+) ──────────────
+  -- Enable globally: set general.layout = "scrolling"
+  -- Or per-workspace: hl.workspace_rule({ workspace = "2", layout_opts = { direction = "right" } }) in rules.lua
+  -- Wiki: https://wiki.hypr.land/Configuring/Layouts/Scrolling-Layout/
+  scrolling = {
+    fullscreen_on_one_column = true,              -- single window fills screen (true = no dead tape)
+    column_width             = 0.6,                -- default column width (0.1-1.0) — 0.6 = 60% of monitor, good for 1920x1080
+    explicit_column_widths   = "0.333, 0.5, 0.667, 1.0", -- cycle via hl.dsp.layout("colresize +conf/-conf")
+    focus_fit_method         = 1,                  -- 0=center, 1=fit visible
+    follow_focus             = true,               -- auto-scroll to focused column
+    follow_min_visible       = 0.4,                -- need 40% visible before auto-follow
+    wrap_focus               = true,               -- focus l/r wraps at tape ends
+    wrap_swapcol             = true,               -- swapcol l/r wraps
+    direction                = "right",            -- new windows appear to the "right" (also: left/up/down)
   },
 
   misc = {

@@ -28,9 +28,32 @@ hl.bind("SUPER + SPACE", hl.dsp.exec_cmd("pkill latuicon || ~/.config/hypr/scrip
 hl.bind("SUPER + A", hl.dsp.exec_cmd("vivaldi --new-window vivaldi://startpage/"))
 -- Layout ──────────────────────────
 hl.bind("SUPER + F",       hl.dsp.window.fullscreen({ mode = "fullscreen" }))
-hl.bind("SUPER + X",       hl.dsp.window.float({ action = "toggle" }))
-hl.bind("SUPER + P",       hl.dsp.exec_cmd("killall -SIGUSR1 waybar"))
+hl.bind("SUPER + X", function()
+  local ws = hl.get_active_workspace()
+  local w = hl.get_active_window()
+  if not ws or not w then
+    hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
+    return
+  end
+  -- single window on workspace and currently tiled → float to smaller centered window
+  if #ws:get_windows() == 1 and not w.floating then
+    hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
+    hl.dispatch(hl.dsp.window.resize({ x = 1200, y = 750 }))
+    hl.dispatch(hl.dsp.window.center())
+  else
+    hl.dispatch(hl.dsp.window.float({ action = "toggle" }))
+  end
+end)
+hl.bind("SUPER + P",       hl.dsp.exec_cmd("~/.config/hypr/scripts/zen-mode.sh"))
 hl.bind("SUPER + J",       hl.dsp.layout("togglesplit"))
+hl.bind("SUPER + Y", function()
+  local cur = hl.get_config("general:layout")
+  if cur == "scrolling" then
+    hl.config({ general = { layout = "dwindle" } })
+  else
+    hl.config({ general = { layout = "scrolling" } })
+  end
+end)
 hl.bind("SUPER + V", hl.dsp.exec_cmd("pkill fuzzel ||bash -c 'WAYLAND_DISPLAY=wayland-1 bash ~/hyprarch/configs/hypr/scripts/cliphist-fuzzel.sh'"))
 -- Focus movement ──────────────────
 hl.bind("SUPER + left",    hl.dsp.focus({ direction = "l" }))
