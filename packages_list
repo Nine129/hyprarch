@@ -41,6 +41,7 @@ fcitx5-configtool
 fcitx5-unikey
 fd
 ffmpegthumbnailer
+fprintd
 fuzzel
 fzf
 ghgrab-bin
@@ -91,6 +92,7 @@ lib32-pipewire-jack
 lib32-sdl2-compat
 lib32-v4l-utils
 lib32-vulkan-intel
+libfprint
 libnotify
 libreoffice-fresh
 libva-intel-driver
@@ -167,7 +169,6 @@ timeshift-autosnap
 toofan-bin
 topgrade
 tork
-tork-debug
 trash-cli
 ttf-jetbrains-mono-nerd
 ttf-liberation

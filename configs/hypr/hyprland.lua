@@ -66,6 +66,7 @@ hl.on("hyprland.start", function()
   hl.dsp.exec_cmd("wl-paste --type text --watch cliphist store")
   hl.dsp.exec_cmd("wl-paste --type image --watch cliphist store")
   hl.exec_cmd("amixer -c0 sset 'Capture' 37 && amixer -c0 sset 'Internal Mic Boost' 0 && amixer -c0 sset 'Mic Boost' 53")
+  hl.exec_cmd("bezel")
 end)
 
 

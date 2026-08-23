@@ -75,8 +75,8 @@ hl.bind("SUPER + CTRL + up",    hl.dsp.window.swap({ direction = "u" }))
 hl.bind("SUPER + CTRL + down",  hl.dsp.window.swap({ direction = "d" }))
 
 -- Resize ───────────────────────────
-hl.bind("SUPER + SHIFT + CTRL + left",  hl.dsp.window.resize({ x = -20, y = 0, relative = true }))
-hl.bind("SUPER + SHIFT + CTRL + right", hl.dsp.window.resize({ x =  20, y = 0, relative = true }))
+hl.bind("SUPER + minus",  hl.dsp.window.resize({ x = -50, y = 0, relative = true }))
+hl.bind("SUPER + equal", hl.dsp.window.resize({ x =  50, y = 0, relative = true }))
 hl.bind("SUPER + SHIFT + CTRL + up",    hl.dsp.window.resize({ x =  0, y = -20, relative = true }))
 hl.bind("SUPER + SHIFT + CTRL + down",  hl.dsp.window.resize({ x =  0, y =  20, relative = true }))
 

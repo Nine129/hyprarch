@@ -16,7 +16,7 @@ window#waybar {
 
 window > box {
   background: transparent;
-  padding: 0; margin: 1 6px;
+  padding: 0; margin: 1 10px;
 }
 
 

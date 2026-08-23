@@ -1,0 +1,44 @@
+[zones]
+left_width = 0.08
+right_width = 0.08
+top_height = 0.08
+bottom_height = 0.08
+
+
+[gestures.right.up]
+action = "command"
+cmd = "~/hyprarch/scripts/osd-notify.sh brightness raise"
+
+[gestures.right.down]
+action = "command"
+cmd = "~/hyprarch/scripts/osd-notify.sh brightness lower"
+
+[gestures.left.up]
+action = "command"
+cmd = "~/hyprarch/scripts/osd-notify.sh volume raise"
+
+[gestures.left.down]
+action = "command"
+cmd = "~/hyprarch/scripts/osd-notify.sh volume lower"
+
+
+[gestures.top.left]
+action = "command"
+cmd = "~/hyprarch/scripts/workspacectl.sh left"
+
+[gestures.top.right]
+action = "command"
+cmd = "~/hyprarch/scripts/workspacectl.sh right"
+
+
+[gestures.bottom.left]
+action = "command"
+cmd = "playerctl previous"
+
+[gestures.bottom.right]
+action = "command"
+cmd = "playerctl next"
+
+[gestures.bottom.tap]
+action = "command"
+cmd = "playerctl play-pause"
