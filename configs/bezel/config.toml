@@ -1,8 +1,8 @@
 [zones]
-left_width = 0.08
-right_width = 0.08
-top_height = 0.08
-bottom_height = 0.08
+left_width = 0.02
+right_width = 0.02
+top_height = 0.05
+bottom_height = 0.02
 
 
 [gestures.right.up]

@@ -153,6 +153,7 @@ rustup
 sddm
 shell-color-scripts-git
 slurp
+smartmontools
 starship
 steam
 streamlink

@@ -68,7 +68,7 @@ hl.config({
   -- Wiki: https://wiki.hypr.land/Configuring/Layouts/Scrolling-Layout/
   scrolling = {
     fullscreen_on_one_column = true,              -- single window fills screen (true = no dead tape)
-    column_width             = 0.60,                -- default column width (0.1-1.0) — 0.6 = 60% of monitor, good for 1920x1080
+    column_width             = 0.50,                -- default column width (0.1-1.0) — 0.6 = 60% of monitor, good for 1920x1080
     explicit_column_widths   = "0.333, 0.5, 0.667, 1.0", -- cycle via hl.dsp.layout("colresize +conf/-conf")
     focus_fit_method         = 1,                  -- 0=center, 1=fit visible
     follow_focus             = true,               -- auto-scroll to focused column
