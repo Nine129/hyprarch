@@ -22,6 +22,13 @@ orange = "#ff6b00"
 lime   = "#C8FF00"
 cyan   = "#00e5ff"
 
+# ── Transient prompt (zsh) ─────────────────────────────
+# What an accepted command line collapses to. Rendered by the
+# zsh-transient-prompt widget hook in shell/.zshrc via:
+#   starship prompt --profile transient
+[profiles]
+transient = "$character"
+
 # ── Character (line 2) ─────────────────────────────────
 [character]
 success_symbol            = '[❯](bold red)'

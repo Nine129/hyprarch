@@ -267,9 +267,9 @@ muted "    ln -sf $CONFIG_SRC/shell/.zprofile \$HOME/.zprofile"
 ok "Shell symlinks created"
 
 # ── Zsh plugins ────────────────────────────────────────
-# The .zshrc expects zsh-defer at ~/zsh-defer and the two popular zsh
-# plugins at ~/.zsh/plugins/*.  Neither is in the official Arch repos, so
-# clone them here if missing.
+# The .zshrc expects zsh-defer at ~/zsh-defer and the zsh plugins at
+# ~/.zsh/plugins/*.  None is in the official Arch repos, so clone them
+# here if missing.
 echo ""
 echo "── Phase 2b: Zsh Plugins ────────────────────────"
 
@@ -294,6 +294,8 @@ install_zsh_plugin "https://github.com/zsh-users/zsh-autosuggestions" \
   "$HOME/.zsh/plugins/zsh-autosuggestions" "zsh-autosuggestions"
 install_zsh_plugin "https://github.com/zsh-users/zsh-syntax-highlighting" \
   "$HOME/.zsh/plugins/zsh-syntax-highlighting" "zsh-syntax-highlighting"
+install_zsh_plugin "https://github.com/olets/zsh-transient-prompt" \
+  "$HOME/.zsh/plugins/zsh-transient-prompt" "zsh-transient-prompt"
 
 # Guard the zsh-defer source and the optional env file so a missing plugin
 # does not break the first interactive shell.

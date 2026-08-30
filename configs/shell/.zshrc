@@ -265,6 +265,19 @@ fi
 source "$_starship_cache"
 unset _starship_cache
 
+# ── Transient prompt (zsh) ────────────────────────────
+# Starship has no native zsh transient prompt (docs cover fish/bash/pwsh/cmd
+# only), so collapse each accepted line to the character-only profile via the
+# zsh-transient-prompt widget plugin (cloned by apply.sh). Full prompt still
+# renders on the next line; only past prompts shrink to "❯".
+if [[ -r "$ZSH_PLUGIN_DIR/zsh-transient-prompt/transient-prompt.plugin.zsh" ]]; then
+  typeset -g TRANSIENT_PROMPT_PROMPT="$PROMPT"
+  typeset -g TRANSIENT_PROMPT_RPROMPT="$RPROMPT"
+  typeset -g TRANSIENT_PROMPT_TRANSIENT_PROMPT='$('/usr/bin/starship' prompt --profile transient --terminal-width="$COLUMNS" --keymap="${KEYMAP:-}" --status="${STARSHIP_CMD_STATUS:-}" --pipestatus="${STARSHIP_PIPE_STATUS[*]:-}" --cmd-duration="${STARSHIP_DURATION:-}" --jobs="${STARSHIP_JOBS_COUNT:-0}")'
+  typeset -g TRANSIENT_PROMPT_TRANSIENT_RPROMPT=''
+  source "$ZSH_PLUGIN_DIR/zsh-transient-prompt/transient-prompt.plugin.zsh"
+fi
+
 # ── Zoxide (smart cd) ───────────────────────────────
 # Cache init script so we don't run `zoxide` on every shell start
 local _zoxide_cache="$HOME/.cache/zoxide-init.zsh"
