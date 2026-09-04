@@ -29,7 +29,7 @@
         marker_style: (fg: "#ebcb8b"), marker_highlighted_style: (fg: "#ebcb8b"), marker_current_style: (fg: "#2e3440", bg: "#ebcb8b" ),
     ),
     progress_bar: (
-        symbols: ["█", "█", "█", "█", "█"],
+        symbols: ["", "█", "", "█", ""],
         track_style: (fg: "#2a2a35", bg: "#151518"),
         elapsed_style: (fg: "#ff2d55", bg: "#151518"),
         thumb_style: (fg: "#ff2d55", bg: "#2a2a35"),
@@ -49,12 +49,7 @@
             100: "#8a0020",
         }),
     ),
-    scrollbar: (
-        symbols: ["┋", "█", "󰄿", "󰄼"],
-        track_style: (fg: "#2a2a35"),
-        ends_style: (fg: "#2a2a35"),
-        thumb_style: (fg: "#ff2d55"),
-    ),
+    scrollbar: None,
     song_table_format: [
         (prop: (kind: Property(Position), style: (fg: "#c8ff00")),
             width: "4", alignment: Left, label: ""),
@@ -95,8 +90,7 @@
     layout: Split(direction: Vertical, panes: [
             (size: "5", pane: Component("header")),
             (size: "100%", pane: Pane(TabContent)),
-            (size: "1", borders: "TOP", border_symbols: Rounded, pane: Pane(Empty())),
-            (size: "1", pane: Component("progress_bar")),
+            (size: "2", borders: "NONE", pane: Component("progress_bar")),
     ]),
     browser_song_format: [
         (kind: Group([
@@ -177,20 +171,22 @@
                 ])
             ),
         ]),
-        "progress_bar": Split(direction: Horizontal, panes: [
-            (size: "3", pane: Pane(Property(content: [
-                (kind: Text(" ")),
-                (kind: Property(Status(StateV2(playing_label: "▶",
-                    paused_label: "⏸", stopped_label: "⏹"))),
-                    style: (fg: "#ff2d55")),
-            ], align: Left))),
-            (size: "100%", pane: Pane(ProgressBar)),
-            (size: "16", pane: Pane(Property(content: [
-                (kind: Text("   ")),
-                (kind: Property(Status(Elapsed)), style: (fg: "#e8e8f0")),
-                (kind: Text(" / "), style: (fg: "#ff6b00")),
-                (kind: Property(Status(Duration)), style: (fg: "#e8e8f0")),
-            ]))),
+        "progress_bar": Split(direction: Vertical, panes: [
+                (size: "2", borders: "TOP", border_symbols: Plain,
+                    border_title: [
+                        (kind: Property(Status(Elapsed)), style: (fg: "#e8e8f0")),
+                        (kind: Property(Status(StateV2(playing_label: "─󱦟─", paused_label: "  ", stopped_label: "  "))),
+                            style: (fg: "#ff2d55", modifiers: "Bold")),
+                        (kind: Property(Status(Duration)), style: (fg: "#e8e8f0")),
+                    ],
+                    border_title_position: Top,
+                    border_title_alignment: Center,
+                    pane: Split(direction: Horizontal, panes: [
+                        (size: "1", pane: Pane(Empty())),
+                        (size: "100%", borders: "NONE", pane: Pane(ProgressBar)),
+                        (size: "1", pane: Pane(Empty())),
+                    ])
+                ),
         ]),
         "header_element_1": Split(direction: Horizontal, panes: [
             (size: "100%", pane: Pane(Property(content: [

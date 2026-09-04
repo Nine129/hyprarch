@@ -7,6 +7,7 @@
     on_song_change: ["~/.config/rmpc/notify.sh"],
     theme: "cggx",
     cache_dir: None,
+    lyrics_dir: "~/Music",
     volume_step: 5,
     max_fps: 60,
     music_directory: "~/Music",
@@ -81,7 +82,7 @@
             "1":          SwitchToTab("Queue"),
             "2":          SwitchToTab("Directories"),
             "3":          SwitchToTab("Artists"),
-            "4":          SwitchToTab("Album Artists"),
+            "4":          SwitchToTab("Lyrics"),
             "5":          SwitchToTab("Albums"),
             "6":          SwitchToTab("Playlists"),
             "7":          SwitchToTab("Search"),
@@ -181,7 +182,7 @@
                         size: "45%",
                         pane: Pane(AlbumArt),
                         background_color: Some("#000000"),
-                        borders: "NONE",                   
+                        borders: "NONE",
                     ),
                     (
                         size: "65%",
@@ -247,11 +248,11 @@
             )
         ),
         (
-            name: "Album Artists",
+            name: "Lyrics",
             pane: Split(
                 size: "100%",
                 direction: Vertical,
-                panes: [(pane: Pane(AlbumArtists), size: "100%")],
+                panes: [(pane: Pane(Lyrics), size: "100%")],
             )
         ),
         (

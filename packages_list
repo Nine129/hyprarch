@@ -32,6 +32,7 @@ cowsay
 direnv
 duf
 dust
+dxvk-bin
 easyeffects
 efibootmgr
 eza
@@ -106,6 +107,7 @@ localsend-bin
 lsp-plugins
 lutris
 mediainfo
+mgba-sdl
 mpd
 mpd-mpris
 mpv
@@ -185,12 +187,14 @@ ventoy-bin
 vesktop-bin
 vivaldi
 vivaldi-ffmpeg-codecs
+vkd3d-proton-bin
 vpl-gpu-rt
 vulkan-intel
 waybar
 wf-recorder
 wine-staging
 winetricks
+wireguard-tools
 wiremix
 wireplumber
 wl-clip-persist

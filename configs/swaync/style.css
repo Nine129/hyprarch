@@ -238,7 +238,7 @@
    ═══════════════════════════════════════════════════════════════════ */
 /* ── Zero out notification window container ─────────────────────── */
 .notification-window { margin: 0; padding: 0; }
-.floating-notifications { margin: 0; padding: 0; }
+.floating-notifications { margin: 3px 0 0; padding: 0; }
 
 .floating-notifications .notification-row {
   margin-bottom: 4px;
@@ -246,9 +246,9 @@
 .floating-notifications .notification-background {
   background: @surface;
   border: 2px solid @accent;
-  border-radius: 8px;
+  border-radius: 0;
   padding: 18px 20px;
-  margin: 4px;
+  margin: 1px 10px;
   box-shadow: 0 0 16px alpha(@accent, 0.2);
   transition: all 0.2s ease;
 }

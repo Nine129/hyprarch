@@ -38,7 +38,7 @@ rules = [
   { url = "*.nix",    name = " ", fg = "#ff6b00" },
   { url = "*.env",    name = " ", fg = "#ff6b00" },
   { url = "*.cfg",    name = " ", fg = "#ff6b00" },
-
+  { url = "*.ron",    name = " ", fg = "#ff6b00" },
   # Shell scripts / misc code — lavender
   { url = "*.sh",     name = " ", fg = "#b48cff" },
   { url = "*.bash",   name = " ", fg = "#b48cff" },
